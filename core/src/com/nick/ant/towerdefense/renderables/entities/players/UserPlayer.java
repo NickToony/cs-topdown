@@ -42,6 +42,9 @@ public class UserPlayer extends Player{
             this.moveRight = false;
         }
 
+        direction = calculateDirection(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+        System.out.println(Gdx.input.getX() + ":" + (Gdx.graphics.getHeight() - Gdx.input.getY()));
+
 
         super.render(spriteBatch);
     }
