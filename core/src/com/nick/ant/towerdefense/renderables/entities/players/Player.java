@@ -28,7 +28,6 @@ public class Player extends Entity {
 
         texture = TextureManager.getTexture("player.png");
         sprite = new Sprite(texture);
-        sprite.setScale(0.5f);
 
         this.x = x;
         this.y = y;
@@ -53,7 +52,6 @@ public class Player extends Entity {
     @Override
     public void step() {
         x ++;
-        y += 4;
         direction = calculateDirection(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
     }
 
