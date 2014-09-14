@@ -27,7 +27,7 @@ public class Game extends ApplicationAdapter {
 	public void render () {
         step();
 
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         SpriteBatch batch = currentRoom.getSpriteBatch();

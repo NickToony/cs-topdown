@@ -2,6 +2,7 @@ package com.nick.ant.towerdefense.renderables.rooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 import com.nick.ant.towerdefense.renderables.entities.world.World;
@@ -14,13 +15,17 @@ public class RoomGame extends Room {
     private SpriteBatch spriteBatch;
     private float mouseX = 0f;
     private float mouseY = 0f;
+    private CollisionManager collisionManager;
 
     public RoomGame()   {
         spriteBatch = new SpriteBatch();
         world = new World("de_dust2");
 
+        collisionManager = new CollisionManager(world);
+
         Player player = new UserPlayer(16,16);
         addEntity(player);
+        player.setCollisionManager(collisionManager);
         world.setEntitySnap(player);
     }
 
@@ -45,5 +50,9 @@ public class RoomGame extends Room {
 
     public float getMouseY() {
         return mouseY;
+    }
+
+    public World getWorld() {
+        return world;
     }
 }

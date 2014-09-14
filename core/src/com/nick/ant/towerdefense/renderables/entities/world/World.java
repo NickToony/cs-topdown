@@ -3,15 +3,21 @@ package com.nick.ant.towerdefense.renderables.entities.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Nick on 10/09/2014.
@@ -24,6 +30,8 @@ public class World  {
     private MapLayer objectiveLayer;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+
+    List<Rectangle> collisionObjects;
 
     private Entity entitySnap;
 
@@ -84,4 +92,28 @@ public class World  {
     public float getCameraY()   {
         return camera.position.y;
     }
+
+    public List<Rectangle> getCollisionObjects() {
+        if (collisionObjects == null)   {
+            collisionObjects = new ArrayList<Rectangle>();
+            for (MapObject object : collisionLayer.getObjects())   {
+                if (object instanceof RectangleMapObject) {
+                    // Fetch the rectangle collision box
+                    Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+
+                    // Resize it to the correct size and location
+                    rectangle.setX(rectangle.getX() - (cellSize/2));
+                    rectangle.setY(rectangle.getY() - (cellSize/2));
+                    rectangle.setWidth(cellSize);
+                    rectangle.setHeight(cellSize);
+
+                    // Add to list
+                    collisionObjects.add(rectangle);
+                }
+            }
+        }
+
+        return collisionObjects;
+    }
+
 }

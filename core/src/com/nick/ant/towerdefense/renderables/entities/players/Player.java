@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.components.TextureManager;
 
@@ -16,7 +17,7 @@ public class Player extends Entity {
     private Sprite sprite;
 
     protected float direction;
-    private int moveSpeed;
+    private final int moveSpeed = 2;
 
     protected boolean moveUp;
     protected boolean moveDown;
@@ -32,7 +33,6 @@ public class Player extends Entity {
         this.y = y;
 
         this.direction = 0.0f;
-        this.moveSpeed = 2;
 
         this.moveUp = false;
         this.moveDown = false;
@@ -51,18 +51,24 @@ public class Player extends Entity {
 
     @Override
     public void step() {
-        if(moveUp){
-            y += moveSpeed;
+        super.step();
+
+        hSpeed = 0;
+        vSpeed = 0;
+
+        if (moveUp && !moveDown) {
+            vSpeed = moveSpeed;
+        }   else if (moveDown && !moveUp)    {
+            vSpeed = -moveSpeed;
         }
-        if(moveDown){
-            y -= moveSpeed;
+
+        if (moveLeft && !moveRight) {
+            hSpeed = -moveSpeed;
+        }   else if (moveRight && !moveLeft)    {
+            hSpeed = moveSpeed;
         }
-        if(moveLeft){
-            x -= moveSpeed;
-        }
-        if(moveRight){
-            x += moveSpeed;
-        }
+
+
     }
 
     protected float calculateDirection(int aimX, int aimY){
