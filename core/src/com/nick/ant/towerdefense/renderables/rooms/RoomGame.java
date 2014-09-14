@@ -12,15 +12,17 @@ import com.nick.ant.towerdefense.renderables.entities.world.World;
  */
 public class RoomGame extends Room {
     private World world;
+    private SpriteBatch spriteBatch;
 
     public RoomGame()   {
+        spriteBatch = new SpriteBatch();
         world = new World("harry");
 
         addEntity(new Player(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2));
     }
 
     public SpriteBatch getSpriteBatch() {
-        SpriteBatch spriteBatch = new SpriteBatch();
+
         spriteBatch.setProjectionMatrix(world.getCamera().combined);
         world.render();
         return spriteBatch;
