@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.renderables.entities.players;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -52,7 +53,7 @@ public class Player extends Entity {
     public void step() {
         x ++;
         y += 4;
-        direction = calculateDirection(512, 384);
+        direction = calculateDirection(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
     }
 
     protected float calculateDirection(int aimX, int aimY){
