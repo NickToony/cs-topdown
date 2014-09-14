@@ -23,6 +23,7 @@ public class RoomGame extends Room {
 
     public SpriteBatch getSpriteBatch() {
 
+        world.step();
         spriteBatch.setProjectionMatrix(world.getCamera().combined);
         world.render();
         return spriteBatch;
