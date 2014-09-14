@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.renderables.rooms;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
@@ -11,6 +12,8 @@ import com.nick.ant.towerdefense.renderables.entities.world.World;
 public class RoomGame extends Room {
     private World world;
     private SpriteBatch spriteBatch;
+    private float mouseX = 0f;
+    private float mouseY = 0f;
 
     public RoomGame()   {
         spriteBatch = new SpriteBatch();
@@ -27,5 +30,20 @@ public class RoomGame extends Room {
         spriteBatch.setProjectionMatrix(world.getCamera().combined);
         world.render();
         return spriteBatch;
+    }
+
+    public void step()  {
+        super.step();
+
+        mouseX = Gdx.input.getX() + world.getCameraX();
+        mouseY = Gdx.input.getY() + world.getCameraY();
+    }
+
+    public float getMouseX() {
+        return mouseX;
+    }
+
+    public float getMouseY() {
+        return mouseY;
     }
 }
