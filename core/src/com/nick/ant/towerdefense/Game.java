@@ -10,14 +10,12 @@ import com.nick.ant.towerdefense.renderables.ui.FPSCounter;
 import com.nick.ant.towerdefense.renderables.ui.UIComponent;
 
 public class Game extends ApplicationAdapter {
-	private SpriteBatch batch;
     private Room currentRoom;
     private UIComponent fpsCounter;
 	
 	@Override
 	public void create () {
         currentRoom = new RoomGame();
-		batch = new SpriteBatch();
         fpsCounter = new FPSCounter();
 	}
 
@@ -31,11 +29,11 @@ public class Game extends ApplicationAdapter {
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        SpriteBatch batch = currentRoom.getSpriteBatch();
 		batch.begin();
 
-        if (currentRoom != null) {
-            currentRoom.render(batch);
-        }
+        currentRoom.render(batch);
 
         fpsCounter.render(batch);
 

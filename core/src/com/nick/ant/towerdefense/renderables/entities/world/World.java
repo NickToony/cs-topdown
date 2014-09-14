@@ -11,32 +11,33 @@ import com.nick.ant.towerdefense.renderables.Renderable;
 /**
  * Created by Nick on 10/09/2014.
  */
-public class World extends Renderable {
+public class World  {
     private final int cellSize = 32;
     private String mapName;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private OrthographicCamera camera;
 
     public World(String mapName)    {
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
 
         // Calculate the scale
-        float unitScale = 1 / (float) cellSize;
+        float unitScale = 1;
         renderer = new OrthogonalTiledMapRenderer(map, unitScale);
 
         // Setup the camera
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / 32f, Gdx.graphics.getHeight() / 32f);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderer.setView(camera);
     }
 
-    public void render(SpriteBatch spriteBatch) {
+    public void render() {
+        camera.update();
         renderer.render();
     }
 
-    @Override
-    public void step() {
-
+    public OrthographicCamera getCamera() {
+        return camera;
     }
 }
