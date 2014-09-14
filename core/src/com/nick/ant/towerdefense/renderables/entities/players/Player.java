@@ -63,7 +63,6 @@ public class Player extends Entity {
         if(moveRight){
             x += moveSpeed;
         }
-//        direction = calculateDirection(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
     }
 
     protected float calculateDirection(int aimX, int aimY){
