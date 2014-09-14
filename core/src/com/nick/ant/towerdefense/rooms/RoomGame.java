@@ -20,6 +20,10 @@ public class RoomGame extends Room {
         world.setTile(5, 6, "black.png");
         world.setArea(10, 10, 12, 12, "black.png");
         addEntity(world);
+
+        // Player testing
+        Player player = new Player(64, 64);
+        addEntity(player);
     }
 
 
