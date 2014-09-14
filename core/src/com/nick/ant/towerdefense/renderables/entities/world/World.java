@@ -22,9 +22,8 @@ public class World  {
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
 
-        // Calculate the scale
-        float unitScale = 1;
-        renderer = new OrthogonalTiledMapRenderer(map, unitScale);
+        // Create a rendered, with a px scale of 1:1
+        renderer = new OrthogonalTiledMapRenderer(map, 1);
 
         // Setup the camera
         camera = new OrthographicCamera();
