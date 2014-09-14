@@ -68,6 +68,11 @@ public class Player extends Entity {
             hSpeed = moveSpeed;
         }
 
+        if (hSpeed != 0 && vSpeed != 0) {
+            hSpeed *= 0.75;
+            vSpeed *= 0.75;
+        }
+
 
     }
 
