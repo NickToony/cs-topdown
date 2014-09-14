@@ -51,5 +51,11 @@ public class Player extends Entity {
     @Override
     public void step() {
         x ++;
+        y += 4;
+        direction = calculateDirection(512, 384);
+    }
+
+    protected float calculateDirection(int aimX, int aimY){
+        return (float) ((Math.atan2((aimX - x), -(aimY - y)) * 180.0f / Math.PI) + 180f);
     }
 }
