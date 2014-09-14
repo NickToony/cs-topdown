@@ -16,8 +16,7 @@ public class UserPlayer extends Player{
     }
 
     @Override
-    public void render(SpriteBatch spriteBatch){
-
+    public void step(){
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             this.moveUp = true;
         }else{
@@ -45,8 +44,8 @@ public class UserPlayer extends Player{
         }
 
         direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
-        System.out.println("Player: " + this.x + "," + this.y + " || Mouse: " + room.getMouseX() + "," + room.getMouseY());
-        super.render(spriteBatch);
+
+        super.step();
     }
 
 }
