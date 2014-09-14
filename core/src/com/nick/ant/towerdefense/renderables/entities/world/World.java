@@ -2,11 +2,16 @@ package com.nick.ant.towerdefense.renderables.entities.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
+
+import java.util.Iterator;
 
 /**
  * Created by Nick on 10/09/2014.
@@ -15,6 +20,8 @@ public class World  {
     private final int cellSize = 32;
     private String mapName;
     private TiledMap map;
+    private MapLayer collisionLayer;
+    private MapLayer objectiveLayer;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
@@ -23,6 +30,23 @@ public class World  {
     public World(String mapName)    {
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
+        // Get the collision layer
+        for (MapLayer layer : map.getLayers()) {
+            MapProperties properties = layer.getProperties();
+
+            if (properties.containsKey("collision"))    {
+                System.out.println("Found collision layer");
+                if (((String)properties.get("collision")).contentEquals("true"))    {
+                    collisionLayer = layer;
+                    System.out.println("Found collision layer with " + layer.getObjects().getCount() + " objects");
+                }
+            }   else if (properties.containsKey("objectives"))  {
+                if (((String)properties.get("objectives")).contentEquals("true"))    {
+                    objectiveLayer = layer;
+                    System.out.println("Found objective layer with " + layer.getObjects().getCount() + " objects");
+                }
+            }
+        }
 
         // Create a rendered, with a px scale of 1:1
         renderer = new OrthogonalTiledMapRenderer(map, 1);
