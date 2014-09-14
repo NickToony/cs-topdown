@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Background Layer" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC7WXwW6DMBBELW7ACalVFcipnxBCUHtoD+01//87xeqOMpl6jUFNpBEE8L7dtXcNVQihXdQvGhbNi06Lnh6sj0Wfiyrjn4092fHR/K9F38QHuzVVdK6K9142CvbYh1b4ysjpdYPaAv4lE6+nHA/Sefb4KUWfBif/WLOYswPd5zE8z5XwK7LVyfy3Yq9P8COzoes4v5gtz14qFtRAVB1+a7AlTrQ5y5iTXXsz9kT3J7MDPzrT0Y5qq7bj1dTbs+xrl+DnYmrM75p8QSxenV1FfP9IY47hvmbwPNs8ExNzPUscXH/IvcdHPFovns9x3YxmuzL7o+SN7c/m65jJT2/j6wI+P8fr3OMjZ4fM/ZLe5KkNtzWqfQF6D7c6yPG3/uIYrhHuC/BF+4jy2We2uyX+Q8IWfMEa8PjsM/NL9zxex9oXdX70ei7+PXycsx3uKZVcL4l/Lf/wn/cHthNrhXuM8lPrT/m5Ps/z7MWvDC+WPXz+jzjX+Gu/Pfzc/A/hcfyokfiax/+KP1f/qhw/N+9rfO5pKaHPsJ3OefbZtIWvax05j1ze37z4Gxqzh+/F7a0L7WPYr2fn2dS4tbnO5VZ7ZbQxhftaKZlXzWHq/bmU34T79wGvh4GF93X4rHupx0/tFZzDc4Ed8KJO4e+7uSdvr2L+EPx33Vgzcd/Ad/PW76hSvo7j7wt9Z0DOUnnD/CA3P1JJcZEAEAAA
+   H4sIAAAAAAAAC7WXzU7DMBCErdySnCKBUJtKIA59gP4KDnCAa9//dbDFjjodvI4T0UqjRkm83/54bacJIfRR66gx6hy1i3q4sz6iPqMa4x+MfbT/e/O/or6JD3ZvauhalZ49zRTssQ+98JVR0nPUa4VehOPxT4V4PeV8SLwtSevs8XNKPo1O/jFnt6JexnCdG+E3ZGsIt/VnjcZS/iqqo/u4Ppktz14uFvRAUht+e7AnTrJ5ljE7u/dm7CM9P5od+DGYNvavtlr7v5jW9i77OmT4pZg687slXxCL12cXET/f0JhNuO0ZvM82D8RErc8SB/cfcu/xEY/2i+dzmjd7s92Y/b3kje2fzdd9IT9rG99W8Pk9nuceHzlbFZ7XrE2e+nCdo7ouQO/h2gcl/txfGsM9wusCfEGvef3JPrPdOfGvMrbgC+aAx2efmV+75/E81nVR66P3S/Ev4eOa7fCa0sj9mvin8g//eX9gO6lXeI1Rfm7+Kd/7aZ29+JXhxbKEz/YR5xR/6reEX6o/anMPftKe+JrH/4q/1P+qEr9U9yk+r2k5YZ1hO4Pz7qNpDl/nOnKeuLy/efF3NGYJ34u7tJfp2RDfJFM1ya0/tXzEpmtlsnEMt71SU1fNYe78XMvvwu15wFvDwMJ5HT7rXurxc3sF5/BQYQe8pF34ezb35O1VzB+Df9ZNPZP2DXw3z/2OquXrOP6+0DMDcpbLG+qD3PwAo6XdvwAQAAA=
   </data>
  </layer>
  <objectgroup name="Collision Layer" width="32" height="32">
@@ -130,17 +130,6 @@
   <object gid="2" x="224" y="128"/>
   <object gid="2" x="192" y="128"/>
   <object gid="2" x="192" y="96"/>
-  <object gid="31" x="448" y="128"/>
-  <object gid="31" x="480" y="160"/>
-  <object gid="32" x="640" y="160"/>
-  <object gid="32" x="768" y="128"/>
-  <object gid="38" x="512" y="192"/>
-  <object gid="38" x="544" y="192"/>
-  <object gid="38" x="576" y="192"/>
-  <object gid="38" x="608" y="192"/>
-  <object gid="38" x="672" y="160"/>
-  <object gid="38" x="704" y="160"/>
-  <object gid="38" x="736" y="160"/>
   <object gid="2" x="512" y="832"/>
   <object gid="2" x="512" y="800"/>
   <object gid="2" x="512" y="768"/>
@@ -291,6 +280,23 @@
   <object gid="1" x="736" y="96"/>
   <object gid="1" x="768" y="96"/>
   <object gid="1" x="800" y="96"/>
+  <object gid="1" x="448" y="128"/>
+  <object gid="1" x="480" y="128"/>
+  <object gid="1" x="480" y="160"/>
+  <object gid="1" x="512" y="128"/>
+  <object gid="1" x="544" y="128"/>
+  <object gid="1" x="576" y="128"/>
+  <object gid="1" x="512" y="160"/>
+  <object gid="1" x="544" y="160"/>
+  <object gid="1" x="576" y="160"/>
+  <object gid="1" x="608" y="160"/>
+  <object gid="1" x="608" y="128"/>
+  <object gid="1" x="640" y="128"/>
+  <object gid="1" x="640" y="160"/>
+  <object gid="1" x="672" y="128"/>
+  <object gid="1" x="704" y="128"/>
+  <object gid="1" x="736" y="128"/>
+  <object gid="1" x="768" y="128"/>
  </objectgroup>
  <objectgroup name="Objective Layer" width="32" height="32">
   <properties>
