@@ -14,8 +14,6 @@ public class Player extends Entity {
 
     private Texture texture;
     private Sprite sprite;
-    private int x;
-    private int y;
 
     private float direction;
 
@@ -57,13 +55,5 @@ public class Player extends Entity {
 
     protected float calculateDirection(int aimX, int aimY){
         return (float) ((Math.atan2((aimX - x), -(aimY - y)) * 180.0f / Math.PI) + 180f);
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 }
