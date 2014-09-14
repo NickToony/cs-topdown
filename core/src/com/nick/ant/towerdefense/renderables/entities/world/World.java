@@ -53,4 +53,12 @@ public class World  {
 
         camera.update();
     }
+
+    public float getCameraX() {
+        return camera.position.x;
+    }
+
+    public float getCameraY()   {
+        return camera.position.y;
+    }
 }
