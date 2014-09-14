@@ -16,7 +16,7 @@ public class RoomGame extends Room {
 
     public RoomGame()   {
         spriteBatch = new SpriteBatch();
-        world = new World("harry");
+        world = new World("de_dust2");
 
         addEntity(new Player(16,16));
     }
