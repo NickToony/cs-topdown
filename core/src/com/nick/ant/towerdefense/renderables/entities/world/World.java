@@ -2,11 +2,10 @@ package com.nick.ant.towerdefense.renderables.entities.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.nick.ant.towerdefense.renderables.Renderable;
+import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 
 /**
@@ -19,7 +18,7 @@ public class World  {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
-    private Player playerSnap;
+    private Entity entitySnap;
 
     public World(String mapName)    {
         // Load the map
@@ -35,8 +34,8 @@ public class World  {
     }
 
     public void render() {
-        if (playerSnap != null) {
-            camera.translate(playerSnap.getX() - camera.position.x, playerSnap.getY() - camera.position.y);
+        if (entitySnap != null) {
+            camera.translate(entitySnap.getX() - camera.position.x, entitySnap.getY() - camera.position.y);
         }
 
         camera.update();
@@ -48,7 +47,7 @@ public class World  {
         return camera;
     }
 
-    public void setPlayerSnap(Player player)    {
-        this.playerSnap = player;
+    public void setEntitySnap(Player player)    {
+        this.entitySnap = player;
     }
 }

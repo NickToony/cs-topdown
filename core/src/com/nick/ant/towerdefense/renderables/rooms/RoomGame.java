@@ -1,9 +1,6 @@
 package com.nick.ant.towerdefense.renderables.rooms;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
-import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.world.World;
 
@@ -20,7 +17,7 @@ public class RoomGame extends Room {
 
         Player player = new Player(16,16);
         addEntity(player);
-        world.setPlayerSnap(player);
+        world.setEntitySnap(player);
     }
 
     public SpriteBatch getSpriteBatch() {
