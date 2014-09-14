@@ -18,7 +18,9 @@ public class RoomGame extends Room {
         spriteBatch = new SpriteBatch();
         world = new World("de_dust2");
 
-        addEntity(new Player(16,16));
+        Player player = new Player(16,16);
+        addEntity(player);
+        world.setPlayerSnap(player);
     }
 
     public SpriteBatch getSpriteBatch() {

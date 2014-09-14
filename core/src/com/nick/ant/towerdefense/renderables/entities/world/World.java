@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.nick.ant.towerdefense.renderables.Renderable;
+import com.nick.ant.towerdefense.renderables.entities.players.Player;
 
 /**
  * Created by Nick on 10/09/2014.
@@ -17,6 +18,8 @@ public class World  {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+
+    private Player playerSnap;
 
     public World(String mapName)    {
         // Load the map
@@ -32,11 +35,20 @@ public class World  {
     }
 
     public void render() {
+        if (playerSnap != null) {
+            camera.translate(playerSnap.getX() - camera.position.x, playerSnap.getY() - camera.position.y);
+        }
+
         camera.update();
+        renderer.setView(camera);
         renderer.render();
     }
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public void setPlayerSnap(Player player)    {
+        this.playerSnap = player;
     }
 }

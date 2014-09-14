@@ -46,6 +46,7 @@ public class Player extends Entity {
         sprite.setX(this.x);
         sprite.setY(this.y);
         sprite.setRotation(direction);
+        sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
         sprite.draw(spriteBatch);
     }
 
@@ -58,5 +59,13 @@ public class Player extends Entity {
 
     protected float calculateDirection(int aimX, int aimY){
         return (float) ((Math.atan2((aimX - x), -(aimY - y)) * 180.0f / Math.PI) + 180f);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
