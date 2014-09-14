@@ -45,7 +45,6 @@ public class Player extends Entity {
         sprite.setX(this.x);
         sprite.setY(this.y);
         sprite.setRotation(direction);
-        System.out.println("Dir: " + direction);
         sprite.draw(spriteBatch);
     }
 
