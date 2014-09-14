@@ -52,7 +52,7 @@ public abstract class Entity extends Renderable {
         float newX = x + hSpeed;
         float newY = y + vSpeed;
 
-        if (collisionManager == null)   {
+        if (collisionManager == null || collisionCircle == null)   {
             x = newX;
             y = newY;
             return;
@@ -76,7 +76,9 @@ public abstract class Entity extends Renderable {
     }
 
     public Circle getCollisionCircle(float x, float y) {
-        if (collisionCentered)  {
+        if (collisionCircle == null)    {
+            // Do nothing
+        }   else if (collisionCentered)  {
             collisionCircle.setX(x - collisionCircle.radius);
             collisionCircle.setY(y - collisionCircle.radius);
         }   else    {
