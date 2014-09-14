@@ -37,4 +37,7 @@ public abstract class Room {
     }
 
     public abstract SpriteBatch getSpriteBatch();
+
+    public abstract float getMouseX();
+    public abstract float getMouseY();
 }
