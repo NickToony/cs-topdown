@@ -51,7 +51,6 @@ public abstract class Entity extends Renderable {
 
         float newX = x + hSpeed;
         float newY = y + vSpeed;
-        float offset = 0;
 
         if (collisionManager == null)   {
             x = newX;
@@ -59,31 +58,32 @@ public abstract class Entity extends Renderable {
             return;
         }
 
-        Circle circle = getCollisionCircle();
-        if (collisionCentered)  {
-            offset = -circle.radius;
-        }
-
-        circle.setX(x + offset);
-        circle.setY(y + offset);
+        Circle circle;
 
         if (newX != x) {
-            circle.setX(newX + offset);
+            circle = getCollisionCircle(newX, y);
             if (collisionManager.checkCollision(circle)) {
                 x = newX;
             }
         }
 
         if (newY != y) {
-            circle.setX(x + offset);
-            circle.setY(newY + offset);
+            circle = getCollisionCircle(x, newY);
             if (collisionManager.checkCollision(circle)) {
                 y = newY;
             }
         }
     }
 
-    public Circle getCollisionCircle() {
+    public Circle getCollisionCircle(float x, float y) {
+        if (collisionCentered)  {
+            collisionCircle.setX(x - collisionCircle.radius);
+            collisionCircle.setY(y - collisionCircle.radius);
+        }   else    {
+            collisionCircle.setX(x);
+            collisionCircle.setY(y);
+        }
+
         return collisionCircle;
     }
 

@@ -41,7 +41,7 @@ public class Player extends Entity {
         this.moveRight = false;
 
         setCollisionCircle(new Circle(), true);
-        getCollisionCircle().setRadius(texture.getWidth()/2);
+        getCollisionCircle(0, 0).setRadius(texture.getWidth()/2);
     }
 
     @Override
