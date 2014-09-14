@@ -2,22 +2,12 @@ package com.nick.ant.towerdefense;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nick.ant.towerdefense.entities.Entity;
-import com.nick.ant.towerdefense.entities.players.Player;
-import com.nick.ant.towerdefense.rooms.Room;
-import com.nick.ant.towerdefense.rooms.RoomGame;
-import com.nick.ant.towerdefense.services.TextureManager;
-import com.nick.ant.towerdefense.ui.FPSCounter;
-import com.nick.ant.towerdefense.ui.UIComponent;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.nick.ant.towerdefense.renderables.rooms.Room;
+import com.nick.ant.towerdefense.renderables.rooms.RoomGame;
+import com.nick.ant.towerdefense.renderables.ui.FPSCounter;
+import com.nick.ant.towerdefense.renderables.ui.UIComponent;
 
 public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -26,8 +16,6 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-        
-
         currentRoom = new RoomGame();
 		batch = new SpriteBatch();
         fpsCounter = new FPSCounter();

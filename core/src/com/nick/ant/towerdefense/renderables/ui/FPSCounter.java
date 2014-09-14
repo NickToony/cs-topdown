@@ -1,4 +1,4 @@
-package com.nick.ant.towerdefense.ui;
+package com.nick.ant.towerdefense.renderables.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

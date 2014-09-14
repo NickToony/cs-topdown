@@ -1,9 +1,9 @@
-package com.nick.ant.towerdefense.entities.players;
+package com.nick.ant.towerdefense.renderables.entities.players;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nick.ant.towerdefense.entities.Entity;
-import com.nick.ant.towerdefense.services.TextureManager;
+import com.nick.ant.towerdefense.renderables.entities.Entity;
+import com.nick.ant.towerdefense.components.TextureManager;
 
 /**
  * Created by Nick on 08/09/2014.

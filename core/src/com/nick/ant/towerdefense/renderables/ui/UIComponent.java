@@ -1,7 +1,6 @@
-package com.nick.ant.towerdefense.ui;
+package com.nick.ant.towerdefense.renderables.ui;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nick.ant.towerdefense.entities.Entity;
+import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 /**
  * Created by Nick on 10/09/2014.

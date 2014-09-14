@@ -1,4 +1,4 @@
-package com.nick.ant.towerdefense.services;
+package com.nick.ant.towerdefense.components;
 
 import com.badlogic.gdx.graphics.Texture;
 
