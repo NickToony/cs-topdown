@@ -16,11 +16,12 @@ public class Player extends Entity {
     private Sprite sprite;
 
     private float direction;
+    private int moveSpeed;
 
-    private boolean moveUp;
-    private boolean moveDown;
-    private boolean moveLeft;
-    private boolean moveRight;
+    protected boolean moveUp;
+    protected boolean moveDown;
+    protected boolean moveLeft;
+    protected boolean moveRight;
 
     public Player(int x, int y) {
 
@@ -31,6 +32,7 @@ public class Player extends Entity {
         this.y = y;
 
         this.direction = 0.0f;
+        this.moveSpeed = 2;
 
         this.moveUp = false;
         this.moveDown = false;
@@ -49,7 +51,18 @@ public class Player extends Entity {
 
     @Override
     public void step() {
-        x ++;
+        if(moveUp){
+            y += moveSpeed;
+        }
+        if(moveDown){
+            y -= moveSpeed;
+        }
+        if(moveLeft){
+            x -= moveSpeed;
+        }
+        if(moveRight){
+            x += moveSpeed;
+        }
         direction = calculateDirection(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
     }
 
