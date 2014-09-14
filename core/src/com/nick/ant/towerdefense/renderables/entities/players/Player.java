@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.components.TextureManager;
@@ -38,12 +39,15 @@ public class Player extends Entity {
         this.moveDown = false;
         this.moveLeft = false;
         this.moveRight = false;
+
+        setCollisionCircle(new Circle(), true);
+        getCollisionCircle().setRadius(texture.getWidth()/2);
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        sprite.setX(this.x);
-        sprite.setY(this.y);
+        sprite.setCenterX(this.x);
+        sprite.setCenterY(this.y);
         sprite.setRotation(direction);
         sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
         sprite.draw(spriteBatch);

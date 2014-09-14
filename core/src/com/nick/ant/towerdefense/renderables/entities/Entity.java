@@ -1,6 +1,7 @@
 package com.nick.ant.towerdefense.renderables.entities;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
 import com.nick.ant.towerdefense.renderables.rooms.Room;
@@ -15,6 +16,8 @@ public abstract class Entity extends Renderable {
     protected float vSpeed = 0;
     protected Room room;
     protected CollisionManager collisionManager;
+    private Circle collisionCircle;
+    private boolean collisionCentered;
 
     public float getX() {
         return x;
@@ -48,6 +51,7 @@ public abstract class Entity extends Renderable {
 
         float newX = x + hSpeed;
         float newY = y + vSpeed;
+        float offset = 0;
 
         if (collisionManager == null)   {
             x = newX;
@@ -55,21 +59,36 @@ public abstract class Entity extends Renderable {
             return;
         }
 
-        Circle circle = new Circle(x, y, 16);
+        Circle circle = getCollisionCircle();
+        if (collisionCentered)  {
+            offset = -circle.radius;
+        }
+
+        circle.setX(x + offset);
+        circle.setY(y + offset);
 
         if (newX != x) {
-            circle.setX(newX);
+            circle.setX(newX + offset);
             if (collisionManager.checkCollision(circle)) {
                 x = newX;
             }
         }
 
         if (newY != y) {
-            circle.setX(x);
-            circle.setY(newY);
+            circle.setX(x + offset);
+            circle.setY(newY + offset);
             if (collisionManager.checkCollision(circle)) {
                 y = newY;
             }
         }
+    }
+
+    public Circle getCollisionCircle() {
+        return collisionCircle;
+    }
+
+    public void setCollisionCircle(Circle collisionCircle, boolean centered) {
+        this.collisionCircle = collisionCircle;
+        this.collisionCentered = centered;
     }
 }
