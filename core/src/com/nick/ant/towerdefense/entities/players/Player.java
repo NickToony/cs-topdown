@@ -14,11 +14,27 @@ public class Player extends Entity {
     private int x;
     private int y;
 
+    private boolean moveUp;
+    private boolean moveDown;
+    private boolean moveLeft;
+    private boolean moveRight;
+
+    private int xAim;
+    private int yAim;
+
     public Player(int x, int y) {
         texture = TextureManager.getTexture("player.png");
 
         this.x = x;
         this.y = y;
+
+        this.moveUp = false;
+        this.moveDown = false;
+        this.moveLeft = false;
+        this.moveRight = false;
+
+        this.xAim = 0;
+        this.yAim = 0;
     }
 
     @Override
