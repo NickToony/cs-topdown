@@ -35,7 +35,6 @@ public class World  {
             MapProperties properties = layer.getProperties();
 
             if (properties.containsKey("collision"))    {
-                System.out.println("Found collision layer");
                 if (((String)properties.get("collision")).contentEquals("true"))    {
                     collisionLayer = layer;
                     System.out.println("Found collision layer with " + layer.getObjects().getCount() + " objects");
