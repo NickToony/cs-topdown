@@ -34,11 +34,6 @@ public class World  {
     }
 
     public void render() {
-        if (entitySnap != null) {
-            camera.translate(entitySnap.getX() - camera.position.x, entitySnap.getY() - camera.position.y);
-        }
-
-        camera.update();
         renderer.setView(camera);
         renderer.render();
     }
@@ -49,5 +44,13 @@ public class World  {
 
     public void setEntitySnap(Player player)    {
         this.entitySnap = player;
+    }
+
+    public void step() {
+        if (entitySnap != null) {
+            camera.translate(entitySnap.getX() - camera.position.x, entitySnap.getY() - camera.position.y);
+        }
+
+        camera.update();
     }
 }
