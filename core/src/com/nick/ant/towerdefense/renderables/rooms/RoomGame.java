@@ -18,7 +18,7 @@ public class RoomGame extends Room {
         spriteBatch = new SpriteBatch();
         world = new World("harry");
 
-        addEntity(new Player(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2));
+        addEntity(new Player(16,16));
     }
 
     public SpriteBatch getSpriteBatch() {
