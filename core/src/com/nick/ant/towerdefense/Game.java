@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nick.ant.towerdefense.renderables.rooms.Room;
 import com.nick.ant.towerdefense.renderables.rooms.RoomGame;
+import com.nick.ant.towerdefense.renderables.rooms.RoomMainMenu;
 import com.nick.ant.towerdefense.renderables.ui.FPSCounter;
 import com.nick.ant.towerdefense.renderables.ui.UIComponent;
 
@@ -15,7 +16,7 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-        currentRoom = new RoomGame();
+        currentRoom = new RoomMainMenu();
         fpsCounter = new FPSCounter();
 	}
 
