@@ -40,4 +40,10 @@ public abstract class Room {
 
     public abstract float getMouseX();
     public abstract float getMouseY();
+
+    public void dispose()   {
+        for (Renderable renderable : entityList) {
+            renderable.dispose();
+        }
+    }
 }

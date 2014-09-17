@@ -8,4 +8,5 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class Renderable {
     public abstract void render(SpriteBatch spriteBatch);
     public abstract void step();
+    public abstract void dispose();
 }
