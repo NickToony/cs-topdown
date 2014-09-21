@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
+import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.components.TextureManager;
 
@@ -14,7 +16,7 @@ import com.nick.ant.towerdefense.components.TextureManager;
  */
 public class Player extends Entity {
 
-    private Texture texture;
+    private TextureRegion texture;
     private Sprite sprite;
 
     protected float direction;
@@ -27,7 +29,10 @@ public class Player extends Entity {
 
     public Player(int x, int y) {
 
-        texture = TextureManager.getTexture("player.png");
+        //texture = TextureManager.getTexture("player.png");
+        texture = CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getTexture();
+        texture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         sprite = new Sprite(texture);
 
         this.x = x;
@@ -41,7 +46,7 @@ public class Player extends Entity {
         this.moveRight = false;
 
         setCollisionCircle(new Circle(), true);
-        getCollisionCircle(0, 0).setRadius(texture.getWidth()/2);
+        getCollisionCircle(0, 0).setRadius(texture.getRegionWidth()/2);
     }
 
     @Override
