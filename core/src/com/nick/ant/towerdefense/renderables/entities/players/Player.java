@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
+import com.esotericsoftware.spine.*;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.components.TextureManager;
@@ -18,6 +19,9 @@ public class Player extends Entity {
 
     private TextureRegion texture;
     private Sprite sprite;
+    private Skeleton skeleton;
+    AnimationState state;
+    SkeletonRenderer renderer;
 
     protected float direction;
     private final int moveSpeed = 2;
@@ -32,6 +36,11 @@ public class Player extends Entity {
         //texture = TextureManager.getTexture("player.png");
         texture = CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getTexture();
         texture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        skeleton = CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton();
+        state = new AnimationState(new AnimationStateData(skeleton.getData()));
+        state.setAnimation(0, "rifle_idle", true);
+        state.setTimeScale(skeleton.getData().findAnimation("rifle_idle").getDuration() / 1);
+        renderer = new SkeletonRenderer();
 
         sprite = new Sprite(texture);
 
@@ -51,11 +60,12 @@ public class Player extends Entity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        sprite.setCenterX(this.x);
+        /*sprite.setCenterX(this.x);
         sprite.setCenterY(this.y);
         sprite.setRotation(direction);
         sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-        sprite.draw(spriteBatch);
+        sprite.draw(spriteBatch);*/
+        renderer.draw(spriteBatch, skeleton);
     }
 
     @Override
@@ -82,7 +92,12 @@ public class Player extends Entity {
             vSpeed *= 0.75;
         }
 
-
+        state.update(Gdx.graphics.getDeltaTime());
+        state.apply(skeleton);
+        skeleton.setX(this.x);
+        skeleton.setY(this.y);
+        skeleton.getRootBone().setRotation(direction - 90f);
+        skeleton.updateWorldTransform();
     }
 
     protected float calculateDirection(int aimX, int aimY){
