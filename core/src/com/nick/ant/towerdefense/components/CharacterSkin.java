@@ -23,6 +23,7 @@ public class CharacterSkin  {
     private String asset;
     private String folder;
     private String name;
+    private SkeletonData data;
 
     public CharacterSkin(String asset, String folder, String name)  {
         this.asset = asset;
@@ -40,21 +41,23 @@ public class CharacterSkin  {
 
     public Skeleton getSkeleton()   {
 
-        File packedFile = new File(asset + "/" + name + ".png");
-        File atlasFile = new File(asset + "/" + name + ".atlas");
+        if (data == null) {
+            File packedFile = new File(asset + "/" + name + ".png");
+            File atlasFile = new File(asset + "/" + name + ".atlas");
 
-        if (!packedFile.exists() || !atlasFile.exists())   {
-            System.out.println("Generating the texture for " + name);
-            TexturePacker.process(asset, asset, name);
-        }
+            if (!packedFile.exists() || !atlasFile.exists()) {
+                System.out.println("Generating the texture for " + name);
+                TexturePacker.process(asset, asset, name);
+            }
 
-        TextureAtlas atlas = new TextureAtlas(atlasFile.getPath());
-        for (Texture texture : atlas.getTextures()) {
-            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            TextureAtlas atlas = new TextureAtlas(atlasFile.getPath());
+            for (Texture texture : atlas.getTextures()) {
+                texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            }
+            AtlasAttachmentLoader attachmentLoader = new AtlasAttachmentLoader(atlas);
+            SkeletonJson json = new SkeletonJson(attachmentLoader);
+            data = json.readSkeletonData(Gdx.files.internal(asset + "/skeleton.json"));
         }
-        AtlasAttachmentLoader attachmentLoader = new AtlasAttachmentLoader(atlas);
-        SkeletonJson json = new SkeletonJson(attachmentLoader);
-        SkeletonData data = json.readSkeletonData(Gdx.files.internal(asset + "/skeleton.json"));
 
         Skeleton skeleton = new Skeleton(data);
 

@@ -12,6 +12,7 @@ import com.nick.ant.towerdefense.renderables.rooms.Room;
 public abstract class Entity extends Renderable {
     protected float x = 0;
     protected float y = 0;
+    protected float direction;
     protected float hSpeed = 0;
     protected float vSpeed = 0;
     protected Room room;

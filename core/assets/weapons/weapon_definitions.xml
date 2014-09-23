@@ -1,0 +1,38 @@
+<weapons>
+    <category key="rifles" name="Rifles">
+        <weapon key = "rifle_m4a1">
+            <name>M4A1</name>
+            <ammo>
+                <clip>30</clip>
+                <total>90</total>
+            </ammo>
+            <damage>
+                <low>10</low>
+                <medium>25</medium>
+                <high>75</high>
+            </damage>
+            <performance>
+                <rof>10</rof>
+                <accuracy>90</accuracy>
+                <recoil>5</recoil>
+                <speed>100</speed>
+            </performance>
+            <money>
+                <cost>1000</cost>
+                <reward>250</reward>
+            </money>
+            <extra>
+                <silencer>1</silencer>
+            </extra>
+            <animations>
+                <idle>rifle_idle</idle>
+                <shoot>rifle_shoot</shoot>
+                <reload>rifle_reload</reload>
+            </animations>
+            <graphics>
+                <texture>rifle_m4a1</texture>
+            </graphics>
+
+        </weapon>
+    </category>
+</weapons>
