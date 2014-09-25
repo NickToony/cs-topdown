@@ -1,38 +1,84 @@
 <weapons>
-    <category key="rifles" name="Rifles">
-        <weapon key = "rifle_m4a1">
-            <name>M4A1</name>
-            <ammo>
-                <clip>30</clip>
-                <total>90</total>
-            </ammo>
+    <category key="rifle" name="Rifles">
+        <weapon key="m4a1" name = "M4A1">
+            <clip>30</clip>
+            <total>90</total>
+            <rof>10</rof>
+            <accuracy>90</accuracy>
+            <recoil>5</recoil>
+            <speed>100</speed>
+            <cost>1000</cost>
+            <reward>250</reward>
+            <silencer>1</silencer>
+            <zoom>1</zoom>
+            <reload>2</reload>
+            <reload_type>full</reload_type>
             <damage>
                 <low>10</low>
                 <medium>25</medium>
                 <high>75</high>
             </damage>
-            <performance>
-                <rof>10</rof>
-                <accuracy>90</accuracy>
-                <recoil>5</recoil>
-                <speed>100</speed>
-            </performance>
-            <money>
-                <cost>1000</cost>
-                <reward>250</reward>
-            </money>
-            <extra>
-                <silencer>1</silencer>
-            </extra>
             <animations>
                 <idle>rifle_idle</idle>
                 <shoot>rifle_shoot</shoot>
                 <reload>rifle_reload</reload>
+                <equip>rifle_equip</equip>
+                <unequip>rifle_unequip</unequip>
+                <cock>rifle_cock</cock>
             </animations>
+            <sounds>
+                <fire></fire>
+                <clip_in></clip_in>
+                <clip_out></clip_out>
+                <cock></cock>
+                <equip></equip>
+                <unequip></unequip>
+            </sounds>
             <graphics>
-                <texture>rifle_m4a1</texture>
+                <left>0</left>
+                <right>1</right>
             </graphics>
-
+        </weapon>
+    </category>
+    <category key="pistol" name="Pistols">
+        <weapon key="dual_beretta" name="Dual Berettas">
+            <clip>30</clip>
+            <total>60</total>
+            <rof>1</rof>
+            <accuracy>40</accuracy>
+            <recoil>10</recoil>
+            <speed>100</speed>
+            <cost>200</cost>
+            <reward>400</reward>
+            <silencer>0</silencer>
+            <zoom>0</zoom>
+            <reload>2</reload>
+            <reload_type>full</reload_type>
+            <damage>
+                <low>5</low>
+                <medium>30</medium>
+                <high>75</high>
+            </damage>
+            <animations>
+                <idle>dual_idle</idle>
+                <shoot>dual_shoot</shoot>
+                <reload>dual_reload</reload>
+                <equip>dual_equip</equip>
+                <unequip>dual_unequip</unequip>
+                <cock>dual_cock</cock>
+            </animations>
+            <sounds>
+                <fire></fire>
+                <clip_in></clip_in>
+                <clip_out></clip_out>
+                <cock></cock>
+                <equip></equip>
+                <unequip></unequip>
+            </sounds>
+            <graphics>
+                <left>1</left>
+                <right>1</right>
+            </graphics>
         </weapon>
     </category>
 </weapons>
