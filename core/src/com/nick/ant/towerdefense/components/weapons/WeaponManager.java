@@ -49,7 +49,7 @@ public class WeaponManager {
             weaponsCategories.add(weaponCategory);
 
             for (XmlReader.Element weaponElement : categoryElement.getChildrenByName("weapon")) {
-                String weaponKey = categoryKey + "_" + categoryElement.getAttribute("key");
+                String weaponKey = categoryKey + "_" + weaponElement.getAttribute("key");
                 String weaponName = categoryElement.getAttribute("name");
 
                 Weapon weapon = new Weapon(weaponKey, weaponName, weaponElement);

@@ -35,8 +35,8 @@
                 <unequip></unequip>
             </sounds>
             <graphics>
-                <left>0</left>
-                <right>1</right>
+                <left>false</left>
+                <right>true</right>
             </graphics>
         </weapon>
     </category>
@@ -76,8 +76,8 @@
                 <unequip></unequip>
             </sounds>
             <graphics>
-                <left>1</left>
-                <right>1</right>
+                <left>true</left>
+                <right>true</right>
             </graphics>
         </weapon>
     </category>

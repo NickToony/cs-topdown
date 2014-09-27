@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.components.weapons;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.XmlReader;
 
 /**
@@ -228,5 +229,9 @@ public class Weapon {
 
     public boolean isRightHand() {
         return rightHand;
+    }
+
+    public String getTexture() {
+        return getWeaponKey();
     }
 }

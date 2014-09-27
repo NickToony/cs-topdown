@@ -1,8 +1,15 @@
 package com.nick.ant.towerdefense.renderables.entities.players;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.esotericsoftware.spine.Bone;
+import com.esotericsoftware.spine.Skeleton;
 import com.nick.ant.towerdefense.components.CharacterManager;
+import com.nick.ant.towerdefense.components.TextureManager;
+import com.nick.ant.towerdefense.components.weapons.Weapon;
+import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.renderables.entities.SkeletonEntity;
 
 /**
@@ -11,17 +18,30 @@ import com.nick.ant.towerdefense.renderables.entities.SkeletonEntity;
 public class Player extends SkeletonEntity {
 
     private final int PLAYER_RADIUS = 15;
-
-    private final int moveSpeed = 2;
+    private final int PLAYER_MOVE_SPEED = 2;
+    private final int WEAPON_X_OFFSET = 15;
+    private final int WEAPON_Y_OFFSET = 64 - 46;
 
     protected boolean moveUp;
     protected boolean moveDown;
     protected boolean moveLeft;
     protected boolean moveRight;
 
+    private Weapon weaponPrimary;
+    private Bone leftHand;
+    private Bone rightHand;
+    private Sprite leftHandSprite;
+    private Sprite rightHandSprite;
+
+    private Texture gunTexture;
+
     public Player(int x, int y) {
 
         setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
+        leftHand = getSkeleton().findBone("left_gun");
+        rightHand = getSkeleton().findBone("right_gun");
+
+        setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
 
         this.x = x;
         this.y = y;
@@ -34,11 +54,53 @@ public class Player extends SkeletonEntity {
 
         setCollisionCircle(new Circle(), true);
         getCollisionCircle(0, 0).setRadius(PLAYER_RADIUS);
+
+        if (weaponPrimary != null)  {
+            startAnimation(weaponPrimary.getAnimationIdle(), 2, true);
+        }   else    {
+            System.out.println("NO ANIMATIONS");
+        }
+    }
+
+    private void setGun(Weapon weapon)  {
+        if (gunTexture != null) {
+            gunTexture.dispose();
+        }
+
+        gunTexture = TextureManager.getTexture("weapons/" + weapon.getTexture()+ "/texture.png");
+        weaponPrimary = weapon;
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
         super.render(spriteBatch);
+
+        Weapon weapon = weaponPrimary;
+
+        if (weapon.isLeftHand() && weapon != null)  {
+            if (leftHandSprite == null || leftHandSprite.getTexture() != gunTexture)  {
+                leftHandSprite = new Sprite(gunTexture);
+                leftHandSprite.setOrigin(WEAPON_X_OFFSET, WEAPON_Y_OFFSET);
+            }
+
+            leftHandSprite.setX(leftHand.getWorldX() + x - WEAPON_X_OFFSET);
+            leftHandSprite.setY(leftHand.getWorldY() + y - WEAPON_Y_OFFSET);
+            leftHandSprite.setRotation(leftHand.getWorldRotation() - 90);
+
+            leftHandSprite.draw(spriteBatch);
+        }
+        if (weapon.isRightHand() && weapon != null) {
+            if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture)  {
+                rightHandSprite = new Sprite(gunTexture);
+                rightHandSprite.setOrigin(WEAPON_X_OFFSET, WEAPON_Y_OFFSET);
+            }
+
+            rightHandSprite.setX(rightHand.getWorldX() + x - WEAPON_X_OFFSET);
+            rightHandSprite.setY(rightHand.getWorldY() + y - WEAPON_Y_OFFSET);
+            rightHandSprite.setRotation(rightHand.getWorldRotation() - 90);
+
+            rightHandSprite.draw(spriteBatch);
+        }
     }
 
     @Override
@@ -49,15 +111,15 @@ public class Player extends SkeletonEntity {
         vSpeed = 0;
 
         if (moveUp && !moveDown) {
-            vSpeed = moveSpeed;
+            vSpeed = PLAYER_MOVE_SPEED;
         }   else if (moveDown && !moveUp)    {
-            vSpeed = -moveSpeed;
+            vSpeed = -PLAYER_MOVE_SPEED;
         }
 
         if (moveLeft && !moveRight) {
-            hSpeed = -moveSpeed;
+            hSpeed = -PLAYER_MOVE_SPEED;
         }   else if (moveRight && !moveLeft)    {
-            hSpeed = moveSpeed;
+            hSpeed = PLAYER_MOVE_SPEED;
         }
 
         if (hSpeed != 0 && vSpeed != 0) {
@@ -69,4 +131,5 @@ public class Player extends SkeletonEntity {
     protected float calculateDirection(int aimX, int aimY){
         return (float) ((Math.atan2((aimX - x), -(aimY - y)) * 180.0f / Math.PI) + 180f);
     }
+
 }

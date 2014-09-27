@@ -45,8 +45,15 @@ public abstract class SkeletonEntity extends Entity {
     protected void setSkeleton(Skeleton skeleton)  {
         this.skeleton = skeleton;
         this.state = new AnimationState(new AnimationStateData(skeleton.getData()));
-        this.state.setAnimation(0, "rifle_idle", true);
-        this.state.setTimeScale(skeleton.getData().findAnimation("rifle_idle").getDuration() / 1);
         this.renderer = new SkeletonRenderer();
+    }
+
+    protected void startAnimation(String animation, float duration, boolean loop)   {
+        this.state.setAnimation(0, animation, loop);
+        this.state.setTimeScale(skeleton.getData().findAnimation(animation).getDuration() / duration);
+    }
+
+    protected Skeleton getSkeleton()    {
+        return skeleton;
     }
 }
