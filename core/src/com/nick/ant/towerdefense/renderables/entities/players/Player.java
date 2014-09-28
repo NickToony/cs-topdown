@@ -74,7 +74,7 @@ public class Player extends SkeletonEntity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        shadowSprite = new Sprite(TextureManager.getTexture("shadow2.png"));
+        shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
         shadowSprite.setX(x - shadowSprite.getWidth()/2);
         shadowSprite.setY(y - shadowSprite.getHeight()/2);
         shadowSprite.draw(spriteBatch);
