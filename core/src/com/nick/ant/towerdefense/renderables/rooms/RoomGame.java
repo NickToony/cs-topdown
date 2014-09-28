@@ -16,6 +16,7 @@ public class RoomGame extends Room {
     private float mouseX = 0f;
     private float mouseY = 0f;
     private CollisionManager collisionManager;
+    public Player userPlayer;
 
     public RoomGame()   {
         spriteBatch = new SpriteBatch();
@@ -23,10 +24,10 @@ public class RoomGame extends Room {
 
         collisionManager = new CollisionManager(world);
 
-        Player player = new UserPlayer(16,16);
-        addEntity(player);
-        player.setCollisionManager(collisionManager);
-        world.setEntitySnap(player);
+        userPlayer = new UserPlayer(16,16);
+        addEntity(userPlayer);
+        userPlayer.setCollisionManager(collisionManager);
+        world.setEntitySnap(userPlayer);
     }
 
     public SpriteBatch getSpriteBatch() {
@@ -42,6 +43,10 @@ public class RoomGame extends Room {
 
         mouseX = Gdx.input.getX() + world.getCameraX() - Gdx.graphics.getWidth()/2;
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + world.getCameraY() - Gdx.graphics.getHeight()/2;
+    }
+
+    public Player getUserPlayer() {
+        return userPlayer;
     }
 
     public float getMouseX() {

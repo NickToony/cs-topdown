@@ -72,6 +72,10 @@ public class Player extends SkeletonEntity {
         weaponPrimary = weapon;
     }
 
+    public Weapon getGun(){
+        return weaponPrimary;
+    }
+
     @Override
     public void render(SpriteBatch spriteBatch) {
         shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
