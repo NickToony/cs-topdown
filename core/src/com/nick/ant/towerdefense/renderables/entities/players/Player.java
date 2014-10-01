@@ -68,6 +68,9 @@ public class Player extends SkeletonEntity {
         }
 
         gunTexture = TextureManager.getTexture("weapons/" + weapon.getTexture()+ "/texture.png");
+        gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+
         weaponPrimary = weapon;
     }
 
