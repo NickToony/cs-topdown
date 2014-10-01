@@ -1,10 +1,15 @@
 package com.nick.ant.towerdefense.renderables.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
+import com.nick.ant.towerdefense.renderables.rooms.RoomGame;
 
 /**
  * Created by harry on 28/09/14.
@@ -12,20 +17,39 @@ import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 public class HUD extends UIComponent {
 
     private BitmapFont font;
-    private Player userPlayer;
+    private RoomGame room;
+    private int x;
+    private int y;
 
-    public HUD(Player player) {
+    private Player player;
+
+    private String ammoCount;
+
+    public HUD(RoomGame room) {
         font = new BitmapFont();
-        font.setColor(Color.BLACK);
+        font.setColor(0.91f, 0.73f, 0.23f, 0.95f);
+        // Scaling works really well with bitmap fonts
+        font.setScale(2f);
 
-        userPlayer = (UserPlayer) player;
+        this.room = room;
+        this.player = room.getUserPlayer();
+
+    }
+
+    @Override
+    public void step(){
+        // Should hopefully return 0,0 of the window
+        this.x = Math.round(room.getViewX()) - Gdx.graphics.getWidth()/2;
+        this.y = Math.round(room.getViewY()) - Gdx.graphics.getHeight()/2;
+
+        ammoCount = player.getGun().getClipSize() + "|" + player.getGun().getClipTotal();
+
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        int ammo = userPlayer.getGun().getClipSize();
-
-        font.draw(spriteBatch, "Ammo: " + ammo, 20, 80);
+        // TODO: Define HUD elements with XML?
+        font.draw(spriteBatch, ammoCount, x + 10, y + 40);
     }
 
     @Override

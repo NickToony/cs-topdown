@@ -22,7 +22,10 @@ public class Game extends ApplicationAdapter {
 	public void create () {
         currentRoom = new RoomGame();
         fpsCounter = new FPSCounter();
-        HUD = new HUD(((RoomGame)currentRoom).getUserPlayer());
+        HUD = new HUD(((RoomGame)currentRoom));
+
+        currentRoom.addRenderable(fpsCounter);
+        currentRoom.addRenderable(HUD);
 
 
         CharacterManager characterManager = CharacterManager.getInstance();
