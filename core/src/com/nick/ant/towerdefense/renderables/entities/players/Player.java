@@ -137,6 +137,11 @@ public class Player extends SkeletonEntity {
         }
     }
 
+    @Override
+    public void dispose() {
+        texture.dispose();
+    }
+
     protected float calculateDirection(int aimX, int aimY){
         return (float) ((Math.atan2((aimX - x), -(aimY - y)) * 180.0f / Math.PI) + 180f);
     }

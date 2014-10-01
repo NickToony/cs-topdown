@@ -42,4 +42,12 @@ public abstract class Room {
     public abstract float getMouseX();
     public abstract float getMouseY();
 
+    public abstract float getViewX();
+    public abstract float getViewY();
+
+    public void dispose()   {
+        for (Renderable renderable : entityList) {
+            renderable.dispose();
+        }
+    }
 }

@@ -18,6 +18,7 @@ public class RoomMainMenu extends Room {
     public RoomMainMenu()   {
         spriteBatch = new SpriteBatch();
         addRenderable(new TextLabel("Hello World"));
+
     }
 
     public SpriteBatch getSpriteBatch() {
@@ -35,5 +36,21 @@ public class RoomMainMenu extends Room {
 
     public float getMouseY() {
         return Gdx.input.getY();
+    }
+
+    @Override
+    public float getViewX() {
+        return 0;
+    }
+
+    @Override
+    public float getViewY() {
+        return 0;
+    }
+
+    @Override
+    public void dispose()   {
+        super.dispose();
+        spriteBatch.dispose();
     }
 }

@@ -57,6 +57,16 @@ public class RoomGame extends Room {
         return mouseY;
     }
 
+    @Override
+    public float getViewX() {
+        return world.getCameraX();
+    }
+
+    @Override
+    public float getViewY() {
+        return world.getCameraY();
+    }
+
     public World getWorld() {
         return world;
     }

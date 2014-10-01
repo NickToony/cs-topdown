@@ -32,4 +32,9 @@ public class FPSCounter extends UIComponent {
 
         font.draw(spriteBatch, "FPS: " + currentFPS, 20, 20);
     }
+
+    @Override
+    public void dispose() {
+        font.dispose();
+    }
 }
