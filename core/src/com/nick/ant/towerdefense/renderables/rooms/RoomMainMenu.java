@@ -39,6 +39,16 @@ public class RoomMainMenu extends Room {
     }
 
     @Override
+    public float getViewX() {
+        return 0;
+    }
+
+    @Override
+    public float getViewY() {
+        return 0;
+    }
+
+    @Override
     public void dispose()   {
         super.dispose();
         spriteBatch.dispose();
