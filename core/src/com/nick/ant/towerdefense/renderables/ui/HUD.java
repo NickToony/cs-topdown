@@ -28,4 +28,9 @@ public class HUD extends UIComponent {
         font.draw(spriteBatch, "Ammo: " + ammo, 20, 80);
     }
 
+    @Override
+    public void dispose() {
+        font.dispose();
+    }
+
 }

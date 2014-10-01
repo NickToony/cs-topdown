@@ -139,7 +139,9 @@ public class Player extends SkeletonEntity {
 
     @Override
     public void dispose() {
-        texture.dispose();
+        shadowSprite.getTexture().dispose();
+        leftHandSprite.getTexture().dispose();
+        rightHandSprite.getTexture().dispose();
     }
 
     protected float calculateDirection(int aimX, int aimY){
