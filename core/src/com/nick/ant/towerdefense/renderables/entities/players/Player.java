@@ -32,6 +32,7 @@ public class Player extends SkeletonEntity {
     private Bone rightHand;
     private Sprite leftHandSprite;
     private Sprite rightHandSprite;
+    private Sprite shadowSprite;
 
     private Texture gunTexture;
 
@@ -76,8 +77,12 @@ public class Player extends SkeletonEntity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        super.render(spriteBatch);
+        shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
+        shadowSprite.setX(x - shadowSprite.getWidth()/2);
+        shadowSprite.setY(y - shadowSprite.getHeight()/2);
+        shadowSprite.draw(spriteBatch);
 
+        super.render(spriteBatch);
         Weapon weapon = weaponPrimary;
 
         if (weapon.isLeftHand() && weapon != null)  {
@@ -93,7 +98,7 @@ public class Player extends SkeletonEntity {
             leftHandSprite.draw(spriteBatch);
         }
         if (weapon.isRightHand() && weapon != null) {
-            if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture)  {
+            if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture) {
                 rightHandSprite = new Sprite(gunTexture);
                 rightHandSprite.setOrigin(WEAPON_X_OFFSET, WEAPON_Y_OFFSET);
             }
