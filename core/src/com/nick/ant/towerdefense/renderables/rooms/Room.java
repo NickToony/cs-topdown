@@ -50,4 +50,12 @@ public abstract class Room {
             renderable.dispose();
         }
     }
+
+    public void makePriority(Entity entitySnap) {
+        if (entityList.contains(entitySnap))    {
+            entityList.remove(entitySnap);
+            entityList.add(0, entitySnap);
+            System.out.println("Okay!");
+        }
+    }
 }

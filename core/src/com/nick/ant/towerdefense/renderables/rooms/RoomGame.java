@@ -6,6 +6,7 @@ import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManage
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 import com.nick.ant.towerdefense.renderables.entities.world.World;
+import com.nick.ant.towerdefense.renderables.ui.HUD;
 
 /**
  * Created by Nick on 08/09/2014.
@@ -28,6 +29,9 @@ public class RoomGame extends Room {
         addEntity(userPlayer);
         userPlayer.setCollisionManager(collisionManager);
         world.setEntitySnap(userPlayer);
+
+        HUD hud = new HUD(this);
+        addRenderable(hud);
     }
 
     public SpriteBatch getSpriteBatch() {
