@@ -75,6 +75,10 @@ public class Player extends SkeletonEntity {
         weaponPrimary = weapon;
     }
 
+    public Weapon getGun(){
+        return weaponPrimary;
+    }
+
     @Override
     public void render(SpriteBatch spriteBatch) {
         shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
@@ -134,6 +138,13 @@ public class Player extends SkeletonEntity {
             hSpeed *= 0.75;
             vSpeed *= 0.75;
         }
+    }
+
+    @Override
+    public void dispose() {
+        shadowSprite.getTexture().dispose();
+        leftHandSprite.getTexture().dispose();
+        rightHandSprite.getTexture().dispose();
     }
 
     protected float calculateDirection(int aimX, int aimY){

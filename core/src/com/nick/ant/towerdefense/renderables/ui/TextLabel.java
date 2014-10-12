@@ -18,4 +18,9 @@ public class TextLabel extends UIComponent {
     public void render(SpriteBatch spriteBatch) {
         label.draw(spriteBatch, 1);
     }
+
+    @Override
+    public void dispose() {
+        label.getStage().dispose();
+    }
 }

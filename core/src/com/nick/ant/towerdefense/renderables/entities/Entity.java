@@ -40,6 +40,10 @@ public abstract class Entity extends Renderable {
         this.room = room;
     }
 
+    public Room getRoom()   {
+        return room;
+    }
+
     public void setCollisionManager(CollisionManager collisionManager)  {
         this.collisionManager = collisionManager;
     }

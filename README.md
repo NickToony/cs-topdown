@@ -4,5 +4,6 @@ CS Top Down
 A simple Counter-Strike inspired game.
 
 Future features:
-- Mutliplayer
+- Multiplayer
 - 2D skeletal animation
+- Next-gen graphics
