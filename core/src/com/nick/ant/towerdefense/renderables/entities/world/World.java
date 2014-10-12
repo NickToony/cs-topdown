@@ -7,9 +7,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
@@ -18,6 +16,7 @@ import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by Nick on 10/09/2014.
@@ -79,7 +78,7 @@ public class World  {
 
     public void step() {
         if (entitySnap != null) {
-            camera.translate(entitySnap.getX() - camera.position.x, entitySnap.getY() - camera.position.y);
+            camera.translate(Math.round(entitySnap.getX() - camera.position.x), Math.round(entitySnap.getY() - camera.position.y));
         }
 
         camera.update();
