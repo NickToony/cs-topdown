@@ -9,7 +9,7 @@ A quick adventure into the world of LibGDX: topdown 2D shooter based on the popu
 - External map loading and rendering
 - Skeletal based animation
 
-## Features
+## Future Features
 - Shooting (somewhat vital!)
 - Enemy AI
 - Possibly some simple multiplayer..
