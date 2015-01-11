@@ -1,9 +1,15 @@
+![](https://github.com/NickToony/cs-topdown/blob/master/screenshots/screenshot1.png)
+
 CS Top Down
 =====================
+A quick adventure into the world of LibGDX: topdown 2D shooter based on the popular Counterstrike series.
 
-A simple Counter-Strike inspired game.
+##Current Features
+- Collisions and movement
+- External map loading and rendering
+- Skeletal based animation
 
-Future features:
-- Multiplayer
-- 2D skeletal animation
-- Next-gen graphics
+## Features
+- Shooting (somewhat vital!)
+- Enemy AI
+- Possibly some simple multiplayer..
