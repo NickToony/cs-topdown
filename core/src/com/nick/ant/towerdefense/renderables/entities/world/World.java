@@ -72,7 +72,11 @@ public class World  {
         return camera;
     }
 
-    public void setEntitySnap(Player player)    {
+    /**
+     * Set the entity that the camera should lock onto. You can set it to null to disable this feature.
+     * @param player
+     */
+    public void setEntitySnap(Entity player)    {
         this.entitySnap = player;
     }
 
