@@ -16,7 +16,6 @@ import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by Nick on 10/09/2014.
