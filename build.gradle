@@ -47,6 +47,9 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+
+        compile project(':libs:gameserver-service-java')
+        compile project(':libs:gameserver-service-libgdx')
     }
 }
 
