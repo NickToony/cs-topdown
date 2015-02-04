@@ -9,6 +9,7 @@ import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.renderables.rooms.Room;
 import com.nick.ant.towerdefense.renderables.rooms.RoomGame;
+import com.nick.ant.towerdefense.renderables.rooms.RoomMainMenu;
 import com.nick.ant.towerdefense.renderables.ui.FPSCounter;
 import com.nick.ant.towerdefense.renderables.ui.UIComponent;
 import com.nick.ant.towerdefense.renderables.ui.HUD;
@@ -20,7 +21,7 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-        currentRoom = new RoomGame();
+        currentRoom = new RoomMainMenu();
         fpsCounter = new FPSCounter();
 
         // Force it to load the instances
