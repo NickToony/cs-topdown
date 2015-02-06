@@ -30,10 +30,9 @@
 
 package com.esotericsoftware.spine;
 
-import com.esotericsoftware.spine.attachments.Attachment;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.spine.attachments.Attachment;
 
 public class Skeleton {
 	final SkeletonData data;

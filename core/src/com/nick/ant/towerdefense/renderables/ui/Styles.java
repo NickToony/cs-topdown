@@ -1,7 +1,6 @@
 package com.nick.ant.towerdefense.renderables.ui;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
  * Created by Nick on 15/09/2014.

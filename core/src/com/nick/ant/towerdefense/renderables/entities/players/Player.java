@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.esotericsoftware.spine.Bone;
-import com.esotericsoftware.spine.Skeleton;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;

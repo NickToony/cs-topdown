@@ -30,11 +30,11 @@
 
 package com.esotericsoftware.spine;
 
-import static com.badlogic.gdx.math.Matrix3.*;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector2;
+
+import static com.badlogic.gdx.math.Matrix3.*;
 
 public class Bone {
 	final BoneData data;

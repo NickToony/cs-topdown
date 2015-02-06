@@ -30,11 +30,10 @@
 
 package com.esotericsoftware.spine;
 
-import com.esotericsoftware.spine.attachments.Attachment;
-
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
+import com.esotericsoftware.spine.attachments.Attachment;
 
 /** Stores attachments by slot index and attachment name. */
 public class Skin {

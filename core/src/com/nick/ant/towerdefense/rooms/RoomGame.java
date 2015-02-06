@@ -1,7 +1,6 @@
 package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
@@ -20,7 +19,8 @@ public class RoomGame extends Room {
     private CollisionManager collisionManager;
     public Player userPlayer;
 
-    public RoomGame()   {
+    @Override
+    public void create() {
         // Force it to load the instances
         CharacterManager.getInstance();
         WeaponManager.getInstance();

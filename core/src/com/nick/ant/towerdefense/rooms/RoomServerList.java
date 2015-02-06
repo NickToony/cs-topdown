@@ -1,10 +1,9 @@
 package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.nick.ant.towerdefense.serverlist.GameConfig;
+import com.nick.ant.towerdefense.components.SkinManager;
+import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.gameserver.service.libgdx.ServerList;
@@ -21,14 +20,15 @@ public class RoomServerList extends Room {
     private ServerList serverList;
     private Stage stage;
 
-    public RoomServerList()   {
+    @Override
+    public void create() {
         // set gameserver config.json
-        GameserverConfig.setConfig(new GameConfig());
+        GameserverConfig.setConfig(new ServerlistConfig());
         // A stage
         stage = new Stage();
 
         // The server list (which is an actor)
-        serverList = new ServerList(new Skin(Gdx.files.internal("skins/default/uiskin.json")));
+        serverList = new ServerList(SkinManager.getUiSkin());
 //        serverList.setDebug(true, true);
         serverList.pad(20);
 
@@ -40,24 +40,6 @@ public class RoomServerList extends Room {
     public void step()  {
         super.step();
         stage.act(Gdx.graphics.getDeltaTime());
-    }
-
-    public float getMouseX() {
-        return Gdx.input.getX();
-    }
-
-    public float getMouseY() {
-        return Gdx.input.getY();
-    }
-
-    @Override
-    public float getViewX() {
-        return 0;
-    }
-
-    @Override
-    public float getViewY() {
-        return 0;
     }
 
     @Override

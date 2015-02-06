@@ -1,6 +1,5 @@
 package com.nick.ant.towerdefense.components.weapons;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.XmlReader;
 
 /**

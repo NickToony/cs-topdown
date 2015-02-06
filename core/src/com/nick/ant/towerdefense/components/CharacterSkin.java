@@ -1,7 +1,6 @@
 package com.nick.ant.towerdefense.components;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,11 +9,8 @@ import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonJson;
 import com.esotericsoftware.spine.attachments.AtlasAttachmentLoader;
-import com.nick.ant.towerdefense.components.TextureManager;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Created by Nick on 21/09/2014.

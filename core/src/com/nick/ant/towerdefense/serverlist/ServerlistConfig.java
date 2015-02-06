@@ -5,7 +5,7 @@ import com.nicktoony.gameserver.service.GameserverConfig;
 /**
  * Created by Nick on 04/02/2015.
  */
-public class GameConfig extends GameserverConfig {
+public class ServerlistConfig extends GameserverConfig {
 
     @Override
     public String getServerUrl() {

@@ -3,7 +3,7 @@ package com.nicktoony.cstd.server;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.nick.ant.towerdefense.serverlist.GameConfig;
+import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import org.apache.commons.io.FileUtils;
@@ -29,7 +29,7 @@ class Server {
 
     public Server() {
         log("Setting up");
-        GameserverConfig.setConfig(new GameConfig());
+        GameserverConfig.setConfig(new ServerlistConfig());
 
         File configFile = new File("server/config.json");
         if (!configFile.exists()) {

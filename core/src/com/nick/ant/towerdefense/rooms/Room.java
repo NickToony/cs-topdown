@@ -1,6 +1,9 @@
 package com.nick.ant.towerdefense.rooms;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nick.ant.towerdefense.Game;
+import com.nick.ant.towerdefense.components.SkinManager;
 import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
@@ -14,6 +17,9 @@ import java.util.List;
 public abstract class Room {
     protected List<Renderable> entityList = new ArrayList<Renderable>();
     private SpriteBatch spriteBatch = new SpriteBatch();
+    private Game game;
+
+    public abstract void create();
 
     public void addEntity(Entity entity) {
         entityList.add(entity);
@@ -43,18 +49,31 @@ public abstract class Room {
         return this.spriteBatch;
     }
 
-    public abstract float getMouseX();
-    public abstract float getMouseY();
+    public float getMouseX() {
+        return Gdx.input.getX();
+    }
 
-    public abstract float getViewX();
-    public abstract float getViewY();
+    public float getMouseY() {
+        return Gdx.input.getY();
+    }
+
+    public float getViewX() {
+        return 0;
+    }
+
+    public float getViewY() {
+        return 0;
+    }
 
     public void dispose()   {
         for (Renderable renderable : entityList) {
             renderable.dispose();
         }
         spriteBatch.dispose();
+
+        // dispose managers
         TextureManager.dispose();
+        SkinManager.dispose();
     }
 
     public void makePriority(Entity entitySnap) {
@@ -62,5 +81,13 @@ public abstract class Room {
             entityList.remove(entitySnap);
             entityList.add(0, entitySnap);
         }
+    }
+
+    public void navigateToRoom(Room room) {
+        game.navigateToRoom(room);
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }
