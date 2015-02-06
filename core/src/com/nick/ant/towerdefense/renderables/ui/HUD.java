@@ -1,15 +1,10 @@
 package com.nick.ant.towerdefense.renderables.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
-import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
-import com.nick.ant.towerdefense.renderables.rooms.RoomGame;
+import com.nick.ant.towerdefense.rooms.RoomGame;
 
 /**
  * Created by harry on 28/09/14.

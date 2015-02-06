@@ -1,10 +1,9 @@
 package com.nick.ant.towerdefense.renderables.entities;
 
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
-import com.nick.ant.towerdefense.renderables.rooms.Room;
+import com.nick.ant.towerdefense.rooms.Room;
 
 /**
  * Created by Nick on 08/09/2014.

@@ -1,4 +1,4 @@
-package com.nick.ant.towerdefense.renderables.rooms;
+package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,14 +13,12 @@ import com.nick.ant.towerdefense.renderables.ui.HUD;
  */
 public class RoomGame extends Room {
     private World world;
-    private SpriteBatch spriteBatch;
     private float mouseX = 0f;
     private float mouseY = 0f;
     private CollisionManager collisionManager;
     public Player userPlayer;
 
     public RoomGame()   {
-        spriteBatch = new SpriteBatch();
         world = new World("de_dust2");
 
         collisionManager = new CollisionManager(world);
@@ -34,12 +32,13 @@ public class RoomGame extends Room {
         addRenderable(hud);
     }
 
-    public SpriteBatch getSpriteBatch() {
-
+    @Override
+    public void render() {
         world.step();
-        spriteBatch.setProjectionMatrix(world.getCamera().combined);
+        getSpriteBatch().setProjectionMatrix(world.getCamera().combined);
         world.render();
-        return spriteBatch;
+
+        super.render();
     }
 
     public void step()  {

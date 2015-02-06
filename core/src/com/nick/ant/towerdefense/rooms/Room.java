@@ -1,10 +1,8 @@
-package com.nick.ant.towerdefense.renderables.rooms;
+package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
-import com.nick.ant.towerdefense.renderables.entities.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
  */
 public abstract class Room {
     protected List<Renderable> entityList = new ArrayList<Renderable>();
+    private SpriteBatch spriteBatch = new SpriteBatch();
 
     public void addEntity(Entity entity) {
         entityList.add(entity);
@@ -24,10 +23,12 @@ public abstract class Room {
         entityList.add(renderable);
     }
 
-    public void render(SpriteBatch spriteBatch) {
+    public void render() {
+        spriteBatch.begin();
         for (Renderable renderable : entityList) {
             renderable.render(spriteBatch);
         }
+        spriteBatch.end();
     }
 
 
@@ -37,7 +38,9 @@ public abstract class Room {
         }
     }
 
-    public abstract SpriteBatch getSpriteBatch();
+    protected SpriteBatch getSpriteBatch() {
+        return this.spriteBatch;
+    }
 
     public abstract float getMouseX();
     public abstract float getMouseY();
@@ -49,13 +52,13 @@ public abstract class Room {
         for (Renderable renderable : entityList) {
             renderable.dispose();
         }
+        spriteBatch.dispose();
     }
 
     public void makePriority(Entity entitySnap) {
         if (entityList.contains(entitySnap))    {
             entityList.remove(entitySnap);
             entityList.add(0, entitySnap);
-            System.out.println("Okay!");
         }
     }
 }
