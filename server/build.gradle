@@ -17,10 +17,3 @@ dependencies {
     compile "commons-io:commons-io:+"
     compile 'com.google.code.gson:gson:1.7.2'
 }
-
-task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    workingDir = project.assetsDir
-}
