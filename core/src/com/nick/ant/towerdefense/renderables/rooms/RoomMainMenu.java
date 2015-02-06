@@ -30,15 +30,8 @@ public class RoomMainMenu extends Room {
     private SpriteBatch spriteBatch;
 
     public RoomMainMenu()   {
-        // set gameserver config
+        // set gameserver config.json
         GameserverConfig.setConfig(new GameConfig());
-
-        Random random = new Random();
-        for (int i = 0; i < 10; i ++) {
-            Host host = new Host("A Game Server " + i, random.nextInt(32), random.nextInt(32));
-            hosts.add(host);
-        }
-
         // A stage
         stage = new Stage();
 
