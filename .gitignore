@@ -19,7 +19,6 @@ hs_err_pid*
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 *.iml
-libs/libs.iml
 
 ## Directory-based project format:
 .idea/
