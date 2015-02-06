@@ -1,6 +1,7 @@
 package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
@@ -53,6 +54,7 @@ public abstract class Room {
             renderable.dispose();
         }
         spriteBatch.dispose();
+        TextureManager.dispose();
     }
 
     public void makePriority(Entity entitySnap) {

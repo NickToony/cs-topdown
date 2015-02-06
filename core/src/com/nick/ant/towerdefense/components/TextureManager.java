@@ -18,4 +18,11 @@ public class TextureManager {
 
         return loadedTextures.get(texture);
     }
+
+    public static void dispose() {
+        for (Map.Entry<String, Texture> texture : loadedTextures.entrySet()) {
+            texture.getValue().dispose();
+        }
+        loadedTextures.clear();
+    }
 }
