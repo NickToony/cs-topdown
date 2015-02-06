@@ -27,6 +27,11 @@ class Server {
     private int currentPlayers = 0;
     private Timer timer;
 
+    public Server(ServerConfig config) {
+        this.config = config;
+        setup();
+    }
+
     public Server() {
         log("Setting up");
         GameserverConfig.setConfig(new ServerlistConfig());
@@ -58,7 +63,9 @@ class Server {
             log("Failed to parse config file. Exiting.");
             return;
         }
+    }
 
+    public void setup() {
         // Server list
         host = new Host("A Game Server", 0, 16);
 
