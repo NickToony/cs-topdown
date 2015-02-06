@@ -2,6 +2,8 @@ package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nick.ant.towerdefense.components.CharacterManager;
+import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
@@ -19,6 +21,10 @@ public class RoomGame extends Room {
     public Player userPlayer;
 
     public RoomGame()   {
+        // Force it to load the instances
+        CharacterManager.getInstance();
+        WeaponManager.getInstance();
+
         world = new World("de_dust2");
 
         collisionManager = new CollisionManager(world);
@@ -46,6 +52,14 @@ public class RoomGame extends Room {
 
         mouseX = Gdx.input.getX() + world.getCameraX() - Gdx.graphics.getWidth()/2;
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + world.getCameraY() - Gdx.graphics.getHeight()/2;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        CharacterManager.getInstance().dispose();
+        WeaponManager.getInstance().dispose();
     }
 
     public Player getUserPlayer() {

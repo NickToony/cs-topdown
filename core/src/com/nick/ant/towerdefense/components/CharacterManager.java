@@ -89,6 +89,11 @@ public class CharacterManager {
         }
     }
 
+    public void dispose() {
+        characterCategories.clear();
+        staticInstance = null;
+    }
+
     public class CharacterCategory  {
         private String name;
         private File folder;

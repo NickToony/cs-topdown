@@ -67,4 +67,10 @@ public class WeaponManager {
     public Weapon getWeapon(String weaponKey)   {
         return weapons.get(weaponKey);
     }
+
+    public void dispose() {
+        weapons.clear();
+        weaponsCategories.clear();
+        instance = null;
+    }
 }

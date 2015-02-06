@@ -17,10 +17,6 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
         currentRoom = new RoomGame();
-
-        // Force it to load the instances
-        CharacterManager characterManager = CharacterManager.getInstance();
-        WeaponManager weaponManager = WeaponManager.getInstance();
 	}
 
 	@Override
