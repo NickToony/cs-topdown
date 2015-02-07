@@ -1,4 +1,5 @@
 {
     "name": "A Brand New Server",
+    "port": 3453,
     "max_players": 32
 }

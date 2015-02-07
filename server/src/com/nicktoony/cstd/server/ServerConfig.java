@@ -6,6 +6,7 @@ package com.nicktoony.cstd.server;
 public class ServerConfig {
     private String name;
     private int maxPlayers;
+    private int port;
 
     public String getName() {
         return name;
@@ -13,5 +14,9 @@ public class ServerConfig {
 
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

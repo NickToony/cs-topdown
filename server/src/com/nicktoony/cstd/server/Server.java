@@ -1,5 +1,13 @@
 package com.nicktoony.cstd.server;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.backends.lwjgl.LwjglNet;
+import com.badlogic.gdx.net.ServerSocket;
+import com.badlogic.gdx.net.ServerSocketHints;
+import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.net.SocketHints;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -12,10 +20,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.nicktoony.cstd.server.Main.log;
+import static com.nicktoony.cstd.server.Main.logException;
 
 class Server {
     private final int FPS = 1000/60;
@@ -23,6 +33,7 @@ class Server {
     private Host host;
     private ServerConfig config;
     private boolean timerIsRunning = false;
+    private ServerSocket serverSocket;
 
     private int currentPlayers = 0;
     private Timer timer;
@@ -63,13 +74,29 @@ class Server {
             log("Failed to parse config file. Exiting.");
             return;
         }
+
+        setup();
     }
 
-    public void setup() {
+    private void setup() {
+        // Load GDX stuffs
+        loadGDX();
+
         // Server list
         host = new Host("A Game Server", 0, 16);
 
         log("Server started up");
+
+        // Open a socket
+        try {
+            serverSocket = Gdx.net.newServerSocket(Net.Protocol.TCP, config.getPort(), new ServerSocketHints());
+        } catch (Exception e) {
+            if (!logException(e)) {
+                e.printStackTrace();
+                log("Could not start server");
+            }
+            return;
+        }
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -81,7 +108,14 @@ class Server {
         timerIsRunning = true;
 
         // BETTER SOLUTION?!
-        while (timerIsRunning) {
+        while (serverSocket != null) {
+
+            try {
+                Socket socket = serverSocket.accept(new SocketHints());
+            } catch (Exception e) {
+                logException(e);
+            }
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -90,7 +124,11 @@ class Server {
         }
     }
 
-    public void step() {
+    private void loadGDX() {
+        Gdx.net = new LwjglNet();
+    }
+
+    private void step() {
 
     }
 
@@ -101,6 +139,9 @@ class Server {
         if (timer != null) {
             timer.cancel();
             timerIsRunning = false;
+        }
+        if (serverSocket != null) {
+            serverSocket.dispose();
         }
     }
 }
