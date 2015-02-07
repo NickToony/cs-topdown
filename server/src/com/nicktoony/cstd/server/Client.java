@@ -28,7 +28,7 @@ public class Client {
         if (socket != null) {
 
         } else {
-            
+
         }
     }
 }

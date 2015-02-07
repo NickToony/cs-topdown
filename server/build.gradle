@@ -6,14 +6,19 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "com.nicktoony.cstd.server.Main"
 project.ext.assetsDir = new File("../core/assets");
 
-repositories {
-    mavenCentral()
+task run(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
 }
 
 dependencies {
-    compile project(':libs:gameserver-service-java')
+    //compile project(':libs:gameserver-service-java')
     compile project(':core')
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "commons-io:commons-io:+"
     compile 'com.google.code.gson:gson:1.7.2'
+    compile "com.nicktoony:gameserver-service-java:0.1"
 }

@@ -1,4 +1,4 @@
 include 'desktop', 'core', 'server'
-include ':libs:gameserver-service-java'
-include ':libs:gameserver-service-libgdx'
+//include ':libs:gameserver-service-java'
+//include ':libs:gameserver-service-libgdx'
 

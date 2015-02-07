@@ -26,6 +26,8 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+
+        maven { url "https://raw.githubusercontent.com/NickToony/maven-repo/HEAD/" }
     }
 }
 
@@ -51,8 +53,17 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 
-        compile project(':libs:gameserver-service-java')
-        compile project(':libs:gameserver-service-libgdx')
+        compile "com.nicktoony:gameserver-service-java:0.1"
+        compile "com.nicktoony:gameserver-service-libgdx:0.1"
+
+    }
+}
+
+project(":server") {
+    apply plugin: "java"
+
+    dependencies {
+        compile "com.nicktoony:gameserver-service-java:0.1"
     }
 }
 

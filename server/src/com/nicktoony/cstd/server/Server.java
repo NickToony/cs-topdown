@@ -37,7 +37,7 @@ class Server {
     private boolean timerIsRunning = false;
     private ServerSocket serverSocket;
     private Timer timer;
-    private List<Client> clientList = new ArrayList<>();
+    private List<Client> clientList = new ArrayList<Client>();
 
     public Server(ServerConfig config) {
         this.config = config;
@@ -137,7 +137,7 @@ class Server {
 
     public void dispose() {
         if (host != null) {
-            host.stop();
+            //host.stop();
         }
         if (timer != null) {
             timer.cancel();
