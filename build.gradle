@@ -27,7 +27,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 
-        maven { url "https://raw.githubusercontent.com/NickToony/maven-repo/HEAD/" }
+        maven { url "https://raw.githubusercontent.com/NickToony/maven-repo/master/" }
     }
 }
 
@@ -63,7 +63,13 @@ project(":server") {
     apply plugin: "java"
 
     dependencies {
+        compile project(':core')
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "commons-io:commons-io:+"
+        compile 'com.google.code.gson:gson:1.7.2'
         compile "com.nicktoony:gameserver-service-java:0.1"
+        compile 'com.squareup.okhttp:okhttp:2.2.0'
+
     }
 }
 
