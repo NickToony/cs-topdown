@@ -28,6 +28,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 
         maven { url "https://raw.githubusercontent.com/NickToony/maven-repo/master/" }
+        maven { url "http://clojars.org/repo/" }
     }
 }
 
@@ -55,7 +56,7 @@ project(":core") {
 
         compile "com.nicktoony:gameserver-service-java:0.1"
         compile "com.nicktoony:gameserver-service-libgdx:0.1"
-
+        compile "kryonet:kryonet:2.21"
     }
 }
 
@@ -69,7 +70,6 @@ project(":server") {
         compile 'com.google.code.gson:gson:1.7.2'
         compile "com.nicktoony:gameserver-service-java:0.1"
         compile 'com.squareup.okhttp:okhttp:2.2.0'
-
     }
 }
 
