@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,9 +36,8 @@ class Server {
     private ServerConfig config;
     private boolean timerIsRunning = false;
     private ServerSocket serverSocket;
-
-    private int currentPlayers = 0;
     private Timer timer;
+    private List<Client> clientList = new ArrayList<>();
 
     public Server(ServerConfig config) {
         this.config = config;
@@ -112,6 +113,8 @@ class Server {
 
             try {
                 Socket socket = serverSocket.accept(new SocketHints());
+
+                clientList.add(new Client(socket));
             } catch (Exception e) {
                 logException(e);
             }
