@@ -53,7 +53,7 @@ public class RoomMainMenu extends Room {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button)
                             {
-                                navigateToRoom(new RoomGame());
+                                navigateToRoom(new RoomServerList());
                             }
                         }
                 ));

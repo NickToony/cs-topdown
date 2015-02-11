@@ -54,8 +54,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 
-        compile "com.nicktoony:gameserver-service-java:0.1"
-        compile "com.nicktoony:gameserver-service-libgdx:0.1"
+        compile "com.nicktoony:gameserver-service-java:0.1.1"
+        compile "com.nicktoony:gameserver-service-libgdx:0.1.1"
         compile files('../libs/kryonet-2.21-all.jar')
     }
 }
@@ -67,9 +67,7 @@ project(":server") {
         compile project(':core')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "commons-io:commons-io:+"
-        compile 'com.google.code.gson:gson:1.7.2'
-        compile "com.nicktoony:gameserver-service-java:0.1"
-        compile 'com.squareup.okhttp:okhttp:2.2.0' // this is only needed for Nick's desktop, apparently.
+        compile "com.nicktoony:gameserver-service-java:0.1.1"
     }
 }
 
