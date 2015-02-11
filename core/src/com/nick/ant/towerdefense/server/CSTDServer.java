@@ -1,4 +1,4 @@
-package com.nicktoony.cstd.server;
+package com.nick.ant.towerdefense.server;
 
 import com.esotericsoftware.kryonet.Server;
 import com.google.gson.FieldNamingPolicy;
@@ -18,10 +18,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.nicktoony.cstd.server.Main.log;
-import static com.nicktoony.cstd.server.Main.logException;
-
-class CSTDServer {
+public class CSTDServer {
     private final int FPS = 1000/60;
 
     private Host host;
@@ -30,26 +27,45 @@ class CSTDServer {
     private Server serverSocket;
     private Timer timer;
     private List<Client> clientList = new ArrayList<Client>();
+    private Logger logger;
 
-    public CSTDServer(ServerConfig config) {
+    public interface Logger {
+        public void log(String string);
+        public void log(Exception exception);
+    }
+
+    public CSTDServer(Logger logger, ServerConfig config) {
+        this.logger = logger;
         this.config = config;
+
+        logger.log("Setting up");
+        GameserverConfig.setConfig(new ServerlistConfig());
+
         setup();
     }
 
-    public CSTDServer() {
-        log("Setting up");
+    public CSTDServer(Logger logger) {
+        this.logger = logger;
+
+        logger.log("Setting up");
         GameserverConfig.setConfig(new ServerlistConfig());
 
+        if (getConfig()) {
+            setup();
+        }
+    }
+
+    public boolean getConfig() {
         File configFile = new File("server/config.json");
         if (!configFile.exists()) {
-            log("Config file does not exist");
-            log("Copying default config to location");
+            logger.log("Config file does not exist");
+            logger.log("Copying default config to location");
             try {
                 FileUtils.copyFile(new File("server/default.json"), configFile);
             } catch (IOException e) {
-                e.printStackTrace();
-                log("Failed to copy config. Exiting.");
-                return;
+                logger.log(e);
+                logger.log("Failed to copy config. Exiting.");
+                return false;
             }
         }
 
@@ -59,23 +75,23 @@ class CSTDServer {
                     .create()
                     .fromJson(new FileReader(configFile), ServerConfig.class);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            log("Failed to load config file. Exiting.");
-            return;
+            logger.log(e);
+            logger.log("Failed to load config file. Exiting.");
+            return false;
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-            log("Failed to parse config file. Exiting.");
-            return;
+            logger.log(e);
+            logger.log("Failed to parse config file. Exiting.");
+            return false;
         }
 
-        setup();
+        return true;
     }
 
     private void setup() {
         // Server list
         host = new Host("A Game Server", 0, 16);
 
-        log("Server started up");
+        logger.log("Server started up");
 
         // Open a socket
         serverSocket = new Server();
@@ -83,9 +99,8 @@ class CSTDServer {
         try {
             serverSocket.bind(config.getPort());
         } catch (IOException e) {
-            log("Could not bind port. Is it already in use?");
+            logger.log("Could not bind port. Is it already in use?");
             //e.printStackTrace();
-
             return;
         }
 
@@ -100,12 +115,12 @@ class CSTDServer {
         timerIsRunning = true;
 
         // BETTER SOLUTION?!
-        while (serverSocket != null) {
+        while (timerIsRunning) {
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                log("Some sort of sleep error occured.. ignoring.");
+                logger.log("Some sort of sleep error occured.. ignoring.");
             }
         }
     }
@@ -120,10 +135,11 @@ class CSTDServer {
         }
         if (timer != null) {
             timer.cancel();
-            timerIsRunning = false;
         }
         if (serverSocket != null) {
             serverSocket.close();
         }
+
+        timerIsRunning = false;
     }
 }

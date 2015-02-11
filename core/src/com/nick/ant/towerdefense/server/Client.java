@@ -1,4 +1,4 @@
-package com.nicktoony.cstd.server;
+package com.nick.ant.towerdefense.server;
 
 import com.badlogic.gdx.net.Socket;
 

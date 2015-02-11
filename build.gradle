@@ -57,6 +57,8 @@ project(":core") {
         compile "com.nicktoony:gameserver-service-java:0.1.1"
         compile "com.nicktoony:gameserver-service-libgdx:0.1.1"
         compile files('../libs/kryonet-2.21-all.jar')
+
+        compile "commons-io:commons-io:+"
     }
 }
 
@@ -65,9 +67,6 @@ project(":server") {
 
     dependencies {
         compile project(':core')
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "commons-io:commons-io:+"
-        compile "com.nicktoony:gameserver-service-java:0.1.1"
     }
 }
 
