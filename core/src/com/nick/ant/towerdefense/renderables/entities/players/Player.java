@@ -9,11 +9,12 @@ import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
+import com.nick.ant.towerdefense.rooms.RoomGame;
 
 /**
  * Created by Nick on 08/09/2014.
  */
-public class Player extends Entity {
+public class Player extends RoomGame.WorldEntity {
 
     private final int PLAYER_RADIUS = 15;
     private final int PLAYER_MOVE_SPEED = 2;

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by Nick on 10/09/2014.
  */
-public class World  {
+public class Map {
     private final int cellSize = 32;
     private String mapName;
     private TiledMap map;
@@ -31,7 +31,7 @@ public class World  {
 
     private Entity entitySnap;
 
-    public World(String mapName)    {
+    public Map(String mapName)    {
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
         // Get the collision layer

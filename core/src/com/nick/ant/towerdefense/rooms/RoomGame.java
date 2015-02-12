@@ -1,21 +1,33 @@
 package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
+import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
-import com.nick.ant.towerdefense.renderables.entities.world.World;
+import com.nick.ant.towerdefense.renderables.entities.world.Map;
 import com.nick.ant.towerdefense.renderables.ui.HUD;
 
 /**
  * Created by Nick on 08/09/2014.
  */
 public class RoomGame extends Room {
+    private Map map;
     private World world;
     private float mouseX = 0f;
     private float mouseY = 0f;
     public Player userPlayer;
+
+    public static abstract class WorldEntity extends Entity {
+        protected World world;
+
+        public void setWorld(World world) {
+            this.world = world;
+        }
+    }
 
     @Override
     public void create() {
@@ -23,11 +35,12 @@ public class RoomGame extends Room {
         CharacterManager.getInstance();
         WeaponManager.getInstance();
 
-        world = new World("de_dust2");
+        map = new Map("de_dust2");
+        world = new World(new Vector2(0, 0), true);
 
         userPlayer = new UserPlayer(16,16);
-        addEntity(userPlayer);
-        world.setEntitySnap(userPlayer);
+        addWorldEntity(userPlayer);
+        map.setEntitySnap(userPlayer);
 
         HUD hud = new HUD(this);
         addRenderable(hud);
@@ -35,9 +48,9 @@ public class RoomGame extends Room {
 
     @Override
     public void render() {
-        world.step();
-        getSpriteBatch().setProjectionMatrix(world.getCamera().combined);
-        world.render();
+        map.step();
+        getSpriteBatch().setProjectionMatrix(map.getCamera().combined);
+        map.render();
 
         super.render();
     }
@@ -45,8 +58,8 @@ public class RoomGame extends Room {
     public void step()  {
         super.step();
 
-        mouseX = Gdx.input.getX() + world.getCameraX() - Gdx.graphics.getWidth()/2;
-        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + world.getCameraY() - Gdx.graphics.getHeight()/2;
+        mouseX = Gdx.input.getX() + map.getCameraX() - Gdx.graphics.getWidth()/2;
+        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + map.getCameraY() - Gdx.graphics.getHeight()/2;
     }
 
     @Override
@@ -71,15 +84,20 @@ public class RoomGame extends Room {
 
     @Override
     public float getViewX() {
-        return world.getCameraX();
+        return map.getCameraX();
     }
 
     @Override
     public float getViewY() {
-        return world.getCameraY();
+        return map.getCameraY();
     }
 
-    public World getWorld() {
-        return world;
+    public Map getMap() {
+        return map;
+    }
+
+    public void addWorldEntity(WorldEntity worldEntity) {
+        worldEntity.setWorld(world);
+        addEntity(worldEntity);
     }
 }

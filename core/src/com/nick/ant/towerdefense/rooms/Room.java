@@ -28,6 +28,8 @@ public abstract class Room {
 
     public void addRenderable(Renderable renderable)    {
         entityList.add(renderable);
+        renderable.setRoom(this);
+        renderable.create();
     }
 
     public void render() {
