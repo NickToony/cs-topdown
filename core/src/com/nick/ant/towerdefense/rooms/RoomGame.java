@@ -21,14 +21,6 @@ public class RoomGame extends Room {
     private float mouseY = 0f;
     public Player userPlayer;
 
-    public static abstract class WorldEntity extends Entity {
-        protected World world;
-
-        public void setWorld(World world) {
-            this.world = world;
-        }
-    }
-
     @Override
     public void create() {
         // Force it to load the instances
@@ -39,7 +31,7 @@ public class RoomGame extends Room {
         world = new World(new Vector2(0, 0), true);
 
         userPlayer = new UserPlayer(16,16);
-        addWorldEntity(userPlayer);
+        addEntity(userPlayer, world);
         map.setEntitySnap(userPlayer);
 
         HUD hud = new HUD(this);
@@ -57,6 +49,8 @@ public class RoomGame extends Room {
 
     public void step()  {
         super.step();
+
+        world.step(1, 6, 2);
 
         mouseX = Gdx.input.getX() + map.getCameraX() - Gdx.graphics.getWidth()/2;
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + map.getCameraY() - Gdx.graphics.getHeight()/2;
@@ -94,10 +88,5 @@ public class RoomGame extends Room {
 
     public Map getMap() {
         return map;
-    }
-
-    public void addWorldEntity(WorldEntity worldEntity) {
-        worldEntity.setWorld(world);
-        addEntity(worldEntity);
     }
 }

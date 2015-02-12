@@ -3,6 +3,10 @@ package com.nick.ant.towerdefense.renderables.entities.players;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.esotericsoftware.spine.Bone;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.TextureManager;
@@ -14,7 +18,7 @@ import com.nick.ant.towerdefense.rooms.RoomGame;
 /**
  * Created by Nick on 08/09/2014.
  */
-public class Player extends RoomGame.WorldEntity {
+public class Player extends Entity {
 
     private final int PLAYER_RADIUS = 15;
     private final int PLAYER_MOVE_SPEED = 2;
@@ -33,16 +37,11 @@ public class Player extends RoomGame.WorldEntity {
     private Sprite rightHandSprite;
     private Sprite shadowSprite;
 
+    private Body body;
+
     private Texture gunTexture;
 
     public Player(int x, int y) {
-
-        getSkeletonWrapper().setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
-        leftHand = getSkeletonWrapper().getSkeleton().findBone("left_gun");
-        rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
-
-        setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
-
         this.x = x;
         this.y = y;
         this.direction = 0.0f;
@@ -51,12 +50,42 @@ public class Player extends RoomGame.WorldEntity {
         this.moveDown = false;
         this.moveLeft = false;
         this.moveRight = false;
+    }
+
+    @Override
+    public void create() {
+        getSkeletonWrapper().setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
+        leftHand = getSkeletonWrapper().getSkeleton().findBone("left_gun");
+        rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
+
+        setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
 
         if (weaponPrimary != null)  {
             getSkeletonWrapper().startAnimation(weaponPrimary.getAnimationIdle(), 2, true);
         }   else    {
             System.out.println("NO ANIMATIONS");
         }
+
+        setupBody();
+    }
+
+    private void setupBody() {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x + PLAYER_RADIUS, y + PLAYER_RADIUS);
+
+        body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(PLAYER_RADIUS, PLAYER_RADIUS);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.1f;
+        fixtureDef.restitution = 0.5f;
+
+        body.createFixture(fixtureDef);
+        shape.dispose();
     }
 
     private void setGun(Weapon weapon)  {
@@ -111,15 +140,23 @@ public class Player extends RoomGame.WorldEntity {
     }
 
     @Override
+    public void step() {
+        this.x = body.getPosition().x;
+        this.y = body.getPosition().y;
+
+        super.step();
+
+        float hSpeed = (moveLeft ? -PLAYER_MOVE_SPEED : 0) + (moveRight ? PLAYER_MOVE_SPEED : 0);
+        float vSpeed = (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0);
+
+        body.setLinearVelocity(hSpeed, vSpeed);
+    }
+
+    @Override
     public void dispose() {
         shadowSprite.getTexture().dispose();
         leftHandSprite.getTexture().dispose();
         rightHandSprite.getTexture().dispose();
-    }
-
-    @Override
-    public void create() {
-
     }
 
     protected float calculateDirection(int aimX, int aimY){

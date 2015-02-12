@@ -2,6 +2,7 @@ package com.nick.ant.towerdefense.rooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
 import com.nick.ant.towerdefense.Game;
 import com.nick.ant.towerdefense.components.SkinManager;
 import com.nick.ant.towerdefense.components.TextureManager;
@@ -20,6 +21,11 @@ public abstract class Room {
     private Game game;
 
     public abstract void create();
+
+    public void addEntity(Entity entity, World world) {
+        entity.setWorld(world);
+        addEntity(entity);
+    }
 
     public void addEntity(Entity entity) {
         entityList.add(entity);

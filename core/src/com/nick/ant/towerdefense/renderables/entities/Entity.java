@@ -2,6 +2,7 @@ package com.nick.ant.towerdefense.renderables.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.Skeleton;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.rooms.Room;
@@ -14,6 +15,7 @@ public abstract class Entity extends Renderable {
     protected float y = 0;
     protected float direction = 0;
     protected SkeletonWrapper skeletonWrapper;
+    protected World world;
 
     public SkeletonWrapper getSkeletonWrapper() {
         if (skeletonWrapper == null) {
@@ -53,5 +55,9 @@ public abstract class Entity extends Renderable {
 
     public float getDirection() {
         return direction;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 }
