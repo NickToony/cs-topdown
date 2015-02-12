@@ -3,7 +3,6 @@ package com.nick.ant.towerdefense.rooms;
 import com.badlogic.gdx.Gdx;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
-import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 import com.nick.ant.towerdefense.renderables.entities.world.World;
@@ -16,7 +15,6 @@ public class RoomGame extends Room {
     private World world;
     private float mouseX = 0f;
     private float mouseY = 0f;
-    private CollisionManager collisionManager;
     public Player userPlayer;
 
     @Override
@@ -27,11 +25,8 @@ public class RoomGame extends Room {
 
         world = new World("de_dust2");
 
-        collisionManager = new CollisionManager(world);
-
         userPlayer = new UserPlayer(16,16);
         addEntity(userPlayer);
-        userPlayer.setCollisionManager(collisionManager);
         world.setEntitySnap(userPlayer);
 
         HUD hud = new HUD(this);

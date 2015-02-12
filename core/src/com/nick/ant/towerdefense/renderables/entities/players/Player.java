@@ -3,18 +3,17 @@ package com.nick.ant.towerdefense.renderables.entities.players;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.esotericsoftware.spine.Bone;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
-import com.nick.ant.towerdefense.renderables.entities.SkeletonEntity;
+import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 /**
  * Created by Nick on 08/09/2014.
  */
-public class Player extends SkeletonEntity {
+public class Player extends Entity {
 
     private final int PLAYER_RADIUS = 15;
     private final int PLAYER_MOVE_SPEED = 2;
@@ -37,9 +36,9 @@ public class Player extends SkeletonEntity {
 
     public Player(int x, int y) {
 
-        setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
-        leftHand = getSkeleton().findBone("left_gun");
-        rightHand = getSkeleton().findBone("right_gun");
+        getSkeletonWrapper().setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
+        leftHand = getSkeletonWrapper().getSkeleton().findBone("left_gun");
+        rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
 
         setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
 
@@ -52,11 +51,8 @@ public class Player extends SkeletonEntity {
         this.moveLeft = false;
         this.moveRight = false;
 
-        setCollisionCircle(new Circle(), true);
-        getCollisionCircle(0, 0).setRadius(PLAYER_RADIUS);
-
         if (weaponPrimary != null)  {
-            startAnimation(weaponPrimary.getAnimationIdle(), 2, true);
+            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimationIdle(), 2, true);
         }   else    {
             System.out.println("NO ANIMATIONS");
         }
@@ -69,7 +65,6 @@ public class Player extends SkeletonEntity {
 
         gunTexture = TextureManager.getTexture("weapons/" + weapon.getTexture()+ "/texture.png");
         gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
 
         weaponPrimary = weapon;
     }
@@ -115,35 +110,15 @@ public class Player extends SkeletonEntity {
     }
 
     @Override
-    public void step() {
-        super.step();
-
-        hSpeed = 0;
-        vSpeed = 0;
-
-        if (moveUp && !moveDown) {
-            vSpeed = PLAYER_MOVE_SPEED;
-        }   else if (moveDown && !moveUp)    {
-            vSpeed = -PLAYER_MOVE_SPEED;
-        }
-
-        if (moveLeft && !moveRight) {
-            hSpeed = -PLAYER_MOVE_SPEED;
-        }   else if (moveRight && !moveLeft)    {
-            hSpeed = PLAYER_MOVE_SPEED;
-        }
-
-        if (hSpeed != 0 && vSpeed != 0) {
-            hSpeed *= 0.75;
-            vSpeed *= 0.75;
-        }
-    }
-
-    @Override
     public void dispose() {
         shadowSprite.getTexture().dispose();
         leftHandSprite.getTexture().dispose();
         rightHandSprite.getTexture().dispose();
+    }
+
+    @Override
+    public void create() {
+
     }
 
     protected float calculateDirection(int aimX, int aimY){

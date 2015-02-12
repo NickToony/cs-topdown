@@ -10,15 +10,17 @@ import com.esotericsoftware.spine.SkeletonRenderer;
 /**
  * Created by Nick on 23/09/2014.
  */
-public abstract class SkeletonEntity extends Entity {
+public class SkeletonWrapper {
     private Skeleton skeleton;
     private AnimationState state;
     private SkeletonRenderer renderer;
+    private Entity entity;
 
-    @Override
+    public SkeletonWrapper(Entity entity) {
+        this.entity = entity;
+    }
+
     public void step()  {
-        super.step();
-
         if (skeleton == null)   {
             return;
         }
@@ -26,9 +28,9 @@ public abstract class SkeletonEntity extends Entity {
         state.update(Gdx.graphics.getDeltaTime());
         state.apply(skeleton);
 
-        skeleton.setX(this.x);
-        skeleton.setY(this.y);
-        skeleton.getRootBone().setRotation(skeleton.getRootBone().getRotation() + direction);
+        skeleton.setX(entity.x);
+        skeleton.setY(entity.y);
+        skeleton.getRootBone().setRotation(skeleton.getRootBone().getRotation() + entity.direction);
 
         skeleton.updateWorldTransform();
     }
@@ -37,23 +39,26 @@ public abstract class SkeletonEntity extends Entity {
      * Renders the skeleton. Don't forget to call super.render(batch);
      * @param spriteBatch
      */
-    @Override
     public void render(SpriteBatch spriteBatch) {
         renderer.draw(spriteBatch, skeleton);
     }
 
-    protected void setSkeleton(Skeleton skeleton)  {
+    public void setSkeleton(Skeleton skeleton)  {
         this.skeleton = skeleton;
         this.state = new AnimationState(new AnimationStateData(skeleton.getData()));
         this.renderer = new SkeletonRenderer();
     }
 
-    protected void startAnimation(String animation, float duration, boolean loop)   {
+    public void startAnimation(String animation, float duration, boolean loop)   {
         this.state.setAnimation(0, animation, loop);
         this.state.setTimeScale(skeleton.getData().findAnimation(animation).getDuration() / duration);
     }
 
-    protected Skeleton getSkeleton()    {
+    public Skeleton getSkeleton()    {
         return skeleton;
+    }
+
+    public void dispose() {
+
     }
 }

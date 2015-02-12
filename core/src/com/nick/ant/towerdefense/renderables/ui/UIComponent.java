@@ -9,4 +9,9 @@ public abstract class UIComponent extends Renderable {
     public void step() {
         // Nothing!
     }
+
+    @Override
+    public void create() {
+
+    }
 }

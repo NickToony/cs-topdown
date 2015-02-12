@@ -1,8 +1,9 @@
 package com.nick.ant.towerdefense.renderables.entities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.esotericsoftware.spine.Skeleton;
 import com.nick.ant.towerdefense.renderables.Renderable;
-import com.nick.ant.towerdefense.renderables.entities.collisions.CollisionManager;
 import com.nick.ant.towerdefense.rooms.Room;
 
 /**
@@ -11,90 +12,46 @@ import com.nick.ant.towerdefense.rooms.Room;
 public abstract class Entity extends Renderable {
     protected float x = 0;
     protected float y = 0;
-    protected float direction;
-    protected float hSpeed = 0;
-    protected float vSpeed = 0;
-    protected Room room;
-    protected CollisionManager collisionManager;
-    private Circle collisionCircle;
-    private boolean collisionCentered;
+    protected float direction = 0;
+    protected SkeletonWrapper skeletonWrapper;
+
+    public SkeletonWrapper getSkeletonWrapper() {
+        if (skeletonWrapper == null) {
+            skeletonWrapper = new SkeletonWrapper(this);
+        }
+        return skeletonWrapper;
+    }
+
+    @Override
+    public void step() {
+        if (skeletonWrapper != null) {
+            skeletonWrapper.step();
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch spriteBatch) {
+        if (skeletonWrapper != null) {
+            skeletonWrapper.render(spriteBatch);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (skeletonWrapper != null) {
+            skeletonWrapper.dispose();
+        }
+    }
 
     public float getX() {
         return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
     }
 
     public float getY() {
         return y;
     }
 
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public void setRoom(Room room)  {
-        this.room = room;
-    }
-
-    public Room getRoom()   {
-        return room;
-    }
-
-    public void setCollisionManager(CollisionManager collisionManager)  {
-        this.collisionManager = collisionManager;
-    }
-
-    @Override
-    public void step()  {
-        if (vSpeed == 0 && hSpeed == 0) {
-            return;
-        }
-
-        float newX = x + hSpeed;
-        float newY = y + vSpeed;
-
-        if (collisionManager == null || collisionCircle == null)   {
-            x = newX;
-            y = newY;
-            return;
-        }
-
-        Circle circle;
-
-        if (newX != x) {
-            circle = getCollisionCircle(newX, y);
-            if (collisionManager.checkCollision(circle)) {
-                x = newX;
-            }
-        }
-
-        if (newY != y) {
-            circle = getCollisionCircle(x, newY);
-            if (collisionManager.checkCollision(circle)) {
-                y = newY;
-            }
-        }
-    }
-
-    public Circle getCollisionCircle(float x, float y) {
-        if (collisionCircle == null)    {
-            // Do nothing
-        }   else if (collisionCentered)  {
-            collisionCircle.setX(x - collisionCircle.radius);
-            collisionCircle.setY(y - collisionCircle.radius);
-        }   else    {
-            collisionCircle.setX(x);
-            collisionCircle.setY(y);
-        }
-
-        return collisionCircle;
-    }
-
-    public void setCollisionCircle(Circle collisionCircle, boolean centered) {
-        this.collisionCircle = collisionCircle;
-        this.collisionCentered = centered;
+    public float getDirection() {
+        return direction;
     }
 }
