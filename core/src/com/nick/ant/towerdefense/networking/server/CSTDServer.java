@@ -1,9 +1,10 @@
-package com.nick.ant.towerdefense.server;
+package com.nick.ant.towerdefense.networking.server;
 
 import com.esotericsoftware.kryonet.Server;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
 import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
@@ -26,7 +27,7 @@ public class CSTDServer {
     private boolean timerIsRunning = false;
     private Server serverSocket;
     private Timer timer;
-    private List<Client> clientList = new ArrayList<Client>();
+    private List<ServerClient> serverClientList = new ArrayList<ServerClient>();
     private Logger logger;
 
     public interface Logger {
@@ -104,6 +105,7 @@ public class CSTDServer {
             return;
         }
 
+        PacketDefinition.registerClasses(serverSocket.getKryo());
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {

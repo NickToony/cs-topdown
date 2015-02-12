@@ -1,6 +1,6 @@
 package com.nicktoony.cstd.server;
 
-import com.nick.ant.towerdefense.server.CSTDServer;
+import com.nick.ant.towerdefense.networking.server.CSTDServer;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;

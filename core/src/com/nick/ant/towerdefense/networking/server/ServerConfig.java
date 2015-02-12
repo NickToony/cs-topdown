@@ -1,4 +1,4 @@
-package com.nick.ant.towerdefense.server;
+package com.nick.ant.towerdefense.networking.server;
 
 /**
  * Created by Nick on 04/02/2015.

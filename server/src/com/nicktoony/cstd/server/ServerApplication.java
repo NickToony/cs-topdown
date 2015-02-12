@@ -1,13 +1,8 @@
 package com.nicktoony.cstd.server;
 
-import com.nick.ant.towerdefense.server.CSTDServer;
+import com.nick.ant.towerdefense.networking.server.CSTDServer;
 
-import javax.swing.*;
-import javax.swing.text.DefaultCaret;
-import java.awt.*;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ServerApplication {
     public static CSTDServer server;

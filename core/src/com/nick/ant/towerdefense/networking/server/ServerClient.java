@@ -1,11 +1,11 @@
-package com.nick.ant.towerdefense.server;
+package com.nick.ant.towerdefense.networking.server;
 
 import com.badlogic.gdx.net.Socket;
 
 /**
  * Created by Nick on 07/02/2015.
  */
-public class Client {
+public class ServerClient {
     public interface Listener {
 
     }
@@ -13,11 +13,11 @@ public class Client {
     private Socket socket;
     private Listener listener;
 
-    public Client(Socket socket) {
+    public ServerClient(Socket socket) {
         this.socket = socket;
     }
 
-    public Client(Listener listener) {
+    public ServerClient(Listener listener) {
         this.listener = listener;
     }
 
