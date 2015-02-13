@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.*;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 import java.util.ArrayList;
@@ -26,8 +27,6 @@ public class Map {
     private MapLayer objectiveLayer;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
-
-    List<Rectangle> collisionObjects;
 
     private Entity entitySnap;
 
@@ -93,27 +92,30 @@ public class Map {
         return camera.position.y;
     }
 
-    public List<Rectangle> getCollisionObjects() {
-        if (collisionObjects == null)   {
-            collisionObjects = new ArrayList<Rectangle>();
-            for (MapObject object : collisionLayer.getObjects())   {
-                if (object instanceof RectangleMapObject) {
-                    // Fetch the rectangle collision box
-                    Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+    public void addCollisionObjects(World world) {
+        for (MapObject object : collisionLayer.getObjects())   {
+            if (object instanceof RectangleMapObject) {
+                // Fetch the rectangle collision box
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
 
-                    // Resize it to the correct size and location
-                    rectangle.setX(rectangle.getX() - (cellSize/2));
-                    rectangle.setY(rectangle.getY() - (cellSize/2));
-                    rectangle.setWidth(cellSize);
-                    rectangle.setHeight(cellSize);
+                // Resize it to the correct size and location
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                bodyDef.position.set(rectangle.getX() + (cellSize/2), rectangle.getY() + (cellSize/2));
 
-                    // Add to list
-                    collisionObjects.add(rectangle);
-                }
+                Body body = world.createBody(bodyDef);
+
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(cellSize/2, cellSize/2);
+
+                FixtureDef fixtureDef = new FixtureDef();
+                fixtureDef.shape = shape;
+                fixtureDef.density = 1f;
+
+                body.createFixture(fixtureDef);
+                shape.dispose();
             }
         }
-
-        return collisionObjects;
     }
 
 }

@@ -82,7 +82,7 @@ public class Player extends Entity {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 0.1f;
-        fixtureDef.restitution = 0.5f;
+        fixtureDef.restitution = 0f;
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -141,8 +141,8 @@ public class Player extends Entity {
 
     @Override
     public void step() {
-        this.x = body.getPosition().x;
-        this.y = body.getPosition().y;
+        this.x = Math.round(body.getPosition().x);
+        this.y = Math.round(body.getPosition().y);
 
         super.step();
 

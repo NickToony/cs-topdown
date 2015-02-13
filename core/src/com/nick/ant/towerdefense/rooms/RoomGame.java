@@ -29,6 +29,7 @@ public class RoomGame extends Room {
 
         map = new Map("de_dust2");
         world = new World(new Vector2(0, 0), true);
+        map.addCollisionObjects(world);
 
         userPlayer = new UserPlayer(16,16);
         addEntity(userPlayer, world);
