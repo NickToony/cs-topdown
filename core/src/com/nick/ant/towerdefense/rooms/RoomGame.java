@@ -49,12 +49,12 @@ public class RoomGame extends Room {
     }
 
     public void step()  {
-        super.step();
-
         world.step(1, 6, 2);
 
         mouseX = Gdx.input.getX() + map.getCameraX() - Gdx.graphics.getWidth()/2;
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + map.getCameraY() - Gdx.graphics.getHeight()/2;
+
+        super.step();
     }
 
     @Override

@@ -43,6 +43,8 @@ public class UserPlayer extends Player{
         direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
 
         super.step();
+
+
     }
 
 }
