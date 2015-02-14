@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.renderables.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +17,7 @@ public class FPSCounter extends UIComponent {
 
     public FPSCounter() {
         font = new BitmapFont();
-        font.setColor(Color.BLACK);
+        font.setColor(Color.WHITE);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class FPSCounter extends UIComponent {
 
         counter += 1;
 
-        font.draw(spriteBatch, "FPS: " + currentFPS, 20, 20);
+        font.draw(spriteBatch, "FPS: " + currentFPS, 20, Gdx.graphics.getHeight()-20);
     }
 
     @Override

@@ -12,13 +12,11 @@ import com.nick.ant.towerdefense.rooms.RoomGame;
 public class HUD extends UIComponent {
 
     private BitmapFont font;
-    private RoomGame room;
     private int x;
     private int y;
-
     private Player player;
-
     private String ammoCount;
+    private FPSCounter counter;
 
     public HUD(RoomGame room) {
         font = new BitmapFont();
@@ -29,17 +27,20 @@ public class HUD extends UIComponent {
         this.room = room;
         this.player = room.getUserPlayer();
 
+        counter = new FPSCounter();
     }
 
     @Override
     public void step(){
         ammoCount = player.getGun().getClipSize() + "|" + player.getGun().getClipTotal();
+        counter.step();
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
         // TODO: Define HUD elements with XML?
         font.draw(spriteBatch, ammoCount, 10, 40);
+        counter.render(spriteBatch);
     }
 
     @Override
