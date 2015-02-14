@@ -38,12 +38,8 @@ public class HUD extends UIComponent {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        // Should hopefully return 0,0 of the window
-        this.x = Math.round(room.getViewX()) - Gdx.graphics.getWidth()/2;
-        this.y = Math.round(room.getViewY()) - Gdx.graphics.getHeight()/2;
-
         // TODO: Define HUD elements with XML?
-        font.draw(spriteBatch, ammoCount, x + 10, y + 40);
+        font.draw(spriteBatch, ammoCount, 10, 40);
     }
 
     @Override

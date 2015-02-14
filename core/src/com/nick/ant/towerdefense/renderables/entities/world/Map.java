@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
@@ -27,12 +28,22 @@ public class Map {
     private MapLayer objectiveLayer;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+    private int mapWidth;
+    private int mapHeight;
 
     private Entity entitySnap;
 
     public Map(String mapName)    {
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
+
+        // Calculate map size
+        MapProperties mapProperties = map.getProperties();
+        int tX = mapProperties.get("width", Integer.class);
+        int tY = mapProperties.get("height", Integer.class);
+        mapWidth = cellSize * tX;
+        mapHeight = cellSize * tY;
+
         // Get the collision layer
         for (MapLayer layer : map.getLayers()) {
             MapProperties properties = layer.getProperties();
@@ -116,6 +127,29 @@ public class Map {
                 shape.dispose();
             }
         }
+
+        int[][] values =  {
+                { 0, 0,     1, 0 },
+                { 1, 0,     1, 1 },
+                { 1, 1,     0, 1},
+                { 0, 1,     0, 0}
+        };
+
+        for (int[] value : values) {
+            BodyDef bodyDef2 = new BodyDef();
+            bodyDef2.type = BodyDef.BodyType.StaticBody;
+            bodyDef2.position.set(0,0);
+            FixtureDef fixtureDef2 = new FixtureDef();
+            EdgeShape edgeShape = new EdgeShape();
+            edgeShape.set(mapWidth * value[0], mapHeight * value[1], mapWidth * value[2], mapHeight * value[3]);
+            fixtureDef2.shape = edgeShape;
+
+            Body bodyEdgeScreen = world.createBody(bodyDef2);
+            bodyEdgeScreen.createFixture(fixtureDef2);
+            edgeShape.dispose();
+        }
+
+
     }
 
 }

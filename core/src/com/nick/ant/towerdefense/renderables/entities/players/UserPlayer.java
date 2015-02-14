@@ -40,6 +40,10 @@ public class UserPlayer extends Player{
             this.moveRight = false;
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            setLightOn(!isLightOn());
+        }
+
         direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
 
         super.step();

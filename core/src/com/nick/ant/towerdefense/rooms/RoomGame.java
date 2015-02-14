@@ -1,14 +1,19 @@
 package com.nick.ant.towerdefense.rooms;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nick.ant.towerdefense.components.CharacterManager;
+import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
-import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 import com.nick.ant.towerdefense.renderables.entities.world.Map;
+import com.nick.ant.towerdefense.renderables.lights.RayHandlerWrapper;
 import com.nick.ant.towerdefense.renderables.ui.HUD;
 
 /**
@@ -20,6 +25,9 @@ public class RoomGame extends Room {
     private float mouseX = 0f;
     private float mouseY = 0f;
     public Player userPlayer;
+    private SpriteBatch spriteBatch = new SpriteBatch();
+    private HUD hud;
+    private RayHandlerWrapper rayHandlerWrapper;
 
     @Override
     public void create() {
@@ -27,16 +35,26 @@ public class RoomGame extends Room {
         CharacterManager.getInstance();
         WeaponManager.getInstance();
 
+        // Create the map
         map = new Map("de_dust2");
         world = new World(new Vector2(0, 0), true);
         map.addCollisionObjects(world);
 
+        // Setup lighting engine
+        RayHandler rayHandler = new RayHandler(world);
+        rayHandler.setShadows(true);
+        rayHandler.setAmbientLight(new Color(0, 0, 0, .1f));
+        rayHandlerWrapper = new RayHandlerWrapper(rayHandler, map);
+
+        // Define a player object
         userPlayer = new UserPlayer(16,16);
+        userPlayer.setTorch(LightManager.defineTorch(rayHandler));
+        userPlayer.setGlow(LightManager.definePlayerGlow(rayHandler));
         addEntity(userPlayer, world);
         map.setEntitySnap(userPlayer);
 
-        HUD hud = new HUD(this);
-        addRenderable(hud);
+        // Add hud
+        hud = new HUD(this);
     }
 
     @Override
@@ -46,6 +64,12 @@ public class RoomGame extends Room {
         map.render();
 
         super.render();
+
+        rayHandlerWrapper.render(getSpriteBatch());
+
+        spriteBatch.begin();
+        hud.render(spriteBatch);
+        spriteBatch.end();
     }
 
     public void step()  {
@@ -53,6 +77,8 @@ public class RoomGame extends Room {
 
         mouseX = Gdx.input.getX() + map.getCameraX() - Gdx.graphics.getWidth()/2;
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY() + map.getCameraY() - Gdx.graphics.getHeight()/2;
+
+        hud.step();
 
         super.step();
     }
@@ -63,6 +89,8 @@ public class RoomGame extends Room {
 
         CharacterManager.getInstance().dispose();
         WeaponManager.getInstance().dispose();
+        rayHandlerWrapper.dispose();
+        spriteBatch.dispose();
     }
 
     public Player getUserPlayer() {

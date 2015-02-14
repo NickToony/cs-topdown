@@ -30,6 +30,7 @@ public abstract class Room {
     public void addEntity(Entity entity) {
         entityList.add(entity);
         entity.setRoom(this);
+        entity.create();
     }
 
     public void addRenderable(Renderable renderable)    {

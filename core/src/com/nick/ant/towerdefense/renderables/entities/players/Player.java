@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.renderables.entities.players;
 
+import box2dLight.Light;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +14,6 @@ import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
-import com.nick.ant.towerdefense.rooms.RoomGame;
 
 /**
  * Created by Nick on 08/09/2014.
@@ -25,10 +25,11 @@ public class Player extends Entity {
     private final int WEAPON_X_OFFSET = 15;
     private final int WEAPON_Y_OFFSET = 64 - 46;
 
-    protected boolean moveUp;
-    protected boolean moveDown;
-    protected boolean moveLeft;
-    protected boolean moveRight;
+    protected boolean moveUp = false;
+    protected boolean moveDown = false;
+    protected boolean moveLeft = false;
+    protected boolean moveRight = false;
+    private boolean lightOn = true;
 
     private Weapon weaponPrimary;
     private Bone leftHand;
@@ -38,18 +39,15 @@ public class Player extends Entity {
     private Sprite shadowSprite;
 
     private Body body;
+    private Light torch;
 
     private Texture gunTexture;
+    private Light glow;
 
     public Player(int x, int y) {
         this.x = x;
         this.y = y;
         this.direction = 0.0f;
-
-        this.moveUp = false;
-        this.moveDown = false;
-        this.moveLeft = false;
-        this.moveRight = false;
     }
 
     @Override
@@ -105,14 +103,10 @@ public class Player extends Entity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
-        shadowSprite.setX(x - shadowSprite.getWidth()/2);
-        shadowSprite.setY(y - shadowSprite.getHeight()/2);
-        shadowSprite.draw(spriteBatch);
-
         super.render(spriteBatch);
         Weapon weapon = weaponPrimary;
 
+        // If player has a gun in the left hand
         if (weapon.isLeftHand() && weapon != null)  {
             if (leftHandSprite == null || leftHandSprite.getTexture() != gunTexture)  {
                 leftHandSprite = new Sprite(gunTexture);
@@ -125,6 +119,7 @@ public class Player extends Entity {
 
             leftHandSprite.draw(spriteBatch);
         }
+        // If player has a gun in the right hand
         if (weapon.isRightHand() && weapon != null) {
             if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture) {
                 rightHandSprite = new Sprite(gunTexture);
@@ -137,6 +132,12 @@ public class Player extends Entity {
 
             rightHandSprite.draw(spriteBatch);
         }
+
+        // Update torch
+        torch.setPosition(rightHand.getX() + x, rightHand.getY() + y);
+        torch.setDirection(direction + 90);
+        // Update glow
+        glow.setPosition(x, y);
     }
 
     @Override
@@ -157,10 +158,28 @@ public class Player extends Entity {
         shadowSprite.getTexture().dispose();
         leftHandSprite.getTexture().dispose();
         rightHandSprite.getTexture().dispose();
+        torch.dispose();
     }
 
     protected float calculateDirection(int aimX, int aimY){
         return (float) ((Math.atan2((aimX - x), -(aimY - y)) * 180.0f / Math.PI) + 180f);
     }
 
+    public void setTorch(Light torch) {
+        this.torch = torch;
+        torch.setActive(lightOn);
+    }
+
+    public void setLightOn(boolean lightOn) {
+        this.lightOn = lightOn;
+        torch.setActive(lightOn);
+    }
+
+    public boolean isLightOn() {
+        return lightOn;
+    }
+
+    public void setGlow(Light glow) {
+        this.glow = glow;
+    }
 }

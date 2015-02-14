@@ -16,6 +16,5 @@ public abstract class Renderable {
 
     public void setRoom(Room room) {
         this.room = room;
-        create();
     }
 }
