@@ -10,6 +10,7 @@ A quick adventure into the world of LibGDX: topdown 2D shooter based on the popu
 - External map loading and rendering
 - Skeletal based animation
 - Lighting engine provided by Box2D Lights
+
 ## Future Features
 - Shooting (somewhat vital!)
 - Enemy AI
