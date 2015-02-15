@@ -99,7 +99,7 @@ public class CSTDServer {
 
     private void setup() {
         // Server list
-        host = new Host("A Game Server", 0, 16);
+        host = new Host(config.getName(), 0, config.getMaxPlayers());
 
         logger.log("Server started up");
 
