@@ -1,11 +1,10 @@
 package com.nick.ant.towerdefense.renderables.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.spine.Skeleton;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.rooms.Room;
+import com.nick.ant.towerdefense.rooms.RoomGame;
 
 /**
  * Created by Nick on 08/09/2014.
@@ -16,6 +15,7 @@ public abstract class Entity extends Renderable {
     protected float direction = 0;
     protected SkeletonWrapper skeletonWrapper;
     protected World world;
+    protected RoomGame room;
 
     public SkeletonWrapper getSkeletonWrapper() {
         if (skeletonWrapper == null) {
@@ -59,5 +59,14 @@ public abstract class Entity extends Renderable {
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public void setGameRoom(RoomGame roomGame) {
+        this.room = roomGame;
+    }
+
+    @Override
+    public void setRoom(Room room) {
+        // do nothing
     }
 }

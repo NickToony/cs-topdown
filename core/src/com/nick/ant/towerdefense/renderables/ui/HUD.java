@@ -1,6 +1,5 @@
 package com.nick.ant.towerdefense.renderables.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;

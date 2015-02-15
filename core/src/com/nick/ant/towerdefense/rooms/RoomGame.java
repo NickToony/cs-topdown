@@ -1,15 +1,16 @@
 package com.nick.ant.towerdefense.rooms;
 
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
+import com.nick.ant.towerdefense.networking.client.CSClient;
+import com.nick.ant.towerdefense.networking.packets.Packet;
+import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 import com.nick.ant.towerdefense.renderables.entities.world.Map;
@@ -28,6 +29,11 @@ public class RoomGame extends Room {
     private SpriteBatch spriteBatch = new SpriteBatch();
     private HUD hud;
     private RayHandlerWrapper rayHandlerWrapper;
+    private CSClient client;
+
+    public RoomGame(CSClient client) {
+        this.client = client;
+    }
 
     @Override
     public void create() {
@@ -119,5 +125,22 @@ public class RoomGame extends Room {
 
     public Map getMap() {
         return map;
+    }
+
+
+    public void addEntity(Entity entity, World world) {
+        entity.setWorld(world);
+        addEntity(entity);
+    }
+
+    public void addEntity(Entity entity) {
+        addRenderable(entity);
+        entity.setGameRoom(this);
+    }
+
+    public void sendPacket(Packet packet) {
+        if (client != null) {
+            client.sendPacket(packet);
+        }
     }
 }

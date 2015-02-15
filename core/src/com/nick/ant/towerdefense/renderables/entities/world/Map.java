@@ -12,13 +12,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Nick on 10/09/2014.

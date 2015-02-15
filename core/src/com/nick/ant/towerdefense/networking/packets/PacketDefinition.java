@@ -9,6 +9,7 @@ public class PacketDefinition {
 
     public static void registerClasses(Kryo kryo) {
         //kryo.register()
+        kryo.register(PlayerMovePacket.class);
     }
 
 }

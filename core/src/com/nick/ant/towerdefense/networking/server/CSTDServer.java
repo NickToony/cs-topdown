@@ -1,10 +1,13 @@
 package com.nick.ant.towerdefense.networking.server;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
+import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
 import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
@@ -30,6 +33,10 @@ public class CSTDServer {
     private List<ServerClient> serverClientList = new ArrayList<ServerClient>();
     private Logger logger;
 
+    public Logger getLogger() {
+        return logger;
+    }
+
     public interface Logger {
         public void log(String string);
         public void log(Exception exception);
@@ -51,12 +58,12 @@ public class CSTDServer {
         logger.log("Setting up");
         GameserverConfig.setConfig(new ServerlistConfig());
 
-        if (getConfig()) {
+        if (findConfig()) {
             setup();
         }
     }
 
-    public boolean getConfig() {
+    private boolean findConfig() {
         File configFile = new File("server/config.json");
         if (!configFile.exists()) {
             logger.log("Config file does not exist");
@@ -104,6 +111,12 @@ public class CSTDServer {
             //e.printStackTrace();
             return;
         }
+        serverSocket.addListener(new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                handleReceivedMessage(connection, object);
+            }
+        });
 
         PacketDefinition.registerClasses(serverSocket.getKryo());
 
@@ -115,15 +128,12 @@ public class CSTDServer {
             }
         }, FPS, FPS);
         timerIsRunning = true;
+    }
 
-        // BETTER SOLUTION?!
-        while (timerIsRunning) {
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                logger.log("Some sort of sleep error occured.. ignoring.");
-            }
+    private void handleReceivedMessage(Connection connection, Object object) {
+        if (object instanceof PlayerMovePacket) {
+            PlayerMovePacket movePacket = (PlayerMovePacket) object;
+            System.out.println("Received move packet");
         }
     }
 
@@ -143,5 +153,13 @@ public class CSTDServer {
         }
 
         timerIsRunning = false;
+    }
+
+    public boolean isTimerIsRunning() {
+        return timerIsRunning;
+    }
+
+    public ServerConfig getConfig() {
+        return config;
     }
 }

@@ -1,6 +1,7 @@
 package com.nicktoony.cstd.server;
 
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
+import com.nick.ant.towerdefense.networking.server.ServerUI;
 
 import java.util.Date;
 
@@ -32,18 +33,34 @@ public class ServerApplication {
 
         });
 
+        // BETTER SOLUTION?!
+        while (server.isTimerIsRunning()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                server.getLogger().log("Some sort of sleep error occured.. ignoring.");
+            }
+        }
+
         server.dispose();
     }
 
-    private static void startUI() {
-
-
+    public static void startUI() {
         server = new CSTDServer(new ServerUI(new ServerUI.UIListener() {
             @Override
             public void onClose() {
                 System.exit(0);
             }
         }));
+
+        // BETTER SOLUTION?!
+        while (server.isTimerIsRunning()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                server.getLogger().log("Some sort of sleep error occured.. ignoring.");
+            }
+        }
 
         server.dispose();
     }

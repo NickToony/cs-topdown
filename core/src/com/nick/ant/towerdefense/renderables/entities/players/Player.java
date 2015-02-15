@@ -13,6 +13,7 @@ import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
+import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 /**
@@ -29,6 +30,7 @@ public class Player extends Entity {
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
     protected boolean moveRight = false;
+    protected int lastMove = 0;
     private boolean lightOn = false;
 
     private Weapon weaponPrimary;
@@ -159,6 +161,19 @@ public class Player extends Entity {
         float vSpeed = (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0);
 
         body.setLinearVelocity(hSpeed, vSpeed);
+
+        // Check if changed movement keys
+        int newMove = ((moveLeft ? 1 : 0) * 1000)
+                + ((moveRight ? 1 : 0) * 100)
+                + ((moveUp ? 1 : 0) * 10)
+                + ((moveDown ? 1 : 0));
+        if (newMove != lastMove) {
+            // Send move packet
+            PlayerMovePacket playerMovePacket = new PlayerMovePacket(moveLeft, moveRight, moveUp, moveDown);
+            room.sendPacket(playerMovePacket);
+        }
+        lastMove = newMove;
+
     }
 
     @Override

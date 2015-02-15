@@ -1,4 +1,4 @@
-package com.nicktoony.cstd.server;
+package com.nick.ant.towerdefense.networking.server;
 
 import javax.swing.*;
 import java.awt.*;
