@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nick.ant.towerdefense.components.SkinManager;
+import com.nick.ant.towerdefense.networking.ServerContainer;
 import com.nick.ant.towerdefense.networking.client.CSClient;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
 import com.nick.ant.towerdefense.networking.server.ServerUI;
@@ -45,13 +46,7 @@ public class RoomMainMenu extends Room {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button)
                             {
-                                CSTDServer server = new CSTDServer(new ServerUI(new ServerUI.UIListener() {
-                                    @Override
-                                    public void onClose() {
-                                        System.exit(0);
-                                    }
-                                }));
-                                navigateToRoom(new RoomConnect(new CSClient(server)));
+                                navigateToRoom(new RoomConnect(new CSClient(ServerContainer.getInstance())));
                             }
                         }
                 ));

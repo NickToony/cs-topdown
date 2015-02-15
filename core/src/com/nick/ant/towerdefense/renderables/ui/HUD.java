@@ -24,21 +24,28 @@ public class HUD extends UIComponent {
         font.setScale(2f);
 
         this.room = room;
-        this.player = room.getUserPlayer();
 
         counter = new FPSCounter();
     }
 
     @Override
     public void step(){
-        ammoCount = player.getGun().getClipSize() + "|" + player.getGun().getClipTotal();
+        if (player != null) {
+            ammoCount = player.getGun().getClipSize() + "|" + player.getGun().getClipTotal();
+        }
         counter.step();
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
         // TODO: Define HUD elements with XML?
-        font.draw(spriteBatch, ammoCount, 10, 40);
+        if (player != null) {
+            font.draw(spriteBatch, ammoCount, 10, 40);
+        }
         counter.render(spriteBatch);
     }
 

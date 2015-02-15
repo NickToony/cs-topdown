@@ -25,7 +25,6 @@ public class RoomGame extends Room {
     private World world;
     private float mouseX = 0f;
     private float mouseY = 0f;
-    public Player userPlayer;
     private SpriteBatch spriteBatch = new SpriteBatch();
     private HUD hud;
     private RayHandlerWrapper rayHandlerWrapper;
@@ -53,13 +52,6 @@ public class RoomGame extends Room {
         rayHandlerWrapper = new RayHandlerWrapper(rayHandler, map);
         // Add map lights
         map.addLightObjects(rayHandler);
-
-        // Define a player object
-        userPlayer = new UserPlayer(16,16);
-        userPlayer.setTorch(LightManager.defineTorch(rayHandler));
-        userPlayer.setGlow(LightManager.definePlayerGlow(rayHandler));
-        addEntity(userPlayer, world);
-        map.setEntitySnap(userPlayer);
 
         // Add hud
         hud = new HUD(this);
@@ -101,10 +93,6 @@ public class RoomGame extends Room {
         spriteBatch.dispose();
     }
 
-    public Player getUserPlayer() {
-        return userPlayer;
-    }
-
     public float getMouseX() {
         return mouseX;
     }
@@ -142,5 +130,26 @@ public class RoomGame extends Room {
         if (client != null) {
             client.sendPacket(packet);
         }
+    }
+
+    public Player createUserPlayer() {
+        // Define a player object
+        Player player = new UserPlayer();
+        map.setEntitySnap(player);
+        hud.setPlayer(player);
+        return setupPlayer(player);
+    }
+
+    public Player createPlayer() {
+        // Define a player object
+        Player player = new Player();
+        return setupPlayer(player);
+    }
+
+    private Player setupPlayer(Player player) {
+        player.setTorch(LightManager.defineTorch(rayHandlerWrapper.getHandler()));
+        player.setGlow(LightManager.definePlayerGlow(rayHandlerWrapper.getHandler()));
+        addEntity(player, world);
+        return player;
     }
 }

@@ -3,6 +3,7 @@ package com.nick.ant.towerdefense;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.nick.ant.towerdefense.networking.ServerContainer;
 import com.nick.ant.towerdefense.rooms.Room;
 import com.nick.ant.towerdefense.rooms.RoomMainMenu;
 
@@ -34,4 +35,11 @@ public class Game extends ApplicationAdapter {
 
         currentRoom.render();
 	}
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        ServerContainer.dispose();
+    }
 }

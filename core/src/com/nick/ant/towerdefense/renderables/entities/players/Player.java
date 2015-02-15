@@ -46,9 +46,9 @@ public class Player extends Entity {
     private Texture gunTexture;
     private Light glow;
 
-    public Player(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Player() {
+        this.x = 0;
+        this.y = 0;
         this.direction = 0.0f;
     }
 

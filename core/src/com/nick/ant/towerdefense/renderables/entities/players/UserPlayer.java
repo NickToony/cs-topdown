@@ -8,10 +8,6 @@ import com.badlogic.gdx.Input;
  */
 public class UserPlayer extends Player{
 
-    public UserPlayer(int x, int y){
-        super(x, y);
-    }
-
     @Override
     public void step(){
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
