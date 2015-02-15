@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
 import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
+import com.nick.ant.towerdefense.rooms.RoomGame;
 import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
@@ -32,6 +33,7 @@ public class CSTDServer {
     private Timer timer;
     private List<ServerClient> serverClientList = new ArrayList<ServerClient>();
     private Logger logger;
+    private RoomGame roomGame;
 
     public Logger getLogger() {
         return logger;
@@ -116,9 +118,18 @@ public class CSTDServer {
             public void received(Connection connection, Object object) {
                 handleReceivedMessage(connection, object);
             }
+
+            @Override
+            public void connected(Connection connection) {
+                handleClientConnected(connection);
+            }
         });
 
         PacketDefinition.registerClasses(serverSocket.getKryo());
+
+
+        roomGame = new RoomGame();
+        roomGame.create();
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -130,15 +141,24 @@ public class CSTDServer {
         timerIsRunning = true;
     }
 
+    private void handleClientConnected(Connection connection) {
+        serverClientList.add(new ServerClient(this, connection));
+    }
+
     private void handleReceivedMessage(Connection connection, Object object) {
-        if (object instanceof PlayerMovePacket) {
-            PlayerMovePacket movePacket = (PlayerMovePacket) object;
-            System.out.println("Received move packet");
+        for (ServerClient client : serverClientList) {
+            if (client.getSocket() == connection) {
+                client.handleReceivedMessage(object);
+            }
         }
     }
 
     private void step() {
+        roomGame.step();
 
+        for (ServerClient serverClient : serverClientList) {
+            serverClient.step();
+        }
     }
 
     public void dispose() {
@@ -161,5 +181,10 @@ public class CSTDServer {
 
     public ServerConfig getConfig() {
         return config;
+    }
+
+
+    public RoomGame getRoomGame() {
+        return roomGame;
     }
 }

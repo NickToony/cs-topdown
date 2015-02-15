@@ -46,19 +46,11 @@ public class Player extends Entity {
     private Texture gunTexture;
     private Light glow;
 
-    public Player() {
-        this.x = 0;
-        this.y = 0;
-        this.direction = 0.0f;
-    }
-
     @Override
-    public void create() {
+    public void createGL() {
         getSkeletonWrapper().setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
         leftHand = getSkeletonWrapper().getSkeleton().findBone("left_gun");
         rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
-
-        setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
 
         if (weaponPrimary != null)  {
             getSkeletonWrapper().startAnimation(weaponPrimary.getAnimationIdle(), 2, true);
@@ -66,9 +58,14 @@ public class Player extends Entity {
             System.out.println("NO ANIMATIONS");
         }
 
+        shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
+    }
+
+    @Override
+    public void createLogic() {
         setupBody();
 
-        shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
+        setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
     }
 
     private void setupBody() {
@@ -95,9 +92,6 @@ public class Player extends Entity {
             gunTexture.dispose();
         }
 
-        gunTexture = TextureManager.getTexture("weapons/" + weapon.getTexture()+ "/texture.png");
-        gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
         weaponPrimary = weapon;
     }
 
@@ -107,6 +101,8 @@ public class Player extends Entity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        super.render(spriteBatch);
+
         // render harry's shadow
         shadowSprite.setX(x - shadowSprite.getWidth()/2);
         shadowSprite.setY(y - shadowSprite.getHeight()/2);
@@ -114,7 +110,12 @@ public class Player extends Entity {
 
 
         super.render(spriteBatch);
+
         Weapon weapon = weaponPrimary;
+        if (gunTexture == null) {
+            gunTexture = TextureManager.getTexture("weapons/" + weapon.getTexture() + "/texture.png");
+            gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
 
         // If player has a gun in the left hand
         if (weapon.isLeftHand() && weapon != null)  {
@@ -167,13 +168,12 @@ public class Player extends Entity {
                 + ((moveRight ? 1 : 0) * 100)
                 + ((moveUp ? 1 : 0) * 10)
                 + ((moveDown ? 1 : 0));
-        if (newMove != lastMove) {
+        if (newMove != lastMove && isMultiplayer()) {
             // Send move packet
             PlayerMovePacket playerMovePacket = new PlayerMovePacket(moveLeft, moveRight, moveUp, moveDown);
             room.sendPacket(playerMovePacket);
         }
         lastMove = newMove;
-
     }
 
     @Override
@@ -202,4 +202,17 @@ public class Player extends Entity {
     public void setGlow(Light glow) {
         this.glow = glow;
     }
+
+    @Override
+    public void setX(float x) {
+        super.setX(x);
+        body.setTransform(x, 0, 0);
+    }
+
+    @Override
+    public void setY(float y) {
+        super.setY(y);
+        body.setTransform(x, y, 0);
+    }
+
 }

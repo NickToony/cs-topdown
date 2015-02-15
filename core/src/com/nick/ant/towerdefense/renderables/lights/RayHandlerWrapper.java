@@ -36,7 +36,7 @@ public class RayHandlerWrapper extends Renderable {
     }
 
     @Override
-    public void create() {
+    public void createGL() {
 
     }
 

@@ -16,6 +16,7 @@ public abstract class Entity extends Renderable {
     protected SkeletonWrapper skeletonWrapper;
     protected World world;
     protected RoomGame room;
+    private boolean isMultiplayer = false;
 
     public SkeletonWrapper getSkeletonWrapper() {
         if (skeletonWrapper == null) {
@@ -33,6 +34,7 @@ public abstract class Entity extends Renderable {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        super.render(spriteBatch);
         if (skeletonWrapper != null) {
             skeletonWrapper.render(spriteBatch);
         }
@@ -68,5 +70,25 @@ public abstract class Entity extends Renderable {
     @Override
     public void setRoom(Room room) {
         // do nothing
+    }
+
+    public boolean isMultiplayer() {
+        return isMultiplayer;
+    }
+
+    public void setMultiplayer(boolean isMultiplayer) {
+        this.isMultiplayer = isMultiplayer;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void setDirection(float direction) {
+        this.direction = direction;
     }
 }

@@ -30,6 +30,9 @@ public class RoomGame extends Room {
     private RayHandlerWrapper rayHandlerWrapper;
     private CSClient client;
 
+    public RoomGame() {
+    }
+
     public RoomGame(CSClient client) {
         this.client = client;
     }
@@ -122,8 +125,9 @@ public class RoomGame extends Room {
     }
 
     public void addEntity(Entity entity) {
-        addRenderable(entity);
+        entity.setMultiplayer(client != null);
         entity.setGameRoom(this);
+        addRenderable(entity);
     }
 
     public void sendPacket(Packet packet) {

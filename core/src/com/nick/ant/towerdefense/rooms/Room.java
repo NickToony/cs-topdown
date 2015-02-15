@@ -24,7 +24,7 @@ public abstract class Room {
     public void addRenderable(Renderable renderable)    {
         entityList.add(renderable);
         renderable.setRoom(this);
-        renderable.create();
+        renderable.createLogic();
     }
 
     public void render() {

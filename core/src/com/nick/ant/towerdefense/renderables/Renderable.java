@@ -8,11 +8,20 @@ import com.nick.ant.towerdefense.rooms.Room;
  */
 public abstract class Renderable {
     protected Room room;
+    private boolean created = false;
 
-    public abstract void render(SpriteBatch spriteBatch);
+    public void render(SpriteBatch spriteBatch) {
+        if (!created) {
+            createGL();
+            created = true;
+        }
+    };
     public abstract void step();
     public abstract void dispose();
-    public abstract void create();
+    public abstract void createGL();
+    public void createLogic() {
+
+    };
 
     public void setRoom(Room room) {
         this.room = room;

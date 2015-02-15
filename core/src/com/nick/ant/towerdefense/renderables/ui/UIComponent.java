@@ -11,7 +11,7 @@ public abstract class UIComponent extends Renderable {
     }
 
     @Override
-    public void create() {
+    public void createGL() {
 
     }
 }
