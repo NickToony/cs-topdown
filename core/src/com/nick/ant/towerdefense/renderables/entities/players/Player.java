@@ -65,6 +65,8 @@ public class Player extends Entity {
         }
 
         setupBody();
+
+        shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
     }
 
     private void setupBody() {
@@ -103,6 +105,12 @@ public class Player extends Entity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        // render harry's shadow
+        shadowSprite.setX(x - shadowSprite.getWidth()/2);
+        shadowSprite.setY(y - shadowSprite.getHeight()/2);
+        shadowSprite.draw(spriteBatch);
+
+
         super.render(spriteBatch);
         Weapon weapon = weaponPrimary;
 
@@ -155,10 +163,7 @@ public class Player extends Entity {
 
     @Override
     public void dispose() {
-        shadowSprite.getTexture().dispose();
-        leftHandSprite.getTexture().dispose();
-        rightHandSprite.getTexture().dispose();
-        torch.dispose();
+
     }
 
     protected float calculateDirection(int aimX, int aimY){
