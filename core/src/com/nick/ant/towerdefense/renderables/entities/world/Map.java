@@ -1,6 +1,8 @@
 package com.nick.ant.towerdefense.renderables.entities.world;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 import java.util.ArrayList;
@@ -26,10 +29,12 @@ public class Map {
     private TiledMap map;
     private MapLayer collisionLayer;
     private MapLayer objectiveLayer;
+    private MapLayer lightLayer;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
     private int mapWidth;
     private int mapHeight;
+    private Color ambientColour;
 
     private Entity entitySnap;
 
@@ -41,6 +46,11 @@ public class Map {
         MapProperties mapProperties = map.getProperties();
         int tX = mapProperties.get("width", Integer.class);
         int tY = mapProperties.get("height", Integer.class);
+
+        // Ambient colours
+        ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
+        ambientColour.a = Float.parseFloat(mapProperties.get("ambientAlpha", String.class));
+
         mapWidth = cellSize * tX;
         mapHeight = cellSize * tY;
 
@@ -57,6 +67,11 @@ public class Map {
                 if (((String)properties.get("objectives")).contentEquals("true"))    {
                     objectiveLayer = layer;
                     System.out.println("Found objective layer with " + layer.getObjects().getCount() + " objects");
+                }
+            } else if (properties.containsKey("lights")) {
+                if (((String)properties.get("lights")).contentEquals("true")) {
+                    lightLayer = layer;
+                    System.out.println("Found light layer with " + layer.getObjects().getCount() + " objects");
                 }
             }
         }
@@ -152,4 +167,34 @@ public class Map {
 
     }
 
+    public void addLightObjects(RayHandler rayHandler) {
+        if (lightLayer == null) {
+            return;
+        }
+
+        for (MapObject object : lightLayer.getObjects())   {
+            if (object instanceof RectangleMapObject) {
+                MapProperties mapProperties = object.getProperties();
+
+                // Fetch the rectangle collision box
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+
+                LightManager.definePointLight(rayHandler, mapProperties,
+                        rectangle.getX() +  (cellSize/2),
+                        rectangle.getY() +  (cellSize/2));
+            }
+        }
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public Color getAmbientColour() {
+        return ambientColour;
+    }
 }

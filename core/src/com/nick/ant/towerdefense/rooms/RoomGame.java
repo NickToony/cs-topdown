@@ -43,8 +43,10 @@ public class RoomGame extends Room {
         // Setup lighting engine
         RayHandler rayHandler = new RayHandler(world);
         rayHandler.setShadows(true);
-        rayHandler.setAmbientLight(new Color(0, 0, 0, .1f));
+        rayHandler.setAmbientLight(map.getAmbientColour());
         rayHandlerWrapper = new RayHandlerWrapper(rayHandler, map);
+        // Add map lights
+        map.addLightObjects(rayHandler);
 
         // Define a player object
         userPlayer = new UserPlayer(16,16);

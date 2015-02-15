@@ -29,7 +29,7 @@ public class Player extends Entity {
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
     protected boolean moveRight = false;
-    private boolean lightOn = true;
+    private boolean lightOn = false;
 
     private Weapon weaponPrimary;
     private Bone leftHand;
