@@ -112,6 +112,8 @@ public class CSTDServer {
         // Server list
         host = new Host(config.getName(), 0, config.getMaxPlayers());
         host.addMeta("map", config.getMap());
+        host.addMeta("ip", config.getIP());
+        host.addMeta("port", Integer.toString(config.getPort()));
         host.create();
 
         logger.log("Server started up");

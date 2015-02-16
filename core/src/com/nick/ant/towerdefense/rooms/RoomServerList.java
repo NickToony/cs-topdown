@@ -3,8 +3,10 @@ package com.nick.ant.towerdefense.rooms;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.nick.ant.towerdefense.components.SkinManager;
+import com.nick.ant.towerdefense.networking.client.CSClient;
 import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
+import com.nicktoony.gameserver.service.client.models.Server;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.gameserver.service.libgdx.ServerList;
 
@@ -33,6 +35,19 @@ public class RoomServerList extends Room {
         serverList.pad(20);
         // Add meta
         serverList.addMetaColumn("Map", "map");
+        serverList.addMetaColumn("IP", "ip");
+        serverList.addMetaColumn("Port", "port");
+        // Listener
+        serverList.setListener(new ServerList.RowListener() {
+            @Override
+            public void onSelected(Server server) {
+                if (server.getMeta().containsKey("ip") && server.getMeta().containsKey("port")) {
+                    navigateToRoom(new RoomConnect(new CSClient(
+                            server.getMeta().get("ip"),
+                            Integer.parseInt(server.getMeta().get("port")))));
+                }
+            }
+        });
         // Setup
         serverList.setup();
 
