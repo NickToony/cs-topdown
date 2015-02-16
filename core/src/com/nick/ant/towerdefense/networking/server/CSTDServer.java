@@ -43,8 +43,9 @@ public class CSTDServer {
 
     public void sendToOthers(Packet packet, ServerClient myClient) {
         for (ServerClient serverClient : serverClientList) {
-            if (serverClient != myClient) {
+            if (serverClient != myClient && serverClient.isReady()) {
                 serverClient.getSocket().sendTCP(packet);
+                System.out.println("Sent to other" + serverClient.getId());
             }
         }
     }
@@ -170,6 +171,7 @@ public class CSTDServer {
         for (ServerClient client : serverClientList) {
             if (client.getSocket() == connection) {
                 client.handleReceivedMessage(object);
+                return;
             }
         }
     }
@@ -207,5 +209,11 @@ public class CSTDServer {
 
     public RoomGame getRoomGame() {
         return roomGame;
+    }
+
+    public void updateNewClient(Connection connection) {
+        for (ServerClient serverClient : serverClientList) {
+            serverClient.updateNewPlayer(connection);
+        }
     }
 }

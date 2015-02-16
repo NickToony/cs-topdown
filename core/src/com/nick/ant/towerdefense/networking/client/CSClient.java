@@ -6,11 +6,14 @@ import com.esotericsoftware.kryonet.Listener;
 import com.nick.ant.towerdefense.networking.packets.Packet;
 import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
 import com.nick.ant.towerdefense.networking.packets.PlayerCreatePacket;
+import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.rooms.RoomGameRender;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nick on 11/02/2015.
@@ -21,6 +24,17 @@ public class CSClient {
     private int port;
     private Client client;
     private RoomGameRender roomGame;
+    private List<PlayerWrapper> players = new ArrayList();
+
+    private class PlayerWrapper {
+        public Player player;
+        public int id;
+
+        public PlayerWrapper(Player player, int id) {
+            this.player = player;
+            this.id = id;
+        }
+    }
 
     public CSClient(CSTDServer server) {
         this.ip = "127.0.0.1";
@@ -72,7 +86,31 @@ public class CSClient {
                 Player player = roomGame.createUserPlayer();
                 player.setX(packet.x);
                 player.setY(packet.y);
+            } else {
+                Player player = roomGame.createPlayer();
+                player.setX(packet.x);
+                player.setY(packet.y);
+                player.setMultiplayer(false);
+                players.add(new PlayerWrapper(player, packet.id));
+            }
+            return;
+        }
+
+        if (object instanceof PlayerMovePacket) {
+            PlayerMovePacket packet = (PlayerMovePacket) object;
+            Player player = findPlayer(packet.id);
+            if (player != null) {
+                player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);
             }
         }
+    }
+
+    private Player findPlayer(int id) {
+        for (PlayerWrapper wrapper : players) {
+            if (wrapper.id == id) {
+                return wrapper.player;
+            }
+        }
+        return null;
     }
 }

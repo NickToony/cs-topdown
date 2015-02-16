@@ -1,6 +1,7 @@
 package com.nick.ant.towerdefense.networking.server;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.nick.ant.towerdefense.networking.packets.ClientReadyPacket;
 import com.nick.ant.towerdefense.networking.packets.Packet;
 import com.nick.ant.towerdefense.networking.packets.PlayerCreatePacket;
 import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
@@ -15,6 +16,7 @@ public class ServerClient {
     private long timeCreated = System.currentTimeMillis();
     private Player player;
     private int id;
+    private boolean ready = false;
 
     public ServerClient(int id, CSTDServer server, Connection socket) {
         this.id = id;
@@ -25,7 +27,21 @@ public class ServerClient {
     public void handleReceivedMessage(Object object) {
         if (object instanceof PlayerMovePacket) {
             PlayerMovePacket movePacket = (PlayerMovePacket) object;
-            System.out.println("Received move packet");
+
+            if (player != null) {
+                player.setMovement(movePacket.moveUp, movePacket.moveRight, movePacket.moveDown, movePacket.moveLeft);
+            }
+
+            movePacket.id = id;
+            sendToOthers(movePacket);
+
+            return;
+        }
+
+        if (object instanceof ClientReadyPacket) {
+            if (!ready) {
+                setReady(true);
+            }
         }
     }
 
@@ -39,6 +55,8 @@ public class ServerClient {
             player.setX(128);
             player.setY(128);
             socket.sendTCP(new PlayerCreatePacket(true, player.getX(), player.getY()));
+
+            sendToOthers(new PlayerCreatePacket(false, player.getX(), player.getY(), id));
         }
     }
 
@@ -47,6 +65,24 @@ public class ServerClient {
     }
 
     private void sendToOthers(Packet packet) {
+        System.out.println("IM GOING TO SEND TO OTHERS" + getId());
         server.sendToOthers(packet, this);
+    }
+
+    public void updateNewPlayer(Connection connection) {
+        if (player != null) {
+            connection.sendTCP(new PlayerCreatePacket(false, player.getX(), player.getY(), id));
+        }
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+        if (ready) {
+            server.updateNewClient(socket);
+        }
     }
 }

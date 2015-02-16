@@ -8,6 +8,7 @@ public class PlayerMovePacket extends Packet {
     public boolean moveRight;
     public boolean moveUp;
     public boolean moveDown;
+    public int id;
 
     public PlayerMovePacket() {
     }
@@ -17,6 +18,14 @@ public class PlayerMovePacket extends Packet {
         this.moveRight = moveRight;
         this.moveUp = moveUp;
         this.moveDown = moveDown;
+    }
+
+    public PlayerMovePacket(boolean moveLeft, boolean moveRight, boolean moveUp, boolean moveDown, int id) {
+        this.moveLeft = moveLeft;
+        this.moveRight = moveRight;
+        this.moveUp = moveUp;
+        this.moveDown = moveDown;
+        this.id = id;
     }
 
 

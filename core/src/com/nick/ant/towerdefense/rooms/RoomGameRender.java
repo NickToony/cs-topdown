@@ -10,6 +10,7 @@ import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.networking.TexturelessMap;
 import com.nick.ant.towerdefense.networking.client.CSClient;
+import com.nick.ant.towerdefense.networking.packets.ClientReadyPacket;
 import com.nick.ant.towerdefense.networking.packets.Packet;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
@@ -56,6 +57,14 @@ public class RoomGameRender extends RoomGame {
 
         // Add hud
         hud = new HUD(this);
+
+        if (isMultiplayer()) {
+            client.sendPacket(new ClientReadyPacket());
+        }
+    }
+
+    private boolean isMultiplayer() {
+        return client != null;
     }
 
     @Override

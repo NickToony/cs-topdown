@@ -215,4 +215,10 @@ public class Player extends Entity {
         body.setTransform(x, y, 0);
     }
 
+    public void setMovement(boolean moveUp, boolean moveRight, boolean moveDown, boolean moveLeft) {
+        this.moveUp = moveUp;
+        this.moveRight = moveRight;
+        this.moveDown = moveDown;
+        this.moveLeft = moveLeft;
+    }
 }

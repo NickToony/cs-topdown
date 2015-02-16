@@ -7,6 +7,7 @@ public class PlayerCreatePacket extends Packet {
     public boolean mine;
     public float x;
     public float y;
+    public int id;
 
     public PlayerCreatePacket() {
     }
@@ -15,5 +16,12 @@ public class PlayerCreatePacket extends Packet {
         this.mine = mine;
         this.x = x;
         this.y = y;
+    }
+
+    public PlayerCreatePacket(boolean mine, float x, float y, int id) {
+        this.mine = mine;
+        this.x = x;
+        this.y = y;
+        this.id = id;
     }
 }
