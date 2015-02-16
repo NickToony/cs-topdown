@@ -1,5 +1,7 @@
 package com.nicktoony.cstd.server;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
 import com.nick.ant.towerdefense.networking.server.ServerUI;
 
@@ -9,6 +11,10 @@ public class ServerApplication {
     public static CSTDServer server;
 
     public static void main(String [ ] args) {
+
+        if (Gdx.files == null) {
+            Gdx.files = new LwjglFiles();
+        }
 
         if (args.length <= 0) {
             startNoUI();

@@ -31,6 +31,10 @@ public class RoomServerList extends Room {
         serverList = new ServerList(SkinManager.getUiSkin());
 //        serverList.setDebug(true, true);
         serverList.pad(20);
+        // Add meta
+        serverList.addMetaColumn("Map", "map");
+        // Setup
+        serverList.setup();
 
         // Handle input, and add the actor
         Gdx.input.setInputProcessor(stage);

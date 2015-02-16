@@ -35,7 +35,7 @@ public class ServerUI implements CSTDServer.Logger {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(true);
-        JTextArea textArea = new JTextArea(30, 50);
+        JTextArea textArea = new JTextArea(50,80);
 
         PrintStream con = new PrintStream(new TextAreaOutputStream(textArea));
         System.setOut(con);

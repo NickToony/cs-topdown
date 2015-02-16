@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.networking.server;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -7,8 +8,8 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
-import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
 import com.nick.ant.towerdefense.rooms.RoomGame;
+import com.nick.ant.towerdefense.rooms.RoomGameRender;
 import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
@@ -66,12 +67,13 @@ public class CSTDServer {
     }
 
     private boolean findConfig() {
-        File configFile = new File("server/config.json");
+        File configFile = Gdx.files.local("server/config.json").file();
         if (!configFile.exists()) {
             logger.log("Config file does not exist");
             logger.log("Copying default config to location");
+            logger.log(configFile.getAbsolutePath());
             try {
-                FileUtils.copyFile(new File("server/default.json"), configFile);
+                FileUtils.copyFile(Gdx.files.local("server/default.json").file(), configFile);
             } catch (IOException e) {
                 logger.log(e);
                 logger.log("Failed to copy config. Exiting.");
@@ -100,6 +102,8 @@ public class CSTDServer {
     private void setup() {
         // Server list
         host = new Host(config.getName(), 0, config.getMaxPlayers());
+        host.addMeta("map", config.getMap());
+        host.create();
 
         logger.log("Server started up");
 

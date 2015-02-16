@@ -46,7 +46,8 @@ public class RoomMainMenu extends Room {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button)
                             {
-                                navigateToRoom(new RoomConnect(new CSClient(ServerContainer.getInstance())));
+                                //navigateToRoom(new RoomConnect(new CSClient(ServerContainer.getInstance())));
+                                navigateToRoom(new RoomConnect(new CSClient("nick-hope.co.uk", 3453)));
                             }
                         }
                 ));

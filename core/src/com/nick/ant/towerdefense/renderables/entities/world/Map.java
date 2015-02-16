@@ -20,7 +20,7 @@ import com.nick.ant.towerdefense.renderables.entities.Entity;
  * Created by Nick on 10/09/2014.
  */
 public class Map {
-    private final int cellSize = 32;
+    protected final int CELL_SIZE = 32;
     private String mapName;
     private TiledMap map;
     private MapLayer collisionLayer;
@@ -28,11 +28,15 @@ public class Map {
     private MapLayer lightLayer;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
-    private int mapWidth;
-    private int mapHeight;
+    protected int mapWidth;
+    protected int mapHeight;
     private Color ambientColour;
 
     private Entity entitySnap;
+
+    protected Map() {
+
+    }
 
     public Map(String mapName)    {
         // Load the map
@@ -47,8 +51,8 @@ public class Map {
         ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
         ambientColour.a = Float.parseFloat(mapProperties.get("ambientAlpha", String.class));
 
-        mapWidth = cellSize * tX;
-        mapHeight = cellSize * tY;
+        mapWidth = CELL_SIZE * tX;
+        mapHeight = CELL_SIZE * tY;
 
         // Get the collision layer
         for (MapLayer layer : map.getLayers()) {
@@ -123,12 +127,12 @@ public class Map {
                 // Resize it to the correct size and location
                 BodyDef bodyDef = new BodyDef();
                 bodyDef.type = BodyDef.BodyType.StaticBody;
-                bodyDef.position.set(rectangle.getX() + (cellSize/2), rectangle.getY() + (cellSize/2));
+                bodyDef.position.set(rectangle.getX() + (CELL_SIZE /2), rectangle.getY() + (CELL_SIZE /2));
 
                 Body body = world.createBody(bodyDef);
 
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(cellSize/2, cellSize/2);
+                shape.setAsBox(CELL_SIZE /2, CELL_SIZE /2);
 
                 FixtureDef fixtureDef = new FixtureDef();
                 fixtureDef.shape = shape;
@@ -176,8 +180,8 @@ public class Map {
                 Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
 
                 LightManager.definePointLight(rayHandler, mapProperties,
-                        rectangle.getX() +  (cellSize/2),
-                        rectangle.getY() +  (cellSize/2));
+                        rectangle.getX() +  (CELL_SIZE /2),
+                        rectangle.getY() +  (CELL_SIZE /2));
             }
         }
     }

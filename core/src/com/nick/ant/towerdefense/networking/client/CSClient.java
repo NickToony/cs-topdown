@@ -8,7 +8,7 @@ import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
 import com.nick.ant.towerdefense.networking.packets.PlayerCreatePacket;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
-import com.nick.ant.towerdefense.rooms.RoomGame;
+import com.nick.ant.towerdefense.rooms.RoomGameRender;
 
 import java.io.IOException;
 
@@ -20,11 +20,17 @@ public class CSClient {
     private String ip;
     private int port;
     private Client client;
-    private RoomGame roomGame;
+    private RoomGameRender roomGame;
 
     public CSClient(CSTDServer server) {
         this.ip = "127.0.0.1";
         this.port = server.getConfig().getPort();
+        setup();
+    }
+
+    public CSClient(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
         setup();
     }
 
@@ -40,7 +46,7 @@ public class CSClient {
         }
     }
 
-    public boolean connect(RoomGame roomGame) {
+    public boolean connect(RoomGameRender roomGame) {
         try {
             client.connect(5000, ip, port);
         } catch (IOException e) {

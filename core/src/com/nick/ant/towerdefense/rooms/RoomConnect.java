@@ -16,7 +16,7 @@ public class RoomConnect extends Room {
     @Override
     public void create() {
 
-        RoomGame roomGame = new RoomGame(client);
+        RoomGameRender roomGame = new RoomGameRender(client);
         if (client.connect(roomGame)) {
             navigateToRoom(roomGame);
         }

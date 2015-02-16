@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class Room {
     protected List<Renderable> entityList = new ArrayList<Renderable>();
-    private SpriteBatch spriteBatch = new SpriteBatch();
+    private SpriteBatch spriteBatch;
     private Game game;
 
     public abstract void create();
@@ -28,6 +28,10 @@ public abstract class Room {
     }
 
     public void render() {
+        if (spriteBatch == null) {
+            spriteBatch  = new SpriteBatch();
+        }
+
         spriteBatch.begin();
         for (Renderable renderable : entityList) {
             renderable.render(spriteBatch);
@@ -43,6 +47,9 @@ public abstract class Room {
     }
 
     protected SpriteBatch getSpriteBatch() {
+        if (spriteBatch == null) {
+            spriteBatch  = new SpriteBatch();
+        }
         return this.spriteBatch;
     }
 
@@ -66,7 +73,9 @@ public abstract class Room {
         for (Renderable renderable : entityList) {
             renderable.dispose();
         }
-        spriteBatch.dispose();
+        if (spriteBatch != null) {
+            spriteBatch.dispose();
+        }
 
         // dispose managers
         TextureManager.dispose();

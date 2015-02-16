@@ -15,13 +15,17 @@ public class FPSCounter extends UIComponent {
     private final int aSecond = 1000;
     private BitmapFont font;
 
-    public FPSCounter() {
+    @Override
+    public void createGL() {
+        super.createGL();
+
         font = new BitmapFont();
         font.setColor(Color.WHITE);
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        super.render(spriteBatch);
         long time = System.currentTimeMillis();
         if (time > lastTime + 1000) {
             currentFPS = counter;

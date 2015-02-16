@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.rooms.Room;
 import com.nick.ant.towerdefense.rooms.RoomGame;
+import com.nick.ant.towerdefense.rooms.RoomGameRender;
 
 /**
  * Created by Nick on 08/09/2014.

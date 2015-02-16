@@ -7,6 +7,7 @@ public class ServerConfig {
     private String name;
     private int maxPlayers;
     private int port;
+    private String map;
 
     public String getName() {
         return name;
@@ -18,5 +19,9 @@ public class ServerConfig {
 
     public int getPort() {
         return port;
+    }
+
+    public String getMap() {
+        return map;
     }
 }
