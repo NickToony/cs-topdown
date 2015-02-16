@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.nick.ant.towerdefense.networking.packets.Packet;
 import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
 import com.nick.ant.towerdefense.rooms.RoomGame;
 import com.nick.ant.towerdefense.rooms.RoomGameRender;
@@ -38,6 +39,14 @@ public class CSTDServer {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public void sendToOthers(Packet packet, ServerClient myClient) {
+        for (ServerClient serverClient : serverClientList) {
+            if (serverClient != myClient) {
+                serverClient.getSocket().sendTCP(packet);
+            }
+        }
     }
 
     public interface Logger {
@@ -146,7 +155,13 @@ public class CSTDServer {
     }
 
     private void handleClientConnected(Connection connection) {
-        serverClientList.add(new ServerClient(this, connection));
+        int highest = 0;
+        for (ServerClient serverClient : serverClientList) {
+            if (serverClient.getId() > highest) {
+                highest = serverClient.getId();
+            }
+        }
+        serverClientList.add(new ServerClient(highest + 1, this, connection));
     }
 
     private void handleReceivedMessage(Connection connection, Object object) {

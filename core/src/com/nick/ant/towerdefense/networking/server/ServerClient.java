@@ -1,6 +1,7 @@
 package com.nick.ant.towerdefense.networking.server;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.nick.ant.towerdefense.networking.packets.Packet;
 import com.nick.ant.towerdefense.networking.packets.PlayerCreatePacket;
 import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
@@ -13,8 +14,10 @@ public class ServerClient {
     private CSTDServer server;
     private long timeCreated = System.currentTimeMillis();
     private Player player;
+    private int id;
 
-    public ServerClient(CSTDServer server, Connection socket) {
+    public ServerClient(int id, CSTDServer server, Connection socket) {
+        this.id = id;
         this.socket = socket;
         this.server = server;
     }
@@ -37,5 +40,13 @@ public class ServerClient {
             player.setY(128);
             socket.sendTCP(new PlayerCreatePacket(true, player.getX(), player.getY()));
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    private void sendToOthers(Packet packet) {
+        server.sendToOthers(packet, this);
     }
 }
