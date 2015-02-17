@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.nick.ant.towerdefense.networking.packets.*;
+import com.nick.ant.towerdefense.networking.packets.player.*;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.rooms.RoomGameRender;
@@ -113,6 +114,25 @@ public class CSClient {
             if (player != null) {
                 player.setX(packet.x);
                 player.setY(packet.y);
+                player.setDirection(packet.direction);
+            }
+            return;
+        }
+
+        if (object instanceof PlayerTorchPacket) {
+            PlayerTorchPacket packet = (PlayerTorchPacket) object;
+            Player player = findPlayer(packet.id);
+            if (player!= null) {
+                player.setLightOn(packet.torch);
+            }
+            return;
+        }
+
+        if (object instanceof PlayerShootPacket) {
+            PlayerShootPacket packet = (PlayerShootPacket) object;
+            Player player = findPlayer(packet.id);
+            if (player!= null) {
+                player.setShooting(packet.shoot);
             }
             return;
         }

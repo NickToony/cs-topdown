@@ -2,7 +2,6 @@ package com.nick.ant.towerdefense.renderables.entities.players;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,8 +15,10 @@ import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
-import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
-import com.nick.ant.towerdefense.networking.packets.PlayerPositionPacket;
+import com.nick.ant.towerdefense.networking.packets.player.PlayerMovePacket;
+import com.nick.ant.towerdefense.networking.packets.player.PlayerPositionPacket;
+import com.nick.ant.towerdefense.networking.packets.player.PlayerShootPacket;
+import com.nick.ant.towerdefense.networking.packets.player.PlayerTorchPacket;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 /**
@@ -34,9 +35,12 @@ public class Player extends Entity {
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
     protected boolean moveRight = false;
-    protected boolean shooting = false;
     protected int lastMove = 0;
+    protected boolean shooting = false;
+    private boolean hasShot = false;
+    private boolean lastShooting = false;
     private boolean lightOn = false;
+    private boolean lastTorch = false;
 
     private Weapon weaponPrimary;
     private Bone leftHand;
@@ -162,13 +166,14 @@ public class Player extends Entity {
         gunVector.setAngle(rightHand.getWorldRotation());
         vector.add(gunVector);
 
-        // Update torch
+        // Update shoot
         torch.setPosition(vector.x, vector.y);
         torch.setDirection(rightHand.getWorldRotation());
+        torch.setActive(lightOn);
         // Update gun fire
         gunFire.setPosition(vector.x, vector.y);
         gunFire.setDirection(rightHand.getWorldRotation());
-        gunFire.setActive(shooting);
+        gunFire.setActive(hasShot);
 
         // Update glow
         glow.setPosition(x, y);
@@ -202,20 +207,34 @@ public class Player extends Entity {
         }
         lastMove = newMove;
 
+
+        // Handle fire rate
+        hasShot = false;
         if (shooting) {
             if (lastShotCount <= 0) {
                 lastShotCount = weaponPrimary.getRateOfFire();
+                hasShot = true;
             } else {
                 lastShotCount -=  1;
-                shooting = false;
             }
         }
 
+        // Handle multiplayer update
         if (isMultiplayer()) {
             if (System.currentTimeMillis() > lastUpdate + UPDATE_RATE) {
                 lastUpdate = System.currentTimeMillis();
 
-                room.sendPacket(new PlayerPositionPacket(0, Math.round(getX()), Math.round(getY()), 0));
+                room.sendPacket(new PlayerPositionPacket(0, Math.round(getX()), Math.round(getY()), direction));
+            }
+
+            if (lastTorch != lightOn) {
+                lastTorch = lightOn;
+                room.sendPacket(new PlayerTorchPacket(lightOn));
+            }
+
+            if (lastShooting != shooting) {
+                lastShooting = shooting;
+                room.sendPacket(new PlayerShootPacket(shooting));
             }
         }
     }
@@ -236,7 +255,6 @@ public class Player extends Entity {
 
     public void setLightOn(boolean lightOn) {
         this.lightOn = lightOn;
-        torch.setActive(lightOn);
     }
 
     public boolean isLightOn() {
@@ -274,5 +292,29 @@ public class Player extends Entity {
     public void setGunFire(ConeLight coneLight) {
         this.gunFire = coneLight;
         gunFire.setActive(false);
+    }
+
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
+    }
+
+    public boolean getShooting() {
+        return shooting;
+    }
+
+    public boolean getMoveLeft() {
+        return moveLeft;
+    }
+
+    public boolean getMoveRight() {
+        return moveRight;
+    }
+
+    public boolean getMoveUp() {
+        return moveUp;
+    }
+
+    public boolean getMoveDown() {
+        return moveDown;
     }
 }

@@ -48,7 +48,7 @@ public class HUD extends UIComponent {
         super.render(spriteBatch);
 
         // TODO: Define HUD elements with XML?
-        if (player != null) {
+        if (player != null && ammoCount != null) {
             font.draw(spriteBatch, ammoCount, 10, 40);
         }
         counter.render(spriteBatch);

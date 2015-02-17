@@ -1,6 +1,7 @@
 package com.nick.ant.towerdefense.networking.packets;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.nick.ant.towerdefense.networking.packets.player.*;
 
 /**
  * Created by Nick on 11/02/2015.
@@ -13,6 +14,8 @@ public class PacketDefinition {
         kryo.register(PlayerCreatePacket.class);
         kryo.register(ClientReadyPacket.class);
         kryo.register(PlayerPositionPacket.class);
+        kryo.register(PlayerTorchPacket.class);
+        kryo.register(PlayerShootPacket.class);
     }
 
 }

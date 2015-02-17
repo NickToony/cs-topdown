@@ -3,6 +3,7 @@ package com.nick.ant.towerdefense.networking.server;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.nick.ant.towerdefense.networking.packets.*;
+import com.nick.ant.towerdefense.networking.packets.player.*;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 
 /**
@@ -51,9 +52,27 @@ public class ServerClient {
             if (Vector2.dst(player.getX(), player.getY(), packet.x, packet.y) < 32) {
                 player.setX(packet.x);
                 player.setY(packet.y);
+                player.setDirection(packet.direction);
             } else {
-                socket.sendTCP(new PlayerPositionPacket(id, Math.round(player.getX()), Math.round(player.getY()), 0));
+                socket.sendTCP(new PlayerPositionPacket(id, Math.round(player.getX()), Math.round(player.getY()), player.getDirection()));
             }
+            return;
+        }
+
+        if (object instanceof PlayerTorchPacket) {
+            PlayerTorchPacket packet = (PlayerTorchPacket) object;
+            player.setLightOn(packet.torch);
+            packet.id = id;
+            sendToOthers(packet);
+            return;
+        }
+
+        if (object instanceof PlayerShootPacket) {
+            PlayerShootPacket packet = (PlayerShootPacket) object;
+            player.setShooting(packet.shoot);
+            packet.id = id;
+            sendToOthers(packet);
+            return;
         }
     }
 
@@ -76,7 +95,7 @@ public class ServerClient {
         if (System.currentTimeMillis() > lastUpdate + UPDATE_RATE && player != null) {
             lastUpdate = System.currentTimeMillis();
 
-            sendToOthers(new PlayerPositionPacket(id, Math.round(player.getX()), Math.round(player.getY()), 0));
+            sendToOthers(new PlayerPositionPacket(id, Math.round(player.getX()), Math.round(player.getY()), player.getDirection()));
         }
     }
 
@@ -96,6 +115,9 @@ public class ServerClient {
     public void updateNewPlayer(Connection connection) {
         if (player != null) {
             connection.sendTCP(new PlayerCreatePacket(false, player.getX(), player.getY(), id));
+            connection.sendTCP(new PlayerMovePacket(player.getMoveLeft(), player.getMoveRight(), player.getMoveUp(), player.getMoveDown(), id));
+            connection.sendTCP(new PlayerShootPacket(player.getShooting(), id));
+            connection.sendTCP(new PlayerTorchPacket(player.isLightOn(), id));
         }
     }
 

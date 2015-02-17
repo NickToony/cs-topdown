@@ -1,4 +1,6 @@
-package com.nick.ant.towerdefense.networking.packets;
+package com.nick.ant.towerdefense.networking.packets.player;
+
+import com.nick.ant.towerdefense.networking.packets.Packet;
 
 /**
  * Created by Nick on 11/02/2015.
