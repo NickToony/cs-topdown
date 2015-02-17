@@ -10,108 +10,79 @@ public class Weapon {
     public static final int RELOAD_FULL_COCK = 1;
     public static final int RELOAD_SHOTGUN = 2;
 
-    private String weaponKey;
-    private String weaponName;
+    private String name = "Gun";
 
-    private int clipSize;
-    private int clipTotal;
+    private int clipSize = 30;
+    private int clipTotal = 30;
 
-    private float rateOfFire;
-    private float accuracy;
-    private float recoil;
-    private float speed;
+    private float rateOfFire = 1;
+    private float accuracy = 0;
+    private float recoil = 0;
+    private float speed = 100;
 
-    private int cost;
-    private int reward;
+    private int cost = 0;
+    private int reward = 0;
 
-    private boolean silencer;
-    private float zoom;
-    private int reloadType;
-    private float reloadDuration;
+    private boolean silencer = false;
+    private float zoom = 1;
+    private float reloadDuration = 2;
+    private String reloadType = "";
 
-    private int damageLow;
-    private int damageMedium;
-    private int damageHigh;
+    private Damage damage = new Damage();
+    private Animation animations = new Animation();
+    private Sound sounds = new Sound();
+    private Graphic graphics = new Graphic();
 
-    private String animationIdle;
-    private String animationShoot;
-    private String animationReload;
-    private String animationEquip;
-    private String animationUnequip;
-    private String animationCock;
+    private String key;
+    private String category;
+    private int reloadCalculatedType;
 
-    private String soundFire;
-    private String soundClipIn;
-    private String soundClipOut;
-    private String soundCock;
-    private String soundEquip;
-    private String soundUnequip;
-
-    private boolean leftHand;
-    private boolean rightHand;
-
-    public Weapon(String weaponKey, String weaponName, XmlReader.Element weaponElement) {
-
-        // DO NOT HOLD ON TO XML REFERENCE !!!!
-
-        this.weaponKey = weaponKey;
-        this.weaponName = weaponName;
-
-        this.clipSize = weaponElement.getInt("clip", 1);
-        this.clipTotal = weaponElement.getInt("total", 1);
-
-        this.rateOfFire = weaponElement.getFloat("rof", 1);
-        this.accuracy = weaponElement.getFloat("accuracy",1);
-        this.recoil = weaponElement.getFloat("recoil", 1);
-        this.speed = weaponElement.getFloat("speed", 1);
-
-        this.cost = weaponElement.getInt("cost");
-        this.reward = weaponElement.getInt("reward");
-
-        this.silencer = weaponElement.getBoolean("silencer", false);
-        this.zoom = weaponElement.getFloat("zoom", 0);
-
-
-        String reloadType = weaponElement.get("reload_type", "full").toLowerCase();
-        if (reloadType.contentEquals("full"))   {
-            this.reloadType = RELOAD_FULL;
-        }   else if (reloadType.contentEquals("full_cock"))    {
-            this.reloadType = RELOAD_FULL_COCK;
-        }   else if (reloadType.contentEquals("shotgun"))   {
-            this.reloadType = RELOAD_SHOTGUN;
-        }
-
-
-        this.reloadDuration = weaponElement.getFloat("reload_duration", 1);
-
-        this.damageLow = weaponElement.getChildByName("damage").getInt("low");
-        this.damageMedium = weaponElement.getChildByName("damage").getInt("medium");
-        this.damageHigh = weaponElement.getChildByName("damage").getInt("high");
-
-        this.animationIdle = weaponElement.getChildByName("animations").get("idle", "");
-        this.animationShoot = weaponElement.getChildByName("animations").get("shoot", "");
-        this.animationReload = weaponElement.getChildByName("animations").get("reload", "");
-        this.animationEquip = weaponElement.getChildByName("animations").get("equip", "");
-        this.animationUnequip = weaponElement.getChildByName("animations").get("unequip", "");
-        this.animationCock = weaponElement.getChildByName("animations").get("cock", "");
-
-        this.soundFire = weaponElement.getChildByName("sounds").get("fire", "");
-        this.soundClipIn = weaponElement.getChildByName("sounds").get("clip_in", "");
-        this.soundClipOut = weaponElement.getChildByName("sounds").get("clip_out", "");
-        this.soundCock = weaponElement.getChildByName("sounds").get("cock", "");
-        this.soundEquip = weaponElement.getChildByName("sounds").get("equip", "");
-        this.soundUnequip = weaponElement.getChildByName("sounds").get("unequip", "");
-
-        this.leftHand = weaponElement.getChildByName("graphics").getBoolean("left", false);
-        this.rightHand = weaponElement.getChildByName("graphics").getBoolean("right", true);
+    public String getCategory() {
+        return category;
     }
 
-    public String getWeaponKey() {
-        return weaponKey;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getWeaponName() {
-        return weaponName;
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getTexture() {
+        return "weapons/" + getCategory() + "/" + getKey() + "/texture.png";
+    }
+
+    public class Damage {
+        public int low = 0;
+        public int medium = 0;
+        public int high = 0;
+    }
+
+    public class Animation {
+        public String idle;
+        public String shoot;
+        public String reload;
+        public String equip;
+        public String unequip;
+        public String cock;
+    }
+
+    public class Sound {
+
+    }
+
+    public class Graphic {
+        public boolean left = false;
+        public boolean right = false;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getClipSize() {
@@ -154,83 +125,42 @@ public class Weapon {
         return zoom;
     }
 
-    public int getReloadType() {
-        return reloadType;
-    }
-
-    public float getReloadDuration()    {
+    public float getReloadDuration() {
         return reloadDuration;
     }
 
-    public int getDamageLow() {
-        return damageLow;
+    public int getReloadType() {
+        if (reloadCalculatedType != -1) {
+
+            if (reloadType == null) {
+                reloadCalculatedType = RELOAD_FULL;
+            } else if (reloadType.contains("full")) {
+                reloadCalculatedType = RELOAD_FULL;
+            } else if (reloadType.contains("full_cock")) {
+                reloadCalculatedType = RELOAD_FULL_COCK;
+            } else if (reloadType.contains("shotgun")) {
+                reloadCalculatedType = RELOAD_SHOTGUN;
+            } else {
+                reloadCalculatedType = RELOAD_FULL;
+            }
+        }
+
+        return reloadCalculatedType;
     }
 
-    public int getDamageMedium() {
-        return damageMedium;
+    public Damage getDamage() {
+        return damage;
     }
 
-    public int getDamageHigh() {
-        return damageHigh;
+    public Animation getAnimations() {
+        return animations;
     }
 
-    public String getAnimationIdle() {
-        return animationIdle;
+    public Sound getSounds() {
+        return sounds;
     }
 
-    public String getAnimationShoot() {
-        return animationShoot;
-    }
-
-    public String getAnimationReload() {
-        return animationReload;
-    }
-
-    public String getAnimationEquip() {
-        return animationEquip;
-    }
-
-    public String getAnimationUnequip() {
-        return animationUnequip;
-    }
-
-    public String getAnimationCock()    {
-        return animationCock;
-    }
-
-    public String getSoundFire() {
-        return soundFire;
-    }
-
-    public String getSoundClipIn() {
-        return soundClipIn;
-    }
-
-    public String getSoundClipOut() {
-        return soundClipOut;
-    }
-
-    public String getSoundCock() {
-        return soundCock;
-    }
-
-    public String getSoundEquip() {
-        return soundEquip;
-    }
-
-    public String getSoundUnequip() {
-        return soundUnequip;
-    }
-
-    public boolean isLeftHand() {
-        return leftHand;
-    }
-
-    public boolean isRightHand() {
-        return rightHand;
-    }
-
-    public String getTexture() {
-        return getWeaponKey();
+    public Graphic getGraphics() {
+        return graphics;
     }
 }

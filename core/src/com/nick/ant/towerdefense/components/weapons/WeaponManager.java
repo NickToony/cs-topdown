@@ -2,7 +2,11 @@ package com.nick.ant.towerdefense.components.weapons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
+import com.nick.ant.towerdefense.Game;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,51 +30,55 @@ public class WeaponManager {
     // SINGULAR END
 
 
-    private Map<String, Weapon> weapons;
-    private List<WeaponCategory> weaponsCategories;
+    private List<WeaponCategory> weaponCategories = new ArrayList<WeaponCategory>();
+    private Map<String, Weapon> weapons = new HashMap<String, Weapon>();
 
-    public WeaponManager()  {
-        weapons = new HashMap<String, Weapon>();
-        weaponsCategories = new ArrayList<WeaponCategory>();
-
-        XmlReader xmlReader = new XmlReader();
-        XmlReader.Element rootElement;
+    public WeaponManager() {
+        File file = Gdx.files.internal("weapons").file();
         try {
-            rootElement = xmlReader.parse(Gdx.files.internal("weapons/weapon_definitions.xml"));
-        } catch (IOException e) {
+            findCategories(file);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return;
         }
+    }
 
-        for (XmlReader.Element categoryElement : rootElement.getChildrenByName("category")) {
-            String categoryKey = categoryElement.getAttribute("key");
-            String categoryName = categoryElement.getAttribute("name");
-            WeaponCategory weaponCategory = new WeaponCategory(categoryName);
-            weaponsCategories.add(weaponCategory);
-
-            for (XmlReader.Element weaponElement : categoryElement.getChildrenByName("weapon")) {
-                String weaponKey = categoryKey + "_" + weaponElement.getAttribute("key");
-                String weaponName = categoryElement.getAttribute("name");
-
-                Weapon weapon = new Weapon(weaponKey, weaponName, weaponElement);
-
-                weaponCategory.add(weapon);
-                weapons.put(weaponKey, weapon);
+    private void findCategories(File file) throws FileNotFoundException {
+        for (String subDirectory : file.list()) {
+            File sub = new File(file.getPath() + "/" + subDirectory);
+            if (sub.isDirectory()) {
+                WeaponCategory weaponCategory = new WeaponCategory(sub.getName());
+                weaponCategories.add(weaponCategory);
+                weaponCategory.getWeapons().addAll(findWeapons(sub));
             }
         }
     }
 
-    public List<WeaponCategory> getWeaponsCategories() {
-        return weaponsCategories;
-    }
+    private List<Weapon> findWeapons(File file) throws FileNotFoundException {
+        List<Weapon> weaponsToReturn = new ArrayList<Weapon>();
+        for (String subDirectory : file.list()) {
+            File sub = new File(file.getPath() + "/" + subDirectory);
+            if (sub.isDirectory()) {
+                Weapon weapon = Game
+                        .getGson()
+                        .fromJson(new FileReader(new File(sub + "/definition.json")),
+                                Weapon.class);
+                weapons.put(sub.getName(), weapon);
+                weaponsToReturn.add(weapon);
 
-    public Weapon getWeapon(String weaponKey)   {
-        return weapons.get(weaponKey);
+                // assign category
+                weapon.setCategory(file.getName());
+                weapon.setKey(sub.getName());
+            }
+        }
+        return weaponsToReturn;
     }
 
     public void dispose() {
-        weapons.clear();
-        weaponsCategories.clear();
+        weaponCategories.clear();
         instance = null;
+    }
+
+    public Weapon getWeapon(String string) {
+        return weapons.get(string);
     }
 }

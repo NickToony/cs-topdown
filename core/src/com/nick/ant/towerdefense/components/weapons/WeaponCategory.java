@@ -7,22 +7,26 @@ import java.util.List;
  * Created by Nick on 25/09/2014.
  */
 public class WeaponCategory {
-    private String categoryName;
+    private String name;
     private List<Weapon> weapons = new ArrayList<Weapon>();
 
-    public WeaponCategory(String categoryName) {
-        this.categoryName = categoryName;
+    public WeaponCategory(String name) {
+        this.name = name;
     }
 
-    public void add(Weapon weapon) {
-        this.weapons.add(weapon);
+    public String getName() {
+        return name;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Weapon> getWeapons() {
         return weapons;
+    }
+
+    public void setWeapons(List<Weapon> weapons) {
+        this.weapons = weapons;
     }
 }

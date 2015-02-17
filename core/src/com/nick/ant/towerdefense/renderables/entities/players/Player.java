@@ -59,7 +59,7 @@ public class Player extends Entity {
         rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
 
         if (weaponPrimary != null)  {
-            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimationIdle(), 2, true);
+            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().idle, 2, true);
         }   else    {
             System.out.println("NO ANIMATIONS");
         }
@@ -119,12 +119,12 @@ public class Player extends Entity {
 
         Weapon weapon = weaponPrimary;
         if (gunTexture == null) {
-            gunTexture = TextureManager.getTexture("weapons/" + weapon.getTexture() + "/texture.png");
+            gunTexture = TextureManager.getTexture(weapon.getTexture());
             gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
 
         // If player has a gun in the left hand
-        if (weapon.isLeftHand() && weapon != null)  {
+        if (weapon.getGraphics().left && weapon != null)  {
             if (leftHandSprite == null || leftHandSprite.getTexture() != gunTexture)  {
                 leftHandSprite = new Sprite(gunTexture);
                 leftHandSprite.setOrigin(WEAPON_X_OFFSET, WEAPON_Y_OFFSET);
@@ -137,7 +137,7 @@ public class Player extends Entity {
             leftHandSprite.draw(spriteBatch);
         }
         // If player has a gun in the right hand
-        if (weapon.isRightHand() && weapon != null) {
+        if (weapon.getGraphics().right && weapon != null) {
             if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture) {
                 rightHandSprite = new Sprite(gunTexture);
                 rightHandSprite.setOrigin(WEAPON_X_OFFSET, WEAPON_Y_OFFSET);

@@ -3,6 +3,9 @@ package com.nick.ant.towerdefense;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.nick.ant.towerdefense.networking.ServerContainer;
 import com.nick.ant.towerdefense.rooms.Room;
 import com.nick.ant.towerdefense.rooms.RoomMainMenu;
@@ -41,5 +44,16 @@ public class Game extends ApplicationAdapter {
         super.dispose();
 
         ServerContainer.dispose();
+    }
+
+    // Constants
+    private static Gson gson;
+    public static Gson getGson() {
+        if (gson == null) {
+            gson = new GsonBuilder()
+                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .create();
+        }
+        return gson;
     }
 }
