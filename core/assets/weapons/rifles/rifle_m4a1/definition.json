@@ -2,7 +2,7 @@
   "name": "M4A1",
   "clip_size": 30,
   "clip_total": 90,
-  "rate_of_fire": 10,
+  "rate_of_fire": 5,
   "accuracy": 90,
   "recoil": 5,
   "speed": 100,

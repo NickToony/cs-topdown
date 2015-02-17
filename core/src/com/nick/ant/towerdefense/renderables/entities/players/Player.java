@@ -2,9 +2,11 @@ package com.nick.ant.towerdefense.renderables.entities.players;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -49,6 +51,8 @@ public class Player extends Entity {
     private Light glow;
     private Light torch;
     private Light gunFire;
+
+    private int lastShotCount = 0;
 
     // Multiplayer
     private long lastUpdate = 0;
@@ -153,12 +157,17 @@ public class Player extends Entity {
             rightHandSprite.draw(spriteBatch);
         }
 
+        Vector2 vector = new Vector2(rightHand.getWorldX() + x, rightHand.getWorldY() + y);
+        Vector2 gunVector = new Vector2(rightHandSprite.getHeight()/2, 0);
+        gunVector.setAngle(rightHand.getWorldRotation());
+        vector.add(gunVector);
+
         // Update torch
-        torch.setPosition(rightHand.getX() + x, rightHand.getY() + y);
+        torch.setPosition(vector.x, vector.y);
         torch.setDirection(direction + 90);
         // Update gun fire
-        gunFire.setPosition(rightHand.getX() + x, rightHand.getY() + y);
-        gunFire.setDirection(direction + 90);
+        gunFire.setPosition(vector.x, vector.y);
+        gunFire.setDirection(direction + 90 + rightHand.getRotation());
         gunFire.setActive(shooting);
         // Update glow
         glow.setPosition(x, y);
@@ -191,6 +200,15 @@ public class Player extends Entity {
             room.sendPacket(playerMovePacket);
         }
         lastMove = newMove;
+
+        if (shooting) {
+            if (lastShotCount <= 0) {
+                lastShotCount = weaponPrimary.getRateOfFire();
+            } else {
+                lastShotCount -=  1;
+                shooting = false;
+            }
+        }
 
         if (isMultiplayer()) {
             if (System.currentTimeMillis() > lastUpdate + UPDATE_RATE) {

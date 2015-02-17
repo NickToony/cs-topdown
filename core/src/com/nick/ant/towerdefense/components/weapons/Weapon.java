@@ -15,7 +15,7 @@ public class Weapon {
     private int clipSize = 30;
     private int clipTotal = 30;
 
-    private float rateOfFire = 1;
+    private int rateOfFire = 10;
     private float accuracy = 0;
     private float recoil = 0;
     private float speed = 100;
@@ -93,7 +93,7 @@ public class Weapon {
         return clipTotal;
     }
 
-    public float getRateOfFire() {
+    public int getRateOfFire() {
         return rateOfFire;
     }
 
