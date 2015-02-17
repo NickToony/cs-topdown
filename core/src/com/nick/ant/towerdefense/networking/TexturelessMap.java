@@ -36,10 +36,11 @@ public class TexturelessMap extends Map {
 
             // Determine if collision layer
             boolean isCollision = false;
-            for (XmlReader.Element property : layer.getChildrenByName("property")) {
+            for (XmlReader.Element property : properties.getChildrenByName("property")) {
                 if (property.getAttribute("name").contains("collision")) {
                     if (property.getAttribute("value").contains("true")) {
                         isCollision = true;
+                        System.out.println("Found collision layer");
                     }
                 }
             }
@@ -48,7 +49,7 @@ public class TexturelessMap extends Map {
             if (isCollision) {
                 for (XmlReader.Element object : layer.getChildrenByName("object")) {
                     int x = Integer.parseInt(object.getAttribute("x"));
-                    int y = Integer.parseInt(object.getAttribute("y"));
+                    int y = mapHeight - Integer.parseInt(object.getAttribute("y"));
 
                     // Resize it to the correct size and location
                     BodyDef bodyDef = new BodyDef();
@@ -66,6 +67,7 @@ public class TexturelessMap extends Map {
 
                     body.createFixture(fixtureDef);
                     shape.dispose();
+
                 }
             }
         }

@@ -1,10 +1,8 @@
 package com.nick.ant.towerdefense.networking.server;
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
-import com.nick.ant.towerdefense.networking.packets.ClientReadyPacket;
-import com.nick.ant.towerdefense.networking.packets.Packet;
-import com.nick.ant.towerdefense.networking.packets.PlayerCreatePacket;
-import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
+import com.nick.ant.towerdefense.networking.packets.*;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 
 /**
@@ -17,6 +15,9 @@ public class ServerClient {
     private Player player;
     private int id;
     private boolean ready = false;
+
+    private long lastUpdate = 0;
+    private final long UPDATE_RATE = 1000;
 
     public ServerClient(int id, CSTDServer server, Connection socket) {
         this.id = id;
@@ -42,6 +43,17 @@ public class ServerClient {
             if (!ready) {
                 setReady(true);
             }
+            return;
+        }
+
+        if (object instanceof PlayerPositionPacket) {
+            PlayerPositionPacket packet = (PlayerPositionPacket) object;
+            if (Vector2.dst(player.getX(), player.getY(), packet.x, packet.y) < 32) {
+                player.setX(packet.x);
+                player.setY(packet.y);
+            } else {
+                socket.sendTCP(new PlayerPositionPacket(id, Math.round(player.getX()), Math.round(player.getY()), 0));
+            }
         }
     }
 
@@ -54,10 +66,23 @@ public class ServerClient {
             player = server.getRoomGame().createPlayer();
             player.setX(128);
             player.setY(128);
-            socket.sendTCP(new PlayerCreatePacket(true, player.getX(), player.getY()));
+            // Create self
+            socket.sendTCP(new PlayerCreatePacket(true, player.getX(), player.getY(), id));
 
+            // Create my player on other clients
             sendToOthers(new PlayerCreatePacket(false, player.getX(), player.getY(), id));
         }
+
+        if (System.currentTimeMillis() > lastUpdate + UPDATE_RATE && player != null) {
+            lastUpdate = System.currentTimeMillis();
+
+            sendToOthers(new PlayerPositionPacket(id, Math.round(player.getX()), Math.round(player.getY()), 0));
+        }
+    }
+
+    private void sendToAll(Packet packet) {
+        socket.sendTCP(packet);
+        sendToOthers(packet);
     }
 
     public int getId() {
@@ -65,7 +90,6 @@ public class ServerClient {
     }
 
     private void sendToOthers(Packet packet) {
-        System.out.println("IM GOING TO SEND TO OTHERS" + getId());
         server.sendToOthers(packet, this);
     }
 

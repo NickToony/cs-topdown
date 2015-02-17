@@ -3,10 +3,7 @@ package com.nick.ant.towerdefense.networking.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.nick.ant.towerdefense.networking.packets.Packet;
-import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
-import com.nick.ant.towerdefense.networking.packets.PlayerCreatePacket;
-import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
+import com.nick.ant.towerdefense.networking.packets.*;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
 import com.nick.ant.towerdefense.rooms.RoomGameRender;
@@ -25,6 +22,8 @@ public class CSClient {
     private Client client;
     private RoomGameRender roomGame;
     private List<PlayerWrapper> players = new ArrayList();
+    private int id;
+    private Player player;
 
     private class PlayerWrapper {
         public Player player;
@@ -83,9 +82,10 @@ public class CSClient {
         if (object instanceof PlayerCreatePacket) {
             PlayerCreatePacket packet = (PlayerCreatePacket) object;
             if (packet.mine) {
-                Player player = roomGame.createUserPlayer();
+                player = roomGame.createUserPlayer();
                 player.setX(packet.x);
                 player.setY(packet.y);
+                id = packet.id;
             } else {
                 Player player = roomGame.createPlayer();
                 player.setX(packet.x);
@@ -102,6 +102,24 @@ public class CSClient {
             if (player != null) {
                 player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);
             }
+            return;
+        }
+
+        if (object instanceof PlayerPositionPacket) {
+            PlayerPositionPacket packet = (PlayerPositionPacket) object;
+
+            // This client is wrong, needs to use the new x and y
+            if (packet.id == id) {
+                player.setX(packet.x);
+                player.setY(packet.y);
+            } else {
+                Player player = findPlayer(packet.id);
+                if (player != null) {
+                    player.setX(packet.x);
+                    player.setY(packet.y);
+                }
+            }
+            return;
         }
     }
 

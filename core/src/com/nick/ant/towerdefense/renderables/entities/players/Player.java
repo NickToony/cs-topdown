@@ -14,6 +14,7 @@ import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
 import com.nick.ant.towerdefense.networking.packets.PlayerMovePacket;
+import com.nick.ant.towerdefense.networking.packets.PlayerPositionPacket;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
 /**
@@ -45,6 +46,11 @@ public class Player extends Entity {
 
     private Texture gunTexture;
     private Light glow;
+
+    // Multiplayer
+    private long lastUpdate = 0;
+    private final long UPDATE_RATE = 1000;
+    private boolean changedPosition = false;
 
     @Override
     public void createGL() {
@@ -104,7 +110,7 @@ public class Player extends Entity {
         super.render(spriteBatch);
 
         // render harry's shadow
-        shadowSprite.setX(x - shadowSprite.getWidth()/2);
+        shadowSprite.setX(x - shadowSprite.getWidth() / 2);
         shadowSprite.setY(y - shadowSprite.getHeight()/2);
         shadowSprite.draw(spriteBatch);
 
@@ -153,6 +159,10 @@ public class Player extends Entity {
 
     @Override
     public void step() {
+        if (changedPosition) {
+            updatePosition();
+        }
+
         this.x = Math.round(body.getPosition().x);
         this.y = Math.round(body.getPosition().y);
 
@@ -174,6 +184,14 @@ public class Player extends Entity {
             room.sendPacket(playerMovePacket);
         }
         lastMove = newMove;
+
+        if (isMultiplayer()) {
+            if (System.currentTimeMillis() > lastUpdate + UPDATE_RATE) {
+                lastUpdate = System.currentTimeMillis();
+
+                room.sendPacket(new PlayerPositionPacket(0, Math.round(getX()), Math.round(getY()), 0));
+            }
+        }
     }
 
     @Override
@@ -206,13 +224,18 @@ public class Player extends Entity {
     @Override
     public void setX(float x) {
         super.setX(x);
-        body.setTransform(x, 0, 0);
+        changedPosition = true;
     }
 
     @Override
     public void setY(float y) {
         super.setY(y);
-        body.setTransform(x, y, 0);
+        changedPosition = true;
+    }
+
+    public void updatePosition() {
+        body.setTransform(getX(), getY(), 0);
+        changedPosition = false;
     }
 
     public void setMovement(boolean moveUp, boolean moveRight, boolean moveDown, boolean moveLeft) {

@@ -45,9 +45,9 @@ public class RoomGame extends Room {
     }
 
     public void step()  {
-        world.step(1, 6, 2);
-
         super.step();
+
+        world.step(1, 6, 2);
     }
 
     @Override
