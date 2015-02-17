@@ -39,4 +39,10 @@ public class LightManager {
 
         return pointLight;
     }
+
+    public static ConeLight defineGunFire(RayHandler handler) {
+        ConeLight coneLight = new ConeLight(handler, 500, Color.YELLOW, 100, 16, 16, 0, 50);
+        coneLight.setXray(true);
+        return coneLight;
+    }
 }

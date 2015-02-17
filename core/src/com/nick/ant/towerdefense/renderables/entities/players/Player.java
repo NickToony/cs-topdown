@@ -1,5 +1,6 @@
 package com.nick.ant.towerdefense.renderables.entities.players;
 
+import box2dLight.ConeLight;
 import box2dLight.Light;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -31,6 +32,7 @@ public class Player extends Entity {
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
     protected boolean moveRight = false;
+    protected boolean shooting = false;
     protected int lastMove = 0;
     private boolean lightOn = false;
 
@@ -42,10 +44,11 @@ public class Player extends Entity {
     private Sprite shadowSprite;
 
     private Body body;
-    private Light torch;
 
     private Texture gunTexture;
     private Light glow;
+    private Light torch;
+    private Light gunFire;
 
     // Multiplayer
     private long lastUpdate = 0;
@@ -153,6 +156,10 @@ public class Player extends Entity {
         // Update torch
         torch.setPosition(rightHand.getX() + x, rightHand.getY() + y);
         torch.setDirection(direction + 90);
+        // Update gun fire
+        gunFire.setPosition(rightHand.getX() + x, rightHand.getY() + y);
+        gunFire.setDirection(direction + 90);
+        gunFire.setActive(shooting);
         // Update glow
         glow.setPosition(x, y);
     }
@@ -243,5 +250,10 @@ public class Player extends Entity {
         this.moveRight = moveRight;
         this.moveDown = moveDown;
         this.moveLeft = moveLeft;
+    }
+
+    public void setGunFire(ConeLight coneLight) {
+        this.gunFire = coneLight;
+        gunFire.setActive(false);
     }
 }

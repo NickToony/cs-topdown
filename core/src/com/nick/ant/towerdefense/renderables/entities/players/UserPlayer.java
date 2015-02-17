@@ -40,6 +40,8 @@ public class UserPlayer extends Player{
             setLightOn(!isLightOn());
         }
 
+        shooting = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
+
         direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
 
         super.step();

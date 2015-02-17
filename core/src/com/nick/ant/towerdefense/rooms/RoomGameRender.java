@@ -147,6 +147,7 @@ public class RoomGameRender extends RoomGame {
     protected Player setupPlayer(Player player) {
         player.setTorch(LightManager.defineTorch(rayHandlerWrapper.getHandler()));
         player.setGlow(LightManager.definePlayerGlow(rayHandlerWrapper.getHandler()));
+        player.setGunFire(LightManager.defineGunFire(rayHandlerWrapper.getHandler()));
         super.setupPlayer(player);
         return player;
     }
