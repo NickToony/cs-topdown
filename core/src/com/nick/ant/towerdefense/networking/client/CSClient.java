@@ -109,21 +109,20 @@ public class CSClient {
             PlayerPositionPacket packet = (PlayerPositionPacket) object;
 
             // This client is wrong, needs to use the new x and y
-            if (packet.id == id) {
+            Player player = findPlayer(packet.id);
+            if (player != null) {
                 player.setX(packet.x);
                 player.setY(packet.y);
-            } else {
-                Player player = findPlayer(packet.id);
-                if (player != null) {
-                    player.setX(packet.x);
-                    player.setY(packet.y);
-                }
             }
             return;
         }
     }
 
     private Player findPlayer(int id) {
+        if (id == this.id) {
+            return player;
+        }
+
         for (PlayerWrapper wrapper : players) {
             if (wrapper.id == id) {
                 return wrapper.player;

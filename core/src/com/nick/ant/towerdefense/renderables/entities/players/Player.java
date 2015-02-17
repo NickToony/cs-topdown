@@ -164,11 +164,12 @@ public class Player extends Entity {
 
         // Update torch
         torch.setPosition(vector.x, vector.y);
-        torch.setDirection(direction + 90);
+        torch.setDirection(rightHand.getWorldRotation());
         // Update gun fire
         gunFire.setPosition(vector.x, vector.y);
-        gunFire.setDirection(direction + 90 + rightHand.getRotation());
+        gunFire.setDirection(rightHand.getWorldRotation());
         gunFire.setActive(shooting);
+
         // Update glow
         glow.setPosition(x, y);
     }
