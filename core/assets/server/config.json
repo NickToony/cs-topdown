@@ -1,7 +1,7 @@
 {
-    "name": "A Brand New Server",
-    "port": 3453,
-    "max_players": 32,
-    "map": "de_dust2",
-    "ip": "127.0.0.1"
+  "name": "A brand new server",
+  "max_players": 32,
+  "port": 3453,
+  "map": "de_dust2",
+  "ip": "127.0.0.1"
 }

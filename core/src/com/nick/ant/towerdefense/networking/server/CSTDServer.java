@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.nick.ant.towerdefense.networking.packets.Packet;
@@ -16,10 +17,7 @@ import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -36,6 +34,7 @@ public class CSTDServer {
     private List<ServerClient> serverClientList = new ArrayList<ServerClient>();
     private Logger logger;
     private RoomGame roomGame;
+    private Gson gson;
 
     public Logger getLogger() {
         return logger;
@@ -76,14 +75,29 @@ public class CSTDServer {
         }
     }
 
+    private Gson getGson() {
+        if (gson == null) {
+            gson = new GsonBuilder()
+                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .setPrettyPrinting()
+                    .create();
+        }
+        return gson;
+    }
+
     private boolean findConfig() {
         File configFile = Gdx.files.local("server/config.json").file();
         if (!configFile.exists()) {
             logger.log("Config file does not exist");
-            logger.log("Copying default config to location");
+            logger.log("Creating new default config");
             logger.log(configFile.getAbsolutePath());
             try {
-                FileUtils.copyFile(Gdx.files.local("server/default.json").file(), configFile);
+                Gdx.files.local("server").file().mkdirs();
+                configFile.createNewFile();
+                FileWriter fileWriter = new FileWriter(configFile);
+                getGson().toJson(new ServerConfig(), fileWriter);
+                fileWriter.flush();
+                fileWriter.close();
             } catch (IOException e) {
                 logger.log(e);
                 logger.log("Failed to copy config. Exiting.");
@@ -92,9 +106,7 @@ public class CSTDServer {
         }
 
         try {
-            config = new GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                    .create()
+            config = getGson()
                     .fromJson(new FileReader(configFile), ServerConfig.class);
         } catch (FileNotFoundException e) {
             logger.log(e);
