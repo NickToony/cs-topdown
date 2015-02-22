@@ -11,11 +11,9 @@ import com.google.gson.JsonSyntaxException;
 import com.nick.ant.towerdefense.networking.packets.Packet;
 import com.nick.ant.towerdefense.networking.packets.PacketDefinition;
 import com.nick.ant.towerdefense.rooms.RoomGame;
-import com.nick.ant.towerdefense.rooms.RoomGameRender;
 import com.nick.ant.towerdefense.serverlist.ServerlistConfig;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -36,24 +34,42 @@ public class CSTDServer {
     private RoomGame roomGame;
     private Gson gson;
 
-    public Logger getLogger() {
-        return logger;
-    }
-
-    public void sendToOthers(Packet packet, ServerClient myClient) {
-        for (ServerClient serverClient : serverClientList) {
-            if (serverClient != myClient && serverClient.isReady()) {
-                serverClient.getSocket().sendTCP(packet);
-                System.out.println("Sent to other" + serverClient.getId());
-            }
-        }
-    }
-
+    /**
+     * Allows you to define the server log output in whichever way you desire
+     */
     public interface Logger {
         public void log(String string);
         public void log(Exception exception);
     }
 
+    // Get the logg
+    public Logger getLogger() {
+        return logger;
+    }
+
+    /**
+     * Convenient helper method that sends a packet to all other clients
+     * @param packet the packet to send
+     * @param myClient the current client (who won't receive the packet)
+     */
+    public void sendToOthers(Packet packet, ServerClient myClient) {
+        // For all connected clients
+        for (ServerClient serverClient : serverClientList) {
+            // If the client isn't the current one, and the target is ready
+            if (serverClient != myClient && serverClient.isReady()) {
+                // Send the packet
+                serverClient.getSocket().sendTCP(packet);
+            }
+        }
+    }
+
+    /**
+     * Create a new CSTDServer with the given logger and config
+     *
+     * This is useful for defining the server setup ingame
+     * @param logger
+     * @param config
+     */
     public CSTDServer(Logger logger, ServerConfig config) {
         this.logger = logger;
         this.config = config;
@@ -64,6 +80,13 @@ public class CSTDServer {
         setup();
     }
 
+    /**
+     * Create a new CSTD server with given logger, and use
+     * a config from the file system.
+     *
+     * This is useful for dedicated servers
+     * @param logger
+     */
     public CSTDServer(Logger logger) {
         this.logger = logger;
 
@@ -75,6 +98,10 @@ public class CSTDServer {
         }
     }
 
+    /**
+     * Singleton method generates the gson object for reading server config
+     * @return
+     */
     private Gson getGson() {
         if (gson == null) {
             gson = new GsonBuilder()
@@ -85,6 +112,10 @@ public class CSTDServer {
         return gson;
     }
 
+    /**
+     * Attempt to find the server config in a local file (server/config.json)
+     * @return true on success
+     */
     private boolean findConfig() {
         File configFile = Gdx.files.local("server/config.json").file();
         if (!configFile.exists()) {
@@ -121,12 +152,16 @@ public class CSTDServer {
         return true;
     }
 
+    /**
+     * Called after a config has been successfully set up. This creates the server, and updates
+     * server list
+     */
     private void setup() {
         // Server list
-        host = new Host(config.getName(), 0, config.getMaxPlayers());
-        host.addMeta("map", config.getMap());
-        host.addMeta("ip", config.getIP());
-        host.addMeta("port", Integer.toString(config.getPort()));
+        host = new Host(config.sv_name, 0, config.sv_max_players);
+        host.addMeta("map", config.sv_map);
+        host.addMeta("ip", config.sv_ip);
+        host.addMeta("port", Integer.toString(config.sv_port));
         host.create();
 
         logger.log("Server started up");
@@ -135,7 +170,7 @@ public class CSTDServer {
         serverSocket = new Server();
         serverSocket.start();
         try {
-            serverSocket.bind(config.getPort());
+            serverSocket.bind(config.sv_port);
         } catch (IOException e) {
             logger.log("Could not bind port. Is it already in use?");
             //e.printStackTrace();
@@ -155,10 +190,11 @@ public class CSTDServer {
 
         PacketDefinition.registerClasses(serverSocket.getKryo());
 
-
+        // Game room that loads the map, validates collisions/movement
         roomGame = new RoomGame();
         roomGame.create();
 
+        // A Java timer currently manages the game loop.. not ideal.
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -169,13 +205,20 @@ public class CSTDServer {
         timerIsRunning = true;
     }
 
+    /**
+     * Handles the event on a new client joining
+     * @param connection
+     */
     private void handleClientConnected(Connection connection) {
+        // Find a free ID to use
         int highest = 0;
         for (ServerClient serverClient : serverClientList) {
+            // always use the highest id value available
             if (serverClient.getId() > highest) {
                 highest = serverClient.getId();
             }
         }
+        // Add the client
         serverClientList.add(new ServerClient(highest + 1, this, connection));
     }
 

@@ -38,7 +38,7 @@ public class CSClient {
 
     public CSClient(CSTDServer server) {
         this.ip = "127.0.0.1";
-        this.port = server.getConfig().getPort();
+        this.port = server.getConfig().sv_port;
         setup();
     }
 
