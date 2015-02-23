@@ -25,6 +25,7 @@ public class Weapon {
 
     private boolean silencer = false;
     private float zoom = 1;
+    private float cockDuration = 0.2f;
     private float reloadDuration = 2;
     private String reloadType = "";
 
@@ -35,7 +36,7 @@ public class Weapon {
 
     private String key;
     private String category;
-    private int reloadCalculatedType;
+    private int reloadCalculatedType = -1;
 
     public String getCategory() {
         return category;
@@ -130,15 +131,15 @@ public class Weapon {
     }
 
     public int getReloadType() {
-        if (reloadCalculatedType != -1) {
-
+        if (reloadCalculatedType == -1) {
+            // Not caculated, so calculate now
             if (reloadType == null) {
                 reloadCalculatedType = RELOAD_FULL;
-            } else if (reloadType.contains("full")) {
+            } else if (reloadType.equals("full")) {
                 reloadCalculatedType = RELOAD_FULL;
-            } else if (reloadType.contains("full_cock")) {
+            } else if (reloadType.equals("full_cock")) {
                 reloadCalculatedType = RELOAD_FULL_COCK;
-            } else if (reloadType.contains("shotgun")) {
+            } else if (reloadType.equals("shotgun")) {
                 reloadCalculatedType = RELOAD_SHOTGUN;
             } else {
                 reloadCalculatedType = RELOAD_FULL;
@@ -162,5 +163,9 @@ public class Weapon {
 
     public Graphic getGraphics() {
         return graphics;
+    }
+
+    public float getCockDuration() {
+        return cockDuration;
     }
 }

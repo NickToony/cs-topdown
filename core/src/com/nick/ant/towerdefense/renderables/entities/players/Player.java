@@ -31,20 +31,28 @@ public class Player extends Entity {
     private final int WEAPON_X_OFFSET = 15;
     private final int WEAPON_Y_OFFSET = 64 - 46;
 
+    private final int STATE_IDLE = 0;
+    private final int STATE_SHOOTING = 1;
+    private final int STATE_RELOADING = 2;
+    private final int STATE_COCK = 3;
+
     protected boolean moveUp = false;
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
     protected boolean moveRight = false;
     protected int lastMove = 0;
-    protected boolean shooting = false;
-    private boolean hasShot = false;
-    private boolean lastShooting = false;
     private boolean lightOn = false;
     private boolean lastTorch = false;
+
+
     protected boolean reloadKey = false;
-    private boolean reloading = false;
-    private boolean hasReloaded = false;
-    private int reloadTime = 0;
+    protected boolean shootKey = false;
+    private boolean lastShootKey = shootKey;
+
+    private int state = STATE_IDLE;
+    private int stateTimer = 0;
+    private int stateLast = STATE_IDLE;
+    private boolean stateChange;
 
 
     private Weapon weaponPrimary;
@@ -60,8 +68,6 @@ public class Player extends Entity {
     private Light glow;
     private Light torch;
     private Light gunFire;
-
-    private int lastShotCount = 0;
 
     // Multiplayer
     private long lastUpdate = 0;
@@ -179,15 +185,23 @@ public class Player extends Entity {
         // Update gun fire
         gunFire.setPosition(vector.x, vector.y);
         gunFire.setDirection(rightHand.getWorldRotation());
-        gunFire.setActive(hasShot);
-        if (hasShot) {
-            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().shoot, weapon.getRateOfFire()/60f, false);
+        gunFire.setActive(stateChange && state == STATE_SHOOTING);
+
+        // Handle animations
+        if (stateChange) {
+            switch (state) {
+                case STATE_SHOOTING:
+                    getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().shoot, stateTimer/60f, false);
+                    break;
+                case STATE_RELOADING:
+                    getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().reload, stateTimer / 60f, false);
+                    break;
+                case STATE_COCK:
+                    getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().cock, stateTimer / 60f, false);
+                    break;
+            }
         }
 
-        // Handle reload animation
-        if (hasReloaded) {
-            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().reload, reloadTime / 60f, false);
-        }
 
         // Update glow
         glow.setPosition(x, y);
@@ -222,31 +236,48 @@ public class Player extends Entity {
         lastMove = newMove;
 
 
-        // Handle reload
-        hasReloaded = false;
-        if (!reloading) {
-            if (reloadKey) {
-                hasReloaded = true;
-                reloadTime = 120;
-                reloading = true;
-            }
-        } else {
-            reloadTime -= 1;
-            if (reloadTime <= 0) {
-                reloading = false;
-            }
+        // Handle state variables
+        if (stateTimer > 0) {
+            stateTimer -= 1;
         }
+        stateLast = state;
+        // Now do something depending on state
+        switch (state) {
+            case STATE_IDLE:
+                // If reload key is currently pressed
+                if (reloadKey) {
+                    stateTimer = Math.round(weaponPrimary.getReloadDuration() * 60);
+                    state = STATE_RELOADING;
+                } else if (shootKey) { // otherwise is shoot key pressed?
+                    stateTimer = weaponPrimary.getRateOfFire();
+                    state = STATE_SHOOTING;
+                }
+                break;
 
-        // Handle fire rate
-        hasShot = false;
-        if (shooting && !reloading) {
-            if (lastShotCount <= 0) {
-                lastShotCount = weaponPrimary.getRateOfFire();
-                hasShot = true;
-            } else {
-                lastShotCount -=  1;
-            }
+            case STATE_RELOADING:
+                if (stateTimer <= 0) {
+                    if (weaponPrimary.getReloadType() == Weapon.RELOAD_FULL_COCK) {
+                        state = STATE_COCK;
+                        stateTimer = Math.round(weaponPrimary.getCockDuration() * 60);
+                    } else {
+                        state = STATE_IDLE;
+                    }
+                }
+                break;
+
+            case STATE_SHOOTING:
+                if (stateTimer <= 0) {
+                    state = STATE_IDLE;
+                }
+                break;
+
+            case STATE_COCK:
+                if (stateTimer <= 0) {
+                    state = STATE_IDLE;
+                }
+                break;
         }
+        stateChange = stateLast != state;
 
         // Handle multiplayer update
         if (isMultiplayer()) {
@@ -261,9 +292,9 @@ public class Player extends Entity {
                 room.sendPacket(new PlayerTorchPacket(lightOn));
             }
 
-            if (lastShooting != shooting) {
-                lastShooting = shooting;
-                room.sendPacket(new PlayerShootPacket(shooting));
+            if (lastShootKey != shootKey) {
+                lastShootKey = shootKey;
+                room.sendPacket(new PlayerShootPacket(shootKey));
             }
         }
     }
@@ -323,12 +354,12 @@ public class Player extends Entity {
         gunFire.setActive(false);
     }
 
-    public void setShooting(boolean shooting) {
-        this.shooting = shooting;
+    public void setShooting(boolean shootKey) {
+        this.shootKey = shootKey;
     }
 
     public boolean getShooting() {
-        return shooting;
+        return shootKey;
     }
 
     public boolean getMoveLeft() {

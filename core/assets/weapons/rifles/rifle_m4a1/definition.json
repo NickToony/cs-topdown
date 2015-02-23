@@ -11,7 +11,8 @@
   "silencer": true,
   "zoom": 1,
   "reload_duration": 2,
-  "reload_type": "full",
+  "cock_duration": 0.5,
+  "reload_type": "full_cock",
   "damage": {
     "low": 10,
     "medium": 25,
