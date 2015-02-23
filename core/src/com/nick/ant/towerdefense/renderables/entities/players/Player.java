@@ -41,6 +41,11 @@ public class Player extends Entity {
     private boolean lastShooting = false;
     private boolean lightOn = false;
     private boolean lastTorch = false;
+    protected boolean reloadKey = false;
+    private boolean reloading = false;
+    private boolean hasReloaded = false;
+    private int reloadTime = 0;
+
 
     private Weapon weaponPrimary;
     private Bone leftHand;
@@ -70,7 +75,7 @@ public class Player extends Entity {
         rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
 
         if (weaponPrimary != null)  {
-            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().idle, 2, true);
+            getSkeletonWrapper().startIdle();
         }   else    {
             System.out.println("NO ANIMATIONS");
         }
@@ -110,6 +115,7 @@ public class Player extends Entity {
         }
 
         weaponPrimary = weapon;
+        getSkeletonWrapper().setIdleAnimation(weaponPrimary.getAnimations().idle, 2);
     }
 
     public Weapon getGun(){
@@ -174,6 +180,14 @@ public class Player extends Entity {
         gunFire.setPosition(vector.x, vector.y);
         gunFire.setDirection(rightHand.getWorldRotation());
         gunFire.setActive(hasShot);
+        if (hasShot) {
+            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().shoot, weapon.getRateOfFire()/60f, false);
+        }
+
+        // Handle reload animation
+        if (hasReloaded) {
+            getSkeletonWrapper().startAnimation(weaponPrimary.getAnimations().reload, reloadTime / 60f, false);
+        }
 
         // Update glow
         glow.setPosition(x, y);
@@ -208,9 +222,24 @@ public class Player extends Entity {
         lastMove = newMove;
 
 
+        // Handle reload
+        hasReloaded = false;
+        if (!reloading) {
+            if (reloadKey) {
+                hasReloaded = true;
+                reloadTime = 120;
+                reloading = true;
+            }
+        } else {
+            reloadTime -= 1;
+            if (reloadTime <= 0) {
+                reloading = false;
+            }
+        }
+
         // Handle fire rate
         hasShot = false;
-        if (shooting) {
+        if (shooting && !reloading) {
             if (lastShotCount <= 0) {
                 lastShotCount = weaponPrimary.getRateOfFire();
                 hasShot = true;

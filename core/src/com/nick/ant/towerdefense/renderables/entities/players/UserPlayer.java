@@ -40,6 +40,8 @@ public class UserPlayer extends Player{
             setLightOn(!isLightOn());
         }
 
+        this.reloadKey = Gdx.input.isKeyPressed(Input.Keys.R);
+
         shooting = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
         direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());

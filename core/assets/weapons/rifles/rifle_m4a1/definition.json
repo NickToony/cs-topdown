@@ -2,7 +2,7 @@
   "name": "M4A1",
   "clip_size": 30,
   "clip_total": 90,
-  "rate_of_fire": 5,
+  "rate_of_fire": 7,
   "accuracy": 90,
   "recoil": 5,
   "speed": 100,
@@ -19,7 +19,7 @@
   },
   "animations": {
     "idle": "rifle_idle",
-    "shoot": "rifle_shoot",
+    "shoot": "rifle_fire",
     "reload": "rifle_reload",
     "equip": "rifle_equip",
     "unequip": "rifle_unequip",

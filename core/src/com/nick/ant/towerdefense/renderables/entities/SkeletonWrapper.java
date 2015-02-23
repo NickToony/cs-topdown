@@ -2,10 +2,7 @@ package com.nick.ant.towerdefense.renderables.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.spine.AnimationState;
-import com.esotericsoftware.spine.AnimationStateData;
-import com.esotericsoftware.spine.Skeleton;
-import com.esotericsoftware.spine.SkeletonRenderer;
+import com.esotericsoftware.spine.*;
 
 /**
  * Created by Nick on 23/09/2014.
@@ -15,6 +12,8 @@ public class SkeletonWrapper {
     private AnimationState state;
     private SkeletonRenderer renderer;
     private Entity entity;
+    private String idleAnimation;
+    private float idleDuration;
 
     public SkeletonWrapper(Entity entity) {
         this.entity = entity;
@@ -47,6 +46,40 @@ public class SkeletonWrapper {
         this.skeleton = skeleton;
         this.state = new AnimationState(new AnimationStateData(skeleton.getData()));
         this.renderer = new SkeletonRenderer();
+        this.state.addListener(new AnimationState.AnimationStateListener() {
+            @Override
+            public void event(int trackIndex, Event event) {
+
+            }
+
+            @Override
+            public void complete(int trackIndex, int loopCount) {
+                startIdle();
+            }
+
+            @Override
+            public void start(int trackIndex) {
+
+            }
+
+            @Override
+            public void end(int trackIndex) {
+
+            }
+        });
+
+        startIdle();
+    }
+
+    public void startIdle() {
+        if (idleAnimation != null) {
+            startAnimation(idleAnimation, idleDuration, true);
+        }
+    }
+
+    public void setIdleAnimation(String idleAnimation, float idleDuration) {
+        this.idleAnimation = idleAnimation;
+        this.idleDuration = idleDuration;
     }
 
     public void startAnimation(String animation, float duration, boolean loop)   {
