@@ -29,7 +29,7 @@ public class CSTDServer {
     private boolean timerIsRunning = false;
     private Server serverSocket;
     private Timer timer;
-    private List<ServerClient> serverClientList = new ArrayList<ServerClient>();
+    private List<ServerClientPlayer> serverClientList = new ArrayList<ServerClientPlayer>();
     private Logger logger;
     private RoomGame roomGame;
     private Gson gson;
@@ -54,9 +54,9 @@ public class CSTDServer {
      */
     public void sendToOthers(Packet packet, ServerClient myClient) {
         // For all connected clients
-        for (ServerClient serverClient : serverClientList) {
+        for (ServerClientPlayer serverClient : serverClientList) {
             // If the client isn't the current one, and the target is ready
-            if (serverClient != myClient && serverClient.getState() == ServerClient.STATE_INGAME) {
+            if (serverClient != myClient && serverClient.getState() == ServerClientPlayer.STATE_INGAME) {
                 // Send the packet
                 serverClient.getSocket().sendTCP(packet);
             }
@@ -219,7 +219,7 @@ public class CSTDServer {
             }
         }
         // Add the client
-        serverClientList.add(new ServerClient(highest + 1, this, connection));
+        serverClientList.add(new ServerClientPlayer(highest + 1, this, connection));
     }
 
     private void handleReceivedMessage(Connection connection, Object object) {
@@ -267,7 +267,7 @@ public class CSTDServer {
     }
 
     public void updateNewClient(Connection connection) {
-        for (ServerClient serverClient : serverClientList) {
+        for (ServerClientPlayer serverClient : serverClientList) {
             serverClient.updateNewPlayer(connection);
         }
     }
