@@ -56,7 +56,7 @@ public class CSTDServer {
         // For all connected clients
         for (ServerClient serverClient : serverClientList) {
             // If the client isn't the current one, and the target is ready
-            if (serverClient != myClient && serverClient.isReady()) {
+            if (serverClient != myClient && serverClient.getState() == ServerClient.STATE_INGAME) {
                 // Send the packet
                 serverClient.getSocket().sendTCP(packet);
             }

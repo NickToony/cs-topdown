@@ -10,12 +10,15 @@ import com.nick.ant.towerdefense.renderables.entities.players.Player;
  * Created by Nick on 07/02/2015.
  */
 public class ServerClient {
+    public static final int STATE_LOADING = 0;
+    public static final int STATE_INGAME = 1;
+
     private Connection socket;
     private CSTDServer server;
     private long timeCreated = System.currentTimeMillis();
     private Player player;
     private int id;
-    private boolean ready = false;
+    private int state;
 
     private long lastUpdate = 0;
     private final long UPDATE_RATE = 1000;
@@ -40,10 +43,8 @@ public class ServerClient {
             return;
         }
 
-        if (object instanceof ClientReadyPacket) {
-            if (!ready) {
-                setReady(true);
-            }
+        if (object instanceof ClientLoadedPacket) {
+            setState(STATE_INGAME);
             return;
         }
 
@@ -121,14 +122,14 @@ public class ServerClient {
         }
     }
 
-    public boolean isReady() {
-        return ready;
-    }
-
-    public void setReady(boolean ready) {
-        this.ready = ready;
-        if (ready) {
+    public void setState(int state) {
+        this.state = state;
+        if (state == STATE_INGAME) {
             server.updateNewClient(socket);
         }
+    }
+
+    public int getState() {
+        return state;
     }
 }

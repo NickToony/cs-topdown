@@ -8,13 +8,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.components.weapons.WeaponManager;
-import com.nick.ant.towerdefense.networking.TexturelessMap;
 import com.nick.ant.towerdefense.networking.client.CSClient;
-import com.nick.ant.towerdefense.networking.packets.ClientReadyPacket;
+import com.nick.ant.towerdefense.networking.packets.ClientLoadedPacket;
 import com.nick.ant.towerdefense.networking.packets.Packet;
-import com.nick.ant.towerdefense.renderables.entities.Entity;
 import com.nick.ant.towerdefense.renderables.entities.players.Player;
-import com.nick.ant.towerdefense.renderables.entities.players.UserPlayer;
 import com.nick.ant.towerdefense.renderables.entities.world.Map;
 import com.nick.ant.towerdefense.renderables.lights.RayHandlerWrapper;
 import com.nick.ant.towerdefense.renderables.ui.HUD;
@@ -59,7 +56,7 @@ public class RoomGameRender extends RoomGame {
         hud = new HUD(this);
 
         if (isMultiplayer()) {
-            client.sendPacket(new ClientReadyPacket());
+            client.sendPacket(new ClientLoadedPacket());
         }
     }
 

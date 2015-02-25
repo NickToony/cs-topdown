@@ -13,7 +13,7 @@ public class PacketDefinition {
         //kryo.register()
         kryo.register(PlayerMovePacket.class);
         kryo.register(PlayerCreatePacket.class);
-        kryo.register(ClientReadyPacket.class);
+        kryo.register(ClientLoadedPacket.class);
         kryo.register(PlayerPositionPacket.class);
         kryo.register(PlayerTorchPacket.class);
         kryo.register(PlayerShootPacket.class);
