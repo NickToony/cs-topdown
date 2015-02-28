@@ -136,6 +136,10 @@ public class Map {
         return camera.position.y;
     }
 
+    public float getCameraRotation() {
+        return currentCameraRotation;
+    }
+
     public void addCollisionObjects(World world) {
         for (MapObject object : collisionLayer.getObjects())   {
             if (object instanceof RectangleMapObject) {

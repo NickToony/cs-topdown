@@ -2,6 +2,7 @@ package com.nick.ant.towerdefense.renderables.entities.players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.nick.ant.towerdefense.Game;
 
 /**
@@ -48,23 +49,18 @@ public class UserPlayer extends Player{
 
         shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
-//        if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
-//            boolean rotateLeft = Gdx.input.isKeyPressed(Input.Keys.LEFT);
-//            boolean rotateRight = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-//
-//            if (rotateLeft || rotateRight) {
-//                if (rotationSpeed < 2) {
-//                    rotationSpeed += rotationAcceleration;
-//                }
-//            } else {
-//                rotationSpeed = 0;
-//            }
-//
-//            direction += (rotateLeft ? rotationSpeed : 0)
-//                    + (rotateRight ? -rotationSpeed : 0);
-//        } else {
-            direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
-//        }
+
+        float fromX = Gdx.graphics.getWidth()/2;
+        float fromY = Gdx.graphics.getHeight()/2;
+        float toX = Gdx.input.getX();
+        float toY = Gdx.input.getY();
+        float toDirection = new Vector2(fromX, fromY).sub(new Vector2(toX, toY)).angle();
+        System.out.println(fromX + "," + fromY + " :: " + toX + "," + toY + " :: " + toDirection);
+        if (toDirection < 70) {
+            direction += ( 1 - toDirection/70) * 3;
+        } else if (toDirection > 110) {
+            direction -= ( (toDirection-110)/70 ) * 3;
+        }
 
         super.step();
 
