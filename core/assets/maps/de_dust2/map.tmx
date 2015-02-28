@@ -3,13 +3,14 @@
  <properties>
   <property name="ambientAlpha" value="0.1"/>
   <property name="ambientColour" value="000000"/>
+  <property name="zoom" value="0.75"/>
  </properties>
  <tileset firstgid="1" name="dust" tilewidth="32" tileheight="32">
   <image source="dust.png" width="256" height="320"/>
  </tileset>
  <layer name="Background Layer" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC7WXzU7DMBCErdySnCKBUJtKIA59gP4KDnCAa9//dbDFjjodvI4T0UqjRkm83/54bacJIfRR66gx6hy1i3q4sz6iPqMa4x+MfbT/e/O/or6JD3ZvauhalZ49zRTssQ+98JVR0nPUa4VehOPxT4V4PeV8SLwtSevs8XNKPo1O/jFnt6JexnCdG+E3ZGsIt/VnjcZS/iqqo/u4Ppktz14uFvRAUht+e7AnTrJ5ljE7u/dm7CM9P5od+DGYNvavtlr7v5jW9i77OmT4pZg687slXxCL12cXET/f0JhNuO0ZvM82D8RErc8SB/cfcu/xEY/2i+dzmjd7s92Y/b3kje2fzdd9IT9rG99W8Pk9nuceHzlbFZ7XrE2e+nCdo7ouQO/h2gcl/txfGsM9wusCfEGvef3JPrPdOfGvMrbgC+aAx2efmV+75/E81nVR66P3S/Ev4eOa7fCa0sj9mvin8g//eX9gO6lXeI1Rfm7+Kd/7aZ29+JXhxbKEz/YR5xR/6reEX6o/anMPftKe+JrH/4q/1P+qEr9U9yk+r2k5YZ1hO4Pz7qNpDl/nOnKeuLy/efF3NGYJ34u7tJfp2RDfJFM1ya0/tXzEpmtlsnEMt71SU1fNYe78XMvvwu15wFvDwMJ5HT7rXurxc3sF5/BQYQe8pF34ezb35O1VzB+Df9ZNPZP2DXw3z/2OquXrOP6+0DMDcpbLG+qD3PwAo6XdvwAQAAA=
+   H4sIAAAAAAAAA7WXzU7DMBCErdySnCKBUJtKIA59gP4KDnCAa9//dbDFjjodvI4T0UqjRkm83/54bacJIfRR66gx6hy1i3q4sz6iPqMa4x+MfbT/e/O/or6JD3ZvauhalZ49zRTssQ+98JVR0nPUa4VehOPxT4V4PeV8SLwtSevs8XNKPo1O/jFnt6JexnCdG+E3ZGsIt/VnjcZS/iqqo/u4Ppktz14uFvRAUht+e7AnTrJ5ljE7u/dm7CM9P5od+DGYNvavtlr7v5jW9i77OmT4pZg687slXxCL12cXET/f0JhNuO0ZvM82D8RErc8SB/cfcu/xEY/2i+dzmjd7s92Y/b3kje2fzdd9IT9rG99W8Pk9nuceHzlbFZ7XrE2e+nCdo7ouQO/h2gcl/txfGsM9wusCfEGvef3JPrPdOfGvMrbgC+aAx2efmV+75/E81nVR66P3S/Ev4eOa7fCa0sj9mvin8g//eX9gO6lXeI1Rfm7+Kd/7aZ29+JXhxbKEz/YR5xR/6reEX6o/anMPftKe+JrH/4q/1P+qEr9U9yk+r2k5YZ1hO4Pz7qNpDl/nOnKeuLy/efF3NGYJ34u7tJfp2RDfJFM1ya0/tXzEpmtlsnEMt71SU1fNYe78XMvvwu15wFvDwMJ5HT7rXurxc3sF5/BQYQe8pF34ezb35O1VzB+Df9ZNPZP2DXw3z/2OquXrOP6+0DMDcpbLG+qD3PwAo6XdvwAQAAA=
   </data>
  </layer>
  <objectgroup name="Collision Layer" width="32" height="32">

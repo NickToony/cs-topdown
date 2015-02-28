@@ -82,6 +82,7 @@ public class Map {
         // Setup the camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = Float.parseFloat(mapProperties.get("zoom", String.class));
         renderer.setView(camera);
     }
 
