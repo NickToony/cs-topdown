@@ -9,6 +9,9 @@ import com.nick.ant.towerdefense.Game;
  */
 public class UserPlayer extends Player{
 
+    float rotationSpeed = 0;
+    float rotationAcceleration = 0.1f;
+
     @Override
     public void step(){
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
@@ -46,8 +49,19 @@ public class UserPlayer extends Player{
         shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
         if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
-            direction += (Gdx.input.isKeyPressed(Input.Keys.LEFT) ? 3 : 0)
-                    + (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ? -3 : 0);
+            boolean rotateLeft = Gdx.input.isKeyPressed(Input.Keys.LEFT);
+            boolean rotateRight = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+
+            if (rotateLeft || rotateRight) {
+                if (rotationSpeed < 2) {
+                    rotationSpeed += rotationAcceleration;
+                }
+            } else {
+                rotationSpeed = 0;
+            }
+
+            direction += (rotateLeft ? rotationSpeed : 0)
+                    + (rotateRight ? -rotationSpeed : 0);
         } else {
             direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
         }
