@@ -48,23 +48,23 @@ public class UserPlayer extends Player{
 
         shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
-        if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
-            boolean rotateLeft = Gdx.input.isKeyPressed(Input.Keys.Q);
-            boolean rotateRight = Gdx.input.isKeyPressed(Input.Keys.E);
-
-            if (rotateLeft || rotateRight) {
-                if (rotationSpeed < 2) {
-                    rotationSpeed += rotationAcceleration;
-                }
-            } else {
-                rotationSpeed = 0;
-            }
-
-            direction += (rotateLeft ? rotationSpeed : 0)
-                    + (rotateRight ? -rotationSpeed : 0);
-        } else {
+//        if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
+//            boolean rotateLeft = Gdx.input.isKeyPressed(Input.Keys.LEFT);
+//            boolean rotateRight = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+//
+//            if (rotateLeft || rotateRight) {
+//                if (rotationSpeed < 2) {
+//                    rotationSpeed += rotationAcceleration;
+//                }
+//            } else {
+//                rotationSpeed = 0;
+//            }
+//
+//            direction += (rotateLeft ? rotationSpeed : 0)
+//                    + (rotateRight ? -rotationSpeed : 0);
+//        } else {
             direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
-        }
+//        }
 
         super.step();
 
