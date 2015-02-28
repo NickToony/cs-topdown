@@ -49,8 +49,8 @@ public class UserPlayer extends Player{
         shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
         if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
-            boolean rotateLeft = Gdx.input.isKeyPressed(Input.Keys.LEFT);
-            boolean rotateRight = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+            boolean rotateLeft = Gdx.input.isKeyPressed(Input.Keys.Q);
+            boolean rotateRight = Gdx.input.isKeyPressed(Input.Keys.E);
 
             if (rotateLeft || rotateRight) {
                 if (rotationSpeed < 2) {
