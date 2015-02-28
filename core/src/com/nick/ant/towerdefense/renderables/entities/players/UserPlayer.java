@@ -56,11 +56,12 @@ public class UserPlayer extends Player{
         float toY = Gdx.input.getY();
         float toDirection = new Vector2(fromX, fromY).sub(new Vector2(toX, toY)).angle();
         System.out.println(fromX + "," + fromY + " :: " + toX + "," + toY + " :: " + toDirection);
-        if (toDirection < 70) {
-            direction += ( 1 - toDirection/70) * 3;
-        } else if (toDirection > 110) {
-            direction -= ( (toDirection-110)/70 ) * 3;
+        if (fromX - toX > 100) {
+            direction += ( (1 - (toX / (fromX))) * 3);
+        } else if (toX - fromX > 100) {
+            direction += ( (1 - (toX / (fromX))) * 3);
         }
+        direction = direction % 360;
 
         super.step();
 
