@@ -12,7 +12,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.nick.ant.towerdefense.Game;
+import com.nick.ant.towerdefense.components.CustomMapRenderer;
 import com.nick.ant.towerdefense.components.LightManager;
 import com.nick.ant.towerdefense.renderables.entities.Entity;
 
@@ -33,6 +37,7 @@ public class Map {
     private Color ambientColour;
 
     private Entity entitySnap;
+    private float currentCameraRotation = 0;
 
     protected Map() {
 
@@ -77,7 +82,7 @@ public class Map {
         }
 
         // Create a rendered, with a px scale of 1:1
-        renderer = new OrthogonalTiledMapRenderer(map, 1);
+        renderer = new CustomMapRenderer(map, 1);
 
         // Setup the camera
         camera = new OrthographicCamera();
@@ -105,7 +110,19 @@ public class Map {
 
     public void step() {
         if (entitySnap != null) {
-            camera.translate(Math.round(entitySnap.getX() - camera.position.x), Math.round(entitySnap.getY() - camera.position.y));
+            Vector2 vector = new Vector2(camera.position.x, camera.position.y);
+
+            if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
+                // Add 100 in direction player is looking
+                Vector2 rotationAdd = new Vector2(0, -120);
+                rotationAdd.rotate(entitySnap.getDirection());
+                vector.add(rotationAdd);
+                // Rotate the camera
+                camera.rotate(currentCameraRotation - entitySnap.getDirection());
+                currentCameraRotation = entitySnap.getDirection();
+            }
+
+            camera.translate(Math.round(entitySnap.getX() - vector.x), Math.round(entitySnap.getY() - vector.y));
         }
 
         camera.update();

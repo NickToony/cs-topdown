@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.esotericsoftware.spine.Bone;
+import com.nick.ant.towerdefense.Game;
 import com.nick.ant.towerdefense.components.CharacterManager;
 import com.nick.ant.towerdefense.components.TextureManager;
 import com.nick.ant.towerdefense.components.weapons.Weapon;
@@ -218,10 +219,16 @@ public class Player extends Entity {
 
         super.step();
 
-        float hSpeed = (moveLeft ? -PLAYER_MOVE_SPEED : 0) + (moveRight ? PLAYER_MOVE_SPEED : 0);
-        float vSpeed = (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0);
+        Vector2 vector = new Vector2((moveLeft ? -PLAYER_MOVE_SPEED : 0) + (moveRight ? PLAYER_MOVE_SPEED : 0),
+        (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0));
+//        float hSpeed = (moveLeft ? -PLAYER_MOVE_SPEED : 0) + (moveRight ? PLAYER_MOVE_SPEED : 0);
+//        float vSpeed = (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0);
+        if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
+            vector.rotate(direction);
+        }
 
-        body.setLinearVelocity(hSpeed, vSpeed);
+
+        body.setLinearVelocity(vector.x, vector.y);
 
         // Check if changed movement keys
         int newMove = ((moveLeft ? 1 : 0) * 1000)

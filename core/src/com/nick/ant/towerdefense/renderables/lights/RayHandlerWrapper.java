@@ -1,6 +1,7 @@
 package com.nick.ant.towerdefense.renderables.lights;
 
 import box2dLight.RayHandler;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nick.ant.towerdefense.renderables.Renderable;
 import com.nick.ant.towerdefense.renderables.entities.world.Map;
@@ -21,7 +22,8 @@ public class RayHandlerWrapper extends Renderable {
     @Override
     public void render(SpriteBatch spriteBatch) {
         // Render the light over everything
-        handler.setCombinedMatrix(map.getCamera().combined);
+        OrthographicCamera camera = map.getCamera();
+        handler.setCombinedMatrix(camera.combined, camera.position.x, camera.position.y, camera.viewportWidth, camera.viewportHeight);
         handler.updateAndRender();
     }
 

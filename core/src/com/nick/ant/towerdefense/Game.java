@@ -11,6 +11,10 @@ import com.nick.ant.towerdefense.rooms.Room;
 import com.nick.ant.towerdefense.rooms.RoomMainMenu;
 
 public class Game extends ApplicationAdapter {
+    public static final int CONTROL_MOUSE = 0;
+    public static final int CONTROL_KEYBOARD = 1;
+    public static final int CONTROL_SETTING = CONTROL_KEYBOARD;
+
     private Room currentRoom;
 	
 	@Override

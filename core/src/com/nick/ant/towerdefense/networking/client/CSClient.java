@@ -3,6 +3,7 @@ package com.nick.ant.towerdefense.networking.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.nick.ant.towerdefense.Game;
 import com.nick.ant.towerdefense.networking.packets.*;
 import com.nick.ant.towerdefense.networking.packets.player.*;
 import com.nick.ant.towerdefense.networking.server.CSTDServer;
@@ -108,6 +109,14 @@ public class CSClient {
 
         if (object instanceof PlayerPositionPacket) {
             PlayerPositionPacket packet = (PlayerPositionPacket) object;
+
+
+            // TODO TEMPORARY! Because it's a new movement code
+            if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
+                if (id == packet.id) {
+                    return;
+                }
+            }
 
             // This client is wrong, needs to use the new x and y
             Player player = findPlayer(packet.id);

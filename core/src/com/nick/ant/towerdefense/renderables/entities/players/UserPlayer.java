@@ -2,6 +2,7 @@ package com.nick.ant.towerdefense.renderables.entities.players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.nick.ant.towerdefense.Game;
 
 /**
  * Created by hgreen on 14/09/14.
@@ -44,7 +45,12 @@ public class UserPlayer extends Player{
 
         shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
-        direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
+        if (Game.CONTROL_SETTING == Game.CONTROL_KEYBOARD) {
+            direction += (Gdx.input.isKeyPressed(Input.Keys.LEFT) ? 3 : 0)
+                    + (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ? -3 : 0);
+        } else {
+            direction = calculateDirection((int) room.getMouseX(), (int) room.getMouseY());
+        }
 
         super.step();
 
