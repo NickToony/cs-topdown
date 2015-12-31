@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dust" tilewidth="32" tileheight="32">
+  <image source="dust.png" width="256" height="320"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3SsQoAIAhFUXHt//+3MZCXCIIud5BIqpOWm5kvx1kK/Od7yMecysc3rMzV/o7fHdVdM79S7+99s/UT9atzpvuf9Wvz/+Pj4+Pj4+Pj4+NP+ZtxAS7cUxQAEAAA
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="32" height="32"/>
+</map>

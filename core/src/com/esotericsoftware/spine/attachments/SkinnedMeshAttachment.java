@@ -105,10 +105,10 @@ public class SkinnedMeshAttachment extends Attachment {
 		float a = skeletonColor.a * meshColor.a * regionColor.a * 255;
 		float multiplier = premultipliedAlpha ? a : 255;
 		float color = NumberUtils.intToFloatColor( //
-			((int)a << 24) //
-				| ((int)(skeletonColor.b * meshColor.b * regionColor.b * multiplier) << 16) //
-				| ((int)(skeletonColor.g * meshColor.g * regionColor.g * multiplier) << 8) //
-				| (int)(skeletonColor.r * meshColor.r * regionColor.r * multiplier));
+				((int) a << 24) //
+						| ((int) (skeletonColor.b * meshColor.b * regionColor.b * multiplier) << 16) //
+						| ((int) (skeletonColor.g * meshColor.g * regionColor.g * multiplier) << 8) //
+						| (int) (skeletonColor.r * meshColor.r * regionColor.r * multiplier));
 
 		float[] worldVertices = this.worldVertices;
 		float x = skeleton.getX(), y = skeleton.getY();

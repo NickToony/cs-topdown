@@ -1,4 +1,2 @@
-include 'desktop', 'core', 'server'
-//include ':libs:gameserver-service-java'
-//include ':libs:gameserver-service-libgdx'
+include 'desktop', 'android', 'ios', 'html', 'core', 'server', 'gameserver-service-java', 'gameserver-service-libgdx'
 

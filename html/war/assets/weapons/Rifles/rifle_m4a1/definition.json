@@ -1,0 +1,35 @@
+{
+  "name": "M4A1",
+  "clipSize": 30,
+  "clipTotal": 90,
+  "rateOfFire": 7,
+  "accuracy": 90,
+  "recoil": 5,
+  "speed": 100,
+  "cost": 1000,
+  "reward": 250,
+  "silencer": true,
+  "zoom": 1,
+  "reloadDuration": 2,
+  "cockDuration": 0.5,
+  "reloadType": "full_cock",
+  "damage": {
+    "low": 10,
+    "medium": 25,
+    "high": 75
+  },
+  "animations": {
+    "idle": "rifle_idle",
+    "shoot": "rifle_fire",
+    "reload": "rifle_reload",
+    "equip": "rifle_equip",
+    "unequip": "rifle_unequip",
+    "cock": "rifle_cock"
+  },
+  "sounds": {
+  },
+  "graphics": {
+    "left": false,
+    "right": true
+  }
+}
