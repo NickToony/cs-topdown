@@ -38,13 +38,14 @@ public class WeaponManager {
 
     private void findCategories(FileHandle fileHandle) {
         Json json = new Json();
-//        WeaponCategoryConfigWrapper config = json.fromJson(WeaponCategoryConfigWrapper.class, fileHandle);
-        WeaponCategoryConfigWrapper config = new WeaponCategoryConfigWrapper();
-        config.config = new WeaponCategoryConfig[1];
-        config.config[0] = new WeaponCategoryConfig();
-        config.config[0].name="Rifles";
-        config.config[0].weapons = new String[1];
-        config.config[0].weapons[0] = "rifle_m4a1";
+        WeaponCategoryConfigWrapper config = json.fromJson(WeaponCategoryConfigWrapper.class, fileHandle);
+        // TODO: Fix this
+//        WeaponCategoryConfigWrapper config = new WeaponCategoryConfigWrapper();
+//        config.config = new WeaponCategoryConfig[1];
+//        config.config[0] = new WeaponCategoryConfig();
+//        config.config[0].name="Rifles";
+//        config.config[0].weapons = new String[1];
+//        config.config[0].weapons[0] = "rifle_m4a1";
 
 
         for (WeaponCategoryConfig weaponCategoryConfig :  config.config) {
