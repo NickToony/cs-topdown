@@ -45,12 +45,17 @@ public class DesktopLauncher {
 
                     }
                 }); }
-                return new SBWebServer(logger, config, new NativeLoopManager());
+                return new SBWebServer(logger, config, getLoopManager());
             }
 
             @Override
             public SBServer.LoopManager getLoopManager() {
                 return new NativeLoopManager();
+            }
+
+            @Override
+            public boolean canHost() {
+                return true;
             }
 
 

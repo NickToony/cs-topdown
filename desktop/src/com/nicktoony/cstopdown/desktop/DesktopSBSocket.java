@@ -80,7 +80,6 @@ public class DesktopSBSocket extends SBSocket {
         }
 
         socket.send(getJson().toJson(packet));
-        String string = getJson().toJson(packet);
         return true;
     }
 

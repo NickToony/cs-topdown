@@ -58,10 +58,11 @@ public abstract class SBServer {
      */
     private void setup() {
         // Server list
-        host = new Host(config.sv_name + " " + System.currentTimeMillis(), 0, config.sv_max_players);
-        host.addMeta("ip", config.sv_ip);
-        host.addMeta("port", Integer.toString(config.sv_port));
-        host.create();
+        // TODO: only run if public
+//        host = new Host(config.sv_name + " " + System.currentTimeMillis(), 0, config.sv_max_players);
+//        host.addMeta("ip", config.sv_ip);
+//        host.addMeta("port", Integer.toString(config.sv_port));
+//        host.create();
 
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
@@ -98,7 +99,7 @@ public abstract class SBServer {
     }
 
     public void handleReceivedMessage(SBClient conn, Packet packet) {
-        logger.log("Client: " + packet.getMessage_id());
+        conn.handleReceivedMessage(packet);
     }
 
     protected abstract void startServerSocket(int port);

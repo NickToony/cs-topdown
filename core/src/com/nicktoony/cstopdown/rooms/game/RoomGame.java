@@ -22,11 +22,6 @@ public class RoomGame extends Room {
     protected Map map;
     protected World world;
     private RayHandlerWrapper rayHandlerWrapper;
-//    protected CSClient client;
-
-//    public RoomGame(CSClient client) {
-//        this.client = client;
-//    }
 
     @Override
     public void create(boolean render) {

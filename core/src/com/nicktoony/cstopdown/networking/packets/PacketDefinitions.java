@@ -13,6 +13,8 @@ public class PacketDefinitions {
 
         put(5, ConnectPacket.class);
         put(6, DisconnectPacket.class);
+        put(7, AcceptPacket.class);
+        put(8, RejectPacket.class);
 
     }};
 

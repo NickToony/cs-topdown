@@ -12,10 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nicktoony.cstopdown.components.Room;
+import com.nicktoony.cstopdown.networking.client.SBLocalSocket;
+import com.nicktoony.cstopdown.networking.client.SBSocket;
+import com.nicktoony.cstopdown.networking.packets.Packet;
+import com.nicktoony.cstopdown.networking.server.SBLocalServer;
 import com.nicktoony.cstopdown.networking.server.SBServer;
 import com.nicktoony.cstopdown.networking.server.ServerConfig;
+import com.nicktoony.cstopdown.rooms.connect.RoomConnect;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
+import com.nicktoony.cstopdown.services.Logger;
 import com.nicktoony.cstopdown.services.SkinManager;
 
 import java.util.ArrayList;
@@ -55,49 +61,10 @@ public class RoomMainMenu extends Room {
                         new Label("Single Player", SkinManager.getUiSkin()),
                         new ClickListener() {
                             @Override
-                            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
-                            {
-//                                final SBServer server = new SBLocalServer(new Logger() {
-//                                    @Override
-//                                    public void log(String string) {
-//                                        System.out.println(string);
-//                                    }
-//
-//                                    @Override
-//                                    public void log(Exception exception) {
-//                                        System.out.println(exception.getMessage());
-//                                    }
-//                                }, new ServerConfig(), getGame().getPlatformProvider().getLoopManager());
-//                                SBSocket socket = new SBLocalSocket(server);
-//                                socket.addListener(new SBSocket.SBSocketListener() {
-//
-//                                    @Override
-//                                    public void onOpen(SBSocket socket) {
-//                                        socket.sendMessage(new ConnectPacket());
-//                                        socket.sendMessage(new DisconnectPacket());
-//                                        socket.close();
-//                                    }
-//
-//                                    @Override
-//                                    public void onClose(SBSocket socket) {
-//                                        //server.dispose();
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onMessage(SBSocket socket, Packet packet) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(SBSocket socket, Exception exception) {
-//
-//                                    }
-//                                });
-//                                socket.open();
-
-                                getGame().createRoom(new RoomGame());
+                            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                                startSinglePlayer();
                             }
+
                         }
                 ));
                 // Join server
@@ -112,23 +79,17 @@ public class RoomMainMenu extends Room {
                         }
                 ));
                 // Create server
-                add(newLabelWithListener(
-                        new Label("Create Server", SkinManager.getUiSkin()),
-                        new ClickListener() {
-                            @Override
-                            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
-                            {
-
-                                SBServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
-                                if (server != null) {
-                                    // All okay!
-                                } else {
-                                    System.out.println("This feature is not supported on this platform.");
+                if (getGame().getPlatformProvider().canHost()) {
+                    add(newLabelWithListener(
+                            new Label("Create Server", SkinManager.getUiSkin()),
+                            new ClickListener() {
+                                @Override
+                                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                                    startMultiPlayer();
                                 }
-
                             }
-                        }
-                ));
+                    ));
+                }
                 add(new Label("Options", SkinManager.getUiSkin()));
                 add(new Label("Quit", SkinManager.getUiSkin()));
             }
@@ -169,5 +130,50 @@ public class RoomMainMenu extends Room {
     @Override
     public void dispose()   {
         super.dispose();
+    }
+
+    private void startSinglePlayer() {
+        final SBServer server = new SBLocalServer(new Logger() {
+                                    @Override
+                                    public void log(String string) {
+                                        System.out.println(string);
+                                    }
+
+                                    @Override
+                                    public void log(Exception exception) {
+                                        System.out.println(exception.getMessage());
+                                    }
+                                }, new ServerConfig(), getGame().getPlatformProvider().getLoopManager());
+
+
+        SBSocket socket = new SBLocalSocket(server);
+        socket.addListener(new SBSocket.SBSocketListener() {
+            @Override
+            public void onOpen(SBSocket socket) {
+                // Nothing
+            }
+
+            @Override
+            public void onClose(SBSocket socket) {
+                // When the player leaves in single player, then should just close the server!
+                server.dispose();
+            }
+
+            @Override
+            public void onMessage(SBSocket socket, Packet packet) {
+                // do nothing
+            }
+
+            @Override
+            public void onError(SBSocket socket, Exception exception) {
+                // nothing?
+            }
+        });
+
+        getGame().createRoom(new RoomConnect(socket));
+    }
+
+    private void startMultiPlayer() {
+        SBServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
     }
 }

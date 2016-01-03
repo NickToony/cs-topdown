@@ -24,6 +24,7 @@ public class MyGame extends ApplicationAdapter {
         public GameConfigLoader getGameConfigLoader();
         public SBServer getLocalServer(Logger logger, ServerConfig config);
         public SBServer.LoopManager getLoopManager();
+        public boolean canHost();
     }
 
     public interface GameConfigLoader {
@@ -46,14 +47,16 @@ public class MyGame extends ApplicationAdapter {
 
         this.spriteBatch = new SpriteBatch();
 
-//        createRoom(new RoomGame());
-//        createRoom(new RoomServerList());
         createRoom(new RoomMainMenu());
 	}
 
 	@Override
 	public void render () {
         if (room != null) {
+            if (!room.isCreated()) {
+                room.create(true);
+                return;
+            }
             room.step();
         }
 
@@ -61,9 +64,7 @@ public class MyGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (room != null) {
-//            spriteBatch.begin();
             room.render(spriteBatch);
-//            spriteBatch.end();
         }
 	}
 
@@ -73,7 +74,6 @@ public class MyGame extends ApplicationAdapter {
         }
 
         room.setGame(this);
-        room.create(true);
         this.room = room;
     }
 

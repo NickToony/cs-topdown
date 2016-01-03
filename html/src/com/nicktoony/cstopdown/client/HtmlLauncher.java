@@ -42,7 +42,12 @@ public class HtmlLauncher extends GwtApplication {
 
                 @Override
                 public SBServer.LoopManager getLoopManager() {
-                    return null;
+                    return new HtmlLoopManager();
+                }
+
+                @Override
+                public boolean canHost() {
+                    return false;
                 }
             });
 

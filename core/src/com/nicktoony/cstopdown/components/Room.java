@@ -15,11 +15,13 @@ public class Room implements Renderable {
     private List<Renderable> renderables;
     private MyGame game;
     private boolean render;
+    private boolean created = false;
 
     @Override
     public void create(boolean render) {
         renderables = new ArrayList<Renderable>();
         this.render = render;
+        this.created = true;
     }
 
     @Override
@@ -87,5 +89,9 @@ public class Room implements Renderable {
 
     public boolean isRender() {
         return render;
+    }
+
+    public boolean isCreated() {
+        return created;
     }
 }
