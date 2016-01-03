@@ -36,7 +36,6 @@ public class SBWebClient extends SBClient {
 
     @Override
     public void sendPacket(Packet packet) {
-        // do something
         socket.send(packetToString(packet));
     }
 
