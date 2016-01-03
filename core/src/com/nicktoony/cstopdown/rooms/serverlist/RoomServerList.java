@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.nicktoony.cstopdown.rooms.connect.RoomConnect;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.client.models.Server;
 import com.nicktoony.gameserver.service.host.Host;
@@ -52,32 +53,8 @@ public class RoomServerList extends Room {
                     SBSocket socket = getGame().getPlatformProvider().getWebSocket(
                             server.getMeta().get("ip"), Integer.parseInt(server.getMeta().get("port"))
                     );
-                    socket.open();
 
-                    socket.addListener(new SBSocket.SBSocketListener() {
-
-                        @Override
-                        public void onOpen(SBSocket socket) {
-                            socket.sendMessage(new ConnectPacket());
-                            socket.sendMessage(new DisconnectPacket());
-                            socket.close();
-                        }
-
-                        @Override
-                        public void onClose(SBSocket socket) {
-
-                        }
-
-                        @Override
-                        public void onMessage(SBSocket socket, Packet packet) {
-
-                        }
-
-                        @Override
-                        public void onError(SBSocket socket, Exception exception) {
-
-                        }
-                    });
+                    getGame().createRoom(new RoomConnect(socket));
                 }
             }
         });

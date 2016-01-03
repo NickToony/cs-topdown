@@ -1,5 +1,7 @@
 package com.nicktoony.cstopdown.server;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.server.SBClient;
 import org.java_websocket.WebSocket;
@@ -10,14 +12,32 @@ import org.java_websocket.WebSocket;
 public class SBWebClient extends SBClient {
 
     private WebSocket socket;
+    private Json json;
 
     public SBWebClient(WebSocket socket) {
         this.socket = socket;
     }
 
+    protected Json getJson() {
+        if (json == null) {
+            json = new Json();
+            json.setTypeName(null);
+            json.setUsePrototypes(false);
+            json.setIgnoreUnknownFields(true);
+            json.setOutputType(JsonWriter.OutputType.json);
+        }
+        return json;
+    }
+
+    protected String packetToString(Packet packet) {
+        packet.prepareMessageId();
+        return getJson().toJson(packet);
+    }
+
     @Override
     public void sendPacket(Packet packet) {
         // do something
+        socket.send(packetToString(packet));
     }
 
     @Override

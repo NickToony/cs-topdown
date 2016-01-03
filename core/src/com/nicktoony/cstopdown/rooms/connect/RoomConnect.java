@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.rooms.connect;
 
+import com.badlogic.gdx.Gdx;
 import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.networking.packets.AcceptPacket;
@@ -41,6 +42,8 @@ public class RoomConnect extends Room {
             public void onMessage(SBSocket socket, Packet packet) {
                 if (packet instanceof AcceptPacket) {
                     getGame().createRoom(new RoomGame());
+
+                    Gdx.app.log("CONNECTED", "SUCCESS");
                 } else if (packet instanceof RejectPacket) {
                     // Rejected..
                     // onClose will probably be called anyway

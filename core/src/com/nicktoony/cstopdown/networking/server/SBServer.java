@@ -28,6 +28,7 @@ public abstract class SBServer {
     private RoomGame roomGame;
     private Json json;
     private LoopManager loopManager;
+    protected boolean publicServerList = true;
 
     // Get the logg
     public Logger getLogger() {
@@ -57,13 +58,6 @@ public abstract class SBServer {
      * server list
      */
     private void setup() {
-        // Server list
-        // TODO: only run if public
-//        host = new Host(config.sv_name + " " + System.currentTimeMillis(), 0, config.sv_max_players);
-//        host.addMeta("ip", config.sv_ip);
-//        host.addMeta("port", Integer.toString(config.sv_port));
-//        host.create();
-
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
         roomGame = new RoomGame();
@@ -77,7 +71,15 @@ public abstract class SBServer {
     }
 
     public void step() {
-//        roomGame.step();
+        // Server list
+        if (publicServerList) {
+            if (host == null) {
+                host = new Host(config.sv_name + " " + System.currentTimeMillis(), 0, config.sv_max_players);
+                host.addMeta("ip", config.sv_ip);
+                host.addMeta("port", Integer.toString(config.sv_port));
+                host.create();
+            }
+        }
     }
 
     public boolean isTimerIsRunning() {
@@ -109,11 +111,6 @@ public abstract class SBServer {
     protected Packet stringToPacket(String message) {
         Packet packet = getJson().fromJson(Packet.class, message);
         return (Packet) getJson().fromJson((Class) PacketDefinitions.PACKET_DEFITIONS.get(packet.getMessage_id()), message);
-    }
-
-    protected String packetToString(Packet packet) {
-        packet.prepareMessageId();
-        return getJson().toJson(packet);
     }
 
     protected Json getJson() {

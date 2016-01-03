@@ -15,7 +15,7 @@ public class ServerConfig {
 
     // Connection details
     public String sv_ip = "127.0.0.1";
-    public int sv_port = 8080;
+    public int sv_port = 8457;
     public String sv_password = "";
 
     // Gameplay settings

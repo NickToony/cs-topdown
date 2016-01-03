@@ -6,8 +6,10 @@ import com.nicktoony.cstopdown.services.Logger;
  * Created by nick on 19/07/15.
  */
 public class SBLocalServer extends SBServer {
+
     public SBLocalServer(Logger logger, ServerConfig config, LoopManager loopManager) {
         super(logger, config, loopManager);
+        publicServerList = false;
     }
 
     @Override

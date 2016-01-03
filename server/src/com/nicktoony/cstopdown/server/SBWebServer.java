@@ -29,7 +29,8 @@ public class SBWebServer extends SBServer {
         serverSocket = new WebSocketServer(new InetSocketAddress(port)) {
             @Override
             public void onOpen(WebSocket conn, ClientHandshake handshake) {
-                handleClientConnected(new SBWebClient(conn));
+                clientSockets.put(conn, new SBWebClient(conn));
+                handleClientConnected(clientSockets.get(conn));
             }
 
             @Override

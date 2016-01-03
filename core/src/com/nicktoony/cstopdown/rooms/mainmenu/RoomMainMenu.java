@@ -174,6 +174,32 @@ public class RoomMainMenu extends Room {
     }
 
     private void startMultiPlayer() {
-        SBServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
+        final SBServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
+
+        SBSocket socket = new SBLocalSocket(server);
+        socket.addListener(new SBSocket.SBSocketListener() {
+            @Override
+            public void onOpen(SBSocket socket) {
+                // Nothing
+            }
+
+            @Override
+            public void onClose(SBSocket socket) {
+                // When the player leaves his own server, then should just close the server!
+                server.dispose();
+            }
+
+            @Override
+            public void onMessage(SBSocket socket, Packet packet) {
+                // do nothing
+            }
+
+            @Override
+            public void onError(SBSocket socket, Exception exception) {
+                // nothing?
+            }
+        });
+
+        getGame().createRoom(new RoomConnect(socket));
     }
 }
