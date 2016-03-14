@@ -82,8 +82,10 @@ public abstract class SBClient {
             player.setMovement(castPacket.moveUp, castPacket.moveRight,
                     castPacket.moveDown, castPacket.moveLeft);
             player.setDirection(castPacket.direction);
-            player.setX(castPacket.x);
-            player.setY(castPacket.y);
+            if (Math.abs(player.getX() - castPacket.x) <= 2 && Math.abs(player.getY() - castPacket.y) <= 2) {
+                player.setX(castPacket.x);
+                player.setY(castPacket.y);
+            }
         }
     }
 
