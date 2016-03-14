@@ -29,6 +29,7 @@ public abstract class SBClient {
     private int tempCountdown = 200;
     private int id;
     private int lastUpdate = 0;
+    private float cheat = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -82,10 +83,14 @@ public abstract class SBClient {
             player.setMovement(castPacket.moveUp, castPacket.moveRight,
                     castPacket.moveDown, castPacket.moveLeft);
             player.setDirection(castPacket.direction);
-            if (Math.abs(player.getX() - castPacket.x) <= 2 && Math.abs(player.getY() - castPacket.y) <= 2) {
+//            if (Math.abs(player.getX() - castPacket.x) <= 2 && Math.abs(player.getY() - castPacket.y) <= 2) {
+            cheat += Math.abs(player.getX() - castPacket.x) + Math.abs(player.getY() - castPacket.y);
+
                 player.setX(castPacket.x);
                 player.setY(castPacket.y);
-            }
+
+            System.out.println("Cheat at: " + cheat);
+//            }
         }
     }
 
