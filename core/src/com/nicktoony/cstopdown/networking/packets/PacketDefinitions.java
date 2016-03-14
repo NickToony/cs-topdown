@@ -14,13 +14,19 @@ import java.util.Map;
  */
 public class PacketDefinitions {
 
+    /**
+     * If you add a new packet, you MUST add it to this list with a unique ID!!!!
+     */
     public static final Map<Integer, Class> PACKET_DEFITIONS
             = new HashMap<Integer, Class>() {{
 
+        // Connection
         put(5, ConnectPacket.class);
         put(6, DisconnectPacket.class);
         put(7, AcceptPacket.class);
         put(8, RejectPacket.class);
+
+        // Game
         put(9, CreatePlayer.class);
 
     }};

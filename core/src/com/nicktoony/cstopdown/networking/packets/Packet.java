@@ -4,6 +4,8 @@ import java.util.Map;
 
 /**
  * Created by nick on 17/07/15.
+ *
+ * Provides the core packet parameters for all messages
  */
 public class Packet {
     private int message_id;
