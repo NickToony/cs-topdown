@@ -27,9 +27,6 @@ public class Room extends Renderable {
     @Override
     public void step() {
         for (Renderable renderable : renderables) {
-            if (!renderable.isCreated()) {
-                renderable.triggerCreate(render);
-            }
             renderable.step();
         }
     }
@@ -38,9 +35,7 @@ public class Room extends Renderable {
     public void render(SpriteBatch spriteBatch) {
         spriteBatch.begin();
         for (Renderable renderable : renderables) {
-            if (renderable.isCreated()) {
                 renderable.render(spriteBatch);
-            }
         }
         spriteBatch.end();
     }
@@ -54,7 +49,7 @@ public class Room extends Renderable {
 
     public synchronized Renderable addRenderable(Renderable renderable) {
         renderables.add(renderable);
-//        renderable.create(render);
+        renderable.create(render);
         return renderable;
     }
 

@@ -105,7 +105,6 @@ public class RoomGame extends Room {
             map.setEntitySnap(player);
         } else {
             player = new Player();
-            map.setEntitySnap(player);
         }
         player.setId(id);
         player.setX(x);
