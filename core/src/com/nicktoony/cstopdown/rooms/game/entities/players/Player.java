@@ -97,6 +97,7 @@ public class Player extends Entity<RoomGame> {
 
             shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
         }
+
     }
 
     protected SkeletonWrapper getSkeletonWrapper() {

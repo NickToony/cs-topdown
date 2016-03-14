@@ -9,7 +9,7 @@ import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.config.GameConfig;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.networking.server.SBServer;
-import com.nicktoony.cstopdown.networking.server.ServerConfig;
+import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 import com.nicktoony.cstopdown.services.Logger;
 
@@ -63,7 +63,7 @@ public class MyGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (room != null) {
+        if (room != null && room.isCreated()) {
             room.render(spriteBatch);
         }
 	}

@@ -27,9 +27,7 @@ public class DesktopSBSocket extends SBSocket {
                 + port + "/")) {
             @Override
             public void onOpen(ServerHandshake handshakedata) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onOpen(DesktopSBSocket.this);
-                }
+                notifyOpen(DesktopSBSocket.this);
             }
 
             @Override
@@ -38,23 +36,17 @@ public class DesktopSBSocket extends SBSocket {
                 packet = (Packet) getJson()
                         .fromJson((Class) PacketDefinitions.PACKET_DEFITIONS.get(packet.getMessage_id()), message);
 
-                for (SBSocketListener listener : listeners) {
-                    listener.onMessage(DesktopSBSocket.this, packet);
-                }
+                notifyMessage(DesktopSBSocket.this, packet);
             }
 
             @Override
             public void onClose(int code, String reason, boolean remote) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onClose(DesktopSBSocket.this);
-                }
+                notifyClose(DesktopSBSocket.this);
             }
 
             @Override
             public void onError(Exception ex) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onError(DesktopSBSocket.this, ex);
-                }
+                notifyException(DesktopSBSocket.this, ex);
             }
         };
     }

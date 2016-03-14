@@ -3,12 +3,13 @@ package com.nicktoony.cstopdown.components;
 /**
  * Created by nick on 15/07/15.
  */
-public abstract class Entity<R extends Room> implements Renderable {
+public abstract class Entity<R extends Room> extends Renderable {
 
     private Room room;
     protected float x;
     protected float y;
     protected float direction;
+    protected int id;
 
     public void setRoom(Room room) {
         this.room = room;
@@ -44,5 +45,13 @@ public abstract class Entity<R extends Room> implements Renderable {
 
     public void setDirection(float direction) {
         this.direction = direction;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

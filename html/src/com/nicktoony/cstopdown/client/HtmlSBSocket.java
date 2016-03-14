@@ -28,9 +28,7 @@ public class HtmlSBSocket extends SBSocket {
         socket.addListener(new WebsocketListener() {
             @Override
             public void onClose() {
-                for (SBSocketListener listener : listeners) {
-                    listener.onClose(HtmlSBSocket.this);
-                }
+                notifyClose(HtmlSBSocket.this);
             }
 
             @Override
@@ -39,16 +37,12 @@ public class HtmlSBSocket extends SBSocket {
                 packet = (Packet) getJson()
                         .fromJson((Class) PacketDefinitions.PACKET_DEFITIONS.get(packet.getMessage_id()), message);
 
-                for (SBSocketListener listener : listeners) {
-                    listener.onMessage(HtmlSBSocket.this, packet);
-                }
+                notifyMessage(HtmlSBSocket.this, packet);
             }
 
             @Override
             public void onOpen() {
-                for (SBSocketListener listener : listeners) {
-                    listener.onOpen(HtmlSBSocket.this);
-                }
+                notifyOpen(HtmlSBSocket.this);
             }
         });
     }

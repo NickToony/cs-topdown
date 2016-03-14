@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nicktoony.cstopdown.components.Room;
+import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
@@ -22,6 +23,16 @@ public class RoomGame extends Room {
     protected Map map;
     protected World world;
     private RayHandlerWrapper rayHandlerWrapper;
+    private SBSocket socket;
+    private GameManager gameManager;
+
+    public RoomGame(SBSocket socket) {
+        this.socket = socket;
+        this.gameManager = new GameManager(this, socket);
+        if (socket != null) {
+            socket.addListener(gameManager);
+        }
+    }
 
     @Override
     public void create(boolean render) {
@@ -58,14 +69,15 @@ public class RoomGame extends Room {
 //            }
 
             // temp
-            Player player = createUserPlayer();
-            map.setEntitySnap(player);
+//            Player player = createUserPlayer();
+//            map.setEntitySnap(player);
         }
     }
 
     public void step()  {
         super.step();
 
+        socket.pushNotifications();
         world.step(1, 6, 2);
     }
 
@@ -85,18 +97,22 @@ public class RoomGame extends Room {
         return world;
     }
 
-    public Player createUserPlayer() {
+    public Player createPlayer(int id, float x, float y) {
         // Define a player object
-        Player player = new UserPlayer();
+        Player player;
+        if (socket != null && id == socket.getId()) {
+            player = new UserPlayer();
+            map.setEntitySnap(player);
+        } else {
+            player = new Player();
+            map.setEntitySnap(player);
+        }
+        player.setId(id);
+        player.setX(x);
+        player.setY(y);
         return setupPlayer(player);
     }
-//
-//    public Player createPlayer() {
-//        // Define a player object
-//        Player player = new Player();
-//        return setupPlayer(player);
-//    }
-//
+
     protected Player setupPlayer(Player player) {
         if (isRender()) {
             player.setTorch(LightManager.defineTorch(rayHandlerWrapper.getHandler()));
@@ -133,5 +149,9 @@ public class RoomGame extends Room {
 //        foregroundSpriteBatch.begin();
 //        hud.render(foregroundSpriteBatch);
 //        foregroundSpriteBatch.end();
+    }
+
+    public SBSocket getSocket() {
+        return socket;
     }
 }

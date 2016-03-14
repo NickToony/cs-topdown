@@ -8,7 +8,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
 /**
  * Created by Nick on 14/02/2015.
  */
-public class RayHandlerWrapper implements Renderable {
+public class RayHandlerWrapper extends Renderable {
     private RayHandler handler;
     private Map map;
 

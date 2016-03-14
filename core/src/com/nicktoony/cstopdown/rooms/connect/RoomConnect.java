@@ -1,12 +1,11 @@
 package com.nicktoony.cstopdown.rooms.connect;
 
-import com.badlogic.gdx.Gdx;
 import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.packets.AcceptPacket;
-import com.nicktoony.cstopdown.networking.packets.ConnectPacket;
+import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
+import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
 import com.nicktoony.cstopdown.networking.packets.Packet;
-import com.nicktoony.cstopdown.networking.packets.RejectPacket;
+import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 
@@ -16,6 +15,7 @@ import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 public class RoomConnect extends Room {
 
     private SBSocket socket;
+    private boolean connected = false;
 
     public RoomConnect(SBSocket socket) {
         this.socket = socket;
@@ -41,9 +41,9 @@ public class RoomConnect extends Room {
             @Override
             public void onMessage(SBSocket socket, Packet packet) {
                 if (packet instanceof AcceptPacket) {
-                    getGame().createRoom(new RoomGame());
-
-                    Gdx.app.log("CONNECTED", "SUCCESS");
+                    socket.setServerConfig(((AcceptPacket) packet).serverConfig);
+                    socket.setId(((AcceptPacket) packet).id);
+                    connected = true;
                 } else if (packet instanceof RejectPacket) {
                     // Rejected..
                     // onClose will probably be called anyway
@@ -57,5 +57,16 @@ public class RoomConnect extends Room {
         });
 
         socket.open();
+    }
+
+    @Override
+    public void step() {
+        super.step();
+
+        socket.pushNotifications();
+
+        if (connected) {
+            getGame().createRoom(new RoomGame(socket));
+        }
     }
 }

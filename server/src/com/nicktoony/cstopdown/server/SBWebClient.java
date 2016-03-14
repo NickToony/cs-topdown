@@ -14,7 +14,8 @@ public class SBWebClient extends SBClient {
     private WebSocket socket;
     private Json json;
 
-    public SBWebClient(WebSocket socket) {
+    public SBWebClient(SBWebServer server, WebSocket socket) {
+        super(server);
         this.socket = socket;
     }
 

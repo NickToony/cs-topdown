@@ -6,6 +6,8 @@ package com.nicktoony.cstopdown.networking.server;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.nicktoony.cstopdown.config.ServerConfig;
+import com.nicktoony.cstopdown.networking.packets.game.CreatePlayer;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.cstopdown.config.ServerlistConfig;
@@ -13,6 +15,8 @@ import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.PacketDefinitions;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.services.Logger;
+
+import java.util.*;
 
 public abstract class SBServer {
 
@@ -29,6 +33,11 @@ public abstract class SBServer {
     private Json json;
     private LoopManager loopManager;
     protected boolean publicServerList = true;
+    private List<SBClient> clients = new ArrayList<SBClient>();
+
+    private List<SBClient> connectedQueue = new ArrayList<SBClient>();
+    private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
+    private Map<SBClient, Packet> messageQueue = new LinkedHashMap<SBClient, Packet>();
 
     // Get the logg
     public Logger getLogger() {
@@ -60,7 +69,7 @@ public abstract class SBServer {
     private void setup() {
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
-        roomGame = new RoomGame();
+        roomGame = new RoomGame(null);
         roomGame.create(false);
 
         // begin server
@@ -80,6 +89,14 @@ public abstract class SBServer {
                 host.create();
             }
         }
+
+        // Push the queues
+        pushNotifications();
+
+        // Perform a step event on all client objects
+        for (SBClient client : clients) {
+            client.update();
+        }
     }
 
     public boolean isTimerIsRunning() {
@@ -92,15 +109,30 @@ public abstract class SBServer {
         loopManager.endServerLoop();
     }
 
-    public void handleClientConnected(SBClient conn) {
+    private void handleClientConnected(SBClient conn) {
         logger.log("Client Connected");
+        int testId = 0;
+        boolean clash = true;
+        while (clash) {
+            testId ++;
+            clash = false;
+            for (SBClient client : clients) {
+                if (client.getId() == testId) {
+                    clash = true;
+                }
+            }
+        }
+        conn.setId(testId);
+        clients.add(conn);
+        conn.setState(SBClient.STATE.CONNECTING);
     }
 
-    public void handleClientDisconnected(SBClient conn) {
+    private void handleClientDisconnected(SBClient conn) {
         logger.log("Client Disconnected");
+        clients.remove(conn);
     }
 
-    public void handleReceivedMessage(SBClient conn, Packet packet) {
+    private void handleReceivedMessage(SBClient conn, Packet packet) {
         conn.handleReceivedMessage(packet);
     }
 
@@ -124,5 +156,49 @@ public abstract class SBServer {
         return json;
     }
 
+    public ServerConfig getConfig() {
+        return config;
+    }
 
+    public RoomGame getGame() {
+        return roomGame;
+    }
+
+
+    public void sendToAll(CreatePlayer createPlayer) {
+        for (SBClient client : clients) {
+            client.sendPacket(createPlayer);
+            System.out.println("SENT IT");
+        }
+    }
+
+    public void notifyClientConnected(SBClient conn) {
+        connectedQueue.add(conn);
+    }
+
+    public void notifyClientDisconnected(SBClient conn) {
+        disconnectedQueue.add(conn);
+    }
+
+    public void notifyClientMessage(SBClient conn, Packet packet) {
+        messageQueue.put(conn, packet);
+    }
+
+    public void pushNotifications() {
+        for (SBClient client : connectedQueue) {
+            handleClientConnected(client);
+        }
+
+        for (Map.Entry<SBClient, Packet> client : messageQueue.entrySet()) {
+            handleReceivedMessage(client.getKey(), client.getValue());
+        }
+
+        for (SBClient client : disconnectedQueue) {
+            handleClientDisconnected(client);
+        }
+
+        connectedQueue.clear();
+        disconnectedQueue.clear();
+        messageQueue.clear();
+    }
 }

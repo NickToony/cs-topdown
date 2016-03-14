@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by nick on 15/07/15.
  */
-public class Room implements Renderable {
+public class Room extends Renderable {
 
     private List<Renderable> renderables;
     private MyGame game;
@@ -27,6 +27,9 @@ public class Room implements Renderable {
     @Override
     public void step() {
         for (Renderable renderable : renderables) {
+            if (!renderable.isCreated()) {
+                renderable.triggerCreate(render);
+            }
             renderable.step();
         }
     }
@@ -35,7 +38,9 @@ public class Room implements Renderable {
     public void render(SpriteBatch spriteBatch) {
         spriteBatch.begin();
         for (Renderable renderable : renderables) {
-            renderable.render(spriteBatch);
+            if (renderable.isCreated()) {
+                renderable.render(spriteBatch);
+            }
         }
         spriteBatch.end();
     }
@@ -47,9 +52,9 @@ public class Room implements Renderable {
         }
     }
 
-    public Renderable addRenderable(Renderable renderable) {
+    public synchronized Renderable addRenderable(Renderable renderable) {
         renderables.add(renderable);
-        renderable.create(render);
+//        renderable.create(render);
         return renderable;
     }
 

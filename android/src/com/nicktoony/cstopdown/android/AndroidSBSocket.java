@@ -27,9 +27,7 @@ public class AndroidSBSocket extends SBSocket {
                 + port + "/")) {
             @Override
             public void onOpen(ServerHandshake handshakedata) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onOpen(AndroidSBSocket.this);
-                }
+                notifyOpen(AndroidSBSocket.this);
             }
 
             @Override
@@ -38,23 +36,17 @@ public class AndroidSBSocket extends SBSocket {
                 packet = (Packet) getJson()
                         .fromJson((Class) PacketDefinitions.PACKET_DEFITIONS.get(packet.getMessage_id()), message);
 
-                for (SBSocketListener listener : listeners) {
-                    listener.onMessage(AndroidSBSocket.this, packet);
-                }
+                notifyMessage(AndroidSBSocket.this, packet);
             }
 
             @Override
             public void onClose(int code, String reason, boolean remote) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onClose(AndroidSBSocket.this);
-                }
+                notifyClose(AndroidSBSocket.this);
             }
 
             @Override
             public void onError(Exception ex) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onError(AndroidSBSocket.this, ex);
-                }
+                notifyException(AndroidSBSocket.this, ex);
             }
         };
     }

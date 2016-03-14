@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.networking.server;
+package com.nicktoony.cstopdown.config;
 
 /**
  * Created by nick on 13/07/15.
@@ -8,8 +8,8 @@ package com.nicktoony.cstopdown.networking.server;
 public class ServerConfig {
     // Server settings
     public String sv_name = "Dev Server";
-    public int sv_max_players = 100;
-    public boolean sv_server_list = true;
+    public int sv_max_players = 16;
+    public boolean sv_server_list = false;
 
     // Map settings
 
@@ -20,6 +20,6 @@ public class ServerConfig {
 
     // Gameplay settings
     public boolean mp_player_collisions = false;
-    public int mp_player_update_rate = 1000;
+    public int mp_player_update_rate = 60;
     public float mp_player_move_speed = 2;
 }

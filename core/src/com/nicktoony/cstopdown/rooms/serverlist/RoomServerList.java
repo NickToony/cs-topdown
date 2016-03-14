@@ -12,9 +12,6 @@ import com.nicktoony.gameserver.service.libgdx.ServerList;
 import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.config.ServerlistConfig;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.packets.ConnectPacket;
-import com.nicktoony.cstopdown.networking.packets.DisconnectPacket;
-import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.services.SkinManager;
 
 import java.util.ArrayList;

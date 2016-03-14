@@ -16,46 +16,38 @@ public class SBLocalSocket extends SBSocket {
         super("", 0); // we don't care about port/ip
 
         this.server = server;
-        this.client = new SBClient() {
+        this.client = new SBClient(server) {
             @Override
             public void sendPacket(Packet packet) {
-                for (SBSocketListener listener : listeners) {
-                    listener.onMessage(SBLocalSocket.this, packet);
-                }
+                notifyMessage(SBLocalSocket.this, packet);
             }
 
             @Override
             public void close() {
-                for (SBSocketListener listener : listeners) {
-                    listener.onClose(SBLocalSocket.this);
-                }
+                notifyClose(SBLocalSocket.this);
             }
         };
     }
 
     @Override
     public boolean open() {
-        for (SBSocketListener listener : listeners) {
-            listener.onOpen(SBLocalSocket.this);
-        }
+        notifyOpen(SBLocalSocket.this);
 
-        server.handleClientConnected(client);
+        server.notifyClientConnected(client);
         return true;
     }
 
     @Override
     public boolean close() {
-        for (SBSocketListener listener : listeners) {
-            listener.onClose(SBLocalSocket.this);
-        }
+        notifyClose(SBLocalSocket.this);
 
-        server.handleClientDisconnected(client);
+        server.notifyClientDisconnected(client);
         return true;
     }
 
     @Override
     protected boolean sendPacket(Packet packet) {
-        server.handleReceivedMessage(client, packet);
+        server.notifyClientMessage(client, packet);
         return true;
     }
 }

@@ -8,7 +8,7 @@ import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.config.GameConfig;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.networking.server.SBServer;
-import com.nicktoony.cstopdown.networking.server.ServerConfig;
+import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.services.Logger;
 
 public class AndroidLauncher extends AndroidApplication {
