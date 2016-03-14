@@ -30,8 +30,6 @@ public abstract class SBClient {
     private int id;
     private int lastUpdate = 0;
     private float cheat = 0;
-    private float lastX = 0;
-    private float lastY = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -86,15 +84,15 @@ public abstract class SBClient {
                     castPacket.moveDown, castPacket.moveLeft);
             player.setDirection(castPacket.direction);
 //            if (Math.abs(player.getX() - castPacket.x) <= 2 && Math.abs(player.getY() - castPacket.y) <= 2) {
-            cheat += Math.abs(lastX- castPacket.x) + Math.abs(lastY - castPacket.y);
+            cheat += Math.abs(player.getX() - castPacket.x) + Math.abs(player.getY() - castPacket.y);
 
-            lastX = player.getX();
-            lastY = player.getY();
-
-            player.setX(castPacket.x);
-            player.setY(castPacket.y);
-
-
+            if (cheat < 16) {
+                player.setX(castPacket.x);
+                player.setY(castPacket.y);
+            }
+            if (cheat > 0) {
+                cheat -= 2;
+            }
 
             System.out.println("Cheat at: " + cheat);
 //            }
