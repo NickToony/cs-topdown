@@ -12,6 +12,6 @@ The game is developed such that the entire rendering engine may be disabled for 
 
 ##Current Features
 - Collisions and movement using Box2D
-- External map loading and rendering using Tiled map editor
+- External map loading and rendering using Tiled Map Editor
 - Skeletal based animation using Spine
 - Lighting engine using Box2D Lights
