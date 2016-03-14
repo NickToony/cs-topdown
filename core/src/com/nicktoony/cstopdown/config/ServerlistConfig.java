@@ -31,7 +31,7 @@ public class ServerlistConfig extends GameserverConfig {
 
     @Override
     public String getGameAPIKey() {
-        return "2ZZ5Y8pxQs8HNhLJYw59ypupC7HPx9gqfD7qylKkIWT7jib5jgfoqUo2sTxA";
+        return "pMLRbeKNtlK4Ton6d9riCviNqE0h7V0CWgLXNfx7hCVUl3ReIuCHmcVBymCe";
     }
 
     @Override
