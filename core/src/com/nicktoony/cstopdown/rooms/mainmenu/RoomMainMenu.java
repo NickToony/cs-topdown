@@ -132,6 +132,13 @@ public class RoomMainMenu extends Room {
     }
 
     private void startSinglePlayer() {
+
+        SBServer.LoopManager loopManager = getGame().getPlatformProvider().getLoopManager();
+        // If a looper isn't presented (i.e. a threading system)
+        if (loopManager == null) {
+            // Use the game loop instead
+            loopManager = getGame();
+        }
         final SBServer server = new SBLocalServer(new Logger() {
                                     @Override
                                     public void log(String string) {
@@ -142,7 +149,7 @@ public class RoomMainMenu extends Room {
                                     public void log(Exception exception) {
                                         System.out.println(exception.getMessage());
                                     }
-                                }, new ServerConfig(), getGame().getPlatformProvider().getLoopManager());
+                                }, new ServerConfig(), loopManager);
 
 
         SBSocket socket = new SBLocalSocket(server);

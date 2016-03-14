@@ -13,7 +13,7 @@ import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 import com.nicktoony.cstopdown.services.Logger;
 
-public class MyGame extends ApplicationAdapter {
+public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
 
     public PlatformProvider getPlatformProvider() {
         return platformProvider;
@@ -36,6 +36,7 @@ public class MyGame extends ApplicationAdapter {
     private GameConfig gameConfig;
     private PlatformProvider platformProvider;
     private SpriteBatch spriteBatch;
+    private SBServer linearLoop;
 
     public MyGame(PlatformProvider platformProvider) {
         this.platformProvider = platformProvider;
@@ -65,6 +66,10 @@ public class MyGame extends ApplicationAdapter {
 
         if (room != null && room.isCreated()) {
             room.render(spriteBatch);
+        }
+
+        if (linearLoop != null) {
+            linearLoop.step();
         }
 	}
 
@@ -129,5 +134,20 @@ public class MyGame extends ApplicationAdapter {
 
     public GameConfig getGameConfig() {
         return gameConfig;
+    }
+
+    @Override
+    public void startServerLoop(SBServer server) {
+        linearLoop = server;
+    }
+
+    @Override
+    public boolean isServerLoopRunning() {
+        return linearLoop != null;
+    }
+
+    @Override
+    public void endServerLoop() {
+        linearLoop = null;
     }
 }
