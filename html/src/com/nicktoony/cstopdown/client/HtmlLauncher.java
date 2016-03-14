@@ -14,7 +14,7 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public GwtApplicationConfiguration getConfig () {
-            return new GwtApplicationConfiguration(1024, 728);
+            return new GwtApplicationConfiguration(new GameConfig().game_resolution_x, new GameConfig().game_resolution_y);
         }
 
         @Override
