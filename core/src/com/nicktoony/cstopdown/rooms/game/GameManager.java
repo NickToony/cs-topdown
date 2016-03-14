@@ -17,6 +17,8 @@ public class GameManager implements SBSocket.SBSocketListener {
     private RoomGame roomGame;
     private SBSocket socket;
     private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
+    private float lastX = 0;
+    private float lastY = 0;
 
     public GameManager(RoomGame roomGame, SBSocket socket) {
         this.roomGame = roomGame;
@@ -49,6 +51,19 @@ public class GameManager implements SBSocket.SBSocketListener {
                 if (player != null) {
                     player.setPosition(castPacket.x, castPacket.y);
                     player.setDirection(castPacket.direction);
+                }
+            } else {
+                Player player = playerIdMap.get(castPacket.id);
+                if (player != null) {
+                    final int offset = 32;
+
+                    lastX = player.getX();
+                    lastY = player.getY();
+
+                    if (Math.abs(lastX-castPacket.x) > offset || Math.abs(lastY-castPacket.y) > offset)
+                        player.setPosition(castPacket.x, castPacket.y);
+
+
                 }
             }
         }

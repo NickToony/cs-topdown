@@ -82,6 +82,8 @@ public abstract class SBClient {
             player.setMovement(castPacket.moveUp, castPacket.moveRight,
                     castPacket.moveDown, castPacket.moveLeft);
             player.setDirection(castPacket.direction);
+            player.setX(castPacket.x);
+            player.setY(castPacket.y);
         }
     }
 

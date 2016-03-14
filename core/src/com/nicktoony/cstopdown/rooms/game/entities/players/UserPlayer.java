@@ -64,6 +64,8 @@ public class UserPlayer extends Player{
             playerMovePacket.moveUp = moveUp;
             playerMovePacket.moveDown = moveDown;
             playerMovePacket.direction = getDirection();
+            playerMovePacket.x = x;
+            playerMovePacket.y = y;
             getRoom().getSocket().sendMessage(playerMovePacket);
 
             lastUpdate = getRoom().getSocket().getServerConfig().cl_tickrate;

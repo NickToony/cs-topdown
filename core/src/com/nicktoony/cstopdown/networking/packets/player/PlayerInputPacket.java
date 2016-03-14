@@ -13,6 +13,8 @@ public class PlayerInputPacket extends Packet {
     public boolean moveUp = false;
     public boolean moveDown = false;
     public float direction = 0;
+    public float x = 0;
+    public float y = 0;
 
     public PlayerInputPacket() {
     }
