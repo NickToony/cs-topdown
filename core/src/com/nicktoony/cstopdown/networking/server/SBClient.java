@@ -3,8 +3,11 @@ package com.nicktoony.cstopdown.networking.server;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
+import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
-import com.nicktoony.cstopdown.networking.packets.game.CreatePlayer;
+import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 
 /**
@@ -15,6 +18,7 @@ public abstract class SBClient {
     public enum STATE {
         INIT,
         CONNECTING,
+        LOADING,
         SPECTATE,
         ALIVE
     }
@@ -24,6 +28,7 @@ public abstract class SBClient {
     private Player player;
     private int tempCountdown = 200;
     private int id;
+    private int lastUpdate = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -38,6 +43,14 @@ public abstract class SBClient {
                 handleConnectingMessages(packet);
                 break;
 
+            case LOADING:
+                handleLoadingMessages(packet);
+                break;
+
+            case ALIVE:
+                handleAliveMessages(packet);
+                break;
+
         }
     }
 
@@ -48,11 +61,27 @@ public abstract class SBClient {
             // And if successful..
             if (true) {
                 this.sendPacket(new AcceptPacket(server.getConfig(), this.id));
-                this.state = STATE.SPECTATE;
+                this.state = STATE.LOADING;
             } else {
                 this.sendPacket(new RejectPacket());
                 this.close();
             }
+        }
+    }
+
+    private void handleLoadingMessages(Packet packet) {
+        if (packet instanceof LoadedPacket) {
+            this.state = STATE.SPECTATE;
+            fullUpdate();
+        }
+    }
+
+    private void handleAliveMessages(Packet packet) {
+        if (packet instanceof PlayerInputPacket) {
+            PlayerInputPacket castPacket = (PlayerInputPacket) packet;
+            player.setMovement(castPacket.moveUp, castPacket.moveRight,
+                    castPacket.moveDown, castPacket.moveLeft);
+            player.setDirection(castPacket.direction);
         }
     }
 
@@ -64,11 +93,25 @@ public abstract class SBClient {
                 state = STATE.ALIVE;
                 player = server.getGame().createPlayer(this.id, 50, 50);
 
-                CreatePlayer createPlayer = new CreatePlayer();
+                CreatePlayerPacket createPlayer = new CreatePlayerPacket();
                 createPlayer.x = player.getX();
                 createPlayer.y = player.getY();
                 createPlayer.id = this.id;
                 server.sendToAll(createPlayer);
+            }
+        } else if (state == STATE.ALIVE) {
+            if (lastUpdate <= 0) {
+                lastUpdate = 1000/server.getConfig().sv_tickrate;
+
+                PlayerUpdatePacket packet = new PlayerUpdatePacket();
+                packet.x = player.getX();
+                packet.y = player.getY();
+                packet.direction = player.getDirection();
+                packet.id = id;
+                server.sendToAll(packet);
+
+            } else {
+                lastUpdate -= 1;
             }
         }
     }
@@ -87,5 +130,21 @@ public abstract class SBClient {
 
     public void setState(STATE state) {
         this.state = state;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void fullUpdate() {
+        for (SBClient client : server.getClients()) {
+            if (client != this && client.getState() == STATE.ALIVE) {
+                CreatePlayerPacket packet = new CreatePlayerPacket();
+                packet.id = client.getId();
+                packet.x = client.getPlayer().getX();
+                packet.y = client.getPlayer().getY();
+                sendPacket(packet);
+            }
+        }
     }
 }

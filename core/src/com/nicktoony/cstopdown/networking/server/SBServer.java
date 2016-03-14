@@ -7,7 +7,7 @@ package com.nicktoony.cstopdown.networking.server;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.networking.packets.game.CreatePlayer;
+import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.cstopdown.config.ServerlistConfig;
@@ -26,6 +26,16 @@ public abstract class SBServer {
         public void endServerLoop();
     }
 
+    private class ReceivedPacket {
+        public SBClient client;
+        public Packet packet;
+
+        public ReceivedPacket(SBClient client, Packet packet) {
+            this.client = client;
+            this.packet = packet;
+        }
+    }
+
     private ServerConfig config;
     private Logger logger;
     private Host host;
@@ -37,7 +47,7 @@ public abstract class SBServer {
 
     private List<SBClient> connectedQueue = new ArrayList<SBClient>();
     private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
-    private Map<SBClient, Packet> messageQueue = new LinkedHashMap<SBClient, Packet>();
+    private List<ReceivedPacket> messageQueue = new ArrayList<ReceivedPacket>();
 
     // Get the logg
     public Logger getLogger() {
@@ -69,7 +79,7 @@ public abstract class SBServer {
     private void setup() {
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
-        roomGame = new RoomGame(null);
+        roomGame = new RoomGame(new SBFakeSocket());
         roomGame.create(false);
 
         // begin server
@@ -97,6 +107,9 @@ public abstract class SBServer {
         for (SBClient client : clients) {
             client.update();
         }
+
+        // Update world
+        roomGame.step();
     }
 
     public boolean isTimerIsRunning() {
@@ -165,10 +178,9 @@ public abstract class SBServer {
     }
 
 
-    public void sendToAll(CreatePlayer createPlayer) {
+    public void sendToAll(Packet packet) {
         for (SBClient client : clients) {
-            client.sendPacket(createPlayer);
-            System.out.println("SENT IT");
+            client.sendPacket(packet);
         }
     }
 
@@ -180,17 +192,17 @@ public abstract class SBServer {
         disconnectedQueue.add(conn);
     }
 
-    public void notifyClientMessage(SBClient conn, Packet packet) {
-        messageQueue.put(conn, packet);
+    public synchronized void notifyClientMessage(SBClient conn, Packet packet) {
+        messageQueue.add(new ReceivedPacket(conn, packet));
     }
 
-    public void pushNotifications() {
+    public synchronized void pushNotifications() {
         for (SBClient client : connectedQueue) {
             handleClientConnected(client);
         }
 
-        for (Map.Entry<SBClient, Packet> client : messageQueue.entrySet()) {
-            handleReceivedMessage(client.getKey(), client.getValue());
+        for (ReceivedPacket receivedPacket : messageQueue) {
+            handleReceivedMessage(receivedPacket.client, receivedPacket.packet);
         }
 
         for (SBClient client : disconnectedQueue) {
@@ -200,5 +212,9 @@ public abstract class SBServer {
         connectedQueue.clear();
         disconnectedQueue.clear();
         messageQueue.clear();
+    }
+
+    public List<SBClient> getClients() {
+        return clients;
     }
 }

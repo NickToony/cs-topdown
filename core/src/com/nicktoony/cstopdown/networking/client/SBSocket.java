@@ -20,6 +20,26 @@ public abstract class SBSocket {
         void onError(SBSocket socket, Exception exception);
     }
 
+    private class ReceivedPacket {
+        public SBSocket socket;
+        public Packet packet;
+
+        public ReceivedPacket(SBSocket socket, Packet packet) {
+            this.socket = socket;
+            this.packet = packet;
+        }
+    }
+
+    private class ReceivedError {
+        public SBSocket socket;
+        public Exception exception;
+
+        public ReceivedError(SBSocket socket, Exception exception) {
+            this.socket = socket;
+            this.exception = exception;
+        }
+    }
+
     protected String ip;
     protected int port;
     private List<SBSocketListener> listeners;
@@ -27,8 +47,8 @@ public abstract class SBSocket {
     private int id;
     private List<SBSocket> openQueue;
     private List<SBSocket> closeQueue;
-    private Map<SBSocket, Packet> messageQueue;
-    private Map<SBSocket, Exception> errorQueue;
+    private List<ReceivedPacket> messageQueue;
+    private List<ReceivedError> errorQueue;
 
     public SBSocket(String ip, int port) {
         this.ip = ip;
@@ -37,8 +57,8 @@ public abstract class SBSocket {
 
         this.openQueue = new ArrayList<SBSocket>();
         this.closeQueue = new ArrayList<SBSocket>();
-        this.messageQueue = new LinkedHashMap<SBSocket, Packet>();
-        this.errorQueue = new LinkedHashMap<SBSocket, Exception>();
+        this.messageQueue = new ArrayList<ReceivedPacket>();
+        this.errorQueue = new ArrayList<ReceivedError>();
     }
 
     public abstract boolean open();
@@ -86,15 +106,15 @@ public abstract class SBSocket {
         closeQueue.add(socket);
     }
 
-    protected void notifyMessage(SBSocket socket, Packet packet) {
-        messageQueue.put(socket, packet);
+    protected synchronized void notifyMessage(SBSocket socket, Packet packet) {
+        messageQueue.add(new ReceivedPacket(socket, packet));
     }
 
     protected void notifyException(SBSocket socket, Exception exception) {
-        errorQueue.put(socket, exception);
+        errorQueue.add(new ReceivedError(socket, exception));
     }
 
-    public void pushNotifications() {
+    public synchronized void pushNotifications() {
         // Open queue
         for (SBSocket socket : openQueue) {
             for (SBSocketListener listener : listeners) {
@@ -102,9 +122,9 @@ public abstract class SBSocket {
             }
         }
 
-        for (Map.Entry<SBSocket, Packet> message : messageQueue.entrySet()) {
+        for (ReceivedPacket receivedPacket : messageQueue) {
             for (SBSocketListener listener : listeners) {
-                listener.onMessage(message.getKey(), message.getValue());
+                listener.onMessage(receivedPacket.socket, receivedPacket.packet);
             }
         }
 
@@ -114,9 +134,9 @@ public abstract class SBSocket {
             }
         }
 
-        for (Map.Entry<SBSocket, Exception> message : errorQueue.entrySet()) {
+        for (ReceivedError receivedError : errorQueue) {
             for (SBSocketListener listener : listeners) {
-                listener.onError(message.getKey(), message.getValue());
+                listener.onError(receivedError.socket, receivedError.exception);
             }
         }
 

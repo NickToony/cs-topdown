@@ -38,9 +38,9 @@ public class Player extends Entity<RoomGame> {
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
     protected boolean moveRight = false;
-    protected int lastMove = 0;
     private boolean lightOn = false;
     private boolean lastTorch = false;
+    private boolean changedPosition = false;
 
 
     protected boolean reloadKey = false;
@@ -66,11 +66,6 @@ public class Player extends Entity<RoomGame> {
     private Light glow;
     private Light torch;
     private Light gunFire;
-
-    // Multiplayer
-    private long lastUpdate = 0;
-    private final long UPDATE_RATE = 1000;
-    private boolean changedPosition = false;
 
     private SkeletonWrapper skeletonWrapper;
 
@@ -228,18 +223,6 @@ public class Player extends Entity<RoomGame> {
 
         body.setLinearVelocity(hSpeed, vSpeed);
 
-        // Check if changed movement keys
-        int newMove = ((moveLeft ? 1 : 0) * 1000)
-                + ((moveRight ? 1 : 0) * 100)
-                + ((moveUp ? 1 : 0) * 10)
-                + ((moveDown ? 1 : 0));
-//        if (newMove != lastMove && isMultiplayer()) {
-//            // Send move packet
-//            PlayerMovePacket playerMovePacket = new PlayerMovePacket(moveLeft, moveRight, moveUp, moveDown);
-//            room.sendPacket(playerMovePacket);
-//        }
-        lastMove = newMove;
-
 
         // Handle state variables
         if (stateTimer > 0) {
@@ -340,6 +323,11 @@ public class Player extends Entity<RoomGame> {
     public void setY(float y) {
         super.setY(y);
         changedPosition = true;
+    }
+
+    public void setPosition(float x, float y) {
+        setX(x);
+        setY(y);
     }
 
     public void updatePosition() {
