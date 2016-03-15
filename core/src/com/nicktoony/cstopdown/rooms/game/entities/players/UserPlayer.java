@@ -12,6 +12,8 @@ public class UserPlayer extends Player{
     private int lastMove = 0;
     private int lastUpdate = 0;
 
+    private long stepsPressed = 0;
+
 
     @Override
     public void step(float delta){
@@ -65,10 +67,19 @@ public class UserPlayer extends Player{
             playerMovePacket.moveDown = moveDown;
             playerMovePacket.direction = getDirection();
             playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
+            playerMovePacket.x = x;
+            playerMovePacket.y = y;
             getRoom().getSocket().sendMessage(playerMovePacket);
 
             lastUpdate = getRoom().getSocket().getServerConfig().cl_tickrate;
             lastMove = newMove;
+
+            if (moveUp) {
+                stepsPressed = System.currentTimeMillis();
+            } else if (stepsPressed > 0) {
+                System.out.println("Client steps: " + (System.currentTimeMillis() - stepsPressed));
+                stepsPressed = 0;
+            }
         }
 
         lastUpdate -= 1;

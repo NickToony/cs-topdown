@@ -37,6 +37,7 @@ public abstract class SBClient {
     private int lastUpdate = 0;
     private long initialTimestamp; // only sync'd on loaded!
     private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
+    private long stepsPressed = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -129,7 +130,7 @@ public abstract class SBClient {
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-            if (packet.timestamp < getTimestamp() - server.getConfig().sv_lag_compensate) {
+            if (packet.timestamp <= getTimestamp() - server.getConfig().sv_lag_compensate) {
                 // Latency has been compensated. Process it!
                 iterator.remove();
 
@@ -138,7 +139,22 @@ public abstract class SBClient {
                     player.setMovement(inputPacket.moveUp, inputPacket.moveRight,
                             inputPacket.moveDown, inputPacket.moveLeft);
                     player.setDirection(inputPacket.direction);
+
+                    final int errorMargin = 4;
+                    if ((Math.abs(player.getX() - inputPacket.x) > errorMargin)
+                        || (Math.abs(player.getY() - inputPacket.y) > errorMargin))
+                            System.out.println("MAJOR INCONSISTENCY");
+                    else
+                        player.setPosition(inputPacket.x, inputPacket.y);
                 }
+
+            if (player.getMoveUp()) {
+                stepsPressed = System.currentTimeMillis();
+            } else if (stepsPressed > 0) {
+                System.out.println("Server steps: " + (System.currentTimeMillis() - stepsPressed));
+                stepsPressed = 0;
+            }
+
             } else {
                 // Stop handling input, it's not old enough
                 break;

@@ -53,6 +53,11 @@ public class GameManager implements SBSocket.SBSocketListener {
                     player.setPosition(castPacket.x, castPacket.y);
                     player.setDirection(castPacket.direction);
                 }
+            } else {
+                Player player = playerIdMap.get(castPacket.id);
+                if (player != null) {
+//                    player.setPosition(castPacket.x, castPacket.y);
+                }
             }
         }
     }

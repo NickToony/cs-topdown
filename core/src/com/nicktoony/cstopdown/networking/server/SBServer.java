@@ -47,6 +47,10 @@ public abstract class SBServer {
     private List<SBClient> clients = new ArrayList<SBClient>();
     private long lastTime;
     private final double NS_PER_TICK = 1000000000 / MyGame.GAME_FPS;
+    private float delta;
+
+    private float lastFPSCount = System.nanoTime();
+    private int fpsFrames = 0;
 
     private List<SBClient> connectedQueue = new ArrayList<SBClient>();
     private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
@@ -95,6 +99,14 @@ public abstract class SBServer {
     }
 
     public void step() {
+        if (lastFPSCount < System.nanoTime() - 1000000000) {
+//            System.out.println("Server FPS: " + fpsFrames);
+            fpsFrames = 0;
+            lastFPSCount = System.nanoTime();
+        }
+        fpsFrames += 1;
+
+
         // Server list
         if (publicServerList) {
             if (host == null) {
@@ -114,10 +126,10 @@ public abstract class SBServer {
         }
 
         long now = System.nanoTime();
-        double timeSinceLastStep = (now - lastTime) / NS_PER_TICK;
+        delta = (float) ((now - lastTime) / NS_PER_TICK);
         lastTime = now;
         // Update world
-        roomGame.step((float) timeSinceLastStep);
+        roomGame.step(delta);
     }
 
     public boolean isTimerIsRunning() {
@@ -224,5 +236,9 @@ public abstract class SBServer {
 
     public List<SBClient> getClients() {
         return clients;
+    }
+
+    public float getDelta() {
+        return delta;
     }
 }

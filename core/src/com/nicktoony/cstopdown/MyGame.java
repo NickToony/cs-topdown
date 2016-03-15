@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.cstopdown.components.Room;
@@ -40,6 +41,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
     private PlatformProvider platformProvider;
     private SpriteBatch spriteBatch;
     private SBServer linearLoop;
+    private FPSLogger fpsLogger;
 
     public MyGame(PlatformProvider platformProvider) {
         this.platformProvider = platformProvider;
@@ -52,16 +54,21 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
         this.spriteBatch = new SpriteBatch();
 
         createRoom(new RoomMainMenu());
+
+        fpsLogger = new FPSLogger();
 	}
 
 	@Override
 	public void render () {
+//        fpsLogger.log();
+
         if (room != null) {
             if (!room.isCreated()) {
                 room.create(true);
                 return;
             }
-            room.step(GAME_FPS * Gdx.graphics.getDeltaTime());
+
+            room.step(Gdx.graphics.getDeltaTime() * GAME_FPS);
         }
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);

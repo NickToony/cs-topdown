@@ -89,6 +89,17 @@ public class RoomMainMenu extends Room {
                             }
                     ));
                 }
+                add(newLabelWithListener(
+                        new Label("Join Local", SkinManager.getUiSkin()),
+                        new ClickListener() {
+                            @Override
+                            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                                SBSocket socket = getGame().getPlatformProvider().getWebSocket(
+                                        "127.0.0.1", new ServerConfig().sv_port);
+                                getGame().createRoom(new RoomConnect(socket));
+                            }
+                        }
+                ));
                 add(new Label("Options", SkinManager.getUiSkin()));
                 add(new Label("Quit", SkinManager.getUiSkin()));
             }

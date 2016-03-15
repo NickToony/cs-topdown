@@ -213,8 +213,8 @@ public class Player extends Entity<RoomGame> {
             updatePosition();
         }
 
-        this.x = Math.round(body.getPosition().x);
-        this.y = Math.round(body.getPosition().y);
+        this.x = body.getPosition().x;
+        this.y = body.getPosition().y;
 
         skeletonWrapper.step();
 
