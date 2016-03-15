@@ -1,13 +1,14 @@
 package com.nicktoony.cstopdown.networking.packets.player;
 
 import com.nicktoony.cstopdown.networking.packets.Packet;
+import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
 
 /**
  * Created by Nick on 14/03/2016.
  *
  * Sends the players key presses to server
  */
-public class PlayerInputPacket extends Packet {
+public class PlayerInputPacket extends TimestampedPacket {
     public boolean moveLeft = false;
     public boolean moveRight = false;
     public boolean moveUp = false;

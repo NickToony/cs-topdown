@@ -115,8 +115,8 @@ public class RoomMainMenu extends Room {
         return table.row().bottom().left().expandX().padBottom(20);
     }
 
-    public void step() {
-        super.step();
+    public void step(float delta) {
+        super.step(delta);
         stage.act(Gdx.graphics.getDeltaTime());
     }
 

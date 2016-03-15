@@ -25,9 +25,9 @@ public class Room extends Renderable {
     }
 
     @Override
-    public void step() {
+    public void step(float delta) {
         for (Renderable renderable : renderables) {
-            renderable.step();
+            renderable.step(delta);
         }
     }
 

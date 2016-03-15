@@ -31,7 +31,7 @@ public class RayHandlerWrapper extends Renderable {
     }
 
     @Override
-    public void step() {
+    public void step(float delta) {
 
     }
 

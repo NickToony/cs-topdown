@@ -14,7 +14,7 @@ public class UserPlayer extends Player{
 
 
     @Override
-    public void step(){
+    public void step(float delta){
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             this.moveUp = true;
         }else{
@@ -64,6 +64,7 @@ public class UserPlayer extends Player{
             playerMovePacket.moveUp = moveUp;
             playerMovePacket.moveDown = moveDown;
             playerMovePacket.direction = getDirection();
+            playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
             getRoom().getSocket().sendMessage(playerMovePacket);
 
             lastUpdate = getRoom().getSocket().getServerConfig().cl_tickrate;
@@ -72,7 +73,7 @@ public class UserPlayer extends Player{
 
         lastUpdate -= 1;
 
-        super.step();
+        super.step(delta);
 
 
     }

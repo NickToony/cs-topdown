@@ -63,8 +63,8 @@ public class RoomServerList extends Room {
         stage.addActor(serverList);
     }
 
-    public void step()  {
-        super.step();
+    public void step(float delta)  {
+        super.step(delta);
         stage.act(Gdx.graphics.getDeltaTime());
     }
 

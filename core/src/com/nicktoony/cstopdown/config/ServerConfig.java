@@ -21,6 +21,7 @@ public class ServerConfig {
     // Gameplay settings
     public boolean mp_player_collisions = false;
     public int sv_tickrate = 60;
+    public int sv_lag_compensate = 500; // ms
     public int cl_tickrate = 5;
     public float mp_player_move_speed = 2;
 }

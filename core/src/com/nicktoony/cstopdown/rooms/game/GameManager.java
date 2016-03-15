@@ -17,12 +17,15 @@ public class GameManager implements SBSocket.SBSocketListener {
     private RoomGame roomGame;
     private SBSocket socket;
     private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
+    private long initialTimestamp;
 
     public GameManager(RoomGame roomGame, SBSocket socket) {
         this.roomGame = roomGame;
         this.socket = socket;
 
         socket.sendMessage(new LoadedPacket());
+
+        initialTimestamp = System.currentTimeMillis();
     }
 
     @Override
@@ -57,5 +60,9 @@ public class GameManager implements SBSocket.SBSocketListener {
     @Override
     public void onError(SBSocket socket, Exception exception) {
 
+    }
+
+    public long getTimestamp() {
+        return (System.currentTimeMillis() - initialTimestamp);
     }
 }

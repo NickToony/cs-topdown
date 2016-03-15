@@ -15,7 +15,7 @@ public abstract class Renderable {
     /**
      * Basic game logic occurs here.
      */
-    public abstract void step();
+    public abstract void step(float delta);
 
     /**
      * The event of being drawn.

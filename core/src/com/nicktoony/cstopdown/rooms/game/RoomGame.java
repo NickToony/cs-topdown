@@ -74,11 +74,11 @@ public class RoomGame extends Room {
         }
     }
 
-    public void step()  {
-        super.step();
+    public void step(float delta)  {
+        super.step(delta);
 
         socket.pushNotifications();
-        world.step(1, 6, 2);
+        world.step(delta, 6, 2);
     }
 
     @Override
@@ -152,5 +152,9 @@ public class RoomGame extends Room {
 
     public SBSocket getSocket() {
         return socket;
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
     }
 }

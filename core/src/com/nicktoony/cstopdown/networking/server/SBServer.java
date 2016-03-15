@@ -6,6 +6,7 @@ package com.nicktoony.cstopdown.networking.server;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.gameserver.service.GameserverConfig;
@@ -44,6 +45,8 @@ public abstract class SBServer {
     private LoopManager loopManager;
     protected boolean publicServerList = true;
     private List<SBClient> clients = new ArrayList<SBClient>();
+    private long lastTime;
+    private final double NS_PER_TICK = 1000000000 / MyGame.GAME_FPS;
 
     private List<SBClient> connectedQueue = new ArrayList<SBClient>();
     private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
@@ -87,6 +90,8 @@ public abstract class SBServer {
 
         // A Java timer currently manages the game loop.. not ideal.
         loopManager.startServerLoop(this);
+
+        this.lastTime = System.nanoTime();
     }
 
     public void step() {
@@ -108,8 +113,11 @@ public abstract class SBServer {
             client.update();
         }
 
+        long now = System.nanoTime();
+        double timeSinceLastStep = (now - lastTime) / NS_PER_TICK;
+        lastTime = now;
         // Update world
-        roomGame.step();
+        roomGame.step((float) timeSinceLastStep);
     }
 
     public boolean isTimerIsRunning() {

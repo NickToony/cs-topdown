@@ -208,7 +208,7 @@ public class Player extends Entity<RoomGame> {
     }
 
     @Override
-    public void step() {
+    public void step(float delta) {
         if (changedPosition) {
             updatePosition();
         }

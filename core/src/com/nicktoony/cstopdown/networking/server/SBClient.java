@@ -1,6 +1,7 @@
 package com.nicktoony.cstopdown.networking.server;
 
 import com.nicktoony.cstopdown.networking.packets.Packet;
+import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
@@ -9,6 +10,11 @@ import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by nick on 19/07/15.
@@ -29,6 +35,8 @@ public abstract class SBClient {
     private int tempCountdown = 200;
     private int id;
     private int lastUpdate = 0;
+    private long initialTimestamp; // only sync'd on loaded!
+    private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -72,16 +80,14 @@ public abstract class SBClient {
     private void handleLoadingMessages(Packet packet) {
         if (packet instanceof LoadedPacket) {
             this.state = STATE.SPECTATE;
+            this.initialTimestamp = System.currentTimeMillis();
             fullUpdate();
         }
     }
 
     private void handleAliveMessages(Packet packet) {
         if (packet instanceof PlayerInputPacket) {
-            PlayerInputPacket castPacket = (PlayerInputPacket) packet;
-            player.setMovement(castPacket.moveUp, castPacket.moveRight,
-                    castPacket.moveDown, castPacket.moveLeft);
-            player.setDirection(castPacket.direction);
+            insertInputQueue((PlayerInputPacket) packet);
         }
     }
 
@@ -112,6 +118,30 @@ public abstract class SBClient {
 
             } else {
                 lastUpdate -= 1;
+            }
+
+            handleInputQueue();
+        }
+    }
+
+    private void handleInputQueue() {
+        ListIterator<TimestampedPacket> iterator = inputQueue.listIterator();
+        while (iterator.hasNext()) {
+            TimestampedPacket packet = iterator.next();
+            // Wait until we've compensated for latency
+            if (packet.timestamp < getTimestamp() - server.getConfig().sv_lag_compensate) {
+                // Latency has been compensated. Process it!
+                iterator.remove();
+
+                if (packet instanceof PlayerInputPacket) {
+                    PlayerInputPacket inputPacket = (PlayerInputPacket) packet;
+                    player.setMovement(inputPacket.moveUp, inputPacket.moveRight,
+                            inputPacket.moveDown, inputPacket.moveLeft);
+                    player.setDirection(inputPacket.direction);
+                }
+            } else {
+                // Stop handling input, it's not old enough
+                break;
             }
         }
     }
@@ -146,5 +176,23 @@ public abstract class SBClient {
                 sendPacket(packet);
             }
         }
+    }
+
+    public long getTimestamp() {
+        return (System.currentTimeMillis() - initialTimestamp);
+    }
+
+    public void insertInputQueue(TimestampedPacket packet) {
+        // loop through all elements
+        for (int i = 0; i < inputQueue.size(); i++) {
+            // Skip to next one if smaller
+            if (inputQueue.get(i).timestamp < packet.timestamp) continue;
+
+            // Otherwise, found location
+            inputQueue.add(i, packet);
+            return;
+        }
+        // Jump to end
+        inputQueue.add(packet);
     }
 }

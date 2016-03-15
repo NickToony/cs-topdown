@@ -27,9 +27,9 @@ public class EntityGroup<T extends Room> extends Entity<T> {
     }
 
     @Override
-    public void step() {
+    public void step(float delta) {
         for (Entity entity : entities) {
-            entity.step();
+            entity.step(delta);
         }
     }
 

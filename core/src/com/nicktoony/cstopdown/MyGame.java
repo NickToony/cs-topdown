@@ -15,6 +15,9 @@ import com.nicktoony.cstopdown.services.Logger;
 
 public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
 
+    // Hardcoded ticks per second for game simulation
+    public static final int GAME_FPS = 60;
+
     public PlatformProvider getPlatformProvider() {
         return platformProvider;
     }
@@ -58,7 +61,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
                 room.create(true);
                 return;
             }
-            room.step();
+            room.step(GAME_FPS * Gdx.graphics.getDeltaTime());
         }
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);

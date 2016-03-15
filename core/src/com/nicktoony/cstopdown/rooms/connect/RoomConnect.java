@@ -60,8 +60,8 @@ public class RoomConnect extends Room {
     }
 
     @Override
-    public void step() {
-        super.step();
+    public void step(float delta) {
+        super.step(delta);
 
         socket.pushNotifications();
 

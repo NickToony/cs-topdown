@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.server;
 
+import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.networking.server.SBServer;
 
 import java.util.Timer;
@@ -13,7 +14,7 @@ public class NativeLoopManager implements SBServer.LoopManager {
     private Timer timer;
     private Boolean timerIsRunning = false;
 
-    private final int FPS = 1000/60;
+    private final int FPS = 1000 / MyGame.GAME_FPS;
 
     @Override
     public void startServerLoop(final SBServer server) {
