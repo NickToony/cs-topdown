@@ -24,7 +24,7 @@ import com.nicktoony.cstopdown.services.weapons.WeaponManager;
  */
 public class Player extends Entity<RoomGame> {
 
-    private final int PLAYER_RADIUS = 14;
+    private final int PLAYER_RADIUS = 12;
     private final int PLAYER_MOVE_SPEED = 2;
     private final int WEAPON_X_OFFSET = 15;
     private final int WEAPON_Y_OFFSET = 64 - 46;

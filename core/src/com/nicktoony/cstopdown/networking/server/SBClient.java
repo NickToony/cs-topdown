@@ -12,7 +12,6 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -38,6 +37,7 @@ public abstract class SBClient {
     private long initialTimestamp; // only sync'd on loaded!
     private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
     private long stepsPressed = 0;
+    private float leniency = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -115,7 +115,7 @@ public abstract class SBClient {
                 packet.y = player.getY();
                 packet.direction = player.getDirection();
                 packet.id = id;
-                server.sendToAll(packet);
+                server.sendToOthers(packet, this);
 
             } else {
                 lastUpdate -= 1;
@@ -123,6 +123,9 @@ public abstract class SBClient {
 
             handleInputQueue();
         }
+
+
+        if (leniency > 0) leniency -= 2;
     }
 
     private void handleInputQueue() {
@@ -140,12 +143,37 @@ public abstract class SBClient {
                             inputPacket.moveDown, inputPacket.moveLeft);
                     player.setDirection(inputPacket.direction);
 
-                    final int errorMargin = 4;
-                    if ((Math.abs(player.getX() - inputPacket.x) > errorMargin)
-                        || (Math.abs(player.getY() - inputPacket.y) > errorMargin))
-                            System.out.println("MAJOR INCONSISTENCY");
-                    else
+//                    final int errorMargin = 8;
+//                    if ((Math.abs(player.getX() - inputPacket.x) > errorMargin)
+//                        || (Math.abs(player.getY() - inputPacket.y) > errorMargin)) {
+//                        PlayerUpdatePacket packet = new PlayerUpdatePacket();
+//                        packet.x = player.getX();
+//                        packet.y = player.getY();
+//                        packet.direction = player.getDirection();
+//                        packet.id = id;
+//                        server.sendToOthers(packet, this);
+//                    } else
+//                        player.setPosition(inputPacket.x, inputPacket.y);
+
+                    leniency += Math.abs(player.getX() - inputPacket.x)
+                            + Math.abs(player.getY() - inputPacket.y);
+
+                    if (leniency < 16) {
                         player.setPosition(inputPacket.x, inputPacket.y);
+
+                        System.out.println("Consistent!! " + leniency);
+                    } else {
+                        PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
+                        fixPacket.x = player.getX();
+                        fixPacket.y = player.getY();
+                        fixPacket.direction = player.getDirection();
+                        fixPacket.id = id;
+                        sendPacket(fixPacket);
+
+                        System.out.println("Inconsistent!! " + leniency);
+                    }
+
+
                 }
 
             if (player.getMoveUp()) {
