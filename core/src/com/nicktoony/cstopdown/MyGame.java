@@ -18,6 +18,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
 
     // Hardcoded ticks per second for game simulation
     public static final int GAME_FPS = 60;
+    public static final float GAME_STEP_LENGTH = 1.0f / (float) GAME_FPS;
 
     public PlatformProvider getPlatformProvider() {
         return platformProvider;
@@ -26,7 +27,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
     public interface PlatformProvider {
         public SBSocket getWebSocket(String ip, int port);
         public GameConfigLoader getGameConfigLoader();
-        public SBServer getLocalServer(Logger logger, ServerConfig config);
+        public SBServer getLocalServer(Logger logger, ServerConfig config, SBServer.LoopManager loopManager);
         public SBServer.LoopManager getLoopManager();
         public boolean canHost();
     }

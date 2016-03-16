@@ -38,6 +38,7 @@ public abstract class SBClient {
     private long initialTimestamp; // only sync'd on loaded!
     private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
     private long stepsPressed = 0;
+    private int cheat = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -115,7 +116,7 @@ public abstract class SBClient {
                 packet.y = player.getY();
                 packet.direction = player.getDirection();
                 packet.id = id;
-                server.sendToAll(packet);
+                server.sendToOthers(packet, this);
 
             } else {
                 lastUpdate -= 1;
@@ -127,6 +128,7 @@ public abstract class SBClient {
 
     private void handleInputQueue() {
         ListIterator<TimestampedPacket> iterator = inputQueue.listIterator();
+        boolean isInconsistent = false;
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
@@ -142,10 +144,14 @@ public abstract class SBClient {
 
                     final int errorMargin = 4;
                     if ((Math.abs(player.getX() - inputPacket.x) > errorMargin)
-                        || (Math.abs(player.getY() - inputPacket.y) > errorMargin))
-                            System.out.println("MAJOR INCONSISTENCY");
-                    else
-                        player.setPosition(inputPacket.x, inputPacket.y);
+                        || (Math.abs(player.getY() - inputPacket.y) > errorMargin)) {
+                        isInconsistent = true;
+                    }
+                    else {
+//                        cheat = (int) (Math.abs(player.getX() - inputPacket.x) + (Math.abs(player.getY() - inputPacket.y)));
+//                        player.setPosition(inputPacket.x, inputPacket.y);
+                        isInconsistent = false;
+                    }
                 }
 
             if (player.getMoveUp()) {
@@ -159,6 +165,18 @@ public abstract class SBClient {
                 // Stop handling input, it's not old enough
                 break;
             }
+        }
+
+        if (isInconsistent) {
+            System.out.println("MAJOR INCONSISTENCY");
+
+            PlayerUpdatePacket newPacket = new PlayerUpdatePacket();
+            newPacket.x = player.getX();
+            newPacket.y = player.getY();
+            newPacket.direction = player.getDirection();
+            newPacket.id = id;
+            newPacket.timestamp = getTimestamp();
+            sendPacket(newPacket);
         }
     }
 

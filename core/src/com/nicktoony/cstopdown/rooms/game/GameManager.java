@@ -57,6 +57,44 @@ public class GameManager implements SBSocket.SBSocketListener {
                 Player player = playerIdMap.get(castPacket.id);
                 if (player != null) {
 //                    player.setPosition(castPacket.x, castPacket.y);
+
+                    int stateToRewind = -1;
+                    for (int i = 0; i < player.getSavedStates().size(); i ++) {
+                        if (player.getSavedStates().get(i).timestamp <= castPacket.timestamp) {
+                            stateToRewind = i;
+                            break;
+                        }
+                    }
+                    if (stateToRewind == -1) {
+                        System.out.println("Gave up rewinding");
+                        return;
+                    }
+
+                    System.out.println("RECON");
+
+                    // Rewind the world
+                    for (Player eachPlayer : playerIdMap.values()) {
+                        Player.PlayerSavedState rewindState = eachPlayer.getSavedStates().get(stateToRewind);
+                        eachPlayer.setPosition(rewindState.x, rewindState.y);
+                    }
+
+                    // Set player position
+                    player.setPosition(castPacket.x, castPacket.y);
+
+                    // Replay all steps
+                    while (stateToRewind >= 0) {
+                        for (Player eachPlayer : playerIdMap.values()) {
+                            Player.PlayerSavedState rewindState = eachPlayer.getSavedStates().get(stateToRewind);
+                            eachPlayer.getBody().setLinearVelocity(rewindState.hspeed, rewindState.vspeed);
+                        }
+                        roomGame.getWorld().step(1, 1, 1);
+                        stateToRewind -= 1;
+                    }
+
+                    roomGame.getWorld().step(1, 1, 1);
+                    roomGame.getWorld().step(1, 1, 1);
+                    roomGame.getWorld().step(1, 1, 1);
+                    roomGame.getWorld().step(1, 1, 1);
                 }
             }
         }

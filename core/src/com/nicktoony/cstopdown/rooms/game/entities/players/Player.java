@@ -19,6 +19,10 @@ import com.nicktoony.cstopdown.services.TextureManager;
 import com.nicktoony.cstopdown.services.weapons.Weapon;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Nick on 08/09/2014.
  */
@@ -69,6 +73,15 @@ public class Player extends Entity<RoomGame> {
 
     private SkeletonWrapper skeletonWrapper;
 
+    private List<PlayerSavedState> savedStates = new LinkedList<PlayerSavedState>();
+    public class PlayerSavedState {
+        public long timestamp;
+        public float x;
+        public float y;
+        public float hspeed;
+        public float vspeed;
+    }
+
     public Player() {
         skeletonWrapper = new SkeletonWrapper(this);
     }
@@ -113,6 +126,7 @@ public class Player extends Entity<RoomGame> {
         fixtureDef.shape = shape;
         fixtureDef.density = 0.1f;
         fixtureDef.restitution = 0f;
+        fixtureDef.friction = 0f;
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -285,6 +299,29 @@ public class Player extends Entity<RoomGame> {
 //                room.sendPacket(new PlayerShootPacket(shootKey));
 //            }
 //        }
+
+        if (savedStates.size() > 500) {
+            savedStates.remove(savedStates.size() - 1);
+        }
+
+        PlayerSavedState savedState = new PlayerSavedState();
+        savedState.timestamp = getRoom().getGameManager().getTimestamp();
+        savedState.x = x;
+        savedState.y = y;
+        savedState.hspeed = hSpeed;
+        savedState.vspeed = vSpeed;
+
+        savedStates.add(0, savedState);
+
+
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public List<PlayerSavedState> getSavedStates() {
+        return savedStates;
     }
 
     @Override
@@ -328,6 +365,7 @@ public class Player extends Entity<RoomGame> {
     public void setPosition(float x, float y) {
         setX(x);
         setY(y);
+        updatePosition();
     }
 
     public void updatePosition() {
