@@ -36,7 +36,6 @@ public abstract class SBClient {
     private int lastUpdate = 0;
     private long initialTimestamp; // only sync'd on loaded!
     private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
-    private long stepsPressed = 0;
     private float leniency = 0;
 
     public abstract void sendPacket(Packet packet);
@@ -161,7 +160,7 @@ public abstract class SBClient {
                     if (leniency < 16) {
                         player.setPosition(inputPacket.x, inputPacket.y);
 
-                        System.out.println("Consistent!! " + leniency);
+//                        System.out.println("Consistent!! " + leniency);
                     } else {
                         PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
                         fixPacket.x = player.getX();
@@ -170,18 +169,11 @@ public abstract class SBClient {
                         fixPacket.id = id;
                         sendPacket(fixPacket);
 
-                        System.out.println("Inconsistent!! " + leniency);
+//                        System.out.println("Inconsistent!! " + leniency);
                     }
 
 
                 }
-
-            if (player.getMoveUp()) {
-                stepsPressed = System.currentTimeMillis();
-            } else if (stepsPressed > 0) {
-                System.out.println("Server steps: " + (System.currentTimeMillis() - stepsPressed));
-                stepsPressed = 0;
-            }
 
             } else {
                 // Stop handling input, it's not old enough

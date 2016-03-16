@@ -103,6 +103,7 @@ public class Player extends Entity<RoomGame> {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x + PLAYER_RADIUS, y + PLAYER_RADIUS);
+        bodyDef.allowSleep = false;
 
         body = getRoom().getWorld().createBody(bodyDef);
 
