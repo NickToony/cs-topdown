@@ -25,6 +25,7 @@ public class RoomGame extends Room {
     private RayHandlerWrapper rayHandlerWrapper;
     private SBSocket socket;
     private GameManager gameManager;
+    private float accumulator = 0;
 
     public RoomGame(SBSocket socket) {
         this.socket = socket;
@@ -78,7 +79,13 @@ public class RoomGame extends Room {
         super.step(delta);
 
         socket.pushNotifications();
-        world.step(delta, 6, 2);
+
+        accumulator += delta;
+
+        while (accumulator >= 1) {
+            world.step(1, 1, 1);
+            accumulator -= 1;
+        }
     }
 
     @Override

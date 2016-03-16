@@ -204,6 +204,14 @@ public abstract class SBServer {
         }
     }
 
+    public void sendToOthers(Packet packet, SBClient self) {
+        for (SBClient client : clients) {
+            if (client != self) {
+                client.sendPacket(packet);
+            }
+        }
+    }
+
     public void notifyClientConnected(SBClient conn) {
         connectedQueue.add(conn);
     }
