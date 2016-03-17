@@ -16,16 +16,29 @@ public class Room extends Renderable {
     private MyGame game;
     private boolean render;
     private boolean created = false;
+    private List<Renderable> deletedRenderables;
 
     @Override
     public void create(boolean render) {
         renderables = new ArrayList<Renderable>();
+        deletedRenderables = new ArrayList<Renderable>();
         this.render = render;
         this.created = true;
     }
 
     @Override
     public void step(float delta) {
+        // For all deleted renderables
+        for (Renderable toDelete : deletedRenderables) {
+            // Remove them from the queue
+            if (renderables.remove(toDelete)) {
+                toDelete.dispose();
+            }
+        }
+        // Clear the list
+        deletedRenderables.clear();
+
+        // Now only non-deleted renderables should run
         for (Renderable renderable : renderables) {
             renderable.step(delta);
         }
@@ -77,6 +90,12 @@ public class Room extends Renderable {
 
         Collections.swap(renderables, renderables.size()-1, pos);
         return true;
+    }
+
+    public void deleteRenderable(Renderable renderable) {
+        if (renderables.contains(renderable)) {
+            deletedRenderables.add(renderable);
+        }
     }
 
     public MyGame getGame() {

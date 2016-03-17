@@ -162,6 +162,9 @@ public abstract class SBServer {
 
     private void handleClientDisconnected(SBClient conn) {
         logger.log("Client Disconnected");
+        // Have the client tidy up
+        conn.handleDisconnect();
+        // Then remove it
         clients.remove(conn);
     }
 
@@ -248,5 +251,9 @@ public abstract class SBServer {
 
     public float getDelta() {
         return delta;
+    }
+
+    public RoomGame getRoom() {
+        return roomGame;
     }
 }

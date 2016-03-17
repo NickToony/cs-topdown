@@ -7,6 +7,7 @@ import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
@@ -137,42 +138,30 @@ public abstract class SBClient {
                 iterator.remove();
 
                 if (packet instanceof PlayerInputPacket) {
+                    // Cast to input packet
                     PlayerInputPacket inputPacket = (PlayerInputPacket) packet;
+                    // Update state of player
                     player.setMovement(inputPacket.moveUp, inputPacket.moveRight,
                             inputPacket.moveDown, inputPacket.moveLeft);
                     player.setDirection(inputPacket.direction);
 
-//                    final int errorMargin = 8;
-//                    if ((Math.abs(player.getX() - inputPacket.x) > errorMargin)
-//                        || (Math.abs(player.getY() - inputPacket.y) > errorMargin)) {
-//                        PlayerUpdatePacket packet = new PlayerUpdatePacket();
-//                        packet.x = player.getX();
-//                        packet.y = player.getY();
-//                        packet.direction = player.getDirection();
-//                        packet.id = id;
-//                        server.sendToOthers(packet, this);
-//                    } else
-//                        player.setPosition(inputPacket.x, inputPacket.y);
-
+                    // Calculate how much leniency we're providing
                     leniency += Math.abs(player.getX() - inputPacket.x)
                             + Math.abs(player.getY() - inputPacket.y);
 
+                    // If leniency is within expected parameters
                     if (leniency < 16) {
+                        // Accept the clients simulation
                         player.setPosition(inputPacket.x, inputPacket.y);
-
-//                        System.out.println("Consistent!! " + leniency);
                     } else {
+                        // The client simulation is way off, correct them
                         PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
                         fixPacket.x = player.getX();
                         fixPacket.y = player.getY();
                         fixPacket.direction = player.getDirection();
                         fixPacket.id = id;
                         sendPacket(fixPacket);
-
-//                        System.out.println("Inconsistent!! " + leniency);
                     }
-
-
                 }
 
             } else {
@@ -230,5 +219,23 @@ public abstract class SBClient {
         }
         // Jump to end
         inputQueue.add(packet);
+    }
+
+    /**
+     * Event called when client is disconnected. Hence, should clean up
+     */
+    public void handleDisconnect() {
+        // Delete player if it exists
+        if (player != null) {
+            // Send packet to all
+            DestroyPlayerPacket destroyPlayerPacket = new DestroyPlayerPacket();
+            destroyPlayerPacket.id = id;
+            server.sendToAll(destroyPlayerPacket);
+
+            // Remove the player from the room (which also disposes the object)
+            server.getRoom().deleteRenderable(player);
+            // No player
+            player = null;
+        }
     }
 }

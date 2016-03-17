@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.networking.packets;
 
 import com.nicktoony.cstopdown.networking.packets.connection.*;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 
@@ -28,6 +29,7 @@ public class PacketDefinitions {
 
         // Game
         put(9, CreatePlayerPacket.class);
+        put(13, DestroyPlayerPacket.class);
 
         // Player
         put(10, PlayerInputPacket.class);

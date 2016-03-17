@@ -4,6 +4,7 @@ import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.Packet;
+import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 
@@ -23,14 +24,23 @@ public class GameManager implements SBSocket.SBSocketListener {
         this.roomGame = roomGame;
         this.socket = socket;
 
+        // Game manager is created when the map is loaded, so we're good to go!
         socket.sendMessage(new LoadedPacket());
 
         initialTimestamp = System.currentTimeMillis();
     }
 
+    /**
+     * Calculates the correct timestamp relative to the time LoadedPacket was sent
+     * @return long timestamp
+     */
+    public long getTimestamp() {
+        return (System.currentTimeMillis() - initialTimestamp);
+    }
+
     @Override
     public void onOpen(SBSocket socket) {
-        // will never see
+        // will never see, as this event is called in RoomConnect
     }
 
     @Override
@@ -38,36 +48,62 @@ public class GameManager implements SBSocket.SBSocketListener {
         // the RoomConnect setup a listener for us to deal with this situation
     }
 
-    @Override
-    public void onMessage(SBSocket socket, Packet packet) {
-        if (packet instanceof CreatePlayerPacket) {
-            Player player = roomGame.createPlayer(((CreatePlayerPacket) packet).id,
-                    ((CreatePlayerPacket) packet).x,
-                    ((CreatePlayerPacket) packet).y);
-            playerIdMap.put(((CreatePlayerPacket) packet).id, player);
-        } else if (packet instanceof PlayerUpdatePacket) {
-            PlayerUpdatePacket castPacket = (PlayerUpdatePacket) packet;
-            if (socket.getId() != castPacket.id) {
-                Player player = playerIdMap.get(castPacket.id);
-                if (player != null) {
-                    player.setPosition(castPacket.x, castPacket.y);
-                    player.setDirection(castPacket.direction);
-                }
-            } else {
-                Player player = playerIdMap.get(castPacket.id);
-                if (player != null) {
-                    player.setPosition(castPacket.x, castPacket.y);
-                }
-            }
-        }
-    }
 
     @Override
     public void onError(SBSocket socket, Exception exception) {
 
     }
 
-    public long getTimestamp() {
-        return (System.currentTimeMillis() - initialTimestamp);
+    @Override
+    public void onMessage(SBSocket socket, Packet packet) {
+        if (packet instanceof CreatePlayerPacket) {
+            handleReceivedPacket((CreatePlayerPacket) packet);
+        } else if (packet instanceof PlayerUpdatePacket) {
+            handleReceivedPacket((PlayerUpdatePacket) packet);
+        } else if (packet instanceof DestroyPlayerPacket) {
+            handleReceivedPacket((DestroyPlayerPacket) packet);
+        }
+    }
+
+    private void handleReceivedPacket(DestroyPlayerPacket packet) {
+        // Find the player in question
+        Player player = playerIdMap.get(packet.id);
+        // If the player exists
+        if (player != null) {
+            // Remove the player from room
+            roomGame.deleteRenderable(player);
+
+            // Remove the player from id list
+            playerIdMap.remove(packet.id);
+        }
+    }
+
+    private void handleReceivedPacket(PlayerUpdatePacket packet) {
+        // If it's not our player
+        if (socket.getId() != packet.id) {
+            // Find the player
+            Player player = playerIdMap.get(packet.id);
+            if (player != null) {
+                // Update their position and facing direction
+                player.setPosition(packet.x, packet.y);
+                player.setDirection(packet.direction);
+            }
+        } else {
+            // It's our player. We received this because our simulation desync'd too much
+            Player player = playerIdMap.get(packet.id);
+            if (player != null) {
+                // Fix the desync by jumping to server position
+                player.setPosition(packet.x, packet.y);
+            }
+        }
+    }
+
+    private void handleReceivedPacket(CreatePlayerPacket packet) {
+        // Create the player in the room
+        Player player = roomGame.createPlayer(packet.id,
+                packet.x,
+                packet.y);
+        // Add it to the ID-Player map
+        playerIdMap.put(packet.id, player);
     }
 }
