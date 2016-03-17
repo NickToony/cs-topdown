@@ -10,7 +10,7 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 public class UserPlayer extends Player{
 
     private int lastMove = 0;
-    private int lastUpdate = 0;
+    private long lastUpdate = 0;
 
 
     @Override
@@ -56,7 +56,7 @@ public class UserPlayer extends Player{
                 + ((moveRight ? 1 : 0) * 100)
                 + ((moveUp ? 1 : 0) * 10)
                 + ((moveDown ? 1 : 0));
-        if (newMove != lastMove || lastUpdate <= 0) {
+        if (newMove != lastMove || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
             // Send move packet
             PlayerInputPacket playerMovePacket = new PlayerInputPacket();
             playerMovePacket.moveLeft = moveLeft;
@@ -69,7 +69,7 @@ public class UserPlayer extends Player{
             playerMovePacket.y = y;
             getRoom().getSocket().sendMessage(playerMovePacket);
 
-            lastUpdate = getRoom().getSocket().getServerConfig().cl_tickrate;
+            lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
             lastMove = newMove;
         }
 
@@ -77,8 +77,6 @@ public class UserPlayer extends Player{
             setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX() - getRoom().getMap().getCamera().viewportWidth/2),
                     ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY() - getRoom().getMap().getCamera().viewportHeight/2));
         }
-
-        lastUpdate -= 1;
 
         super.step(delta);
 

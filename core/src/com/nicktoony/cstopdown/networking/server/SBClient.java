@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.networking.server;
 
+import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
@@ -133,6 +134,7 @@ public abstract class SBClient {
     }
 
     private void handleInputQueue() {
+        boolean inconsistent = false;
         ListIterator<TimestampedPacket> iterator = inputQueue.listIterator();
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
@@ -154,21 +156,17 @@ public abstract class SBClient {
                             + Math.abs(player.getY() - inputPacket.y);
 
                     // If leniency is within expected parameters
-                    if (leniency < 16) {
+                    // Calculation: (1000/cl_tickrate) / (1000/SIMULATION_FPS)
+                    // 16 is a good value for 4 updates a second..
+                    if (leniency <= Math.min((1000/server.getConfig().cl_tickrate)
+                            / (1000 / MyGame.GAME_FPS), 8) ) {
                         // Accept the clients simulation
                         player.setPosition(inputPacket.x, inputPacket.y);
 
                         // We should send an update to all players ASAP
                         lastUpdate = 0;
                     } else {
-                        // The client simulation is way off, correct them
-                        PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
-                        fixPacket.x = player.getX();
-                        fixPacket.y = player.getY();
-                        fixPacket.direction = player.getDirection();
-                        fixPacket.id = id;
-                        // We don't send movement.. the player knows that already
-                        sendPacket(fixPacket);
+                        inconsistent = true;
                     }
                 }
 
@@ -176,6 +174,17 @@ public abstract class SBClient {
                 // Stop handling input, it's not old enough
                 break;
             }
+        }
+
+        if (inconsistent) {
+            // The client simulation is way off, correct them
+            PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
+            fixPacket.x = player.getX();
+            fixPacket.y = player.getY();
+            fixPacket.direction = player.getDirection();
+            fixPacket.id = id;
+            // We don't send movement.. the player knows that already
+            sendPacket(fixPacket);
         }
     }
 
