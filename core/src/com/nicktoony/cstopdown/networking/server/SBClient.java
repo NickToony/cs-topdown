@@ -139,7 +139,7 @@ public abstract class SBClient {
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-            if (packet.getTimestamp() <= getTimestamp() - server.getConfig().sv_lag_compensate) {
+            if (packet.timestamp <= getTimestamp() - server.getConfig().sv_lag_compensate) {
                 // Latency has been compensated. Process it!
                 iterator.remove();
 
@@ -228,7 +228,7 @@ public abstract class SBClient {
         // loop through all elements
         for (int i = 0; i < inputQueue.size(); i++) {
             // Skip to next one if smaller
-            if (inputQueue.get(i).getTimestamp() < packet.getTimestamp()) continue;
+            if (inputQueue.get(i).timestamp < packet.timestamp) continue;
 
             // Otherwise, found location
             inputQueue.add(i, packet);

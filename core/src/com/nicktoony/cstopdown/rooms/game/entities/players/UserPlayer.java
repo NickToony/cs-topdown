@@ -64,7 +64,7 @@ public class UserPlayer extends Player{
             playerMovePacket.moveUp = moveUp;
             playerMovePacket.moveDown = moveDown;
             playerMovePacket.direction = getDirection();
-            playerMovePacket.setTimestamp(getRoom().getGameManager().getTimestamp());
+            playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
             playerMovePacket.x = x;
             playerMovePacket.y = y;
             getRoom().getSocket().sendMessage(playerMovePacket);
