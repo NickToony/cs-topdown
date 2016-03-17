@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.components;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.cstopdown.services.TextureManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,7 @@ public class Room extends Renderable {
         for (Renderable toDelete : deletedRenderables) {
             // Remove them from the queue
             if (renderables.remove(toDelete)) {
-                toDelete.dispose();
+                toDelete.dispose(render);
             }
         }
         // Clear the list
@@ -54,10 +55,11 @@ public class Room extends Renderable {
     }
 
     @Override
-    public void dispose() {
+    public void dispose(boolean render) {
         for (Renderable renderable : renderables) {
-            renderable.dispose();
+            renderable.dispose(render);
         }
+        TextureManager.dispose();
     }
 
     public synchronized Renderable addRenderable(Renderable renderable) {

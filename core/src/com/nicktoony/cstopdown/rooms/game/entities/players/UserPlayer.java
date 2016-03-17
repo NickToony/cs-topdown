@@ -50,6 +50,7 @@ public class UserPlayer extends Player{
         shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
 
         direction = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
+        directionTo = direction;
 
         // Check if changed movement keys
         int newMove = ((moveLeft ? 1 : 0) * 1000)

@@ -14,6 +14,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
 import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
 import com.nicktoony.cstopdown.services.CharacterManager;
 import com.nicktoony.cstopdown.services.LightManager;
+import com.nicktoony.cstopdown.services.TextureManager;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 /**
@@ -89,8 +90,8 @@ public class RoomGame extends Room {
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
+    public void dispose(boolean render) {
+        super.dispose(render);
 
         CharacterManager.getInstance().dispose();
         WeaponManager.getInstance().dispose();

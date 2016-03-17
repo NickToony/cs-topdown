@@ -93,7 +93,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
     }
 
     public void disposeRoom() {
-        room.dispose();
+        room.dispose(true);
         room = null;
     }
 

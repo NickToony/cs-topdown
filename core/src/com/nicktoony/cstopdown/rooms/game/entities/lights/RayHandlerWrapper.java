@@ -36,7 +36,7 @@ public class RayHandlerWrapper extends Renderable {
     }
 
     @Override
-    public void dispose() {
+    public void dispose(boolean render) {
         handler.dispose();
     }
 

@@ -44,9 +44,9 @@ public class EntityGroup<T extends Room> extends Entity<T> {
     }
 
     @Override
-    public void dispose() {
+    public void dispose(boolean render) {
         for (Entity entity : entities) {
-            entity.dispose();
+            entity.dispose(render);
         }
         spriteBatch.dispose();
     }

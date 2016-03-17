@@ -25,5 +25,5 @@ public abstract class Renderable {
     /**
      * The event of being disposed. This is where it should free up its memory.
      */
-    public abstract void dispose();
+    public abstract void dispose(boolean render);
 }

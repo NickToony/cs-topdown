@@ -25,6 +25,7 @@ public class Player extends Entity<RoomGame> {
     private final int PLAYER_MOVE_SPEED = 2;
     private final int WEAPON_X_OFFSET = 15;
     private final int WEAPON_Y_OFFSET = 64 - 46;
+    private final float PLAYER_ANGLE_SMOOTHING = 0.1f;
 
     private final int STATE_IDLE = 0;
     private final int STATE_SHOOTING = 1;
@@ -38,6 +39,7 @@ public class Player extends Entity<RoomGame> {
     private boolean lightOn = false;
     private boolean lastTorch = false;
     private boolean changedPosition = false;
+    protected float directionTo;
 
 
     protected boolean reloadKey = false;
@@ -119,7 +121,7 @@ public class Player extends Entity<RoomGame> {
 
     private void setGun(Weapon weapon)  {
         if (gunTexture != null) {
-            gunTexture.dispose();
+//            gunTexture.dispose(); // TextureManager handles this!
         }
 
         weaponPrimary = weapon;
@@ -137,6 +139,7 @@ public class Player extends Entity<RoomGame> {
         shadowSprite.setY(y - shadowSprite.getHeight() / 2);
         shadowSprite.draw(spriteBatch);
 
+        // Render the player entirely
         skeletonWrapper.render(spriteBatch);
 
         Weapon weapon = weaponPrimary;
@@ -266,29 +269,26 @@ public class Player extends Entity<RoomGame> {
         }
         stateChange = stateLast != state;
 
-        // Handle multiplayer update
-//        if (isMultiplayer()) {
-//            if (System.currentTimeMillis() > lastUpdate + UPDATE_RATE) {
-//                lastUpdate = System.currentTimeMillis();
-//
-//                room.sendPacket(new PlayerPositionPacket(0, Math.round(getX()), Math.round(getY()), direction));
-//            }
-//
-//            if (lastTorch != lightOn) {
-//                lastTorch = lightOn;
-//                room.sendPacket(new PlayerTorchPacket(lightOn));
-//            }
-//
-//            if (lastShootKey != shootKey) {
-//                lastShootKey = shootKey;
-//                room.sendPacket(new PlayerShootPacket(shootKey));
-//            }
-//        }
+        smoothRotation();
+    }
+
+    private void smoothRotation() {
+        double angleDifference = (directionTo - direction + 180) % (360) - 180;
+
+        if (Math.abs(angleDifference) < 1) {
+            direction = directionTo;
+        } else {
+            direction += angleDifference * PLAYER_ANGLE_SMOOTHING;
+        }
     }
 
     @Override
-    public void dispose() {
+    public void dispose(boolean render) {
+        getRoom().getWorld().destroyBody(body);
 
+        if (render) {
+
+        }
     }
 
     protected float calculateDirection(int aimX, int aimY){
@@ -368,5 +368,10 @@ public class Player extends Entity<RoomGame> {
 
     public boolean getMoveDown() {
         return moveDown;
+    }
+
+    @Override
+    public void setDirection(float direction) {
+        directionTo = direction;
     }
 }

@@ -138,8 +138,8 @@ public class RoomMainMenu extends Room {
     }
 
     @Override
-    public void dispose()   {
-        super.dispose();
+    public void dispose(boolean render)   {
+        super.dispose(render);
     }
 
     private void startSinglePlayer() {
