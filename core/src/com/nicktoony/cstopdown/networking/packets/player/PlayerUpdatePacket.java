@@ -10,4 +10,8 @@ public class PlayerUpdatePacket extends Packet {
     public float y;
     public float direction;
     public int id;
+    public boolean moveUp;
+    public boolean moveDown;
+    public boolean moveLeft;
+    public boolean moveRight;
 }

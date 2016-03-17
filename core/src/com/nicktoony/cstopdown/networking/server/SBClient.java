@@ -115,6 +115,10 @@ public abstract class SBClient {
                 packet.y = player.getY();
                 packet.direction = player.getDirection();
                 packet.id = id;
+                packet.moveDown = player.getMoveDown();
+                packet.moveUp = player.getMoveUp();
+                packet.moveLeft = player.getMoveLeft();
+                packet.moveRight = player.getMoveRight();
                 server.sendToOthers(packet, this);
 
             } else {
@@ -153,6 +157,9 @@ public abstract class SBClient {
                     if (leniency < 16) {
                         // Accept the clients simulation
                         player.setPosition(inputPacket.x, inputPacket.y);
+
+                        // We should send an update to all players ASAP
+                        lastUpdate = 0;
                     } else {
                         // The client simulation is way off, correct them
                         PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
@@ -160,6 +167,7 @@ public abstract class SBClient {
                         fixPacket.y = player.getY();
                         fixPacket.direction = player.getDirection();
                         fixPacket.id = id;
+                        // We don't send movement.. the player knows that already
                         sendPacket(fixPacket);
                     }
                 }

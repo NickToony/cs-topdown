@@ -87,6 +87,8 @@ public class GameManager implements SBSocket.SBSocketListener {
                 // Update their position and facing direction
                 player.setPosition(packet.x, packet.y);
                 player.setDirection(packet.direction);
+                // Update their inputs
+                player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);
             }
         } else {
             // It's our player. We received this because our simulation desync'd too much
