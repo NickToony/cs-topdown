@@ -3,7 +3,11 @@ package com.nicktoony.cstopdown.config;
 /**
  * Created by nick on 13/07/15.
  *
- * You can turn this into a packet in Kryonet
+ * The ServerConfig is all configuration for the server. Note that all these values are sent
+ * directly to the client. Please see the ServerConfig.md for an explanation of each value.
+ *
+ * The values below are the defaults. The defaults are automatically written to a file on
+ * first run.
  */
 public class ServerConfig {
     // Server settings
@@ -20,8 +24,12 @@ public class ServerConfig {
 
     // Gameplay settings
     public boolean mp_player_collisions = false;
+    public float mp_player_move_speed = 2;
+
+    // Server rates
     public int sv_tickrate = 60;
     public int sv_lag_compensate = 100; // ms
+
+    // Client rates
     public int cl_tickrate = 4;
-    public float mp_player_move_speed = 2;
 }
