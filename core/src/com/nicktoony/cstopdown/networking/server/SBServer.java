@@ -202,23 +202,25 @@ public abstract class SBServer {
 
     public void sendToAll(Packet packet) {
         for (SBClient client : clients) {
-            client.sendPacket(packet);
-        }
-    }
-
-    public void sendToOthers(Packet packet, SBClient self) {
-        for (SBClient client : clients) {
-            if (client != self) {
+            if (client.getState() != SBClient.STATE.DISCONNECTING) {
                 client.sendPacket(packet);
             }
         }
     }
 
-    public void notifyClientConnected(SBClient conn) {
+    public void sendToOthers(Packet packet, SBClient self) {
+        for (SBClient client : clients) {
+            if (client != self && client.getState() != SBClient.STATE.DISCONNECTING) {
+                client.sendPacket(packet);
+            }
+        }
+    }
+
+    public synchronized void notifyClientConnected(SBClient conn) {
         connectedQueue.add(conn);
     }
 
-    public void notifyClientDisconnected(SBClient conn) {
+    public synchronized void notifyClientDisconnected(SBClient conn) {
         disconnectedQueue.add(conn);
     }
 

@@ -27,7 +27,8 @@ public abstract class SBClient {
         CONNECTING,
         LOADING,
         SPECTATE,
-        ALIVE
+        ALIVE,
+        DISCONNECTING
     }
 
     private STATE state = STATE.INIT;
@@ -242,12 +243,13 @@ public abstract class SBClient {
      * Event called when client is disconnected. Hence, should clean up
      */
     public void handleDisconnect() {
+        state = STATE.DISCONNECTING;
         // Delete player if it exists
         if (player != null) {
             // Send packet to all
             DestroyPlayerPacket destroyPlayerPacket = new DestroyPlayerPacket();
             destroyPlayerPacket.id = id;
-            server.sendToAll(destroyPlayerPacket);
+            server.sendToOthers(destroyPlayerPacket, this);
 
             // Remove the player from the room (which also disposes the object)
             server.getRoom().deleteRenderable(player);
