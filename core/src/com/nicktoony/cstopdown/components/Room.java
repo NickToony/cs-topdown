@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.components;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.cstopdown.services.SoundManager;
 import com.nicktoony.cstopdown.services.TextureManager;
 
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class Room extends Renderable {
             renderable.dispose(render);
         }
         TextureManager.dispose();
+        SoundManager.dispose();
     }
 
     public synchronized Renderable addRenderable(Renderable renderable) {

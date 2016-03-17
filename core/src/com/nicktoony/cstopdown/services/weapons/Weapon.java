@@ -4,6 +4,7 @@ package com.nicktoony.cstopdown.services.weapons;
  * Created by Nick on 25/09/2014.
  */
 public class Weapon {
+
     public static final int RELOAD_FULL = 0;
     public static final int RELOAD_FULL_COCK = 1;
     public static final int RELOAD_SHOTGUN = 2;

@@ -62,17 +62,12 @@ public class RoomGame extends Room {
             rayHandlerWrapper = new RayHandlerWrapper(rayHandler, map);
             // Add map lights
             map.addLightObjects(rayHandler);
+
+            // Preload all sounds
+            WeaponManager.getInstance().preloadSounds();
 //
 //            // Add hud
 //            hud = new HUD(this);
-//
-//            if (isMultiplayer()) {
-//                client.sendPacket(new ClientLoadedPacket());
-//            }
-
-            // temp
-//            Player player = createUserPlayer();
-//            map.setEntitySnap(player);
         }
     }
 

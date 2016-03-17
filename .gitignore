@@ -92,3 +92,6 @@ proguard/
 
 # Log Files
 *.log
+
+# Extras
+html/war/

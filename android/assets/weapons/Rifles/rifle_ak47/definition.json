@@ -1,5 +1,5 @@
 {
-  "name": "M4A1",
+  "name": "AK47",
   "clipSize": 30,
   "clipTotal": 90,
   "rateOfFire": 7,
@@ -27,6 +27,13 @@
     "cock": "rifle_cock"
   },
   "sounds": {
+    "shoot": "shoot.wav",
+    "equip": "equip.wav",
+    "dequip": "dequip.wav",
+    "eject": "eject.wav",
+    "insert": "insert.wav",
+    "cock": "cock.wav",
+    "empty": "empty.wav"
   },
   "graphics": {
     "left": false,

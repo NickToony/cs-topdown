@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Bone;
+import com.esotericsoftware.spine.Event;
 import com.nicktoony.cstopdown.components.Entity;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.SkeletonWrapper;
 import com.nicktoony.cstopdown.services.CharacterManager;
+import com.nicktoony.cstopdown.services.SoundManager;
 import com.nicktoony.cstopdown.services.TextureManager;
 import com.nicktoony.cstopdown.services.weapons.Weapon;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
@@ -19,7 +22,7 @@ import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 /**
  * Created by Nick on 08/09/2014.
  */
-public class Player extends Entity<RoomGame> {
+public class Player extends Entity<RoomGame> implements SkeletonWrapper.AnimationEventListener {
 
     private final int PLAYER_RADIUS = 12;
     private final int PLAYER_MOVE_SPEED = 2;
@@ -69,17 +72,18 @@ public class Player extends Entity<RoomGame> {
     private SkeletonWrapper skeletonWrapper;
 
     public Player() {
-        skeletonWrapper = new SkeletonWrapper(this);
+        skeletonWrapper = new SkeletonWrapper(this, this);
     }
 
     @Override
     public void create(boolean render) {
         setupBody();
 
-        setGun(WeaponManager.getInstance().getWeapon("rifle_m4a1"));
+        setGun(WeaponManager.getInstance().getWeapon("rifle_ak47"));
 
         if (render) {
-            getSkeletonWrapper().setSkeleton(CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0).getSkeleton());
+            getSkeletonWrapper().setSkeleton(CharacterManager.getInstance()
+                    .getCharacterCategories(0).getSkins().get(0).getSkeleton());
             leftHand = getSkeletonWrapper().getSkeleton().findBone("left_gun");
             rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
 
@@ -373,5 +377,24 @@ public class Player extends Entity<RoomGame> {
     @Override
     public void setDirection(float direction) {
         directionTo = direction;
+    }
+
+    @Override
+    public void animationEvent(Event event) {
+        if (event.getData().getName().contentEquals("ev_shoot")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.SHOOT);
+        } else if (event.getData().getName().contentEquals("ev_equip")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.EQUIP);
+        } else if (event.getData().getName().contentEquals("ev_dequip")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.DEQUIP);
+        } else if (event.getData().getName().contentEquals("ev_eject")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.EJECT);
+        } else if (event.getData().getName().contentEquals("ev_insert")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.INSERT);
+        } else if (event.getData().getName().contentEquals("ev_cock")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.COCK);
+        } else if (event.getData().getName().contentEquals("ev_empty")) {
+            WeaponManager.getInstance().playSound(weaponPrimary, WeaponManager.SoundType.EMPTY);
+        }
     }
 }

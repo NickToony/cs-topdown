@@ -41,7 +41,7 @@ public class GameManager implements SBSocket.SBSocketListener {
 
     @Override
     public void onOpen(SBSocket socket) {
-        // will never see, as this event is called in RoomConnect
+        // will never see, as this animationEvent is called in RoomConnect
     }
 
     @Override

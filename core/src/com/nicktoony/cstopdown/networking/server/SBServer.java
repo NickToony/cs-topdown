@@ -119,7 +119,7 @@ public abstract class SBServer {
         // Push the queues
         pushNotifications();
 
-        // Perform a step event on all client objects
+        // Perform a step animationEvent on all client objects
         for (SBClient client : clients) {
             client.update();
         }

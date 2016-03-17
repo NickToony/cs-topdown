@@ -1,8 +1,10 @@
 package com.nicktoony.cstopdown.services.weapons;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.nicktoony.cstopdown.services.SoundManager;
 import com.nicktoony.cstopdown.services.weapons.config.WeaponCategoryConfig;
 import com.nicktoony.cstopdown.services.weapons.config.WeaponCategoryConfigWrapper;
 
@@ -16,6 +18,16 @@ import java.util.Map;
  */
 public class WeaponManager {
 
+    public enum SoundType {
+        SHOOT,
+        EQUIP,
+        DEQUIP,
+        EJECT,
+        INSERT,
+        COCK,
+        EMPTY
+    }
+
     // SINGULAR BEGIN
     private static WeaponManager instance;
 
@@ -27,9 +39,9 @@ public class WeaponManager {
     }
     // SINGULAR END
 
-
     private List<WeaponCategory> weaponCategories = new ArrayList<WeaponCategory>();
     private Map<String, Weapon> weapons = new HashMap<String, Weapon>();
+    private Map<Weapon, Map<SoundType, Sound>> loadedSounds = new HashMap<Weapon, Map<SoundType, Sound>>();
 
     public WeaponManager() {
         FileHandle file = Gdx.files.internal("weapons/weapons.json");
@@ -39,14 +51,6 @@ public class WeaponManager {
     private void findCategories(FileHandle fileHandle) {
         Json json = new Json();
         WeaponCategoryConfigWrapper config = json.fromJson(WeaponCategoryConfigWrapper.class, fileHandle);
-        // TODO: Fix this
-//        WeaponCategoryConfigWrapper config = new WeaponCategoryConfigWrapper();
-//        config.config = new WeaponCategoryConfig[1];
-//        config.config[0] = new WeaponCategoryConfig();
-//        config.config[0].name="Rifles";
-//        config.config[0].weapons = new String[1];
-//        config.config[0].weapons[0] = "rifle_m4a1";
-
 
         for (WeaponCategoryConfig weaponCategoryConfig :  config.config) {
             WeaponCategory weaponCategory = new WeaponCategory(weaponCategoryConfig.name);
@@ -57,6 +61,7 @@ public class WeaponManager {
                         Gdx.files.internal("weapons/" + weaponCategory.getName()
                                 + "/" + weaponName + "/definition.json"));
                 weapons.put(weaponName, weapon);
+                loadedSounds.put(weapon, new HashMap<SoundType, Sound>());
 
                 // assign category
                 weapon.setCategory(weaponCategory.getName());
@@ -68,34 +73,82 @@ public class WeaponManager {
 
     }
 
-//    private void findCategories(FileHandle file)  {
-//        for (FileHandle subDirectory : file.list()) {
-////            FileHandle sub = new FileHandle(file.path() + "/" + subDirectory);
-//            if (subDirectory.isDirectory()) {
-//                WeaponCategory weaponCategory = new WeaponCategory(subDirectory.name());
-//                weaponCategories.add(weaponCategory);
-//                weaponCategory.getWeapons().addAll(findWeapons(subDirectory));
-//            }
-//        }
-//    }
-//
-//    private List<Weapon> findWeapons(FileHandle file) {
-//        List<Weapon> weaponsToReturn = new ArrayList<Weapon>();
-//        Json json = new Json();
-//        for (FileHandle subDirectory : file.list()) {
-////            FileHandle sub = new FileHandle(file.path() + "/" + subDirectory);
-//            if (subDirectory.isDirectory()) {
-//                Weapon weapon = json.fromJson(Weapon.class, Gdx.files.internal(subDirectory + "/definition.json"));
-//                weapons.put(subDirectory.name(), weapon);
-//                weaponsToReturn.add(weapon);
-//
-//                // assign category
-//                weapon.setCategory(file.name());
-//                weapon.setKey(subDirectory.name());
-//            }
-//        }
-//        return weaponsToReturn;
-//    }
+    public void preloadSounds() {
+        for (Weapon weapon : weapons.values()) {
+            loadSound(weapon, SoundType.SHOOT);
+            loadSound(weapon, SoundType.EQUIP);
+            loadSound(weapon, SoundType.DEQUIP);
+            loadSound(weapon, SoundType.EJECT);
+            loadSound(weapon, SoundType.INSERT);
+            loadSound(weapon, SoundType.COCK);
+            loadSound(weapon, SoundType.EMPTY);
+        }
+    }
+
+    public Sound loadSound(Weapon weapon, SoundType soundType) {
+        // If already loaded
+        if (loadedSounds.get(weapon).containsKey(soundType)) {
+            // Just return that
+            return loadedSounds.get(weapon).get(soundType);
+        } else {
+            String fileName;
+            switch (soundType) {
+                case SHOOT:
+                    fileName = weapon.getSounds().shoot;
+                    break;
+                case EQUIP:
+                    fileName = weapon.getSounds().equip;
+                    break;
+                case DEQUIP:
+                    fileName = weapon.getSounds().dequip;
+                    break;
+                case EJECT:
+                    fileName = weapon.getSounds().eject;
+                    break;
+                case INSERT:
+                    fileName = weapon.getSounds().insert;
+                    break;
+                case COCK:
+                    fileName = weapon.getSounds().cock;
+                    break;
+                case EMPTY:
+                    fileName = weapon.getSounds().empty;
+                    break;
+                default:
+                    fileName = "";
+            }
+
+            // If it's undefined, we have nothing to load
+            if (fileName.isEmpty()) {
+                loadedSounds.get(weapon).put(soundType, null);
+                return null;
+            }
+
+            // construct the file path
+            FileHandle fileHandle = Gdx.files.internal("weapons/" + weapon.getCategory()
+                    + "/" + weapon.getKey() + "/" + fileName);
+
+            // File doesn't exist? we can't load it
+            if (!fileHandle.exists()) {
+                loadedSounds.get(weapon).put(soundType, null);
+                return null;
+            }
+
+            Sound sound = SoundManager.getSound(fileHandle);
+            if (sound != null) {
+                loadedSounds.get(weapon).put(soundType, sound);
+                return sound;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public void playSound(Weapon weapon, SoundType soundType) {
+        if (loadSound(weapon, soundType) != null) {
+            loadSound(weapon, soundType).play();
+        }
+    }
 
     public void dispose() {
         weaponCategories.clear();

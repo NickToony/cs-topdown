@@ -9,15 +9,23 @@ import com.nicktoony.cstopdown.components.Entity;
  * Created by Nick on 23/09/2014.
  */
 public class SkeletonWrapper {
+    public interface AnimationEventListener {
+        public void animationEvent(Event event);
+    }
+
     private Skeleton skeleton;
     private AnimationState state;
     private SkeletonRenderer renderer;
     private Entity entity;
     private String idleAnimation;
     private float idleDuration;
+    private AnimationEventListener eventListener;
 
-    public SkeletonWrapper(Entity entity) {
+    public SkeletonWrapper(Entity entity, AnimationEventListener listener) {
         this.entity = entity;
+        if (listener != null) {
+            this.eventListener = listener;
+        }
     }
 
     public void step()  {
@@ -50,7 +58,9 @@ public class SkeletonWrapper {
         this.state.addListener(new AnimationState.AnimationStateListener() {
             @Override
             public void event(int trackIndex, Event event) {
-
+                if (eventListener != null) {
+                    eventListener.animationEvent(event);
+                }
             }
 
             @Override
