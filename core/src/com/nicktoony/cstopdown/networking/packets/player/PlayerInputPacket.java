@@ -8,7 +8,7 @@ import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
  *
  * Sends the players key presses to server
  */
-public class PlayerInputPacket extends TimestampedPacket {
+public class PlayerInputPacket extends Packet implements TimestampedPacket {
     public boolean moveLeft = false;
     public boolean moveRight = false;
     public boolean moveUp = false;
@@ -16,7 +16,18 @@ public class PlayerInputPacket extends TimestampedPacket {
     public float direction = 0;
     public float x = 0;
     public float y = 0;
+    public long timestamp;
 
     public PlayerInputPacket() {
+    }
+
+    @Override
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    @Override
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

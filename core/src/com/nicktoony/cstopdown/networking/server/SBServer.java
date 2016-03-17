@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.cstopdown.config.ServerlistConfig;
@@ -46,10 +45,10 @@ public abstract class SBServer {
     protected boolean publicServerList = true;
     private List<SBClient> clients = new ArrayList<SBClient>();
     private long lastTime;
-    private final double NS_PER_TICK = 1000000000 / MyGame.GAME_FPS;
+    private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
 
-    private float lastFPSCount = System.nanoTime();
+    private long lastFPSCount = System.currentTimeMillis();
     private int fpsFrames = 0;
 
     private List<SBClient> connectedQueue = new ArrayList<SBClient>();
@@ -95,14 +94,14 @@ public abstract class SBServer {
         // A Java timer currently manages the game loop.. not ideal.
         loopManager.startServerLoop(this);
 
-        this.lastTime = System.nanoTime();
+        this.lastTime = System.currentTimeMillis();
     }
 
     public void step() {
-        if (lastFPSCount < System.nanoTime() - 1000000000) {
+        if (lastFPSCount < System.currentTimeMillis() - 1000) {
 //            System.out.println("Server FPS: " + fpsFrames);
             fpsFrames = 0;
-            lastFPSCount = System.nanoTime();
+            lastFPSCount = System.currentTimeMillis();
         }
         fpsFrames += 1;
 
@@ -125,8 +124,8 @@ public abstract class SBServer {
             client.update();
         }
 
-        long now = System.nanoTime();
-        delta = (float) ((now - lastTime) / NS_PER_TICK);
+        long now = System.currentTimeMillis();
+        delta = (float) ((now - lastTime) / MS_PER_TICK);
         lastTime = now;
         // Update world
         roomGame.step(delta);
