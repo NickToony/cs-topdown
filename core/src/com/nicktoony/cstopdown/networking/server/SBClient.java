@@ -158,7 +158,7 @@ public abstract class SBClient {
                     // If leniency is within expected parameters
                     // Calculation: (1000/cl_tickrate) / (1000/SIMULATION_FPS)
                     // 16 is a good value for 4 updates a second..
-                    if (leniency <= Math.min((1000/server.getConfig().cl_tickrate)
+                    if (leniency <= Math.max((1000/server.getConfig().cl_tickrate)
                             / (1000 / MyGame.GAME_FPS), 8) ) {
                         // Accept the clients simulation
                         player.setPosition(inputPacket.x, inputPacket.y);

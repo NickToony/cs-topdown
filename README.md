@@ -10,8 +10,11 @@ Recently rebuilt on a new cross-platform networking base I developed as part of 
 ##Server Hosting
 The game is developed such that the entire rendering engine may be disabled for the purposes of hosting. Target the Server module when compiling, which can then be run in either a no-GUI mode or a simple text-based GUI. Of course, you can also host a game using the full-rendering game on platforms that support it (all except HTML).
 
+[Server Config Documentation](SERVERCONFIG.md)
+
 ##Current Features
 - Collisions and movement using Box2D
 - External map loading and rendering using Tiled Map Editor
 - Skeletal based animation using Spine
 - Lighting engine using Box2D Lights
+- Cross-platform multiplayer
