@@ -17,4 +17,4 @@ The game is developed such that the entire rendering engine may be disabled for 
 - External map loading and rendering using Tiled Map Editor
 - Skeletal based animation using Spine
 - Lighting engine using Box2D Lights
-- Cross-network multiplayer
+- Cross-platform multiplayer
