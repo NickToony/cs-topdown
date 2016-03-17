@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 
 /**
  * Created by hgreen on 14/09/14.
@@ -42,7 +43,14 @@ public class UserPlayer extends Player{
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            // toggle light
             setLightOn(!isLightOn());
+
+            // Update server
+            PlayerToggleLight toggleLight = new PlayerToggleLight();
+            toggleLight.timestamp = getRoom().getGameManager().getTimestamp();
+            toggleLight.light = isLightOn();
+            getRoom().getSocket().sendMessage(toggleLight);
         }
 
         this.reloadKey = Gdx.input.isKeyPressed(Input.Keys.R);

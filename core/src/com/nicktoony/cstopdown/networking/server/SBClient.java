@@ -10,6 +10,7 @@ import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 
@@ -91,6 +92,8 @@ public abstract class SBClient {
     private void handleAliveMessages(Packet packet) {
         if (packet instanceof PlayerInputPacket) {
             insertInputQueue((PlayerInputPacket) packet);
+        } else if (packet instanceof PlayerToggleLight) {
+            insertInputQueue((PlayerToggleLight) packet);
         }
     }
 
@@ -169,6 +172,14 @@ public abstract class SBClient {
                     } else {
                         inconsistent = true;
                     }
+                } else if (packet instanceof PlayerToggleLight) {
+                    PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
+                    player.setLightOn(lightPacket.light);
+
+                    // Add an id
+                    lightPacket.id = id;
+
+                    server.sendToOthers(lightPacket, this);
                 }
 
             } else {
@@ -216,6 +227,7 @@ public abstract class SBClient {
                 packet.id = client.getId();
                 packet.x = client.getPlayer().getX();
                 packet.y = client.getPlayer().getY();
+                packet.light = client.getPlayer().isLightOn();
                 sendPacket(packet);
             }
         }

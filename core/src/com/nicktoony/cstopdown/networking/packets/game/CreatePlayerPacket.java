@@ -9,4 +9,5 @@ public class CreatePlayerPacket extends Packet {
     public float x;
     public float y;
     public int id;
+    public boolean light = false;
 }

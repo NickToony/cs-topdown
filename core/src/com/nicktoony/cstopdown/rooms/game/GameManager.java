@@ -5,6 +5,7 @@ import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 
@@ -62,6 +63,8 @@ public class GameManager implements SBSocket.SBSocketListener {
             handleReceivedPacket((PlayerUpdatePacket) packet);
         } else if (packet instanceof DestroyPlayerPacket) {
             handleReceivedPacket((DestroyPlayerPacket) packet);
+        } else if (packet instanceof PlayerToggleLight) {
+            handleReceivedPacket((PlayerToggleLight) packet);
         }
     }
 
@@ -105,7 +108,20 @@ public class GameManager implements SBSocket.SBSocketListener {
         Player player = roomGame.createPlayer(packet.id,
                 packet.x,
                 packet.y);
+        // Update light
+        player.setLightOn(packet.light);
         // Add it to the ID-Player map
         playerIdMap.put(packet.id, player);
     }
+
+    private void handleReceivedPacket(PlayerToggleLight packet) {
+        // Find the player in question
+        Player player = playerIdMap.get(packet.id);
+        // If the player exists
+        if (player != null) {
+            // Set their light
+            player.setLightOn(packet.light);
+        }
+    }
+
 }

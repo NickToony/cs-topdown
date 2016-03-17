@@ -4,6 +4,7 @@ import com.nicktoony.cstopdown.networking.packets.connection.*;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class PacketDefinitions {
         // Player
         put(10, PlayerInputPacket.class);
         put(11, PlayerUpdatePacket.class);
+        put(14, PlayerToggleLight.class);
 
     }};
 
