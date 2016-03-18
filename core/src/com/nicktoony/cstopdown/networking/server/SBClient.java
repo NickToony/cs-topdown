@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.networking.server;
 import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
+import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
@@ -13,6 +14,7 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,11 +106,13 @@ public abstract class SBClient {
             } else {
                 state = STATE.ALIVE;
                 player = server.getGame().createPlayer(this.id, 50, 50);
+                player.setGun(new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")));
 
                 CreatePlayerPacket createPlayer = new CreatePlayerPacket();
                 createPlayer.x = player.getX();
                 createPlayer.y = player.getY();
                 createPlayer.id = this.id;
+                createPlayer.weaponWrapper = getPlayer().getGun();
                 server.sendToAll(createPlayer);
             }
         } else if (state == STATE.ALIVE) {
@@ -228,6 +232,7 @@ public abstract class SBClient {
                 packet.x = client.getPlayer().getX();
                 packet.y = client.getPlayer().getY();
                 packet.light = client.getPlayer().isLightOn();
+                packet.weaponWrapper = client.getPlayer().getGun();
                 sendPacket(packet);
             }
         }

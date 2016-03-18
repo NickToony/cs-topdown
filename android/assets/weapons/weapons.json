@@ -1,9 +1,15 @@
 {
   "config": [
-      {
-        "name": "Rifles",
-        "weapons": [
-          "rifle_ak47"
+    {
+      "name": "Rifles",
+      "weapons": [
+        "rifle_ak47"
+      ]
+    },
+    {
+      "name": "Shotguns",
+      "weapons": [
+        "shotgun_spas"
       ]
     }
   ]

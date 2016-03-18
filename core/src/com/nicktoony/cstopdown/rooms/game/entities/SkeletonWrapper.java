@@ -94,6 +94,10 @@ public class SkeletonWrapper {
     }
 
     public void startAnimation(String animation, float duration, boolean loop)   {
+        if (skeleton == null) {
+            return;
+        }
+
         this.state.setAnimation(0, animation, loop);
         this.state.setTimeScale(skeleton.getData().findAnimation(animation).getDuration() / duration);
     }

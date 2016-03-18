@@ -1,0 +1,35 @@
+package com.nicktoony.cstopdown.networking.packets;
+
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.nicktoony.cstopdown.services.weapons.Weapon;
+import com.nicktoony.cstopdown.services.weapons.WeaponManager;
+
+/**
+ * Created by Nick on 18/03/2016.
+ */
+public class WeaponWrapper implements Json.Serializable {
+    public Weapon weapon;
+    public int bulletsIn;
+    public int bulletsOut;
+
+    public WeaponWrapper() {
+    }
+
+    public WeaponWrapper(Weapon weapon) {
+        this.weapon = weapon;
+        this.bulletsIn = weapon.getClipSize();
+        this.bulletsOut = weapon.getClipTotal();
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue(weapon.getKey());
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        String weaponKey = jsonData.asString();
+        this.weapon = WeaponManager.getInstance().getWeapon(weaponKey);
+    }
+}

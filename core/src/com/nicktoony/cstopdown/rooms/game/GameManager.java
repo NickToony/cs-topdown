@@ -112,6 +112,8 @@ public class GameManager implements SBSocket.SBSocketListener {
         player.setLightOn(packet.light);
         // Add it to the ID-Player map
         playerIdMap.put(packet.id, player);
+        // Weapon
+        player.setGun(packet.weaponWrapper);
     }
 
     private void handleReceivedPacket(PlayerToggleLight packet) {

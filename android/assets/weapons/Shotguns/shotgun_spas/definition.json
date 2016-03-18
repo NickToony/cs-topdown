@@ -1,8 +1,8 @@
 {
-  "name": "AK47",
-  "clipSize": 30,
-  "clipTotal": 90,
-  "rateOfFire": 7,
+  "name": "SPAS",
+  "clipSize": 8,
+  "clipTotal": 32,
+  "rateOfFire": -1,
   "accuracy": 90,
   "recoil": 5,
   "speed": 100,
@@ -10,9 +10,9 @@
   "reward": 250,
   "silencer": false,
   "zoom": 1,
-  "reloadDuration": 2,
-  "cockDuration": 0.5,
-  "reloadType": "full_cock",
+  "reloadDuration": 0.5,
+  "cockDuration": 1,
+  "reloadType": "shotgun",
   "damage": {
     "low": 10,
     "medium": 25,
@@ -21,16 +21,15 @@
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",
-    "reload": "rifle_reload",
+    "reload": "shotgun_reload",
     "equip": "rifle_equip",
     "unequip": "rifle_unequip",
-    "cock": "rifle_cock"
+    "cock": "shotgun_cock"
   },
   "sounds": {
     "shoot": "shoot.wav",
     "equip": "equip.wav",
     "dequip": "dequip.wav",
-    "eject": "eject.wav",
     "insert": "insert.wav",
     "cock": "cock.wav",
     "empty": "empty.wav"
@@ -38,7 +37,7 @@
   "graphics": {
     "left": false,
     "right": true,
-    "x_offset": 30,
-    "y_offset": 38
+    "x_offset": 32,
+    "y_offset": 24
   }
 }
