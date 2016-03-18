@@ -24,12 +24,16 @@ public class WeaponWrapper implements Json.Serializable {
 
     @Override
     public void write(Json json) {
-        json.writeValue(weapon.getKey());
+        json.writeValue("weapon", weapon.getKey());
+        json.writeValue("bulletsIn", bulletsIn);
+        json.writeValue("bulletsOut", bulletsOut);
     }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-        String weaponKey = jsonData.asString();
+        String weaponKey = jsonData.getString("weapon");
         this.weapon = WeaponManager.getInstance().getWeapon(weaponKey);
+        this.bulletsIn = jsonData.getInt("bulletsIn");
+        this.bulletsOut = jsonData.getInt("bulletsOut");
     }
 }

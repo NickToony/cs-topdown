@@ -12,6 +12,7 @@
   "zoom": 1,
   "reloadDuration": 2,
   "cockDuration": 0.5,
+  "equipDuration": 0.3,
   "reloadType": "full_cock",
   "damage": {
     "low": 10,
@@ -23,7 +24,7 @@
     "shoot": "rifle_fire",
     "reload": "rifle_reload",
     "equip": "rifle_equip",
-    "unequip": "rifle_unequip",
+    "unequip": "rifle_dequip",
     "cock": "rifle_cock"
   },
   "sounds": {

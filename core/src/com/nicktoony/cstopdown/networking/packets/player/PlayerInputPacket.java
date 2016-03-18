@@ -16,6 +16,8 @@ public class PlayerInputPacket extends TimestampedPacket {
     public float direction = 0;
     public float x = 0;
     public float y = 0;
+    public boolean shoot = false;
+    public boolean reload = false;
 
     public PlayerInputPacket() {
     }

@@ -2,8 +2,10 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
+import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 /**
  * Created by hgreen on 14/09/14.
@@ -11,6 +13,8 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 public class UserPlayer extends Player{
 
     private int lastMove = 0;
+    private boolean lastShoot = false;
+    private boolean lastReload = false;
     private long lastUpdate = 0;
 
 
@@ -65,7 +69,10 @@ public class UserPlayer extends Player{
                 + ((moveRight ? 1 : 0) * 100)
                 + ((moveUp ? 1 : 0) * 10)
                 + ((moveDown ? 1 : 0));
-        if (newMove != lastMove || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
+        if (newMove != lastMove
+                || lastShoot != shootKey
+                || lastReload != reloadKey
+                || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
             // Send move packet
             PlayerInputPacket playerMovePacket = new PlayerInputPacket();
             playerMovePacket.moveLeft = moveLeft;
@@ -76,15 +83,25 @@ public class UserPlayer extends Player{
             playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
             playerMovePacket.x = x;
             playerMovePacket.y = y;
+            playerMovePacket.reload = reloadKey;
+            playerMovePacket.shoot = shootKey;
             getRoom().getSocket().sendMessage(playerMovePacket);
 
             lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
             lastMove = newMove;
+            lastShoot = shootKey;
+            lastReload = reloadKey;
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX()),
                     ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY()));
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            setGun(new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")));
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            setGun(new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")));
         }
 
         super.step(delta);

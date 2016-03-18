@@ -26,6 +26,7 @@ public class Weapon {
     private float zoom = 1;
     private float cockDuration = 0.2f;
     private float reloadDuration = 2;
+    private float equipDuration = 0.5f;
     private String reloadType = "";
 
     private WeaponDamage damage = new WeaponDamage();
@@ -142,5 +143,9 @@ public class Weapon {
 
     public float getCockDuration() {
         return cockDuration;
+    }
+
+    public float getEquipDuration() {
+        return equipDuration;
     }
 }

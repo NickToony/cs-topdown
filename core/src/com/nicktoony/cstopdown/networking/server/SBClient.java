@@ -112,7 +112,7 @@ public abstract class SBClient {
                 createPlayer.x = player.getX();
                 createPlayer.y = player.getY();
                 createPlayer.id = this.id;
-                createPlayer.weaponWrapper = getPlayer().getGun();
+                createPlayer.weaponWrapper = getPlayer().getNextWeapon();
                 server.sendToAll(createPlayer);
             }
         } else if (state == STATE.ALIVE) {
@@ -128,6 +128,8 @@ public abstract class SBClient {
                 packet.moveUp = player.getMoveUp();
                 packet.moveLeft = player.getMoveLeft();
                 packet.moveRight = player.getMoveRight();
+                packet.shooting = player.getShooting();
+                packet.reloading = player.getReloading();
                 server.sendToOthers(packet, this);
 
             } else {
@@ -158,6 +160,10 @@ public abstract class SBClient {
                     player.setMovement(inputPacket.moveUp, inputPacket.moveRight,
                             inputPacket.moveDown, inputPacket.moveLeft);
                     player.setDirection(inputPacket.direction);
+
+                    // Update shooting
+                    player.setShooting(inputPacket.shoot);
+                    player.setReloading(inputPacket.reload);
 
                     // Calculate how much leniency we're providing
                     leniency += Math.abs(player.getX() - inputPacket.x)
@@ -232,7 +238,7 @@ public abstract class SBClient {
                 packet.x = client.getPlayer().getX();
                 packet.y = client.getPlayer().getY();
                 packet.light = client.getPlayer().isLightOn();
-                packet.weaponWrapper = client.getPlayer().getGun();
+                packet.weaponWrapper = client.getPlayer().getCurrentWeapon();
                 sendPacket(packet);
             }
         }
