@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.components.Entity;
+import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.services.LightManager;
 
 /**
@@ -31,7 +32,7 @@ public class Map {
     protected int mapHeight;
     private Color ambientColour;
 
-    private Entity entitySnap;
+    private Player entitySnap;
 
     protected Map() {
 
@@ -98,8 +99,12 @@ public class Map {
      * Set the entity that the camera should lock onto. You can set it to null to disable this feature.
      * @param player
      */
-    public void setEntitySnap(Entity player)    {
+    public void setEntitySnap(Player player)    {
         this.entitySnap = player;
+    }
+
+    public Player getEntitySnap() {
+        return entitySnap;
     }
 
     public void step() {
@@ -111,7 +116,7 @@ public class Map {
     }
 
     public float getCameraX() {
-        return camera.position.x;
+        return camera.position.x - camera.viewportWidth/2;
     }
 
     public float getCameraY()   {

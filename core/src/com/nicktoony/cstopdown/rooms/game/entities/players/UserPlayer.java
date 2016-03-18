@@ -83,8 +83,8 @@ public class UserPlayer extends Player{
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-            setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX() - getRoom().getMap().getCamera().viewportWidth/2),
-                    ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY() - getRoom().getMap().getCamera().viewportHeight/2));
+            setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX()),
+                    ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY()));
         }
 
         super.step(delta);

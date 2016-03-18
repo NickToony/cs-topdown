@@ -237,7 +237,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         switch (state) {
             case STATE_IDLE:
                 // If reload key is currently pressed
-                if (reloadKey) {
+                if (reloadKey && weaponPrimary.bulletsIn < weaponPrimary.weapon.getClipSize()) {
                     stateTimer = Math.round(weaponPrimary.weapon.getReloadDuration() * 60);
                     state = STATE_RELOADING;
                 } else if (shootKey) { // otherwise is shoot key pressed?

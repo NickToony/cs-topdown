@@ -14,7 +14,6 @@ import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
 import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
 import com.nicktoony.cstopdown.services.CharacterManager;
 import com.nicktoony.cstopdown.services.LightManager;
-import com.nicktoony.cstopdown.services.TextureManager;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 /**
@@ -27,6 +26,8 @@ public class RoomGame extends Room {
     private SBSocket socket;
     private GameManager gameManager;
     private float accumulator = 0;
+    private HUD hud;
+    private SpriteBatch foregroundSpriteBatch;
 
     public RoomGame(SBSocket socket) {
         this.socket = socket;
@@ -55,7 +56,10 @@ public class RoomGame extends Room {
         map.addCollisionObjects(world);
 
         if (render) {
-//            // Setup lighting engine
+            // Setup ui layer
+            foregroundSpriteBatch = new SpriteBatch();
+
+            // Setup lighting engine
             RayHandler rayHandler = new RayHandler(world);
             rayHandler.setShadows(true);
             rayHandler.setAmbientLight(map.getAmbientColour());
@@ -65,9 +69,9 @@ public class RoomGame extends Room {
 
             // Preload all sounds
             WeaponManager.getInstance().preloadSounds();
-//
-//            // Add hud
-//            hud = new HUD(this);
+
+            // Add hud
+            hud = (HUD) addSelfManagedEntity(new HUD());
         }
     }
 
@@ -136,21 +140,21 @@ public class RoomGame extends Room {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        // Render map
         map.step();
         spriteBatch.setProjectionMatrix(map.getCamera().combined);
         map.render();
 
+        // Render everything else
         super.render(spriteBatch);
 
+        // Render lighting
         rayHandlerWrapper.render(spriteBatch);
-//
-//        if (foregroundSpriteBatch == null) {
-//            foregroundSpriteBatch = new SpriteBatch();
-//        }
-//
-//        foregroundSpriteBatch.begin();
-//        hud.render(foregroundSpriteBatch);
-//        foregroundSpriteBatch.end();
+
+        // Render hud
+        foregroundSpriteBatch.begin();
+        hud.render(foregroundSpriteBatch);
+        foregroundSpriteBatch.end();
     }
 
     public SBSocket getSocket() {

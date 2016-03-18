@@ -76,6 +76,12 @@ public class Room extends Renderable {
         return entity;
     }
 
+    public Entity addSelfManagedEntity(Entity entity) {
+        entity.setRoom(this);
+        entity.create(render);
+        return entity;
+    }
+
     public boolean bringRenderableToFront(Renderable renderable) {
         int pos = renderables.indexOf(renderable);
         if (pos == -1) {
