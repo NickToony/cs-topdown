@@ -12,7 +12,7 @@ t:characters/nicktoony/Test/skeleton.json:26665:application/unknown
 t:characters/nicktoony/Test/Test.atlas:698:application/unknown
 b:characters/nicktoony/Test/Test.pdn:6562:application/unknown
 i:characters/nicktoony/Test/Test.png:2351:image/png
-b:characters/nicktoony/Test/Test.spine:5406:application/unknown
+b:characters/nicktoony/Test/Test.spine:5402:application/unknown
 i:characters/nicktoony/Test/torso.png:669:image/png
 t:config.json:91:application/unknown
 d:maps:0:application/unknown
