@@ -144,9 +144,9 @@ public class WeaponManager {
         }
     }
 
-    public void playSound(Weapon weapon, SoundType soundType) {
+    public void playSound(Weapon weapon, SoundType soundType, float volume) {
         if (loadSound(weapon, soundType) != null) {
-            loadSound(weapon, soundType).play();
+            loadSound(weapon, soundType).play(volume);
         }
     }
 

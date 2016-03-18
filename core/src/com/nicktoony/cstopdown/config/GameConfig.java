@@ -7,4 +7,5 @@ public class GameConfig {
     public int game_resolution_x = 1280;
     public int game_resolution_y = 768;
     public boolean game_fullscreen = false;
+    public int sound_range = 1000;
 }

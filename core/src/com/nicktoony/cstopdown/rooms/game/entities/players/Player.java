@@ -460,24 +460,37 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
     @Override
     public void animationEvent(Event event) {
+        int soundRange = getRoom().getGame().getGameConfig().sound_range;
+        float volume = Math.max((soundRange - new Vector2(x, y)
+                .dst(getRoom().getMap().getCameraCenterX(),
+                        getRoom().getMap().getCameraCenterY())) / soundRange, 0);
+
         if (event.getData().getName().contentEquals("ev_shoot")) {
             if (weapons[weaponCurrent].bulletsIn >= 0) {
-                WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.SHOOT);
+                WeaponManager.getInstance()
+                        .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.SHOOT, volume);
             } else {
-                WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EMPTY);
+                WeaponManager.getInstance()
+                        .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EMPTY, volume);
             }
         } else if (event.getData().getName().contentEquals("ev_equip")) {
-            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EQUIP);
+            WeaponManager.getInstance()
+                    .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EQUIP, volume);
         } else if (event.getData().getName().contentEquals("ev_dequip")) {
-            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.DEQUIP);
+            WeaponManager.getInstance()
+                    .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.DEQUIP, volume);
         } else if (event.getData().getName().contentEquals("ev_eject")) {
-            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EJECT);
+            WeaponManager.getInstance()
+                    .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EJECT, volume);
         } else if (event.getData().getName().contentEquals("ev_insert")) {
-            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.INSERT);
+            WeaponManager.getInstance()
+                    .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.INSERT, volume);
         } else if (event.getData().getName().contentEquals("ev_cock")) {
-            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.COCK);
+            WeaponManager.getInstance()
+                    .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.COCK, volume);
         } else if (event.getData().getName().contentEquals("ev_empty")) {
-            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EMPTY);
+            WeaponManager.getInstance()
+                    .playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EMPTY, volume);
         }
     }
 

@@ -119,7 +119,15 @@ public class Map {
         return camera.position.x - camera.viewportWidth/2;
     }
 
+    public float getCameraCenterX() {
+        return camera.position.x;
+    }
+
     public float getCameraY()   {
+        return camera.position.y;
+    }
+
+    public float getCameraCenterY() {
         return camera.position.y;
     }
 
