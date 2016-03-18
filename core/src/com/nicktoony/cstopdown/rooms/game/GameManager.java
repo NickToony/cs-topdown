@@ -5,6 +5,7 @@ import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
@@ -65,6 +66,8 @@ public class GameManager implements SBSocket.SBSocketListener {
             handleReceivedPacket((DestroyPlayerPacket) packet);
         } else if (packet instanceof PlayerToggleLight) {
             handleReceivedPacket((PlayerToggleLight) packet);
+        } else if (packet instanceof PlayerSwitchWeapon) {
+            handleReceivedPacket((PlayerSwitchWeapon) packet);
         }
     }
 
@@ -116,7 +119,8 @@ public class GameManager implements SBSocket.SBSocketListener {
         // Add it to the ID-Player map
         playerIdMap.put(packet.id, player);
         // Weapon
-        player.setGun(packet.weaponWrapper);
+        player.setWeapons(packet.weapons);
+        player.setNextWeapon(packet.currentWeapon);
     }
 
     private void handleReceivedPacket(PlayerToggleLight packet) {
@@ -128,5 +132,16 @@ public class GameManager implements SBSocket.SBSocketListener {
             player.setLightOn(packet.light);
         }
     }
+
+    private void handleReceivedPacket(PlayerSwitchWeapon packet) {
+        // Find the player in question
+        Player player = playerIdMap.get(packet.id);
+        // If the player exists
+        if (player != null) {
+            // Set their light
+            player.setNextWeapon(packet.slot);
+        }
+    }
+
 
 }

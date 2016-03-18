@@ -31,13 +31,13 @@ public class HUD extends Entity<RoomGame> {
     @Override
     public void render(SpriteBatch spriteBatch) {
         Player player = getRoom().getMap().getEntitySnap();
-        if (player != null && player.getCurrentWeapon() != null) {
+        if (player != null && player.getCurrentWeaponObject() != null) {
             StringBuilder b = new StringBuilder();
-            b.append(player.getCurrentWeapon().bulletsIn);
+            b.append(player.getCurrentWeaponObject().bulletsIn);
             b.append(" | ");
-            b.append(player.getCurrentWeapon().bulletsOut);
+            b.append(player.getCurrentWeaponObject().bulletsOut);
             b.append("      ");
-            b.append(player.getCurrentWeapon().weapon.getName());
+            b.append(player.getCurrentWeaponObject().weapon.getName());
             font.draw(spriteBatch, b.toString(), 50, 50);
         }
     }

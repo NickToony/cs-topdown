@@ -54,8 +54,9 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     private boolean stateChange;
 
 
-    private WeaponWrapper weaponCurrent;
-    private WeaponWrapper weaponNext;
+    private int weaponCurrent = -1;
+    private int weaponNext = -1;
+    private WeaponWrapper weapons[];
     private Bone leftHand;
     private Bone rightHand;
     private Sprite leftHandSprite;
@@ -117,16 +118,29 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         shape.dispose();
     }
 
-    public void setGun(WeaponWrapper weapon)  {
-        weaponNext = weapon;
+    public void setNextWeapon(int slot)  {
+        weaponNext = slot;
     }
 
-    public WeaponWrapper getCurrentWeapon(){
+    public int getCurrentWeapon(){
         return weaponCurrent;
     }
 
-    public WeaponWrapper getNextWeapon() {
+    public WeaponWrapper getCurrentWeaponObject() {
+        if (weaponCurrent != -1) return weapons[weaponCurrent];
+        return null;
+    }
+
+    public int getNextWeapon() {
         return weaponNext;
+    }
+
+    public void setWeapons(WeaponWrapper weapons[]) {
+        this.weapons = weapons;
+    }
+
+    public WeaponWrapper[] getWeapons() {
+        return weapons;
     }
 
     @Override
@@ -139,8 +153,8 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         // Render the player entirely
         skeletonWrapper.render(spriteBatch);
 
-        if (weaponCurrent != null) {
-            WeaponWrapper weapon = weaponCurrent;
+        if (weaponCurrent != -1) {
+            WeaponWrapper weapon = weapons[weaponCurrent];
             if (gunTexture == null) {
                 gunTexture = TextureManager.getTexture(weapon.weapon.getTexture());
                 gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -150,12 +164,12 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
             if (weapon.weapon.getGraphics().left) {
                 if (leftHandSprite == null || leftHandSprite.getTexture() != gunTexture) {
                     leftHandSprite = new Sprite(gunTexture);
-                    leftHandSprite.setOrigin(weaponCurrent.weapon.getGraphics().x_offset,
-                            weaponCurrent.weapon.getGraphics().y_offset);
+                    leftHandSprite.setOrigin(weapons[weaponCurrent].weapon.getGraphics().x_offset,
+                            weapons[weaponCurrent].weapon.getGraphics().y_offset);
                 }
 
-                leftHandSprite.setX(leftHand.getWorldX() + x - weaponCurrent.weapon.getGraphics().x_offset);
-                leftHandSprite.setY(leftHand.getWorldY() + y - weaponCurrent.weapon.getGraphics().y_offset);
+                leftHandSprite.setX(leftHand.getWorldX() + x - weapons[weaponCurrent].weapon.getGraphics().x_offset);
+                leftHandSprite.setY(leftHand.getWorldY() + y - weapons[weaponCurrent].weapon.getGraphics().y_offset);
                 leftHandSprite.setRotation(leftHand.getWorldRotation() - 90);
 
                 leftHandSprite.draw(spriteBatch);
@@ -164,12 +178,12 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
             if (weapon.weapon.getGraphics().right) {
                 if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture) {
                     rightHandSprite = new Sprite(gunTexture);
-                    rightHandSprite.setOrigin(weaponCurrent.weapon.getGraphics().x_offset,
-                            weaponCurrent.weapon.getGraphics().y_offset);
+                    rightHandSprite.setOrigin(weapons[weaponCurrent].weapon.getGraphics().x_offset,
+                            weapons[weaponCurrent].weapon.getGraphics().y_offset);
                 }
 
-                rightHandSprite.setX(rightHand.getWorldX() + x - weaponCurrent.weapon.getGraphics().x_offset);
-                rightHandSprite.setY(rightHand.getWorldY() + y - weaponCurrent.weapon.getGraphics().y_offset);
+                rightHandSprite.setX(rightHand.getWorldX() + x - weapons[weaponCurrent].weapon.getGraphics().x_offset);
+                rightHandSprite.setY(rightHand.getWorldY() + y - weapons[weaponCurrent].weapon.getGraphics().y_offset);
                 rightHandSprite.setRotation(rightHand.getWorldRotation() - 90);
 
                 rightHandSprite.draw(spriteBatch);
@@ -177,7 +191,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         }
 
         Vector2 vector = new Vector2(rightHand.getWorldX() + x, rightHand.getWorldY() + y);
-        if (weaponCurrent != null) {
+        if (weaponCurrent != -1) {
             Vector2 gunVector = new Vector2(rightHandSprite.getHeight() / 2, 0);
             gunVector.setAngle(rightHand.getWorldRotation());
             vector.add(gunVector);
@@ -190,25 +204,25 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         // Update gun fire
         gunFire.setPosition(vector.x, vector.y);
         gunFire.setDirection(rightHand.getWorldRotation());
-        gunFire.setActive(stateChange && state == STATE_SHOOTING && weaponCurrent.bulletsIn >= 0);
+        gunFire.setActive(stateChange && state == STATE_SHOOTING && weapons[weaponCurrent].bulletsIn >= 0);
 
         // Handle animations
-        if (stateChange && weaponCurrent != null) {
+        if (stateChange && weaponCurrent != -1) {
             switch (state) {
                 case STATE_SHOOTING:
-                    getSkeletonWrapper().startAnimation(weaponCurrent.weapon.getAnimations().shoot, stateTimer/60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].weapon.getAnimations().shoot, stateTimer/60f, false);
                     break;
                 case STATE_RELOADING:
-                    getSkeletonWrapper().startAnimation(weaponCurrent.weapon.getAnimations().reload, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].weapon.getAnimations().reload, stateTimer / 60f, false);
                     break;
                 case STATE_COCK:
-                    getSkeletonWrapper().startAnimation(weaponCurrent.weapon.getAnimations().cock, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].weapon.getAnimations().cock, stateTimer / 60f, false);
                     break;
                 case STATE_EQUIP:
-                    getSkeletonWrapper().startAnimation(weaponCurrent.weapon.getAnimations().equip, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].weapon.getAnimations().equip, stateTimer / 60f, false);
                     break;
                 case STATE_DEQUIP:
-                    getSkeletonWrapper().startAnimation(weaponCurrent.weapon.getAnimations().unequip, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].weapon.getAnimations().unequip, stateTimer / 60f, false);
                     break;
             }
         }
@@ -245,25 +259,25 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         switch (state) {
             case STATE_IDLE:
                 // If reload key is currently pressed
-                if (reloadKey && weaponCurrent.bulletsIn < weaponCurrent.weapon.getClipSize()) {
-                    stateTimer = Math.round(weaponCurrent.weapon.getReloadDuration() * 60);
+                if (reloadKey && weapons[weaponCurrent].bulletsIn < weapons[weaponCurrent].weapon.getClipSize()) {
+                    stateTimer = Math.round(weapons[weaponCurrent].weapon.getReloadDuration() * 60);
                     state = STATE_RELOADING;
                 } else if (shootKey) { // otherwise is shoot key pressed?
-                    stateTimer = Math.max(0, weaponCurrent.weapon.getRateOfFire());
+                    stateTimer = Math.max(0, weapons[weaponCurrent].weapon.getRateOfFire());
                     state = STATE_SHOOTING;
 
-                    if (weaponCurrent.bulletsIn >= 0) {
-                        weaponCurrent.bulletsIn -= 1;
+                    if (weapons[weaponCurrent].bulletsIn >= 0) {
+                        weapons[weaponCurrent].bulletsIn -= 1;
 
                         // Actually shoot if there was one bullet
-                        if (weaponCurrent.bulletsIn >= 0) {
+                        if (weapons[weaponCurrent].bulletsIn >= 0) {
 
                         }
                     }
-                } else if (weaponNext != null) {
+                } else if (weaponNext != -1) {
                     state = STATE_DEQUIP;
-                    if (weaponCurrent != null) {
-                        stateTimer = Math.round(weaponCurrent.weapon.getEquipDuration() * 60);
+                    if (getCurrentWeaponObject() != null) {
+                        stateTimer = Math.round(weapons[weaponCurrent].weapon.getEquipDuration() * 60);
                     } else {
                         stateTimer = 0;
                     }
@@ -272,37 +286,37 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
             case STATE_RELOADING:
                 if (stateTimer <= 0) {
-                    if (weaponCurrent.weapon.getReloadType() == Weapon.RELOAD_FULL_COCK) {
+                    if (weapons[weaponCurrent].weapon.getReloadType() == Weapon.RELOAD_FULL_COCK) {
                         state = STATE_COCK;
-                        stateTimer = Math.round(weaponCurrent.weapon.getCockDuration() * 60);
-                        weaponCurrent.bulletsIn = weaponCurrent.weapon.getClipSize();
-                    } else if (weaponCurrent.weapon.getReloadType() == Weapon.RELOAD_SHOTGUN) {
+                        stateTimer = Math.round(weapons[weaponCurrent].weapon.getCockDuration() * 60);
+                        weapons[weaponCurrent].bulletsIn = weapons[weaponCurrent].weapon.getClipSize();
+                    } else if (weapons[weaponCurrent].weapon.getReloadType() == Weapon.RELOAD_SHOTGUN) {
                         // Add a shell
-                        weaponCurrent.bulletsIn ++;
+                        weapons[weaponCurrent].bulletsIn ++;
                         // If full
-                        if (weaponCurrent.bulletsIn >= weaponCurrent.weapon.getClipSize()) {
+                        if (weapons[weaponCurrent].bulletsIn >= weapons[weaponCurrent].weapon.getClipSize()) {
                             // Cock the gun
                             state = STATE_COCK;
-                            stateTimer = Math.round(weaponCurrent.weapon.getCockDuration() * 60);
-                            weaponCurrent.bulletsIn = weaponCurrent.weapon.getClipSize();
+                            stateTimer = Math.round(weapons[weaponCurrent].weapon.getCockDuration() * 60);
+                            weapons[weaponCurrent].bulletsIn = weapons[weaponCurrent].weapon.getClipSize();
                         } else {
                             // Load another shell
-                            stateTimer = Math.round(weaponCurrent.weapon.getReloadDuration() * 60);
+                            stateTimer = Math.round(weapons[weaponCurrent].weapon.getReloadDuration() * 60);
                             state = STATE_RELOADING;
                             stateChange = true;
                         }
                     } else {
                         state = STATE_IDLE;
-                        weaponCurrent.bulletsIn = weaponCurrent.weapon.getClipSize();
+                        weapons[weaponCurrent].bulletsIn = weapons[weaponCurrent].weapon.getClipSize();
                     }
                 }
                 break;
 
             case STATE_SHOOTING:
                 if (stateTimer <= 0) {
-                    if (weaponCurrent.weapon.getRateOfFire() == -1) {
+                    if (weapons[weaponCurrent].weapon.getRateOfFire() == -1) {
                         state = STATE_COCK;
-                        stateTimer = Math.round(weaponCurrent.weapon.getCockDuration() * 60);
+                        stateTimer = Math.round(weapons[weaponCurrent].weapon.getCockDuration() * 60);
                     } else {
                         state = STATE_IDLE;
                     }
@@ -318,12 +332,12 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
             case STATE_DEQUIP:
                 if (stateTimer <= 0) {
                     weaponCurrent = weaponNext;
-                    weaponNext = null;
+                    weaponNext = -1;
                     gunTexture = null;
-                    getSkeletonWrapper().setIdleAnimation(weaponCurrent.weapon.getAnimations().idle, 2);
+                    getSkeletonWrapper().setIdleAnimation(weapons[weaponCurrent].weapon.getAnimations().idle, 2);
                     getSkeletonWrapper().startIdle();
                     state = STATE_EQUIP;
-                    stateTimer = Math.round(weaponCurrent.weapon.getEquipDuration() * 60);
+                    stateTimer = Math.round(weapons[weaponCurrent].weapon.getEquipDuration() * 60);
                 }
                 break;
 
@@ -447,23 +461,23 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     @Override
     public void animationEvent(Event event) {
         if (event.getData().getName().contentEquals("ev_shoot")) {
-            if (weaponCurrent.bulletsIn >= 0) {
-                WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.SHOOT);
+            if (weapons[weaponCurrent].bulletsIn >= 0) {
+                WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.SHOOT);
             } else {
-                WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.EMPTY);
+                WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EMPTY);
             }
         } else if (event.getData().getName().contentEquals("ev_equip")) {
-            WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.EQUIP);
+            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EQUIP);
         } else if (event.getData().getName().contentEquals("ev_dequip")) {
-            WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.DEQUIP);
+            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.DEQUIP);
         } else if (event.getData().getName().contentEquals("ev_eject")) {
-            WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.EJECT);
+            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EJECT);
         } else if (event.getData().getName().contentEquals("ev_insert")) {
-            WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.INSERT);
+            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.INSERT);
         } else if (event.getData().getName().contentEquals("ev_cock")) {
-            WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.COCK);
+            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.COCK);
         } else if (event.getData().getName().contentEquals("ev_empty")) {
-            WeaponManager.getInstance().playSound(weaponCurrent.weapon, WeaponManager.SoundType.EMPTY);
+            WeaponManager.getInstance().playSound(weapons[weaponCurrent].weapon, WeaponManager.SoundType.EMPTY);
         }
     }
 

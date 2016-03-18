@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
@@ -99,9 +100,19 @@ public class UserPlayer extends Player{
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            setGun(new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")));
+            setNextWeapon(0);
+            // Tell server
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 0;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            setGun(new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")));
+            setNextWeapon(1);
+            // Tell client
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 1;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
         super.step(delta);

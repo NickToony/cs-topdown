@@ -11,5 +11,6 @@ public class CreatePlayerPacket extends Packet {
     public float y;
     public int id;
     public boolean light = false;
-    public WeaponWrapper weaponWrapper;
+    public WeaponWrapper weapons[];
+    public int currentWeapon;
 }

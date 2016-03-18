@@ -1,6 +1,8 @@
 package com.nicktoony.cstopdown.networking.client;
 
+import com.badlogic.gdx.utils.Json;
 import com.nicktoony.cstopdown.networking.packets.Packet;
+import com.nicktoony.cstopdown.networking.packets.PacketDefinitions;
 import com.nicktoony.cstopdown.networking.server.SBClient;
 import com.nicktoony.cstopdown.networking.server.SBServer;
 
@@ -11,6 +13,7 @@ public class SBLocalSocket extends SBSocket {
 
     private SBServer server;
     private SBClient client;
+    private static Json json = new Json();
 
     public SBLocalSocket(SBServer server) {
         super("", 0); // we don't care about port/ip
@@ -19,7 +22,7 @@ public class SBLocalSocket extends SBSocket {
         this.client = new SBClient(server) {
             @Override
             public void sendPacket(Packet packet) {
-                notifyMessage(SBLocalSocket.this, packet);
+                notifyMessage(SBLocalSocket.this, json.fromJson(packet.getClass(), json.toJson(packet)));
             }
 
             @Override
@@ -47,7 +50,7 @@ public class SBLocalSocket extends SBSocket {
 
     @Override
     protected boolean sendPacket(Packet packet) {
-        server.notifyClientMessage(client, packet);
+        server.notifyClientMessage(client, json.fromJson(packet.getClass(), json.toJson(packet)));
         return true;
     }
 }

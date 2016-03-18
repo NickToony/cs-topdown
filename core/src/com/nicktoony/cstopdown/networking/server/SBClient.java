@@ -11,6 +11,7 @@ import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
@@ -96,6 +97,8 @@ public abstract class SBClient {
             insertInputQueue((PlayerInputPacket) packet);
         } else if (packet instanceof PlayerToggleLight) {
             insertInputQueue((PlayerToggleLight) packet);
+        } else if (packet instanceof PlayerSwitchWeapon) {
+            insertInputQueue((PlayerSwitchWeapon) packet);
         }
     }
 
@@ -106,13 +109,18 @@ public abstract class SBClient {
             } else {
                 state = STATE.ALIVE;
                 player = server.getGame().createPlayer(this.id, 50, 50);
-                player.setGun(new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")));
+                player.setWeapons(new WeaponWrapper[] {
+                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
+                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47"))
+                });
+                player.setNextWeapon(0);
 
                 CreatePlayerPacket createPlayer = new CreatePlayerPacket();
                 createPlayer.x = player.getX();
                 createPlayer.y = player.getY();
                 createPlayer.id = this.id;
-                createPlayer.weaponWrapper = getPlayer().getNextWeapon();
+                createPlayer.weapons = getPlayer().getWeapons();
+                createPlayer.currentWeapon = 0;
                 server.sendToAll(createPlayer);
             }
         } else if (state == STATE.ALIVE) {
@@ -190,6 +198,14 @@ public abstract class SBClient {
                     lightPacket.id = id;
 
                     server.sendToOthers(lightPacket, this);
+                } else if (packet instanceof PlayerSwitchWeapon) {
+                    PlayerSwitchWeapon playerSwitchWeapon = (PlayerSwitchWeapon) packet;
+                    player.setNextWeapon(playerSwitchWeapon.slot);
+
+                    // Add an id
+                    playerSwitchWeapon.id = id;
+
+                    server.sendToOthers(playerSwitchWeapon, this);
                 }
 
             } else {
@@ -238,7 +254,8 @@ public abstract class SBClient {
                 packet.x = client.getPlayer().getX();
                 packet.y = client.getPlayer().getY();
                 packet.light = client.getPlayer().isLightOn();
-                packet.weaponWrapper = client.getPlayer().getCurrentWeapon();
+                packet.weapons = client.getPlayer().getWeapons();
+                packet.currentWeapon = client.getPlayer().getCurrentWeapon();
                 sendPacket(packet);
             }
         }
