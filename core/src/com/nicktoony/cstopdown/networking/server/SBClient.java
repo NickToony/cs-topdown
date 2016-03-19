@@ -149,6 +149,7 @@ public abstract class SBClient {
 
 
         if (leniency > 0) leniency -= 2;
+        if (leniency > 200) leniency = 200;
     }
 
     private void handleInputQueue() {
