@@ -99,7 +99,7 @@ public abstract class SBServer {
 
     public void step() {
         if (lastFPSCount < System.currentTimeMillis() - 1000) {
-//            System.out.println("Server FPS: " + fpsFrames);
+            System.out.println("Server FPS: " + fpsFrames);
             fpsFrames = 0;
             lastFPSCount = System.currentTimeMillis();
         }

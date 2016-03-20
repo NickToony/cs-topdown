@@ -2,7 +2,7 @@
   "sv_name": "Dev Server",
   "sv_max_players": 16,
   "sv_server_list": true,
-  "sv_ip": "192.168.1.205",
+  "sv_ip": "127.0.0.1",
   "sv_port": 9000,
   "sv_password": "",
   "mp_player_collisions": false,

@@ -22,7 +22,7 @@ public class SBLocalSocket extends SBSocket {
         this.client = new SBClient(server) {
             @Override
             public void sendPacket(Packet packet) {
-                notifyMessage(SBLocalSocket.this, json.fromJson(packet.getClass(), json.toJson(packet)));
+                notifyMessage(SBLocalSocket.this, packet);
             }
 
             @Override
@@ -50,7 +50,7 @@ public class SBLocalSocket extends SBSocket {
 
     @Override
     protected boolean sendPacket(Packet packet) {
-        server.notifyClientMessage(client, json.fromJson(packet.getClass(), json.toJson(packet)));
+        server.notifyClientMessage(client, packet);
         return true;
     }
 }

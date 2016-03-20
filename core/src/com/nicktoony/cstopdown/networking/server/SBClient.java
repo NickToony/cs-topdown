@@ -4,10 +4,7 @@ import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
 import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
-import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
-import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
-import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
-import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
+import com.nicktoony.cstopdown.networking.packets.connection.*;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
@@ -99,6 +96,8 @@ public abstract class SBClient {
             insertInputQueue((PlayerToggleLight) packet);
         } else if (packet instanceof PlayerSwitchWeapon) {
             insertInputQueue((PlayerSwitchWeapon) packet);
+        } else if (packet instanceof PingPacket) {
+            sendPacket(packet);
         }
     }
 
@@ -158,7 +157,7 @@ public abstract class SBClient {
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-            if (packet.timestamp <= getTimestamp() - server.getConfig().sv_lag_compensate) {
+            if (packet.timestamp < getTimestamp() - server.getConfig().sv_lag_compensate) {
                 // Latency has been compensated. Process it!
                 iterator.remove();
 

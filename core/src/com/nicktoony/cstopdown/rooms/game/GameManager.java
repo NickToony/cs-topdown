@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.rooms.game;
 
 import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
+import com.nicktoony.cstopdown.networking.packets.connection.PingPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -17,10 +18,15 @@ import java.util.Map;
  * Created by Nick on 03/01/2016.
  */
 public class GameManager implements SBSocket.SBSocketListener {
+    private final long PING_TIMER = 3000;
+
     private RoomGame roomGame;
     private SBSocket socket;
     private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
     private long initialTimestamp;
+    private long ping = 0;
+    private long lastPing = 0;
+
 
     public GameManager(RoomGame roomGame, SBSocket socket) {
         this.roomGame = roomGame;
@@ -68,6 +74,8 @@ public class GameManager implements SBSocket.SBSocketListener {
             handleReceivedPacket((PlayerToggleLight) packet);
         } else if (packet instanceof PlayerSwitchWeapon) {
             handleReceivedPacket((PlayerSwitchWeapon) packet);
+        } else if (packet instanceof PingPacket) {
+            handleReceivedPacket((PingPacket) packet);
         }
     }
 
@@ -109,6 +117,15 @@ public class GameManager implements SBSocket.SBSocketListener {
         }
     }
 
+    public void update() {
+        if (lastPing < getTimestamp() - PING_TIMER) {
+            PingPacket packet = new PingPacket();
+            packet.timestamp = getTimestamp();
+            socket.sendMessage(packet);
+            lastPing = getTimestamp();
+        }
+    }
+
     private void handleReceivedPacket(CreatePlayerPacket packet) {
         // Create the player in the room
         Player player = roomGame.createPlayer(packet.id,
@@ -143,5 +160,11 @@ public class GameManager implements SBSocket.SBSocketListener {
         }
     }
 
+    private void handleReceivedPacket(PingPacket packet) {
+        ping = getTimestamp() - (long) packet.timestamp;
+    }
 
+    public long getPing() {
+        return ping;
+    }
 }

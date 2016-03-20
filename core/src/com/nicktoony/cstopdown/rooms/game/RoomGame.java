@@ -86,6 +86,8 @@ public class RoomGame extends Room {
             world.step(1, 1, 1);
             accumulator -= 1;
         }
+
+        gameManager.update();
     }
 
     @Override
