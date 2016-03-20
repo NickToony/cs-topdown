@@ -113,10 +113,11 @@ public abstract class SBClient {
             // calculate average
             pingAverage = 0;
             for (long p : ping) {
-                pingAverage += p;
+                if (p > pingAverage) {
+                    pingAverage = p;
+                }
             }
-            pingAverage /= ping.length;
-            System.out.println("PING AVERAGE: " + pingAverage);
+//            System.out.println("PING MAX: " + pingAverage);
 
         }
     }
@@ -175,7 +176,7 @@ public abstract class SBClient {
 
 
         if (leniency > 0) leniency -= 2;
-        if (leniency > 200) leniency = 200;
+        if (leniency > 100) leniency = 100;
     }
 
     private void handleInputQueue() {
@@ -184,7 +185,9 @@ public abstract class SBClient {
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-            if (packet.timestamp < getTimestamp() - server.getConfig().sv_lag_compensate) {
+            if (packet.timestamp < getTimestamp()
+                    - Math.max(server.getConfig().sv_min_compensate,
+                    pingAverage + server.getConfig().sv_buffer_compensate)) {
                 // Latency has been compensated. Process it!
                 iterator.remove();
 
