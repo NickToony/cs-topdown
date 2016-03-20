@@ -38,9 +38,6 @@ public class HUD extends Entity<RoomGame> {
             b.append(player.getCurrentWeaponObject().bulletsOut);
             b.append("      ");
             b.append(player.getCurrentWeaponObject().weapon.getName());
-            b.append("                    ");
-            b.append("Ping ");
-            b.append(getRoom().getGameManager().getPing());
             font.draw(spriteBatch, b.toString(), 50, 50);
         }
     }

@@ -7,5 +7,6 @@
   "sv_password": "",
   "mp_player_collisions": false,
   "mp_player_update_rate": 60,
-  "mp_player_move_speed": 2.0
+  "mp_player_move_speed": 2.0,
+  "sv_lag_compensate": 2000
 }

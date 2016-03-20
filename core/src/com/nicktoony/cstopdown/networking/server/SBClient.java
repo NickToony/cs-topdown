@@ -32,6 +32,8 @@ public abstract class SBClient {
         DISCONNECTING
     }
 
+    private final long PING_TIMER = 3000;
+
     private STATE state = STATE.INIT;
     private SBServer server;
     private Player player;
@@ -41,6 +43,10 @@ public abstract class SBClient {
     private long initialTimestamp; // only sync'd on loaded!
     private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
     private float leniency = 0;
+    private long[] ping = {0, 0, 0, 0, 0};
+    private int pingIndex = 0;
+    private long lastPing = 0;
+    private long pingAverage = 0;
 
     public abstract void sendPacket(Packet packet);
     public abstract void close();
@@ -85,6 +91,7 @@ public abstract class SBClient {
         if (packet instanceof LoadedPacket) {
             this.state = STATE.SPECTATE;
             this.initialTimestamp = System.currentTimeMillis();
+            this.lastPing = getTimestamp();
             fullUpdate();
         }
     }
@@ -97,7 +104,20 @@ public abstract class SBClient {
         } else if (packet instanceof PlayerSwitchWeapon) {
             insertInputQueue((PlayerSwitchWeapon) packet);
         } else if (packet instanceof PingPacket) {
-            sendPacket(packet);
+            ping[pingIndex] = getTimestamp() - (long) ((PingPacket) packet).timestamp;
+            pingIndex += 1;
+            if (pingIndex >= ping.length) {
+                pingIndex = 0;
+            }
+
+            // calculate average
+            pingAverage = 0;
+            for (long p : ping) {
+                pingAverage += p;
+            }
+            pingAverage /= ping.length;
+            System.out.println("PING AVERAGE: " + pingAverage);
+
         }
     }
 
@@ -144,6 +164,13 @@ public abstract class SBClient {
             }
 
             handleInputQueue();
+        }
+
+        if (lastPing < getTimestamp() - PING_TIMER) {
+            PingPacket packet = new PingPacket();
+            packet.timestamp = getTimestamp();
+            sendPacket(packet);
+            lastPing = getTimestamp();
         }
 
 

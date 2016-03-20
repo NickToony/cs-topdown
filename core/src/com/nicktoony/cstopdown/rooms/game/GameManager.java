@@ -18,14 +18,12 @@ import java.util.Map;
  * Created by Nick on 03/01/2016.
  */
 public class GameManager implements SBSocket.SBSocketListener {
-    private final long PING_TIMER = 3000;
+
 
     private RoomGame roomGame;
     private SBSocket socket;
     private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
     private long initialTimestamp;
-    private long ping = 0;
-    private long lastPing = 0;
 
 
     public GameManager(RoomGame roomGame, SBSocket socket) {
@@ -118,12 +116,7 @@ public class GameManager implements SBSocket.SBSocketListener {
     }
 
     public void update() {
-        if (lastPing < getTimestamp() - PING_TIMER) {
-            PingPacket packet = new PingPacket();
-            packet.timestamp = getTimestamp();
-            socket.sendMessage(packet);
-            lastPing = getTimestamp();
-        }
+
     }
 
     private void handleReceivedPacket(CreatePlayerPacket packet) {
@@ -161,10 +154,6 @@ public class GameManager implements SBSocket.SBSocketListener {
     }
 
     private void handleReceivedPacket(PingPacket packet) {
-        ping = getTimestamp() - (long) packet.timestamp;
-    }
-
-    public long getPing() {
-        return ping;
+        socket.sendMessage(packet);
     }
 }
