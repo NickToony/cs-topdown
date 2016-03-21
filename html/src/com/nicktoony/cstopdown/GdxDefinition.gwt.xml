@@ -10,7 +10,7 @@
 	<entry-point class='com.nicktoony.cstopdown.client.HtmlLauncher' />
 
 	<!--<set-property name="user.agent" value="gecko1_8, safari"/>-->
-    <!--<collapse-all-properties />-->
+    <collapse-all-properties />
 
 	<set-configuration-property name="gdx.assetpath" value="../android/assets" />
     <extend-configuration-property name="gdx.reflect.include" value="com.nicktoony.cstopdown.networking.packets" />

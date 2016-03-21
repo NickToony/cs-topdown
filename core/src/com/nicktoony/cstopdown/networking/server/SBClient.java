@@ -43,7 +43,7 @@ public abstract class SBClient {
     private long initialTimestamp; // only sync'd on loaded!
     private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
     private float leniency = 0;
-    private long[] ping = {0, 0, 0, 0, 0};
+    private long[] ping;
     private int pingIndex = 0;
     private long lastPing = 0;
     private long pingAverage = 0;
@@ -104,6 +104,13 @@ public abstract class SBClient {
         } else if (packet instanceof PlayerSwitchWeapon) {
             insertInputQueue((PlayerSwitchWeapon) packet);
         } else if (packet instanceof PingPacket) {
+            if (ping == null) {
+                ping = new long[10];
+                for (int i = 0; i < ping.length; i ++) {
+                    ping[i] =  getTimestamp() - (long) ((PingPacket) packet).timestamp;
+                }
+            }
+
             ping[pingIndex] = getTimestamp() - (long) ((PingPacket) packet).timestamp;
             pingIndex += 1;
             if (pingIndex >= ping.length) {
@@ -117,7 +124,7 @@ public abstract class SBClient {
                     pingAverage = p;
                 }
             }
-//            System.out.println("PING MAX: " + pingAverage);
+            System.out.println("PING MAX: " + pingAverage);
 
         }
     }
@@ -186,8 +193,7 @@ public abstract class SBClient {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
             if (packet.timestamp < getTimestamp()
-                    - Math.max(server.getConfig().sv_min_compensate,
-                    pingAverage + server.getConfig().sv_buffer_compensate)) {
+                    - server.getConfig().sv_min_compensate) {
                 // Latency has been compensated. Process it!
                 iterator.remove();
 
@@ -300,6 +306,8 @@ public abstract class SBClient {
         for (int i = 0; i < inputQueue.size(); i++) {
             // Skip to next one if smaller
             if (inputQueue.get(i).timestamp < packet.timestamp) continue;
+
+            System.out.println("WE JUMPED THE QUEUE");
 
             // Otherwise, found location
             inputQueue.add(i, packet);
