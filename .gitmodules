@@ -1,0 +1,6 @@
+[submodule "gameserver-service-java"]
+	path = gameserver-service-java
+	url = C:\\Users\\Nick\\Documents\\cs-topdown\\gameserver-service-java
+[submodule "gameserver-service-libgdx"]
+	path = gameserver-service-libgdx
+	url = C:\\Users\\Nick\\Documents\\cs-topdown\\gameserver-service-libgdx
