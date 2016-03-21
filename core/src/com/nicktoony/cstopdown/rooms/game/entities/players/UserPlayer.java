@@ -113,6 +113,13 @@ public class UserPlayer extends Player{
             playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 1;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            setNextWeapon(2);
+            // Tell client
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 2;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
         super.step(delta);

@@ -1,0 +1,45 @@
+{
+  "name": "Pistol",
+  "clipSize": 15,
+  "clipTotal": 90,
+  "rateOfFire": 20,
+  "accuracy": 90,
+  "recoil": 5,
+  "speed": 100,
+  "cost": 1000,
+  "reward": 250,
+  "silencer": false,
+  "zoom": 1,
+  "reloadDuration": 2,
+  "cockDuration": 0.5,
+  "equipDuration": 0.3,
+  "reloadType": "full_cock",
+  "damage": {
+    "low": 10,
+    "medium": 25,
+    "high": 75
+  },
+  "animations": {
+    "idle": "pistol_idle",
+    "shoot": "pistol_shoot",
+    "reload": "pistol_reload",
+    "equip": "pistol_equip",
+    "unequip": "pistol_dequip",
+    "cock": "pistol_cock"
+  },
+  "sounds": {
+    "shoot": "shoot.wav",
+    "equip": "equip.wav",
+    "dequip": "dequip.wav",
+    "eject": "eject.wav",
+    "insert": "insert.wav",
+    "cock": "cock.wav",
+    "empty": "empty.wav"
+  },
+  "graphics": {
+    "left": false,
+    "right": true,
+    "x_offset": 24,
+    "y_offset": 25
+  }
+}

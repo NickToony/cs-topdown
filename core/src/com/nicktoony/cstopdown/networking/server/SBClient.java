@@ -138,7 +138,9 @@ public abstract class SBClient {
                 player = server.getGame().createPlayer(this.id, 50, 50);
                 player.setWeapons(new WeaponWrapper[] {
                         new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
-                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47"))
+                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")),
+                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("pistol_pistol"))
+
                 });
                 player.setNextWeapon(0);
 
