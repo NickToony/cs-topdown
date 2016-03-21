@@ -24,6 +24,18 @@ The game is developed such that the entire rendering engine may be disabled for 
 
 [Server Config Documentation](SERVERCONFIG.md)
 
+## Building
+1. Clone the repo 
+	- `git clone git clone git@github.com:NickToony/cs-topdown.git`
+2. Fetch the required submodules
+	- `git submodule update --init --recursive`
+3. Build your preferred platform
+	- Server: `./gradlew server:dist`
+	- Desktop: `./gradlew desktop:dist`
+	- Android: `./gradlew android:dist`
+	- iOS: `./gradlew ios:dist`
+	- HTML: `./gradlew html:dist`
+
 ## Contributors
 
 - [HJGreen](https://github.com/HJGreen)
