@@ -117,16 +117,6 @@ public class ServerlistConfig extends GameserverConfig {
         });
     }
 
-    @Override
-    public void startHostLoop(Host host, long rate) {
-
-    }
-
-    @Override
-    public void endHostLoop(Host host) {
-
-    }
-
     /**
      * Provides a Json instance
      * @return

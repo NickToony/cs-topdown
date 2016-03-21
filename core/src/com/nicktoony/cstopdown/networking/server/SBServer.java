@@ -114,6 +114,8 @@ public abstract class SBServer {
                 host.addMeta("port", Integer.toString(config.sv_port));
                 host.create();
             }
+            host.setCurrentPlayers(clients.size());
+            host.step();
         }
 
         // Push the queues
@@ -139,6 +141,9 @@ public abstract class SBServer {
         logger.log("Server closed.");
         stopServerSocket();
         loopManager.endServerLoop();
+        if (host != null) {
+            host.stop();
+        }
     }
 
     private void handleClientConnected(SBClient conn) {
