@@ -19,8 +19,16 @@ A quick adventure into the world of LibGDX: topdown 2D shooter based on the popu
 - Reload: R
 - Switch weapons: 1/2
 
+## Play Now
+You can grab recent builds of the server, desktop and html from my server:
+- [Web](http://cstopdown.nick-hope.co.uk/) (Any modern browser)
+- [Desktop Client](http://cstopdown.nick-hope.co.uk/desktop.jar) (Windows, OSX, Linux)
+- [Server](http://cstopdown.nick-hope.co.uk/server.jar) (Windows, OSX, Linux)
+
+You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/6).
+
 ## Server Hosting
-The game is developed such that the entire rendering engine may be disabled for the purposes of hosting. Target the Server module when compiling, which can then be run in either a no-GUI mode or a simple text-based GUI. Of course, you can also host a game using the full-rendering game on platforms that support it (all except HTML).
+The server module may be ran with either no GUI, or a simple text-based GUI. Alternatively, you can host a server using the game client on platforms that support it (all except HTML).
 
 [Server Config Documentation](SERVERCONFIG.md)
 
