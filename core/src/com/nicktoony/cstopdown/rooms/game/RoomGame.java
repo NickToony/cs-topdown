@@ -76,6 +76,10 @@ public class RoomGame extends Room {
     }
 
     public void step(float delta)  {
+        if (hud != null) {
+            hud.step(delta);
+        }
+
         super.step(delta);
 
         socket.pushNotifications();
@@ -165,5 +169,9 @@ public class RoomGame extends Room {
 
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    public HUD getHud() {
+        return hud;
     }
 }

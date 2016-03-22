@@ -1,30 +1,107 @@
 package com.nicktoony.cstopdown.rooms.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.nicktoony.cstopdown.components.Entity;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.services.TextureManager;
 
 /**
  * Created by Nick on 18/03/2016.
  */
 public class HUD extends Entity<RoomGame> {
 
-    private BitmapFont font;
+    private final int UI_SIZE_X = 1024;
+    private final int UI_SIZE_Y = 768;
+    private BitmapFont hudFont;
+    private BitmapFont chatFont;
+    private Stage stage;
+    private ScrollPane chatScrollPane;
+    private Table chatTable;
+    private Container<ScrollPane> chatContainer;
+    private boolean chatActive = false;
+    private boolean chatJustAdded = false;
 
     @Override
     protected void create(boolean render) {
         if (render) {
-            font = new BitmapFont();
-            font.setColor(Color.BLACK);
-            font.setColor(0.91f, 0.73f, 0.23f, 0.95f);
-            font.getData().scale(2f);
+            hudFont = new BitmapFont();
+            hudFont.setColor(0.91f, 0.73f, 0.23f, 0.95f);
+            hudFont.getData().scale(2f);
+
+            chatFont = new BitmapFont();
+            chatFont.getData().markupEnabled = true;
+
+            // A stage
+            stage = new Stage();
+            Gdx.input.setInputProcessor(stage);
+
+            // Chat container
+            chatContainer = new Container<ScrollPane>();
+            stage.addActor(chatContainer);
+            // Chat background
+            SpriteDrawable chatBackgroundDrawable =
+                    new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/hud/chat_bg.png")));
+            chatContainer.setBackground(chatBackgroundDrawable);
+            // Set size
+            chatContainer.setSize(chatBackgroundDrawable.getSprite().getWidth() * 1.5f,
+                    chatBackgroundDrawable.getSprite().getHeight() * 1.5f);
+            // Set position
+            chatContainer.setPosition(20, 100);
+            chatContainer.pad(10);
+
+            // Chat table
+            chatTable = new Table();
+            chatTable.bottom();
+
+            // Scroll pane for chat table
+            chatScrollPane = new ScrollPane(chatTable);
+            chatScrollPane.setScrollbarsOnTop(true);
+            chatScrollPane.setFlickScroll(false);
+            chatContainer.setActor(chatScrollPane);
+            chatContainer.fill();
+            chatContainer.align(Align.bottomLeft);
+
+            addChatLine("[YELLOW]Chat initiated. Press Y to focus.");
+
         }
+    }
+
+    private void addChatLine(String string) {
+        // Add a new row
+        chatTable.row().expandX().align(Align.bottom);
+        // Define the label
+        Label label = new Label(string,
+                new Label.LabelStyle(chatFont, Color.WHITE));
+        label.setWrap(true);
+        chatTable.add(label).fillX().pad(2);
+        chatJustAdded = true;
+    }
+
+    private void addChatLine(String name, String nameColour, String message, String messageColour) {
+        addChatLine("[" + nameColour + "]" + name
+                + ": [" + messageColour + "]" + message);
     }
 
     @Override
     public void step(float delta) {
+        stage.act(delta);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            chatActive = !chatActive;
+            chatScrollPane.setFlickScroll(chatActive);
+        }
 
     }
 
@@ -38,12 +115,30 @@ public class HUD extends Entity<RoomGame> {
             b.append(player.getCurrentWeaponObject().bulletsOut);
             b.append("      ");
             b.append(player.getCurrentWeaponObject().weapon.getName());
-            font.draw(spriteBatch, b.toString(), 50, 50);
+            hudFont.draw(spriteBatch, b.toString(), 50, 50);
         }
+
+        stage.draw();
+
+
+        if (chatJustAdded) {
+            chatScrollPane.scrollTo(0, 0, 0, 0);
+            chatJustAdded = false;
+        }
+//        stage.setDebugAll(true);
     }
 
     @Override
     public void dispose(boolean render) {
-        font.dispose();
+        hudFont.dispose();
+        stage.dispose();
+    }
+
+    public boolean getMouse() {
+        return (chatActive);
+    }
+
+    public boolean getKeyboard() {
+        return false;
     }
 }

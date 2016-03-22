@@ -11,6 +11,12 @@
       "weapons": [
         "shotgun_spas"
       ]
+    },
+    {
+      "name": "Pistols",
+      "weapons": [
+        "pistol_pistol"
+      ]
     }
   ]
 }

@@ -60,10 +60,41 @@ public class UserPlayer extends Player{
 
         this.reloadKey = Gdx.input.isKeyPressed(Input.Keys.R);
 
-        shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX()),
+                    ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY()));
+        }
+
+
+        if (!getRoom().getHud().getMouse()) {
+            shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
+        }
 
         direction = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
         directionTo = direction;
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            setNextWeapon(0);
+            // Tell server
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 0;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            setNextWeapon(1);
+            // Tell client
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 1;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            setNextWeapon(2);
+            // Tell client
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 2;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
+        }
 
         // Check if changed movement keys
         int newMove = ((moveLeft ? 1 : 0) * 1000)
@@ -92,34 +123,6 @@ public class UserPlayer extends Player{
             lastMove = newMove;
             lastShoot = shootKey;
             lastReload = reloadKey;
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-            setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX()),
-                    ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY()));
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            setNextWeapon(0);
-            // Tell server
-            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
-            playerSwitchWeapon.slot = 0;
-            getRoom().getSocket().sendMessage(playerSwitchWeapon);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            setNextWeapon(1);
-            // Tell client
-            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
-            playerSwitchWeapon.slot = 1;
-            getRoom().getSocket().sendMessage(playerSwitchWeapon);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-            setNextWeapon(2);
-            // Tell client
-            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
-            playerSwitchWeapon.slot = 2;
-            getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
         super.step(delta);
