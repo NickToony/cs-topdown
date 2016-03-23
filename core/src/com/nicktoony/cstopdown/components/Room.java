@@ -108,6 +108,10 @@ public class Room extends Renderable {
         }
     }
 
+    public void resize(int width, int height) {
+
+    }
+
     public MyGame getGame() {
         return game;
     }

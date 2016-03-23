@@ -104,6 +104,14 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
         spriteBatch.dispose();
     }
 
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if (room != null) {
+            room.resize(width, height);
+        }
+    }
+
     /**
      * Loads the games config file, and acts upon it depending on the OS
      */

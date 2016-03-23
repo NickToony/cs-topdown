@@ -4,10 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -27,6 +24,7 @@ import com.nicktoony.cstopdown.rooms.connect.RoomConnect;
 import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
 import com.nicktoony.cstopdown.services.Logger;
 import com.nicktoony.cstopdown.services.SkinManager;
+import com.nicktoony.cstopdown.services.SoundManager;
 import com.nicktoony.cstopdown.services.TextureManager;
 
 import java.util.ArrayList;
@@ -37,12 +35,12 @@ import java.util.List;
  */
 public class RoomMainMenu extends Room {
 
-    private final int UI_SIZE_X = 1024;
-    private final int UI_SIZE_Y = 768;
-
+    private final int UI_SIZE_X = 1920;
+    private final int UI_SIZE_Y = 1080;
 
     private Stage stage;
     private Viewport viewport;
+    private Table table;
 
     @Override
     public void create(boolean render) {
@@ -52,24 +50,25 @@ public class RoomMainMenu extends Room {
         Gdx.app.log("LogTest", "Hello World");
 
         // A stage
-        stage = new Stage(new ExtendViewport(UI_SIZE_X, UI_SIZE_Y));
+        stage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
 
         // Handle input, and add the actor
         Gdx.input.setInputProcessor(stage);
 
         // Table layout
-        Table table = new Table();
-        table.setFillParent(true);
-        table.pad(40);
+        table = new Table();
+//        table.setFillParent(true);
+        table.pad(40).left().bottom();
 
         // Add background
-        Image background = new Image(TextureManager.getTexture("ui/main_menu/background.png"));
+        Image background = new Image(TextureManager.getTexture("ui/main_menu/background.jpg"));
         background.setFillParent(true);
         stage.addActor(background);
 
         // Add background
         Actor menuBackground = new Image(TextureManager.getTexture("ui/main_menu/left_side_bg.png"));
         menuBackground.setPosition(30, 0);
+        table.setBackground(new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/main_menu/background.jpg"))));
         stage.addActor(menuBackground);
 
         // Define all labels
@@ -144,14 +143,20 @@ public class RoomMainMenu extends Room {
 
         };
 
-        row(table).expandY();
         for (Actor label : labels) {
-            table.add(label);
             row(table);
+            table.add(label).left();
         }
 
-
         stage.addActor(table);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (stage != null) {
+            stage.getViewport().update(width, height);
+            System.out.println("YES");
+        }
     }
 
     private Actor buttonWithListener(Label label, EventListener listener) {
@@ -162,11 +167,29 @@ public class RoomMainMenu extends Room {
         Button button = new Button(buttonStyle);
         button.add(label);
         button.addListener(listener);
+
+        button.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+
+                if (event.getTarget() == event.getListenerActor()) {
+                    SoundManager.getSound(Gdx.files.internal("sounds/rollover.ogg")).play();
+                }
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                SoundManager.getSound(Gdx.files.internal("sounds/click.ogg")).play();
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
         return button;
     }
 
     private Cell row(Table table) {
-        return table.row().bottom().left().expandX().padBottom(20);
+        return table.row().padBottom(20);
     }
 
     public void step(float delta) {
@@ -178,6 +201,7 @@ public class RoomMainMenu extends Room {
     public void render(SpriteBatch spriteBatch) {
         super.render(spriteBatch);
         stage.draw();
+
     }
 
     @Override
