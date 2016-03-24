@@ -268,7 +268,7 @@ public abstract class SBClient extends SBPlayer {
 
     public void fullUpdate() {
         for (SBClient client : server.getClients()) {
-            if (client != this && client.getState() == STATE.INGAME) {
+            if (client != this && client.isAlive()) {
                 CreatePlayerPacket packet = new CreatePlayerPacket();
                 packet.id = client.getId();
                 packet.x = client.getPlayer().getX();
@@ -338,5 +338,10 @@ public abstract class SBClient extends SBPlayer {
     @Override
     public int getID() {
         return id;
+    }
+
+    @Override
+    public boolean isBot() {
+        return false;
     }
 }

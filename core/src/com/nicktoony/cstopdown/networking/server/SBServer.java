@@ -11,6 +11,7 @@ import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
+import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.cstopdown.config.ServerlistConfig;
@@ -117,6 +118,13 @@ public abstract class SBServer {
 
         // Begin the game
         startRound();
+
+        for (int i = 0; i < config.sv_bots; i ++) {
+            SBClient client = new SBBotClient(this);
+            handleClientConnected(client);
+            client.setState(SBClient.STATE.LOADING);
+            notifyClientMessage(client, new LoadedPacket());
+        }
     }
 
     public void step() {

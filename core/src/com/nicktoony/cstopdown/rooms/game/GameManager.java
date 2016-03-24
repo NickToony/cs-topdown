@@ -123,7 +123,7 @@ public class GameManager implements SBSocket.SBSocketListener {
         // Create the player in the room
         Player player = roomGame.createPlayer(packet.id,
                 packet.x,
-                packet.y);
+                packet.y, false);
         // Update light
         player.setLightOn(packet.light);
         // Add it to the ID-Player map

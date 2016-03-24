@@ -16,6 +16,7 @@ public interface PlayerModInterface {
     String getName();
     int getID();
     int getTeam();
+    boolean isBot();
 
     // Actions
     boolean spawn();

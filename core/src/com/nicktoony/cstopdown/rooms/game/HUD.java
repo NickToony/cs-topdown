@@ -140,6 +140,7 @@ public class HUD extends Entity<RoomGame> {
     @Override
     public void dispose(boolean render) {
         hudFont.dispose();
+        chatFont.dispose();
         stage.dispose();
     }
 

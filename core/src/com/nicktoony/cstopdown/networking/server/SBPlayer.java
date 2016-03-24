@@ -82,7 +82,7 @@ public abstract class SBPlayer implements PlayerModInterface {
         slay();
 
         // Spawn a new one
-        player = server.getGame().createPlayer(getID(), x, y);
+        player = server.getGame().createPlayer(getID(), x, y, isBot());
         player.setWeapons(new WeaponWrapper[] {
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")),

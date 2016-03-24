@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
+import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
@@ -110,14 +111,18 @@ public class RoomGame extends Room {
         return world;
     }
 
-    public Player createPlayer(int id, float x, float y) {
+    public Player createPlayer(int id, float x, float y, boolean bot) {
         // Define a player object
         Player player;
         if (socket != null && id == socket.getId()) {
             player = new UserPlayer();
             map.setEntitySnap(player);
         } else {
-            player = new Player();
+            if (!bot) {
+                player = new Player();
+            } else {
+                player = new BotPlayer();
+            }
         }
         player.setId(id);
         player.setX(x);
