@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.config.ServerConfig;
+import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
+import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.cstopdown.config.ServerlistConfig;
@@ -36,6 +39,13 @@ public abstract class SBServer {
         }
     }
 
+    enum STATE {
+        ROUND_START,
+        ROUND,
+        ROUND_END
+    }
+    private STATE state;
+
     private ServerConfig config;
     private Logger logger;
     private Host host;
@@ -47,6 +57,7 @@ public abstract class SBServer {
     private long lastTime;
     private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
+    private long roundTimer = 0;
 
     private long lastFPSCount = System.currentTimeMillis();
     private int fpsFrames = 0;
@@ -54,6 +65,8 @@ public abstract class SBServer {
     private List<SBClient> connectedQueue = new ArrayList<SBClient>();
     private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
     private List<ReceivedPacket> messageQueue = new ArrayList<ReceivedPacket>();
+
+    private List<GameModeMod> mods = new ArrayList<GameModeMod>();
 
     // Get the logg
     public Logger getLogger() {
@@ -95,6 +108,15 @@ public abstract class SBServer {
         loopManager.startServerLoop(this);
 
         this.lastTime = System.currentTimeMillis();
+
+        LastTeamStanding lastTeamStanding = new LastTeamStanding();
+        lastTeamStanding.setup(this);
+        mods.add(lastTeamStanding);
+
+        notifyModInit();
+
+        // Begin the game
+        startRound();
     }
 
     public void step() {
@@ -131,6 +153,33 @@ public abstract class SBServer {
         lastTime = now;
         // Update world
         roomGame.step(delta);
+
+        // Manages round time
+        roundStep();
+    }
+
+    private void roundStep() {
+        switch (state) {
+            case ROUND_START:
+                if ((config.mp_freeze_time*1000) + roundTimer < System.currentTimeMillis()) {
+                    state = STATE.ROUND;
+                    roundTimer = System.currentTimeMillis();
+                    notifyModFreezeTime();
+                }
+                break;
+
+            case ROUND:
+                if ((config.mp_round_time*1000) + roundTimer < System.currentTimeMillis()) {
+                    endRound();
+                }
+                break;
+
+            case ROUND_END:
+                if ((config.mp_victory_time*1000) + roundTimer < System.currentTimeMillis()) {
+                    startRound();
+                }
+                break;
+        }
     }
 
     public boolean isTimerIsRunning() {
@@ -251,6 +300,20 @@ public abstract class SBServer {
         messageQueue.clear();
     }
 
+    public void startRound() {
+        state = STATE.ROUND_START;
+        roundTimer = System.currentTimeMillis();
+
+        notifyModRoundStart();
+    }
+
+    public void endRound() {
+        state = STATE.ROUND_END;
+        roundTimer = System.currentTimeMillis();
+
+        notifyModRoundEnd();
+    }
+
     public List<SBClient> getClients() {
         return clients;
     }
@@ -261,5 +324,41 @@ public abstract class SBServer {
 
     public RoomGame getRoom() {
         return roomGame;
+    }
+
+    public void notifyModInit() {
+        for (GameModeMod mod : mods) {
+            mod.evInit();
+        }
+    }
+
+    public void notifyModRoundStart() {
+        for (GameModeMod mod : mods) {
+            mod.evRoundStart();
+        }
+    }
+
+    public void notifyModFreezeTime() {
+        for (GameModeMod mod : mods) {
+            mod.evFreezeTimeEnd();
+        }
+    }
+
+    public void notifyModRoundEnd() {
+        for (GameModeMod mod : mods) {
+            mod.evRoundEnd();
+        }
+    }
+
+    public void notifyModPlayerConnected(PlayerModInterface player) {
+        for (GameModeMod mod : mods) {
+            mod.evPlayerConnected(player);
+        }
+    }
+
+    public void notifyModPlayerJoinedTeam(PlayerModInterface player) {
+        for (GameModeMod mod : mods) {
+            mod.evPlayerJoinedTeam(player);
+        }
     }
 }

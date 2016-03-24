@@ -25,6 +25,9 @@ public class ServerConfig {
     // Gameplay settings
     public boolean mp_player_collisions = false;
     public float mp_player_move_speed = 2;
+    public int mp_freeze_time = 5;
+    public int mp_round_time = 300;
+    public int mp_victory_time = 5;
 
     // Server rates
     public int sv_tickrate = 60;

@@ -27,6 +27,8 @@ import com.nicktoony.cstopdown.services.SkinManager;
 import com.nicktoony.cstopdown.services.SoundManager;
 import com.nicktoony.cstopdown.services.TextureManager;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,6 +151,9 @@ public class RoomMainMenu extends Room {
         }
 
         stage.addActor(table);
+
+        ScriptEngineManager factory = new ScriptEngineManager();
+        ScriptEngine engine = factory.getEngineByName("groovy");
     }
 
     @Override

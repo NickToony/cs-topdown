@@ -32,9 +32,14 @@ i:skins/default/default.png:26179:image/png
 t:skins/default/uiskin.atlas:3124:application/unknown
 t:skins/default/uiskin.json:3212:application/unknown
 i:skins/default/uiskin.png:28299:image/png
+d:sounds:0:application/unknown
+a:sounds/click.ogg:6952:application/unknown
+a:sounds/rollover.ogg:7089:application/unknown
 d:ui:0:application/unknown
+d:ui/hud:0:application/unknown
+i:ui/hud/chat_bg.png:5114:image/png
 d:ui/main_menu:0:application/unknown
-i:ui/main_menu/background.png:3313:image/png
+i:ui/main_menu/background.jpg:301797:image/jpeg
 i:ui/main_menu/button_active.png:6573:image/png
 i:ui/main_menu/button_hover.png:8155:image/png
 i:ui/main_menu/button_normal.png:7440:image/png

@@ -32,6 +32,7 @@ public class HUD extends Entity<RoomGame> {
     private Container<ScrollPane> chatContainer;
     private boolean chatActive = false;
     private boolean chatJustAdded = false;
+    private Label ammoLabel;
 
     @Override
     protected void create(boolean render) {
@@ -75,6 +76,14 @@ public class HUD extends Entity<RoomGame> {
 
             addChatLine("[YELLOW]Chat initiated. Press Y to focus.");
 
+            // Ammo label
+            Label.LabelStyle style = new Label.LabelStyle();
+            style.font = hudFont;
+            style.fontColor = hudFont.getColor();
+            ammoLabel = new Label("", style);
+            ammoLabel.setPosition(50, 50);
+            stage.addActor(ammoLabel);
+
         }
     }
 
@@ -107,6 +116,7 @@ public class HUD extends Entity<RoomGame> {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+
         Player player = getRoom().getMap().getEntitySnap();
         if (player != null && player.getCurrentWeaponObject() != null) {
             StringBuilder b = new StringBuilder();
@@ -115,17 +125,16 @@ public class HUD extends Entity<RoomGame> {
             b.append(player.getCurrentWeaponObject().bulletsOut);
             b.append("      ");
             b.append(player.getCurrentWeaponObject().weapon.getName());
-            hudFont.draw(spriteBatch, b.toString(), 50, 50);
+            ammoLabel.setText(b.toString());
         }
 
         stage.draw();
-
 
         if (chatJustAdded) {
             chatScrollPane.scrollTo(0, 0, 0, 0);
             chatJustAdded = false;
         }
-//        stage.setDebugAll(true);
+
     }
 
     @Override

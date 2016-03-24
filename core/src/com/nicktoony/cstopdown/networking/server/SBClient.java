@@ -21,23 +21,19 @@ import java.util.ListIterator;
 /**
  * Created by nick on 19/07/15.
  */
-public abstract class SBClient {
+public abstract class SBClient extends SBPlayer {
 
     public enum STATE {
         INIT,
         CONNECTING,
         LOADING,
-        SPECTATE,
-        ALIVE,
+        INGAME,
         DISCONNECTING
     }
 
     private final long PING_TIMER = 3000;
 
     private STATE state = STATE.INIT;
-    private SBServer server;
-    private Player player;
-    private int tempCountdown = 200;
     private int id;
     private int lastUpdate = 0;
     private long initialTimestamp; // only sync'd on loaded!
@@ -52,7 +48,7 @@ public abstract class SBClient {
     public abstract void close();
 
     public SBClient(SBServer server) {
-        this.server = server;
+        super(server);
     }
 
     public void handleReceivedMessage(Packet packet) {
@@ -65,8 +61,8 @@ public abstract class SBClient {
                 handleLoadingMessages(packet);
                 break;
 
-            case ALIVE:
-                handleAliveMessages(packet);
+            case INGAME:
+                handleGameMessages(packet);
                 break;
 
         }
@@ -89,14 +85,19 @@ public abstract class SBClient {
 
     private void handleLoadingMessages(Packet packet) {
         if (packet instanceof LoadedPacket) {
-            this.state = STATE.SPECTATE;
+            // State is now in game
+            this.state = STATE.INGAME;
+            // Sync timers
             this.initialTimestamp = System.currentTimeMillis();
             this.lastPing = getTimestamp();
+            // update the player on all OTHER players
             fullUpdate();
+            // Notify mods of a player joined
+            server.notifyModPlayerConnected(this);
         }
     }
 
-    private void handleAliveMessages(Packet packet) {
+    private void handleGameMessages(Packet packet) {
         if (packet instanceof PlayerInputPacket) {
             insertInputQueue((PlayerInputPacket) packet);
         } else if (packet instanceof PlayerToggleLight) {
@@ -130,62 +131,43 @@ public abstract class SBClient {
     }
 
     public void update() {
-        if (state == STATE.SPECTATE) {
-            if (tempCountdown > 0) {
-                tempCountdown -= 1;
-            } else {
-                state = STATE.ALIVE;
-                player = server.getGame().createPlayer(this.id, 50, 50);
-                player.setWeapons(new WeaponWrapper[] {
-                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
-                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")),
-                        new WeaponWrapper(WeaponManager.getInstance().getWeapon("pistol_pistol"))
 
-                });
-                player.setNextWeapon(0);
+        if (state == STATE.INGAME) {
+            if (isAlive()) {
+                if (lastUpdate <= 0) {
+                    lastUpdate = 1000 / server.getConfig().sv_tickrate;
 
-                CreatePlayerPacket createPlayer = new CreatePlayerPacket();
-                createPlayer.x = player.getX();
-                createPlayer.y = player.getY();
-                createPlayer.id = this.id;
-                createPlayer.weapons = getPlayer().getWeapons();
-                createPlayer.currentWeapon = 0;
-                server.sendToAll(createPlayer);
-            }
-        } else if (state == STATE.ALIVE) {
-            if (lastUpdate <= 0) {
-                lastUpdate = 1000/server.getConfig().sv_tickrate;
+                    PlayerUpdatePacket packet = new PlayerUpdatePacket();
+                    packet.x = player.getX();
+                    packet.y = player.getY();
+                    packet.direction = player.getDirection();
+                    packet.id = id;
+                    packet.moveDown = player.getMoveDown();
+                    packet.moveUp = player.getMoveUp();
+                    packet.moveLeft = player.getMoveLeft();
+                    packet.moveRight = player.getMoveRight();
+                    packet.shooting = player.getShooting();
+                    packet.reloading = player.getReloading();
+                    server.sendToOthers(packet, this);
 
-                PlayerUpdatePacket packet = new PlayerUpdatePacket();
-                packet.x = player.getX();
-                packet.y = player.getY();
-                packet.direction = player.getDirection();
-                packet.id = id;
-                packet.moveDown = player.getMoveDown();
-                packet.moveUp = player.getMoveUp();
-                packet.moveLeft = player.getMoveLeft();
-                packet.moveRight = player.getMoveRight();
-                packet.shooting = player.getShooting();
-                packet.reloading = player.getReloading();
-                server.sendToOthers(packet, this);
+                } else {
+                    lastUpdate -= 1;
+                }
 
-            } else {
-                lastUpdate -= 1;
+                handleInputQueue();
             }
 
-            handleInputQueue();
+            if (lastPing < getTimestamp() - PING_TIMER) {
+                PingPacket packet = new PingPacket();
+                packet.timestamp = getTimestamp();
+                sendPacket(packet);
+                lastPing = getTimestamp();
+            }
+
+
+            if (leniency > 0) leniency -= 2;
+            if (leniency > 100) leniency = 100;
         }
-
-        if (lastPing < getTimestamp() - PING_TIMER) {
-            PingPacket packet = new PingPacket();
-            packet.timestamp = getTimestamp();
-            sendPacket(packet);
-            lastPing = getTimestamp();
-        }
-
-
-        if (leniency > 0) leniency -= 2;
-        if (leniency > 100) leniency = 100;
     }
 
     private void handleInputQueue() {
@@ -286,7 +268,7 @@ public abstract class SBClient {
 
     public void fullUpdate() {
         for (SBClient client : server.getClients()) {
-            if (client != this && client.getState() == STATE.ALIVE) {
+            if (client != this && client.getState() == STATE.INGAME) {
                 CreatePlayerPacket packet = new CreatePlayerPacket();
                 packet.id = client.getId();
                 packet.x = client.getPlayer().getX();
@@ -326,15 +308,35 @@ public abstract class SBClient {
         state = STATE.DISCONNECTING;
         // Delete player if it exists
         if (player != null) {
-            // Send packet to all
-            DestroyPlayerPacket destroyPlayerPacket = new DestroyPlayerPacket();
-            destroyPlayerPacket.id = id;
-            server.sendToOthers(destroyPlayerPacket, this);
-
-            // Remove the player from the room (which also disposes the object)
-            server.getRoom().deleteRenderable(player);
-            // No player
-            player = null;
+            destroyPlayer();
         }
+    }
+
+    @Override
+    protected void destroyPlayer() {
+        super.destroyPlayer();
+
+        // Send packet to all
+        DestroyPlayerPacket destroyPlayerPacket = new DestroyPlayerPacket();
+        destroyPlayerPacket.id = id;
+        server.sendToAll(destroyPlayerPacket);
+    }
+
+    @Override
+    protected void createPlayer(float x, float y) {
+        super.createPlayer(x, y);
+
+        CreatePlayerPacket createPlayer = new CreatePlayerPacket();
+        createPlayer.x = player.getX();
+        createPlayer.y = player.getY();
+        createPlayer.id = this.id;
+        createPlayer.weapons = getPlayer().getWeapons();
+        createPlayer.currentWeapon = 0;
+        server.sendToAll(createPlayer);
+    }
+
+    @Override
+    public int getID() {
+        return id;
     }
 }
