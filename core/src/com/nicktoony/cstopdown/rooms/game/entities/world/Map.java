@@ -135,32 +135,7 @@ public class Map {
     }
 
     public void addCollisionObjects(World world) {
-        for (MapObject object : collisionLayer.getObjects())   {
-            if (object instanceof TextureMapObject) {
-                // Fetch the rectangle collision box
-                TextureMapObject rectangle = ((TextureMapObject) object);
-
-                // Resize it to the correct size and location
-                BodyDef bodyDef = new BodyDef();
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                bodyDef.position.set(rectangle.getX() + (CELL_SIZE /2), rectangle.getY() + (CELL_SIZE /2));
-
-                Body body = world.createBody(bodyDef);
-
-                PolygonShape shape = new PolygonShape();
-                shape.setAsBox(CELL_SIZE /2, CELL_SIZE /2);
-
-                FixtureDef fixtureDef = new FixtureDef();
-                fixtureDef.shape = shape;
-                fixtureDef.density = 1f;
-
-                body.createFixture(fixtureDef);
-                shape.dispose();
-
-                // Pathfinding
-                pathfindingGraph.getNodeByWorld(rectangle.getX(), rectangle.getY()).setSolid(true);
-            }
-        }
+        addCollisionWalls(world);
 
         int[][] values =  {
                 { 0, 0,     1, 0 },
@@ -185,6 +160,39 @@ public class Map {
 
         // Setup pathfinding
         pathfindingGraph.setupConnections();
+    }
+
+    protected void addCollisionWalls(World world) {
+        for (MapObject object : collisionLayer.getObjects())   {
+            if (object instanceof TextureMapObject) {
+                // Fetch the rectangle collision box
+                TextureMapObject rectangle = ((TextureMapObject) object);
+
+                addCollisionWall(world, rectangle.getX(), rectangle.getY());
+            }
+        }
+    }
+
+    protected void addCollisionWall(World world, float x, float y) {
+        // Resize it to the correct size and location
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + (CELL_SIZE /2), y + (CELL_SIZE /2));
+
+        Body body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(CELL_SIZE /2, CELL_SIZE /2);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        // Pathfinding
+        pathfindingGraph.getNodeByWorld(x, y).setSolid(true);
     }
 
     public void addLightObjects(RayHandler rayHandler) {
