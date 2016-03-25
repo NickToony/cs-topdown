@@ -165,19 +165,20 @@ public class RoomGame extends Room {
         // Render lighting
         rayHandlerWrapper.render(spriteBatch);
 
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(getMap().getCamera().combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(1, 1, 0, 1);
-        for (PathfindingNode node : getMap().getPathfindingGraph().getNodes()) {
-            for (Connection<PathfindingNode> connection : node.getConnections()) {
-
-
-                shapeRenderer.line(node.getWorldX(), node.getWorldY(), connection.getToNode().getWorldX(), connection.getToNode().getWorldY());
-
-            }
-        }
-        shapeRenderer.end();
+        // Debug code
+//        ShapeRenderer shapeRenderer = new ShapeRenderer();
+//        shapeRenderer.setProjectionMatrix(getMap().getCamera().combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(1, 1, 0, 1);
+//        for (PathfindingNode node : getMap().getPathfindingGraph().getNodes()) {
+//            for (Connection<PathfindingNode> connection : node.getConnections()) {
+//
+//
+//                shapeRenderer.line(node.getWorldX(), node.getWorldY(), connection.getToNode().getWorldX(), connection.getToNode().getWorldY());
+//
+//            }
+//        }
+//        shapeRenderer.end();
 
         // Render hud
         foregroundSpriteBatch.begin();
