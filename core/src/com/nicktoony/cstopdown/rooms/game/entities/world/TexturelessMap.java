@@ -26,6 +26,10 @@ public class TexturelessMap extends Map {
 
         mapWidth = Integer.parseInt(base.getAttribute("width")) * CELL_SIZE;
         mapHeight = Integer.parseInt(base.getAttribute("height")) * CELL_SIZE;
+
+        // Setup pathfinding
+        pathfindingGraph = new PathfindingGraph(Integer.parseInt(base.getAttribute("width")),
+                Integer.parseInt(base.getAttribute("height")));
     }
 
     @Override
@@ -67,6 +71,8 @@ public class TexturelessMap extends Map {
                     body.createFixture(fixtureDef);
                     shape.dispose();
 
+                    // Pathfinding
+                    pathfindingGraph.getNodeByWorld(x, y).setSolid(true);
                 }
             }
         }
@@ -91,5 +97,8 @@ public class TexturelessMap extends Map {
             bodyEdgeScreen.createFixture(fixtureDef2);
             edgeShape.dispose();
         }
+
+        // Setup pathfinding
+        pathfindingGraph.setupConnections();
     }
 }

@@ -1,7 +1,6 @@
 package com.nicktoony.cstopdown.rooms.game;
 
 
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 

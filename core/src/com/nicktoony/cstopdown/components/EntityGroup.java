@@ -19,7 +19,7 @@ public class EntityGroup<T extends Room> extends Entity<T> {
 
     @Override
     public void create(boolean render) {
-        entities = new ArrayList<Entity>();
+        entities = new ArrayList<>();
         this.render = render;
         if (render) {
             spriteBatch = new SpriteBatch();

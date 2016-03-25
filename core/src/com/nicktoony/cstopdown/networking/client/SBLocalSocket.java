@@ -2,7 +2,6 @@ package com.nicktoony.cstopdown.networking.client;
 
 import com.badlogic.gdx.utils.Json;
 import com.nicktoony.cstopdown.networking.packets.Packet;
-import com.nicktoony.cstopdown.networking.packets.PacketDefinitions;
 import com.nicktoony.cstopdown.networking.server.SBClient;
 import com.nicktoony.cstopdown.networking.server.SBServer;
 

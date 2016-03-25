@@ -1,7 +1,6 @@
 package com.nicktoony.cstopdown.networking.server;
 
 import com.nicktoony.cstopdown.networking.packets.Packet;
-import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
 
 /**
  * Created by Nick on 24/03/2016.

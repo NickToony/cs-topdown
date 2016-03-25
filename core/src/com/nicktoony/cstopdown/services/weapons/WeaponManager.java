@@ -39,9 +39,9 @@ public class WeaponManager {
     }
     // SINGULAR END
 
-    private List<WeaponCategory> weaponCategories = new ArrayList<WeaponCategory>();
-    private Map<String, Weapon> weapons = new HashMap<String, Weapon>();
-    private Map<Weapon, Map<SoundType, Sound>> loadedSounds = new HashMap<Weapon, Map<SoundType, Sound>>();
+    private List<WeaponCategory> weaponCategories = new ArrayList<>();
+    private Map<String, Weapon> weapons = new HashMap<>();
+    private Map<Weapon, Map<SoundType, Sound>> loadedSounds = new HashMap<>();
 
     public WeaponManager() {
         FileHandle file = Gdx.files.internal("weapons/weapons.json");

@@ -7,6 +7,6 @@ package com.nicktoony.cstopdown.services;
  * Allows you to define the server log output in whichever way you desire
  */
 public interface Logger {
-    public void log(String string);
-    public void log(Exception exception);
+    void log(String string);
+    void log(Exception exception);
 }

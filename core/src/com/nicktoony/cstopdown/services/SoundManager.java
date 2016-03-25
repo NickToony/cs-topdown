@@ -3,7 +3,6 @@ package com.nicktoony.cstopdown.services;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
  * Created by Nick on 08/09/2014.
  */
 public class SoundManager {
-    private static Map<String, Sound> loadedSounds = new HashMap<String, Sound>();
+    private static Map<String, Sound> loadedSounds = new HashMap<>();
 
     public static Sound getSound(FileHandle fileHandle) {
         if (!loadedSounds.containsKey(fileHandle.toString()))    {

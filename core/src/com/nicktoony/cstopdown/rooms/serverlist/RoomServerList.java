@@ -4,15 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.nicktoony.cstopdown.components.Room;
+import com.nicktoony.cstopdown.config.ServerlistConfig;
+import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.rooms.connect.RoomConnect;
+import com.nicktoony.cstopdown.services.SkinManager;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.client.models.Server;
 import com.nicktoony.gameserver.service.host.Host;
 import com.nicktoony.gameserver.service.libgdx.ServerList;
-import com.nicktoony.cstopdown.components.Room;
-import com.nicktoony.cstopdown.config.ServerlistConfig;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.services.SkinManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
  * Created by nick on 16/07/15.
  */
 public class RoomServerList extends Room {
-    private List<Host> hosts = new ArrayList();
+    private List<Host> hosts = new ArrayList<>();
     private ServerList serverList;
     private Stage stage;
 

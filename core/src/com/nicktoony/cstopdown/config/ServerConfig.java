@@ -14,7 +14,7 @@ public class ServerConfig {
     public String sv_name = "Dev Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 7;
+    public int sv_bots = 1;
 
     // Map settings
 

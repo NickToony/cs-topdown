@@ -22,8 +22,8 @@ public class Room extends Renderable {
 
     @Override
     public void create(boolean render) {
-        renderables = new ArrayList<Renderable>();
-        deletedRenderables = new ArrayList<Renderable>();
+        renderables = new ArrayList<>();
+        deletedRenderables = new ArrayList<>();
         this.render = render;
         this.created = true;
     }

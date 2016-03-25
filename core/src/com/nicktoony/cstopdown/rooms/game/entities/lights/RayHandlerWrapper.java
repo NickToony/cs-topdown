@@ -21,7 +21,7 @@ public class RayHandlerWrapper extends Renderable {
     @Override
     public void render(SpriteBatch spriteBatch) {
         // Render the light over everything
-        handler.setCombinedMatrix(map.getCamera().combined);
+        handler.setCombinedMatrix(map.getCamera());
         handler.updateAndRender();
     }
 

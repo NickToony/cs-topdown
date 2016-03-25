@@ -39,7 +39,7 @@ public abstract class GameModeMod {
     }
 
     protected List<PlayerModInterface> getAlivePlayers() {
-        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        List<PlayerModInterface> list = new ArrayList<>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (player.isAlive()) {
                 list.add(player);
@@ -49,7 +49,7 @@ public abstract class GameModeMod {
     }
 
     protected List<PlayerModInterface> getDeadPlayers() {
-        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        List<PlayerModInterface> list = new ArrayList<>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (!player.isAlive() && player.getTeam() != PlayerModInterface.TEAM_SPECTATE) {
                 list.add(player);
@@ -59,7 +59,7 @@ public abstract class GameModeMod {
     }
 
     protected List<PlayerModInterface> getActivePlayers() {
-        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        List<PlayerModInterface> list = new ArrayList<>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (player.getTeam() != PlayerModInterface.TEAM_SPECTATE) {
                 list.add(player);

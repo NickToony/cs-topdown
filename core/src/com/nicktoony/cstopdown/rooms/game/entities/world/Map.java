@@ -12,7 +12,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
-import com.nicktoony.cstopdown.components.Entity;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.services.LightManager;
 
@@ -31,6 +30,7 @@ public class Map {
     protected int mapWidth;
     protected int mapHeight;
     private Color ambientColour;
+    protected PathfindingGraph pathfindingGraph;
 
     private Player entitySnap;
 
@@ -84,6 +84,9 @@ public class Map {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = Float.parseFloat(mapProperties.get("zoom", String.class));
         renderer.setView(camera);
+
+        // Setup pathfinding
+        pathfindingGraph = new PathfindingGraph(tX, tY);
     }
 
     public void render() {
@@ -153,6 +156,9 @@ public class Map {
 
                 body.createFixture(fixtureDef);
                 shape.dispose();
+
+                // Pathfinding
+                pathfindingGraph.getNodeByWorld(rectangle.getX(), rectangle.getY()).setSolid(true);
             }
         }
 
@@ -177,7 +183,8 @@ public class Map {
             edgeShape.dispose();
         }
 
-
+        // Setup pathfinding
+        pathfindingGraph.setupConnections();
     }
 
     public void addLightObjects(RayHandler rayHandler) {
@@ -209,5 +216,9 @@ public class Map {
 
     public Color getAmbientColour() {
         return ambientColour;
+    }
+
+    public PathfindingGraph getPathfindingGraph() {
+        return pathfindingGraph;
     }
 }

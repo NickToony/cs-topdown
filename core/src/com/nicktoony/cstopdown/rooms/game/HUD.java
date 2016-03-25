@@ -49,7 +49,7 @@ public class HUD extends Entity<RoomGame> {
             Gdx.input.setInputProcessor(stage);
 
             // Chat container
-            chatContainer = new Container<ScrollPane>();
+            chatContainer = new Container<>();
             stage.addActor(chatContainer);
             // Chat background
             SpriteDrawable chatBackgroundDrawable =

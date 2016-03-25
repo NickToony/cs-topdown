@@ -8,26 +8,27 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.config.ServerConfig;
+import com.nicktoony.cstopdown.config.ServerlistConfig;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
-import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
-import com.nicktoony.gameserver.service.GameserverConfig;
-import com.nicktoony.gameserver.service.host.Host;
-import com.nicktoony.cstopdown.config.ServerlistConfig;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.PacketDefinitions;
+import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.services.Logger;
+import com.nicktoony.gameserver.service.GameserverConfig;
+import com.nicktoony.gameserver.service.host.Host;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SBServer {
 
     public interface LoopManager {
-        public void startServerLoop(SBServer server);
-        public boolean isServerLoopRunning();
-        public void endServerLoop();
+        void startServerLoop(SBServer server);
+        boolean isServerLoopRunning();
+        void endServerLoop();
     }
 
     private class ReceivedPacket {
@@ -54,7 +55,7 @@ public abstract class SBServer {
     private Json json;
     private LoopManager loopManager;
     protected boolean publicServerList = true;
-    private List<SBClient> clients = new ArrayList<SBClient>();
+    private List<SBClient> clients = new ArrayList<>();
     private long lastTime;
     private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
@@ -63,11 +64,11 @@ public abstract class SBServer {
     private long lastFPSCount = System.currentTimeMillis();
     private int fpsFrames = 0;
 
-    private List<SBClient> connectedQueue = new ArrayList<SBClient>();
-    private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
-    private List<ReceivedPacket> messageQueue = new ArrayList<ReceivedPacket>();
+    private List<SBClient> connectedQueue = new ArrayList<>();
+    private List<SBClient> disconnectedQueue = new ArrayList<>();
+    private List<ReceivedPacket> messageQueue = new ArrayList<>();
 
-    private List<GameModeMod> mods = new ArrayList<GameModeMod>();
+    private List<GameModeMod> mods = new ArrayList<>();
 
     // Get the logg
     public Logger getLogger() {

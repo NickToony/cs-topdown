@@ -2,11 +2,9 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
-import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 /**
  * Created by hgreen on 14/09/14.
@@ -21,31 +19,10 @@ public class UserPlayer extends Player{
 
     @Override
     public void step(float delta){
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            this.moveUp = true;
-        }else{
-            this.moveUp = false;
-        }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            this.moveDown = true;
-        }else{
-            this.moveDown = false;
-        }
-
-
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            this.moveLeft = true;
-        }else{
-            this.moveLeft = false;
-        }
-
-
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            this.moveRight = true;
-        }else{
-            this.moveRight = false;
-        }
+        this.moveUp = Gdx.input.isKeyPressed(Input.Keys.W);
+        this.moveDown = Gdx.input.isKeyPressed(Input.Keys.S);
+        this.moveLeft = Gdx.input.isKeyPressed(Input.Keys.A);
+        this.moveRight = Gdx.input.isKeyPressed(Input.Keys.D);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             // toggle light

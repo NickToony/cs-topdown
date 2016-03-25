@@ -4,9 +4,7 @@ import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by nick on 17/07/15.
@@ -53,12 +51,12 @@ public abstract class SBSocket {
     public SBSocket(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.listeners = new ArrayList<SBSocketListener>();
+        this.listeners = new ArrayList<>();
 
-        this.openQueue = new ArrayList<SBSocket>();
-        this.closeQueue = new ArrayList<SBSocket>();
-        this.messageQueue = new ArrayList<ReceivedPacket>();
-        this.errorQueue = new ArrayList<ReceivedError>();
+        this.openQueue = new ArrayList<>();
+        this.closeQueue = new ArrayList<>();
+        this.messageQueue = new ArrayList<>();
+        this.errorQueue = new ArrayList<>();
     }
 
     public abstract boolean open();

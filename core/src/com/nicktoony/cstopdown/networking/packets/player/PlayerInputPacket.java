@@ -1,6 +1,5 @@
 package com.nicktoony.cstopdown.networking.packets.player;
 
-import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
 
 /**

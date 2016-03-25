@@ -1,10 +1,10 @@
 package com.nicktoony.cstopdown.rooms.game;
 
 import com.nicktoony.cstopdown.networking.client.SBSocket;
+import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.PingPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
-import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
@@ -22,7 +22,7 @@ public class GameManager implements SBSocket.SBSocketListener {
 
     private RoomGame roomGame;
     private SBSocket socket;
-    private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
+    private Map<Integer, Player> playerIdMap = new HashMap<>();
     private long initialTimestamp;
 
 

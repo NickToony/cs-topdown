@@ -53,8 +53,6 @@ public class CharacterSkin  {
             data = json.readSkeletonData(Gdx.files.internal(asset + "/skeleton.json"));
         }
 
-        Skeleton skeleton = new Skeleton(data);
-
-        return skeleton;
+        return new Skeleton(data);
     }
 }

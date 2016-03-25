@@ -10,7 +10,6 @@ import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.client.responses.ServersList;
 import com.nicktoony.gameserver.service.host.APIResponse.CreateServer;
 import com.nicktoony.gameserver.service.host.APIResponse.UpdateServer;
-import com.nicktoony.gameserver.service.host.Host;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -132,7 +131,7 @@ public class ServerlistConfig extends GameserverConfig {
                 @Override
                 public Map read(Json json, JsonValue jsonData, Class type) {
                     // Create the map (Note: it only works for <String, String[]>
-                    Map<String, Object> map = new HashMap<String, Object>();
+                    Map<String, Object> map = new HashMap<>();
                     // for each entry
                     for (JsonValue entry = jsonData.child; entry != null; entry = entry.next) {
                         // Each entry is an arrange of strings, so we fetch that

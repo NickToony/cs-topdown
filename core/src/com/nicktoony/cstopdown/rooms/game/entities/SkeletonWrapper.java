@@ -10,7 +10,7 @@ import com.nicktoony.cstopdown.components.Entity;
  */
 public class SkeletonWrapper {
     public interface AnimationEventListener {
-        public void animationEvent(Event event);
+        void animationEvent(Event event);
     }
 
     private Skeleton skeleton;

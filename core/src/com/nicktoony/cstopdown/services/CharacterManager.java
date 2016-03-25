@@ -16,7 +16,7 @@ public class CharacterManager {
     private static final String DEBUG = "CharacterManager: ";
     private static CharacterManager staticInstance;
 
-    List<CharacterCategory> characterCategories = new ArrayList<CharacterCategory>();
+    List<CharacterCategory> characterCategories = new ArrayList<>();
 
     public static CharacterManager getInstance()    {
         if (staticInstance == null)   {
@@ -64,16 +64,15 @@ public class CharacterManager {
         Array<XmlReader.Element> categories = root.getChildrenByName("category");
         for (XmlReader.Element category : categories) {
             String name = category.getAttribute("name");
-            FileHandle folder = packFile;
 
-            if (folder.exists())    {
+            if (packFile.exists())    {
                 System.out.println(DEBUG + "Added character category: " + name);
 
-                CharacterCategory characterCategory = new CharacterCategory(name, folder);
+                CharacterCategory characterCategory = new CharacterCategory(name, packFile);
                 characterCategories.add(characterCategory);
                 addCharacterSkins(characterCategory, category);
             }   else    {
-                System.out.println(DEBUG + "Missing character skin directory " + folder.path());
+                System.out.println(DEBUG + "Missing character skin directory " + packFile.path());
             }
         }
     }
@@ -101,7 +100,7 @@ public class CharacterManager {
     public class CharacterCategory  {
         private String name;
         private FileHandle folder;
-        private List<CharacterSkin> skins = new ArrayList<CharacterSkin>();
+        private List<CharacterSkin> skins = new ArrayList<>();
 
         public CharacterCategory(String name, FileHandle folder)   {
             this.name = name;

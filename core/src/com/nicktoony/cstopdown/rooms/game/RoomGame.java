@@ -2,7 +2,9 @@ package com.nicktoony.cstopdown.rooms.game;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nicktoony.cstopdown.components.Room;
@@ -12,6 +14,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
+import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingNode;
 import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
 import com.nicktoony.cstopdown.services.CharacterManager;
 import com.nicktoony.cstopdown.services.LightManager;
@@ -162,10 +165,26 @@ public class RoomGame extends Room {
         // Render lighting
         rayHandlerWrapper.render(spriteBatch);
 
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(getMap().getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(1, 1, 0, 1);
+        for (PathfindingNode node : getMap().getPathfindingGraph().getNodes()) {
+            for (Connection<PathfindingNode> connection : node.getConnections()) {
+
+
+                shapeRenderer.line(node.getWorldX(), node.getWorldY(), connection.getToNode().getWorldX(), connection.getToNode().getWorldY());
+
+            }
+        }
+        shapeRenderer.end();
+
         // Render hud
         foregroundSpriteBatch.begin();
         hud.render(foregroundSpriteBatch);
         foregroundSpriteBatch.end();
+
+
     }
 
     public SBSocket getSocket() {

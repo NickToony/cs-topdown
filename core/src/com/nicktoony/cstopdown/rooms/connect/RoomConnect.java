@@ -2,9 +2,9 @@ package com.nicktoony.cstopdown.rooms.connect;
 
 import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
+import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
 import com.nicktoony.cstopdown.networking.packets.connection.ConnectPacket;
-import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.connection.RejectPacket;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;

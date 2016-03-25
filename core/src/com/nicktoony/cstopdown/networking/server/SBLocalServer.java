@@ -3,8 +3,6 @@ package com.nicktoony.cstopdown.networking.server;
 import com.nicktoony.cstopdown.config.ServerConfig;
 import com.nicktoony.cstopdown.services.Logger;
 
-import java.util.List;
-
 /**
  * Created by nick on 19/07/15.
  */

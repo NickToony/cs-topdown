@@ -3,7 +3,6 @@ package com.nicktoony.cstopdown.networking.server;
 import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.TimestampedPacket;
-import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.connection.*;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -12,7 +11,6 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
-import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +33,9 @@ public abstract class SBClient extends SBPlayer {
 
     private STATE state = STATE.INIT;
     private int id;
-    private int lastUpdate = 0;
+    private long lastUpdate = 0;
     private long initialTimestamp; // only sync'd on loaded!
-    private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
+    private List<TimestampedPacket> inputQueue = new ArrayList<>();
     private float leniency = 0;
     private long[] ping;
     private int pingIndex = 0;
@@ -134,8 +132,8 @@ public abstract class SBClient extends SBPlayer {
 
         if (state == STATE.INGAME) {
             if (isAlive()) {
-                if (lastUpdate <= 0) {
-                    lastUpdate = 1000 / server.getConfig().sv_tickrate;
+                if (lastUpdate + (1000 / server.getConfig().sv_tickrate) < System.currentTimeMillis()) {
+                    lastUpdate = System.currentTimeMillis();
 
                     PlayerUpdatePacket packet = new PlayerUpdatePacket();
                     packet.x = player.getX();
@@ -150,10 +148,7 @@ public abstract class SBClient extends SBPlayer {
                     packet.reloading = player.getReloading();
                     server.sendToOthers(packet, this);
 
-                } else {
-                    lastUpdate -= 1;
                 }
-
                 handleInputQueue();
             }
 
