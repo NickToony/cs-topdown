@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.rooms.game.entities.players;
 
+import box2dLight.Light;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
@@ -15,7 +16,6 @@ public class UserPlayer extends Player{
     private boolean lastShoot = false;
     private boolean lastReload = false;
     private long lastUpdate = 0;
-
 
     @Override
     public void step(float delta){

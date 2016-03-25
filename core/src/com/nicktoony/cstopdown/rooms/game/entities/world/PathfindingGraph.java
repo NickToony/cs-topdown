@@ -17,7 +17,7 @@ public class PathfindingGraph implements IndexedGraph<PathfindingNode> {
     public PathfindingGraph(int width, int height) {
         this.width = width;
         this.height = height;
-        this.nodes = new Array<>();
+        this.nodes = new Array<PathfindingNode>();
 
         for (int x = 0; x < width; x++) {
             int idx = x * height;
@@ -50,7 +50,7 @@ public class PathfindingGraph implements IndexedGraph<PathfindingNode> {
     private void addConnection (PathfindingNode node, int xOffset, int yOffset) {
         PathfindingNode target = getNode(node.getX() + xOffset, node.getY() + yOffset);
         if (!target.isSolid() && !node.isSolid()) {
-            node.getConnections().add(new DefaultConnection<>(node, target));
+            node.getConnections().add(new DefaultConnection<PathfindingNode>(node, target));
         }
     }
 

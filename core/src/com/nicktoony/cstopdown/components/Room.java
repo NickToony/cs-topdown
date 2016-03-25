@@ -19,17 +19,27 @@ public class Room extends Renderable {
     private boolean render;
     private boolean created = false;
     private List<Renderable> deletedRenderables;
+    private List<Renderable> addedRenderables;
 
     @Override
     public void create(boolean render) {
-        renderables = new ArrayList<>();
-        deletedRenderables = new ArrayList<>();
+        renderables = new ArrayList<Renderable>();
+        deletedRenderables = new ArrayList<Renderable>();
+        addedRenderables = new ArrayList<Renderable>();
         this.render = render;
         this.created = true;
     }
 
     @Override
     public void step(float delta) {
+        // For all added renderables
+        for (Renderable toAdd : addedRenderables) {
+            // Remove them from the queue
+            renderables.add(toAdd);
+        }
+        // Clear the list
+        addedRenderables.clear();
+
         // For all deleted renderables
         for (Renderable toDelete : deletedRenderables) {
             // Remove them from the queue
@@ -64,8 +74,8 @@ public class Room extends Renderable {
         SoundManager.dispose();
     }
 
-    public synchronized Renderable addRenderable(Renderable renderable) {
-        renderables.add(renderable);
+    public  Renderable addRenderable(Renderable renderable) {
+        addedRenderables.add(renderable);
         renderable.create(render);
         return renderable;
     }
@@ -103,9 +113,9 @@ public class Room extends Renderable {
     }
 
     public void deleteRenderable(Renderable renderable) {
-        if (renderables.contains(renderable)) {
+//        if (renderables.contains(renderable)) {
             deletedRenderables.add(renderable);
-        }
+//        }
     }
 
     public void resize(int width, int height) {

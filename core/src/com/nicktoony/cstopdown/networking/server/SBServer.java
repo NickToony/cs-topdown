@@ -12,6 +12,7 @@ import com.nicktoony.cstopdown.config.ServerlistConfig;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
+import com.nicktoony.cstopdown.mods.gamemode.implementations.TeamDeathMatch;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.PacketDefinitions;
 import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
@@ -55,7 +56,7 @@ public abstract class SBServer {
     private Json json;
     private LoopManager loopManager;
     protected boolean publicServerList = true;
-    private List<SBClient> clients = new ArrayList<>();
+    private List<SBClient> clients = new ArrayList<SBClient>();
     private long lastTime;
     private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
@@ -64,11 +65,11 @@ public abstract class SBServer {
     private long lastFPSCount = System.currentTimeMillis();
     private int fpsFrames = 0;
 
-    private List<SBClient> connectedQueue = new ArrayList<>();
-    private List<SBClient> disconnectedQueue = new ArrayList<>();
-    private List<ReceivedPacket> messageQueue = new ArrayList<>();
+    private List<SBClient> connectedQueue = new ArrayList<SBClient>();
+    private List<SBClient> disconnectedQueue = new ArrayList<SBClient>();
+    private List<ReceivedPacket> messageQueue = new ArrayList<ReceivedPacket>();
 
-    private List<GameModeMod> mods = new ArrayList<>();
+    private List<GameModeMod> mods = new ArrayList<GameModeMod>();
 
     // Get the logg
     public Logger getLogger() {
@@ -111,9 +112,10 @@ public abstract class SBServer {
 
         this.lastTime = System.currentTimeMillis();
 
-        LastTeamStanding lastTeamStanding = new LastTeamStanding();
-        lastTeamStanding.setup(this);
-        mods.add(lastTeamStanding);
+//        GameModeMod gameModeMod = new LastTeamStanding();
+        GameModeMod gameModeMod = new TeamDeathMatch();
+        gameModeMod.setup(this);
+        mods.add(gameModeMod);
 
         notifyModInit();
 
@@ -370,4 +372,17 @@ public abstract class SBServer {
             mod.evPlayerJoinedTeam(player);
         }
     }
+
+    public void notifyModPlayerDestroyed(PlayerModInterface player) {
+        for (GameModeMod mod : mods) {
+            mod.evPlayerDestroyed(player);
+        }
+    }
+
+    public void notifyModPlayerDestroyed(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
+        for (GameModeMod mod : mods) {
+            mod.evPlayerKilled(playerKiller, playerKilled);
+        }
+    }
 }
+

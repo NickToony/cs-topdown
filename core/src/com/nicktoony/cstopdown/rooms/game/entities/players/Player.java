@@ -40,6 +40,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     protected boolean moveRight = false;
     private boolean lightOn = false;
     private boolean lastTorch = false;
+    private boolean glowActive = false;
     private boolean changedPosition = false;
     protected float directionTo;
 
@@ -71,6 +72,21 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     private Light gunFire;
 
     private SkeletonWrapper skeletonWrapper;
+
+    boolean canSee = false;
+    Body targetBody = null;
+    private RayCastCallback callback = new RayCastCallback() {
+        @Override
+        public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+            if (!body.getFixtureList().contains(fixture, false)
+                    && !targetBody.getFixtureList().contains(fixture, false)) {
+                canSee = true;
+                return 0;
+            } else {
+                return -1;
+            }
+        }
+    };
 
     public Player() {
         skeletonWrapper = new SkeletonWrapper(this, this);
@@ -230,6 +246,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
         // Update glow
         glow.setPosition(x, y);
+        glow.setActive(glowActive);
     }
 
     @Override
@@ -262,7 +279,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
                 if (reloadKey && weapons[weaponCurrent].bulletsIn < weapons[weaponCurrent].weapon.getClipSize()) {
                     stateTimer = Math.round(weapons[weaponCurrent].weapon.getReloadDuration() * 60);
                     state = STATE_RELOADING;
-                } else if (shootKey) { // otherwise is shoot key pressed?
+                } else if (shootKey && weaponCurrent != -1) { // otherwise is shoot key pressed?
                     stateTimer = Math.max(0, weapons[weaponCurrent].weapon.getRateOfFire());
                     state = STATE_SHOOTING;
 
@@ -370,7 +387,13 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         getRoom().getWorld().destroyBody(body);
 
         if (render) {
-
+//                glow.dispose();
+//                torch.dispose();
+//                gunFire.dispose();
+//
+//                glow = null;
+//            torch = null;
+//            gunFire = null;
         }
     }
 
@@ -502,7 +525,15 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         return this.reloadKey;
     }
 
-//    public boolean canSeePlayer(Player player) {
-//
-//    }
+    public boolean canSeePlayer(Player player) {
+        canSee = false;
+        targetBody = player.body;
+        getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
+        return !canSee;
+    }
+
+    @Override
+    public void focused(boolean focused) {
+        glowActive = focused;
+    }
 }

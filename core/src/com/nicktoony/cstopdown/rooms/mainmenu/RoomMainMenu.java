@@ -148,9 +148,6 @@ public class RoomMainMenu extends Room {
         }
 
         stage.addActor(table);
-
-        ScriptEngineManager factory = new ScriptEngineManager();
-        ScriptEngine engine = factory.getEngineByName("groovy");
     }
 
     @Override

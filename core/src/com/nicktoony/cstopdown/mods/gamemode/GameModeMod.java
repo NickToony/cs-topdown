@@ -29,6 +29,7 @@ public abstract class GameModeMod {
     public abstract void evPlayerMessage(PlayerModInterface player);
     public abstract void evPlayerJoinedTeam(PlayerModInterface player);
     public abstract void evFreezeTimeEnd();
+    public abstract void evPlayerDestroyed(PlayerModInterface player);
 
     protected ServerConfig getServerConfig() {
         return server.getConfig();
@@ -39,7 +40,7 @@ public abstract class GameModeMod {
     }
 
     protected List<PlayerModInterface> getAlivePlayers() {
-        List<PlayerModInterface> list = new ArrayList<>();
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (player.isAlive()) {
                 list.add(player);
@@ -49,7 +50,7 @@ public abstract class GameModeMod {
     }
 
     protected List<PlayerModInterface> getDeadPlayers() {
-        List<PlayerModInterface> list = new ArrayList<>();
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (!player.isAlive() && player.getTeam() != PlayerModInterface.TEAM_SPECTATE) {
                 list.add(player);
@@ -59,7 +60,7 @@ public abstract class GameModeMod {
     }
 
     protected List<PlayerModInterface> getActivePlayers() {
-        List<PlayerModInterface> list = new ArrayList<>();
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (player.getTeam() != PlayerModInterface.TEAM_SPECTATE) {
                 list.add(player);
@@ -70,6 +71,10 @@ public abstract class GameModeMod {
 
     protected void restartGame() {
         server.startRound();
+    }
+
+    protected void endRound() {
+        server.endRound();
     }
 
 }

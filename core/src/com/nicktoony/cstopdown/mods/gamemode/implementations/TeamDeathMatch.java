@@ -6,7 +6,7 @@ import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 /**
  * Created by Nick on 24/03/2016.
  */
-public class LastTeamStanding extends GameModeMod {
+public class TeamDeathMatch extends GameModeMod {
 
     private int lastTeam = PlayerModInterface.TEAM_CT;
 
@@ -30,7 +30,7 @@ public class LastTeamStanding extends GameModeMod {
 
     @Override
     public void evPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
-
+        playerKilled.spawn();
     }
 
     @Override
@@ -67,13 +67,6 @@ public class LastTeamStanding extends GameModeMod {
 
     @Override
     public void evPlayerDestroyed(PlayerModInterface player) {
-        boolean alive[] = {false, false};
-        for (PlayerModInterface players : getAlivePlayers()) {
-            alive[players.getTeam()-1] = true;
-        }
 
-        if (!alive[0] || !alive[1]) {
-            endRound();
-        }
     }
 }

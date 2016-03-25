@@ -54,4 +54,8 @@ public abstract class Entity<R extends Room> extends Renderable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void focused(boolean focused) {
+
+    }
 }

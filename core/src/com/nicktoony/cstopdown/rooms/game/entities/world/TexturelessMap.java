@@ -10,6 +10,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Nick on 15/02/2015.
@@ -41,7 +42,7 @@ public class TexturelessMap extends Map {
 
     @Override
     protected void findObjectives() {
-        spawns = new HashMap<>();
+        spawns = new HashMap<Integer, List<Spawn>>();
         spawns.put(PlayerModInterface.TEAM_CT, new ArrayList<Spawn>());
         spawns.put(PlayerModInterface.TEAM_T, new ArrayList<Spawn>());
         for (XmlReader.Element layer : base.getChildrenByName("objectgroup")) {

@@ -51,12 +51,12 @@ public abstract class SBSocket {
     public SBSocket(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.listeners = new ArrayList<>();
+        this.listeners = new ArrayList<SBSocketListener>();
 
-        this.openQueue = new ArrayList<>();
-        this.closeQueue = new ArrayList<>();
-        this.messageQueue = new ArrayList<>();
-        this.errorQueue = new ArrayList<>();
+        this.openQueue = new ArrayList<SBSocket>();
+        this.closeQueue = new ArrayList<SBSocket>();
+        this.messageQueue = new ArrayList<ReceivedPacket>();
+        this.errorQueue = new ArrayList<ReceivedError>();
     }
 
     public abstract boolean open();

@@ -35,7 +35,7 @@ public abstract class SBClient extends SBPlayer {
     private int id;
     private long lastUpdate = 0;
     private long initialTimestamp; // only sync'd on loaded!
-    private List<TimestampedPacket> inputQueue = new ArrayList<>();
+    private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
     private float leniency = 0;
     private long[] ping;
     private int pingIndex = 0;
@@ -172,7 +172,7 @@ public abstract class SBClient extends SBPlayer {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
             if (packet.timestamp < getTimestamp()
-                    - server.getConfig().sv_min_compensate) {
+                    - server.getConfig().sv_min_compensate || isBot()) {
                 // Latency has been compensated. Process it!
                 iterator.remove();
 

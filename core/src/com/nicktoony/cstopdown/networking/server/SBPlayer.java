@@ -83,6 +83,8 @@ public abstract class SBPlayer implements PlayerModInterface {
         server.getRoom().deleteRenderable(player);
         // No player
         player = null;
+        // Notify all
+        server.notifyModPlayerDestroyed(this);
     }
 
     protected void createPlayer(float x, float y) {
@@ -91,7 +93,7 @@ public abstract class SBPlayer implements PlayerModInterface {
 
         // Spawn a new one
         player = server.getGame().createPlayer(getID(), x, y, isBot());
-        player.setWeapons(new WeaponWrapper[] {
+        player.setWeapons(new WeaponWrapper[]{
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")),
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("pistol_pistol"))
@@ -110,5 +112,9 @@ public abstract class SBPlayer implements PlayerModInterface {
     @Override
     public int getTeam() {
         return team;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

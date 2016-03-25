@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class WeaponCategory {
     private String name;
-    private List<Weapon> weapons = new ArrayList<>();
+    private List<Weapon> weapons = new ArrayList<Weapon>();
 
     public WeaponCategory(String name) {
         this.name = name;

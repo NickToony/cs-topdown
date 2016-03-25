@@ -14,7 +14,7 @@ public class PathfindingNode implements IndexedNode<PathfindingNode> {
     private int x;
     private int y;
     private boolean solid = false;
-    private Array<Connection<PathfindingNode>> mConnections = new Array<>();
+    private Array<Connection<PathfindingNode>> mConnections = new Array<Connection<PathfindingNode>>();
 
     public PathfindingNode(int myIndex, int myX, int myY) {
         this.myIndex = myIndex;

@@ -22,7 +22,7 @@ public class GameManager implements SBSocket.SBSocketListener {
 
     private RoomGame roomGame;
     private SBSocket socket;
-    private Map<Integer, Player> playerIdMap = new HashMap<>();
+    private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
     private long initialTimestamp;
 
 
@@ -87,6 +87,14 @@ public class GameManager implements SBSocket.SBSocketListener {
 
             // Remove the player from id list
             playerIdMap.remove(packet.id);
+
+            // If it was the entity snap
+            if (player == roomGame.getMap().getEntitySnap()) {
+                roomGame.getMap().setEntitySnap(null);
+                if (!playerIdMap.isEmpty()) {
+                    roomGame.getMap().setEntitySnap(playerIdMap.values().iterator().next());
+                }
+            }
         }
     }
 

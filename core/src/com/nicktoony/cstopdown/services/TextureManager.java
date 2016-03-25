@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by Nick on 08/09/2014.
  */
 public class TextureManager {
-    private static Map<String, Texture> loadedTextures = new HashMap<>();
+    private static Map<String, Texture> loadedTextures = new HashMap<String, Texture>();
 
     public static Texture getTexture(String texture) {
         if (!loadedTextures.containsKey(texture))    {

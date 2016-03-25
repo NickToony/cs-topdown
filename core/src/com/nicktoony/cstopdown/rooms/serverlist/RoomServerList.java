@@ -21,7 +21,7 @@ import java.util.List;
  * Created by nick on 16/07/15.
  */
 public class RoomServerList extends Room {
-    private List<Host> hosts = new ArrayList<>();
+    private List<Host> hosts = new ArrayList<Host>();
     private ServerList serverList;
     private Stage stage;
 

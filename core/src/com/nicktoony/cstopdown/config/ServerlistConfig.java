@@ -131,7 +131,7 @@ public class ServerlistConfig extends GameserverConfig {
                 @Override
                 public Map read(Json json, JsonValue jsonData, Class type) {
                     // Create the map (Note: it only works for <String, String[]>
-                    Map<String, Object> map = new HashMap<>();
+                    Map<String, Object> map = new HashMap<String, Object>();
                     // for each entry
                     for (JsonValue entry = jsonData.child; entry != null; entry = entry.next) {
                         // Each entry is an arrange of strings, so we fetch that

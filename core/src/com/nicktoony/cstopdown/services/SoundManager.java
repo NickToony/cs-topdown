@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by Nick on 08/09/2014.
  */
 public class SoundManager {
-    private static Map<String, Sound> loadedSounds = new HashMap<>();
+    private static Map<String, Sound> loadedSounds = new HashMap<String, Sound>();
 
     public static Sound getSound(FileHandle fileHandle) {
         if (!loadedSounds.containsKey(fileHandle.toString()))    {

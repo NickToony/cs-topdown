@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nicktoony.cstopdown.components.Room;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
+import com.nicktoony.cstopdown.networking.server.SBServer;
 import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
@@ -19,6 +20,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
 import com.nicktoony.cstopdown.services.CharacterManager;
 import com.nicktoony.cstopdown.services.LightManager;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
+import com.nicktoony.gameserver.service.client.models.Server;
 
 /**
  * Created by Nick on 08/09/2014.
@@ -90,10 +92,11 @@ public class RoomGame extends Room {
 
         accumulator += delta;
 
-        while (accumulator >= 1) {
-            world.step(1, 1, 1);
-            accumulator -= 1;
-        }
+//        while (accumulator >= 1) {
+//            world.step(1, 1, 1);
+//            accumulator -= 1;
+//        }
+        world.step(delta, 1, 1);
 
         gameManager.update();
     }
@@ -125,6 +128,9 @@ public class RoomGame extends Room {
                 player = new Player();
             } else {
                 player = new BotPlayer();
+            }
+            if (map.getEntitySnap() == null) {
+                map.setEntitySnap(player);
             }
         }
         player.setId(id);

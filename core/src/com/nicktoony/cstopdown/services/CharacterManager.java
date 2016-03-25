@@ -16,7 +16,7 @@ public class CharacterManager {
     private static final String DEBUG = "CharacterManager: ";
     private static CharacterManager staticInstance;
 
-    List<CharacterCategory> characterCategories = new ArrayList<>();
+    List<CharacterCategory> characterCategories = new ArrayList<CharacterCategory>();
 
     public static CharacterManager getInstance()    {
         if (staticInstance == null)   {
@@ -100,7 +100,7 @@ public class CharacterManager {
     public class CharacterCategory  {
         private String name;
         private FileHandle folder;
-        private List<CharacterSkin> skins = new ArrayList<>();
+        private List<CharacterSkin> skins = new ArrayList<CharacterSkin>();
 
         public CharacterCategory(String name, FileHandle folder)   {
             this.name = name;

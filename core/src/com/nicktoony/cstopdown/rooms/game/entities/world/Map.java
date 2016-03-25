@@ -101,7 +101,7 @@ public class Map {
     }
 
     protected void findObjectives() {
-        spawns = new HashMap<>();
+        spawns = new HashMap<Integer, List<Spawn>>();
         spawns.put(PlayerModInterface.TEAM_CT, new ArrayList<Spawn>());
         spawns.put(PlayerModInterface.TEAM_T, new ArrayList<Spawn>());
     }
@@ -120,7 +120,13 @@ public class Map {
      * @param player
      */
     public void setEntitySnap(Player player)    {
+        if (entitySnap != null) {
+            entitySnap.focused(false);
+        }
         this.entitySnap = player;
+        if (entitySnap != null) {
+            entitySnap.focused(true);
+        }
     }
 
     public Player getEntitySnap() {
