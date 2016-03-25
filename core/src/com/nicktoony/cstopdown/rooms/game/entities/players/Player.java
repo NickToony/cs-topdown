@@ -501,4 +501,8 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     public boolean getReloading() {
         return this.reloadKey;
     }
+
+//    public boolean canSeePlayer(Player player) {
+//
+//    }
 }

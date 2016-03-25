@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.networking.server;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
 import com.nicktoony.cstopdown.services.weapons.WeaponManager;
 
 /**
@@ -51,7 +52,14 @@ public abstract class SBPlayer implements PlayerModInterface {
     @Override
     public boolean spawn() {
         if (team != TEAM_SPECTATE) {
-            createPlayer(50, 50);
+            int index = server.getRoom().getMap().spawnIndex[getTeam()];
+            Spawn spawn = server.getRoom().getMap().getSpawns(team).get(index);
+            createPlayer(spawn.x, spawn.y);
+            index ++;
+            if (index >= server.getRoom().getMap().getSpawns(team).size()) {
+                index = 0;
+            }
+            server.getRoom().getMap().spawnIndex[getTeam()] = index;
             return true;
         } else {
             return false;

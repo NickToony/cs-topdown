@@ -8,6 +8,7 @@ import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
  */
 public class LastTeamStanding extends GameModeMod {
 
+    private int lastTeam = PlayerModInterface.TEAM_CT;
 
     @Override
     public void evInit() {
@@ -33,7 +34,11 @@ public class LastTeamStanding extends GameModeMod {
 
     @Override
     public void evPlayerConnected(PlayerModInterface player) {
-        player.joinTeam(PlayerModInterface.TEAM_CT);
+        player.joinTeam(lastTeam);
+        if (lastTeam == PlayerModInterface.TEAM_CT)
+            lastTeam = PlayerModInterface.TEAM_T;
+        else
+            lastTeam = PlayerModInterface.TEAM_CT;
     }
 
     @Override

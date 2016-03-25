@@ -12,8 +12,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
 import com.nicktoony.cstopdown.services.LightManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Nick on 10/09/2014.
@@ -31,6 +37,8 @@ public class Map {
     protected int mapHeight;
     private Color ambientColour;
     protected PathfindingGraph pathfindingGraph;
+    protected HashMap<Integer, List<Spawn>> spawns;
+    public int[] spawnIndex = { 0, 0, 0 };
 
     private Player entitySnap;
 
@@ -85,8 +93,17 @@ public class Map {
         camera.zoom = Float.parseFloat(mapProperties.get("zoom", String.class));
         renderer.setView(camera);
 
+        // Objectivbes
+        findObjectives();
+
         // Setup pathfinding
         pathfindingGraph = new PathfindingGraph(tX, tY);
+    }
+
+    protected void findObjectives() {
+        spawns = new HashMap<>();
+        spawns.put(PlayerModInterface.TEAM_CT, new ArrayList<Spawn>());
+        spawns.put(PlayerModInterface.TEAM_T, new ArrayList<Spawn>());
     }
 
     public void render() {
@@ -228,5 +245,9 @@ public class Map {
 
     public PathfindingGraph getPathfindingGraph() {
         return pathfindingGraph;
+    }
+
+    public List<Spawn> getSpawns(int team) {
+        return spawns.get(team);
     }
 }
