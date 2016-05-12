@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nicktoony.cstopdown.components.Room;
+import com.nicktoony.cstopdown.networking.client.SBLocalSocket;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
+import com.nicktoony.cstopdown.networking.server.SBFakeSocket;
+import com.nicktoony.cstopdown.networking.server.SBLocalServer;
 import com.nicktoony.cstopdown.networking.server.SBServer;
 import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
@@ -38,7 +41,7 @@ public class RoomGame extends Room {
     public RoomGame(SBSocket socket) {
         this.socket = socket;
         this.gameManager = new GameManager(this, socket);
-        if (socket != null) {
+        if (socket != null && !(socket instanceof SBLocalSocket)) {
             socket.addListener(gameManager);
         }
     }

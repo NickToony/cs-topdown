@@ -1,6 +1,7 @@
 package com.nicktoony.cstopdown.rooms.connect;
 
 import com.nicktoony.cstopdown.components.Room;
+import com.nicktoony.cstopdown.networking.client.SBLocalSocket;
 import com.nicktoony.cstopdown.networking.client.SBSocket;
 import com.nicktoony.cstopdown.networking.packets.Packet;
 import com.nicktoony.cstopdown.networking.packets.connection.AcceptPacket;
@@ -66,7 +67,12 @@ public class RoomConnect extends Room {
         socket.pushNotifications();
 
         if (connected) {
-            getGame().createRoom(new RoomGame(socket));
+            if (socket instanceof SBLocalSocket) {
+                getGame().createRoom(new RoomGame(socket));
+            } else {
+                getGame().createRoom(((SBLocalSocket)socket).getServer().getRoom());
+            }
+
         }
     }
 }

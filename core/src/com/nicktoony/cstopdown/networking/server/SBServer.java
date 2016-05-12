@@ -53,6 +53,7 @@ public abstract class SBServer {
     private Logger logger;
     private Host host;
     private RoomGame roomGame;
+    private boolean roomOverride = false;
     private Json json;
     private LoopManager loopManager;
     protected boolean publicServerList = true;
@@ -94,6 +95,19 @@ public abstract class SBServer {
         setup();
     }
 
+    public SBServer(Logger logger, ServerConfig config, LoopManager loopManager, boolean roomOverride) {
+        this.roomOverride = roomOverride;
+
+        this.logger = logger;
+        this.config = config;
+        this.loopManager = loopManager;
+
+        logger.log("Setting up");
+        GameserverConfig.setConfig(new ServerlistConfig());
+
+        setup();
+    }
+
     /**
      * Called after a config has been successfully set up. This creates the server, and updates
      * server list
@@ -102,7 +116,7 @@ public abstract class SBServer {
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
         roomGame = new RoomGame(new SBFakeSocket());
-        roomGame.create(false);
+        roomGame.create(roomOverride);
 
         // begin server
         startServerSocket(config.sv_port);
@@ -163,7 +177,9 @@ public abstract class SBServer {
         delta = (float) ((now - lastTime) / MS_PER_TICK);
         lastTime = now;
         // Update world
-        roomGame.step(delta);
+        if (!roomOverride) {
+            roomGame.step(delta);
+        }
 
         // Manages round time
         roundStep();

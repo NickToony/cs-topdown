@@ -104,6 +104,16 @@ public class Map {
         spawns = new HashMap<Integer, List<Spawn>>();
         spawns.put(PlayerModInterface.TEAM_CT, new ArrayList<Spawn>());
         spawns.put(PlayerModInterface.TEAM_T, new ArrayList<Spawn>());
+
+        for (MapObject object : objectiveLayer.getObjects()) {
+            int x = object.getProperties().get("x", Float.class).intValue();
+            int y = object.getProperties().get("y", Float.class).intValue();
+
+            if (object.getProperties().get("type", String.class).contentEquals("spawn")) {
+                int team = Integer.parseInt(object.getProperties().get("team", String.class));
+                spawns.get(team).add(new Spawn(x + 16, y + 16, team));
+            }
+        }
     }
 
     public void render() {

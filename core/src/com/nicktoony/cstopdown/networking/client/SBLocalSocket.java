@@ -72,4 +72,8 @@ public class SBLocalSocket extends SBSocket {
         }
         return json;
     }
+
+    public SBServer getServer() {
+        return server;
+    }
 }

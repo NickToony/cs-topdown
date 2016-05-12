@@ -228,7 +228,7 @@ public class RoomMainMenu extends Room {
                                     public void log(Exception exception) {
                                         System.out.println(exception.getMessage());
                                     }
-                                }, new ServerConfig(), loopManager);
+                                }, new ServerConfig(), loopManager, true);
 
 
         SBSocket socket = new SBLocalSocket(server);

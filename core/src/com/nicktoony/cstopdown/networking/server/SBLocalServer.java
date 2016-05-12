@@ -8,6 +8,11 @@ import com.nicktoony.cstopdown.services.Logger;
  */
 public class SBLocalServer extends SBServer {
 
+    public SBLocalServer(Logger logger, ServerConfig config, LoopManager loopManager, boolean roomOverride) {
+        super(logger, config, loopManager, roomOverride);
+        publicServerList = false;
+    }
+
     public SBLocalServer(Logger logger, ServerConfig config, LoopManager loopManager) {
         super(logger, config, loopManager);
         publicServerList = false;
