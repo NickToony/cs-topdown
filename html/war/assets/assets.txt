@@ -15,11 +15,6 @@ i:characters/nicktoony/Test/Test.png:2351:image/png
 b:characters/nicktoony/Test/Test.spine:6986:application/unknown
 i:characters/nicktoony/Test/torso.png:669:image/png
 t:config.json:91:application/unknown
-b:hs_err_pid10484.log:27469:application/unknown
-b:hs_err_pid13856.log:27535:application/unknown
-b:hs_err_pid16176.log:27188:application/unknown
-b:hs_err_pid2872.log:29201:application/unknown
-b:hs_err_pid6216.log:28578:application/unknown
 d:maps:0:application/unknown
 d:maps/de_dust2:0:application/unknown
 i:maps/de_dust2/dust.png:221003:image/png

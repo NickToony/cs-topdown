@@ -105,7 +105,9 @@ public class GameManager implements SBSocket.SBSocketListener {
             Player player = playerIdMap.get(packet.id);
             if (player != null) {
                 // Update their position and facing direction
-                player.setPosition(packet.x, packet.y);
+                //if (Math.abs(player.getX()-packet.x) > 8 || Math.abs(player.getY()-packet.y) > 8) {
+                    player.setPosition(packet.x, packet.y);
+               // }
                 player.setDirection(packet.direction);
                 // Update their inputs
                 player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);

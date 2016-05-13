@@ -31,6 +31,9 @@ public class BotPlayer extends Player {
         moving
     }
 
+    private static final int BOT_REACTION_MIN = 30;
+    private static final int BOT_REACTION_MAX = 60;
+
     private Random random = new Random();
     private PathfindingPath path;
     private int pathIndex = 0;
@@ -42,6 +45,7 @@ public class BotPlayer extends Player {
     private SBBotClient player;
     private List<SBPlayer> targets = new ArrayList<SBPlayer>();
     private SBPlayer currentTarget = null;
+    private int lastScan = 0;
 
     public void setupBot(SBServer server, SBBotClient player) {
         this.server = server;
@@ -63,7 +67,13 @@ public class BotPlayer extends Player {
     public void step(float delta) {
         super.step(delta);
 
-        scanForEnemies();
+        lastScan --;
+        if (lastScan < 0) {
+            scanForEnemies();
+
+            lastScan = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
+        }
+
         if (!targets.isEmpty()) {
             aiState = AIState.combat;
         }
