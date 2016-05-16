@@ -8,6 +8,7 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
@@ -22,6 +23,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     protected CSServerPlayerWrapper player;
     protected CSServer server;
     private long lastUpdate = 0;
+    private float leniency = 0;
 
     public CSServerClientHandler(CSServer server) {
         super(server);
@@ -79,8 +81,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 }
             }
 
-           // if (leniency > 0) leniency -= 2;
-           // if (leniency > 100) leniency = 100;
+           if (leniency > 0) leniency -= 2;
+           if (leniency > 100) leniency = 100;
         }
     }
 
@@ -100,22 +102,22 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             getPlayer().setReloading(inputPacket.reload);
 
             // Calculate how much leniency we're providing
-            //leniency += Math.abs(player.getX() - inputPacket.x)
-                   // + Math.abs(player.getY() - inputPacket.y);
+            leniency += Math.abs(player.getX() - inputPacket.x)
+                    + Math.abs(player.getY() - inputPacket.y);
 
             // If leniency is within expected parameters
             // Calculation: (1000/cl_tickrate) / (1000/SIMULATION_FPS)
             // 16 is a good value for 4 updates a second..
-            //if (leniency <= Math.max((1000/server.getConfig().cl_tickrate)
-                  //  / (1000 / MyGame.GAME_FPS), 8) ) {
+            if (leniency <= Math.max((1000/server.getConfig().cl_tickrate)
+                    / (1000 / MyGame.GAME_FPS), 8) ) {
                 // Accept the clients simulation
-            getPlayer().setPosition(inputPacket.x, inputPacket.y);
+                getPlayer().setPosition(inputPacket.x, inputPacket.y);
 
                 // We should send an update to all players ASAP
-                //lastUpdate = 0;
-            //} else {
-             //   inconsistent = true;
-            //}
+                lastUpdate = 0;
+            } else {
+                inconsistent = true;
+            }
         } else if (packet instanceof PlayerToggleLight) {
             PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
             getPlayer().setLightOn(lightPacket.light);
@@ -134,16 +136,16 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             server.sendToOthers(playerSwitchWeapon, this);
         }
 
-//        if (inconsistent) {
-//            // The client simulation is way off, correct them
-//            PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
-//            fixPacket.x = player.getX();
-//            fixPacket.y = player.getY();
-//            fixPacket.direction = player.getDirection();
-//            fixPacket.id = id;
-//            // We don't send movement.. the player knows that already
-//            sendPacket(fixPacket);
-//        }
+        if (inconsistent) {
+            // The client simulation is way off, correct them
+            PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
+            fixPacket.x = player.getX();
+            fixPacket.y = player.getY();
+            fixPacket.direction = player.getPlayer().getDirection();
+            fixPacket.id = id;
+            // We don't send movement.. the player knows that already
+            sendPacket(fixPacket);
+        }
 
     }
 
