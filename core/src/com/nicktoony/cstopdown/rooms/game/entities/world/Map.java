@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
-import com.nicktoony.cstopdown.services.LightManager;
+import com.nicktoony.engine.services.LightManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

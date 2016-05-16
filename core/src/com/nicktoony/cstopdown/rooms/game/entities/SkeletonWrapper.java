@@ -3,7 +3,7 @@ package com.nicktoony.cstopdown.rooms.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.spine.*;
-import com.nicktoony.cstopdown.components.Entity;
+import com.nicktoony.engine.components.Entity;
 
 /**
  * Created by Nick on 23/09/2014.

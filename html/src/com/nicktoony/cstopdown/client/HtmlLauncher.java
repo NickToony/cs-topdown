@@ -4,11 +4,11 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.nicktoony.cstopdown.MyGame;
-import com.nicktoony.cstopdown.config.GameConfig;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.server.SBServer;
-import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.services.Logger;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.networking.server.Server;
+import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.services.Logger;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -21,8 +21,8 @@ public class HtmlLauncher extends GwtApplication {
         public ApplicationListener getApplicationListener () {
             return new MyGame(new MyGame.PlatformProvider() {
                 @Override
-                public SBSocket getWebSocket(String ip, int port) {
-                    return new HtmlSBSocket(ip, port);
+                public ClientSocket getWebSocket(String ip, int port) {
+                    return new HtmlClientSocket(ip, port);
                 }
 
                 @Override
@@ -36,12 +36,12 @@ public class HtmlLauncher extends GwtApplication {
                 }
 
                 @Override
-                public SBServer getLocalServer(Logger logger, ServerConfig config) {
+                public Server getLocalServer(Logger logger, ServerConfig config) {
                     return null;
                 }
 
                 @Override
-                public SBServer.LoopManager getLoopManager() {
+                public Server.LoopManager getLoopManager() {
                     return null;
                 }
 

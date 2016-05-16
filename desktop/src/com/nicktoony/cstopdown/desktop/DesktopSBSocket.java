@@ -2,9 +2,9 @@ package com.nicktoony.cstopdown.desktop;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.packets.Packet;
-import com.nicktoony.cstopdown.networking.packets.PacketDefinitions;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.packets.Packet;
+import com.nicktoony.engine.packets.PacketDefinitions;
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -14,7 +14,7 @@ import java.net.URI;
 /**
  * Created by nick on 17/07/15.
  */
-public class DesktopSBSocket extends SBSocket {
+public class DesktopSBSocket extends ClientSocket {
 
     private WebSocketClient socket;
     private Json json;

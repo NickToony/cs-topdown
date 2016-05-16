@@ -10,22 +10,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.nicktoony.cstopdown.components.Room;
-import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.networking.client.SBLocalSocket;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.packets.Packet;
-import com.nicktoony.cstopdown.networking.server.SBLocalServer;
-import com.nicktoony.cstopdown.networking.server.SBServer;
-import com.nicktoony.cstopdown.rooms.connect.RoomConnect;
+import com.nicktoony.cstopdown.networking.CSLocalClientSocket;
+import com.nicktoony.cstopdown.networking.server.CSServer;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.networking.client.LocalClientSocket;
+import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.packets.Packet;
+import com.nicktoony.cstopdown.networking.server.CSServerLocal;
+import com.nicktoony.engine.networking.server.Server;
+import com.nicktoony.engine.rooms.connect.RoomConnect;
 import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
-import com.nicktoony.cstopdown.services.Logger;
-import com.nicktoony.cstopdown.services.SkinManager;
-import com.nicktoony.cstopdown.services.SoundManager;
-import com.nicktoony.cstopdown.services.TextureManager;
+import com.nicktoony.engine.services.Logger;
+import com.nicktoony.engine.services.SkinManager;
+import com.nicktoony.engine.services.SoundManager;
+import com.nicktoony.engine.services.TextureManager;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +99,7 @@ public class RoomMainMenu extends Room {
                         new ClickListener() {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                SBSocket socket = getGame().getPlatformProvider().getWebSocket(
+                                ClientSocket socket = getGame().getPlatformProvider().getWebSocket(
                                         "127.0.0.1", new ServerConfig().sv_port);
                                 getGame().createRoom(new RoomConnect(socket));
                             }
@@ -212,13 +212,13 @@ public class RoomMainMenu extends Room {
 
     private void startSinglePlayer() {
 
-        SBServer.LoopManager loopManager = getGame().getPlatformProvider().getLoopManager();
+        Server.LoopManager loopManager = getGame().getPlatformProvider().getLoopManager();
         // If a looper isn't presented (i.e. a threading system)
         if (loopManager == null) {
             // Use the game loop instead
             loopManager = getGame();
         }
-        final SBServer server = new SBLocalServer(new Logger() {
+        final CSServer server = new CSServerLocal(new Logger() {
                                     @Override
                                     public void log(String string) {
                                         System.out.println(string);
@@ -231,26 +231,26 @@ public class RoomMainMenu extends Room {
                                 }, new ServerConfig(), loopManager);
 
 
-        SBSocket socket = new SBLocalSocket(server);
-        socket.addListener(new SBSocket.SBSocketListener() {
+        ClientSocket socket = new CSLocalClientSocket(server);
+        socket.addListener(new ClientSocket.SBSocketListener() {
             @Override
-            public void onOpen(SBSocket socket) {
+            public void onOpen(ClientSocket socket) {
                 // Nothing
             }
 
             @Override
-            public void onClose(SBSocket socket) {
+            public void onClose(ClientSocket socket) {
                 // When the player leaves in single player, then should just close the server!
                 server.dispose();
             }
 
             @Override
-            public void onMessage(SBSocket socket, Packet packet) {
+            public void onMessage(ClientSocket socket, Packet packet) {
                 // do nothing
             }
 
             @Override
-            public void onError(SBSocket socket, Exception exception) {
+            public void onError(ClientSocket socket, Exception exception) {
                 // nothing?
             }
         });
@@ -259,28 +259,28 @@ public class RoomMainMenu extends Room {
     }
 
     private void startMultiPlayer() {
-        final SBServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
+        final CSServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
 
-        SBSocket socket = new SBLocalSocket(server);
-        socket.addListener(new SBSocket.SBSocketListener() {
+        ClientSocket socket = new CSLocalClientSocket(server);
+        socket.addListener(new ClientSocket.SBSocketListener() {
             @Override
-            public void onOpen(SBSocket socket) {
+            public void onOpen(ClientSocket socket) {
                 // Nothing
             }
 
             @Override
-            public void onClose(SBSocket socket) {
+            public void onClose(ClientSocket socket) {
                 // When the player leaves his own server, then should just close the server!
                 server.dispose();
             }
 
             @Override
-            public void onMessage(SBSocket socket, Packet packet) {
+            public void onMessage(ClientSocket socket, Packet packet) {
                 // do nothing
             }
 
             @Override
-            public void onError(SBSocket socket, Exception exception) {
+            public void onError(ClientSocket socket, Exception exception) {
                 // nothing?
             }
         });

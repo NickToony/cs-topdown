@@ -7,14 +7,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.nicktoony.cstopdown.MyGame;
-import com.nicktoony.cstopdown.config.GameConfig;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.server.SBServer;
-import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.server.NativeLoopManager;
-import com.nicktoony.cstopdown.server.SBWebServer;
-import com.nicktoony.cstopdown.server.ServerUI;
-import com.nicktoony.cstopdown.services.Logger;
+import com.nicktoony.cstopdown.networking.server.CSServer;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.networking.server.Server;
+import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.NativeLoopManager;
+import com.nicktoony.engine.ServerSocket;
+import com.nicktoony.engine.ServerUI;
+import com.nicktoony.engine.services.Logger;
 
 import java.io.*;
 
@@ -23,7 +24,7 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new MyGame(new MyGame.PlatformProvider() {
             @Override
-            public SBSocket getWebSocket(String ip, int port) {
+            public ClientSocket getWebSocket(String ip, int port) {
                 return new DesktopSBSocket(ip, port);
             }
 
@@ -38,18 +39,18 @@ public class DesktopLauncher {
             }
 
             @Override
-            public SBServer getLocalServer(Logger logger, ServerConfig config) {
+            public CSServer getLocalServer(Logger logger, ServerConfig config) {
                 if (logger == null) { logger = new ServerUI(new ServerUI.UIListener() {
                     @Override
                     public void onClose() {
 
                     }
                 }); }
-                return new SBWebServer(logger, config, getLoopManager());
+                return new ServerSocket(logger, config, getLoopManager());
             }
 
             @Override
-            public SBServer.LoopManager getLoopManager() {
+            public Server.LoopManager getLoopManager() {
                 return new NativeLoopManager();
             }
 

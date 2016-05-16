@@ -9,14 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Event;
-import com.nicktoony.cstopdown.components.Entity;
-import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
+import com.nicktoony.engine.components.Entity;
+import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.SkeletonWrapper;
-import com.nicktoony.cstopdown.services.CharacterManager;
-import com.nicktoony.cstopdown.services.TextureManager;
-import com.nicktoony.cstopdown.services.weapons.Weapon;
-import com.nicktoony.cstopdown.services.weapons.WeaponManager;
+import com.nicktoony.engine.services.CharacterManager;
+import com.nicktoony.engine.services.TextureManager;
+import com.nicktoony.engine.services.weapons.Weapon;
+import com.nicktoony.engine.services.weapons.WeaponManager;
 
 /**
  * Created by Nick on 08/09/2014.

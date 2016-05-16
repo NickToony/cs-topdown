@@ -39,6 +39,7 @@ project(":desktop") {
 
     dependencies {
         compile project(":server")
+        compile project (":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
@@ -111,6 +112,7 @@ project(":core") {
 
     dependencies {
         compile project(':gameserver-service-libgdx')
+        compile project(':gameserver-service-java')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"

@@ -4,17 +4,15 @@ import com.badlogic.gdx.ai.pfa.PathFinder;
 import com.badlogic.gdx.ai.pfa.PathSmoother;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
-import com.nicktoony.cstopdown.networking.packets.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
-import com.nicktoony.cstopdown.networking.server.SBBotClient;
-import com.nicktoony.cstopdown.networking.server.SBClient;
-import com.nicktoony.cstopdown.networking.server.SBPlayer;
-import com.nicktoony.cstopdown.networking.server.SBServer;
+import com.nicktoony.cstopdown.networking.server.CSServer;
+import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
+import com.nicktoony.cstopdown.networking.server.ServerBotClientHandler;
+import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingHeuristic;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingNode;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingPath;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingRaycastCollisionDetector;
-import com.nicktoony.gameserver.service.client.models.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +39,13 @@ public class BotPlayer extends Player {
     private PathfindingHeuristic heuristic;
     private AIState aiState = AIState.idle;
     private PathSmoother<PathfindingNode, Vector2> pathSmoother;
-    private SBServer server;
-    private SBBotClient player;
-    private List<SBPlayer> targets = new ArrayList<SBPlayer>();
-    private SBPlayer currentTarget = null;
+    private CSServer server;
+    private ServerBotClientHandler player;
+    private List<CSServerPlayerWrapper> targets = new ArrayList<CSServerPlayerWrapper>();
+    private CSServerPlayerWrapper currentTarget = null;
     private int lastScan = 0;
 
-    public void setupBot(SBServer server, SBBotClient player) {
+    public void setupBot(CSServer server, ServerBotClientHandler player) {
         this.server = server;
         this.player = player;
     }
@@ -146,7 +144,7 @@ public class BotPlayer extends Player {
                             currentTarget.getX() - x)) - 90;
                     if (random.nextInt(1000) < 5) {
                         currentTarget.slay();
-                        server.notifyModPlayerDestroyed(player, currentTarget);
+                        server.notifyModPlayerDestroyed(player.getPlayerWrapper(), currentTarget);
                         currentTarget = null;
                     }
                 } else {
@@ -160,10 +158,10 @@ public class BotPlayer extends Player {
 
     private void scanForEnemies() {
         targets.clear();
-        for (SBPlayer otherPlayer : server.getClients()) {
-            if (otherPlayer.isAlive() && otherPlayer.getTeam() != player.getTeam()) {
+        for (CSServerClientHandler otherPlayer : server.getClients()) {
+            if (otherPlayer.getPlayerWrapper().isAlive() && otherPlayer.getPlayerWrapper().getTeam() != player.getPlayerWrapper().getTeam()) {
                 if (canSeePlayer(otherPlayer.getPlayer())) {
-                    targets.add(otherPlayer);
+                    targets.add(otherPlayer.getPlayerWrapper());
                 }
             }
         }

@@ -5,11 +5,11 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.nicktoony.cstopdown.MyGame;
-import com.nicktoony.cstopdown.config.GameConfig;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.server.SBServer;
-import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.services.Logger;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.networking.server.Server;
+import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.services.Logger;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -18,8 +18,8 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new MyGame(new MyGame.PlatformProvider() {
             @Override
-            public SBSocket getWebSocket(String ip, int port) {
-                return new AndroidSBSocket(ip, port);
+            public ClientSocket getWebSocket(String ip, int port) {
+                return new AndroidClientSocket(ip, port);
             }
 
             @Override
@@ -33,7 +33,7 @@ public class AndroidLauncher extends AndroidApplication {
             }
 
             @Override
-            public SBServer getLocalServer(Logger logger, ServerConfig config) {
+            public Server getLocalServer(Logger logger, ServerConfig config) {
                 return null;
             }
         }), config);

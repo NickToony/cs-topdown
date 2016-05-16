@@ -1,6 +1,6 @@
 package com.nicktoony.cstopdown.networking.packets.player;
 
-import com.nicktoony.cstopdown.networking.packets.Packet;
+import com.nicktoony.engine.packets.Packet;
 
 /**
  * Created by Nick on 14/03/2016.

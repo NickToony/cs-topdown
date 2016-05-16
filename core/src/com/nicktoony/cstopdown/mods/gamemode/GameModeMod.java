@@ -1,7 +1,8 @@
 package com.nicktoony.cstopdown.mods.gamemode;
 
-import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.networking.server.SBServer;
+import com.nicktoony.cstopdown.networking.server.CSServer;
+import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
+import com.nicktoony.engine.config.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +12,12 @@ import java.util.List;
  */
 public abstract class GameModeMod {
 
-    private SBServer server;
+    private CSServer server;
 
     /**
      * You can't override this
      */
-    final public void setup(SBServer server) {
+    final public void setup(CSServer server) {
         this.server = server;
     }
 
@@ -36,7 +37,11 @@ public abstract class GameModeMod {
     }
 
     protected List<? extends PlayerModInterface> getAllPlayers() {
-        return server.getClients();
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        for (CSServerClientHandler client : server.getClients()) {
+            list.add(client.getPlayerWrapper());
+        }
+        return list;
     }
 
     protected List<PlayerModInterface> getAlivePlayers() {

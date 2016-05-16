@@ -58,6 +58,8 @@ public class TeamDeathMatch extends GameModeMod {
 //        if (getActivePlayers().size() == 1) {
             restartGame();
 //        }
+
+//        player.spawn();
     }
 
     @Override

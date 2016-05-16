@@ -1,9 +1,9 @@
 package com.nicktoony.cstopdown.rooms.game;
 
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.packets.Packet;
-import com.nicktoony.cstopdown.networking.packets.connection.LoadedPacket;
-import com.nicktoony.cstopdown.networking.packets.connection.PingPacket;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.packets.Packet;
+import com.nicktoony.engine.packets.connection.LoadedPacket;
+import com.nicktoony.engine.packets.connection.PingPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
@@ -17,16 +17,16 @@ import java.util.Map;
 /**
  * Created by Nick on 03/01/2016.
  */
-public class GameManager implements SBSocket.SBSocketListener {
+public class GameManager implements ClientSocket.SBSocketListener {
 
 
     private RoomGame roomGame;
-    private SBSocket socket;
+    private ClientSocket socket;
     private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
     private long initialTimestamp;
 
 
-    public GameManager(RoomGame roomGame, SBSocket socket) {
+    public GameManager(RoomGame roomGame, ClientSocket socket) {
         this.roomGame = roomGame;
         this.socket = socket;
 
@@ -45,23 +45,23 @@ public class GameManager implements SBSocket.SBSocketListener {
     }
 
     @Override
-    public void onOpen(SBSocket socket) {
+    public void onOpen(ClientSocket socket) {
         // will never see, as this animationEvent is called in RoomConnect
     }
 
     @Override
-    public void onClose(SBSocket socket) {
+    public void onClose(ClientSocket socket) {
         // the RoomConnect setup a listener for us to deal with this situation
     }
 
 
     @Override
-    public void onError(SBSocket socket, Exception exception) {
+    public void onError(ClientSocket socket, Exception exception) {
 
     }
 
     @Override
-    public void onMessage(SBSocket socket, Packet packet) {
+    public void onMessage(ClientSocket socket, Packet packet) {
         if (packet instanceof CreatePlayerPacket) {
             handleReceivedPacket((CreatePlayerPacket) packet);
         } else if (packet instanceof PlayerUpdatePacket) {
@@ -78,6 +78,8 @@ public class GameManager implements SBSocket.SBSocketListener {
     }
 
     private void handleReceivedPacket(DestroyPlayerPacket packet) {
+        System.out.println("DESTROY PLAYER " + packet.id);
+
         // Find the player in question
         Player player = playerIdMap.get(packet.id);
         // If the player exists
@@ -130,6 +132,9 @@ public class GameManager implements SBSocket.SBSocketListener {
     }
 
     private void handleReceivedPacket(CreatePlayerPacket packet) {
+        System.out.println("CREATE PLAYER " + packet.id);
+
+
         // Create the player in the room
         Player player = roomGame.createPlayer(packet.id,
                 packet.x,

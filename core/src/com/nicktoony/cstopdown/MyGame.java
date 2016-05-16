@@ -6,15 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicktoony.cstopdown.components.Room;
-import com.nicktoony.cstopdown.config.GameConfig;
-import com.nicktoony.cstopdown.config.ServerConfig;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.server.SBServer;
+import com.nicktoony.cstopdown.networking.server.CSServer;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
-import com.nicktoony.cstopdown.services.Logger;
+import com.nicktoony.engine.services.Logger;
 
-public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
+public class MyGame extends ApplicationAdapter implements Server.LoopManager {
 
     // Hardcoded ticks per second for game simulation
     public static final int GAME_FPS = 60;
@@ -24,10 +25,10 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
     }
 
     public interface PlatformProvider {
-        SBSocket getWebSocket(String ip, int port);
+        ClientSocket getWebSocket(String ip, int port);
         GameConfigLoader getGameConfigLoader();
-        SBServer getLocalServer(Logger logger, ServerConfig config);
-        SBServer.LoopManager getLoopManager();
+        CSServer getLocalServer(Logger logger, ServerConfig config);
+        Server.LoopManager getLoopManager();
         boolean canHost();
     }
 
@@ -40,7 +41,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
     private GameConfig gameConfig;
     private PlatformProvider platformProvider;
     private SpriteBatch spriteBatch;
-    private SBServer linearLoop;
+    private Server linearLoop;
     private FPSLogger fpsLogger;
 
     public MyGame(PlatformProvider platformProvider) {
@@ -155,7 +156,7 @@ public class MyGame extends ApplicationAdapter implements SBServer.LoopManager {
     }
 
     @Override
-    public void startServerLoop(SBServer server) {
+    public void startServerLoop(Server server) {
         linearLoop = server;
     }
 

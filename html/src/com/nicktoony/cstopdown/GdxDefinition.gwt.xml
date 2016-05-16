@@ -15,6 +15,6 @@
 
 	<set-configuration-property name="gdx.assetpath" value="../android/assets" />
     <extend-configuration-property name="gdx.reflect.include" value="com.nicktoony.cstopdown.networking.packets" />
-    <extend-configuration-property name="gdx.reflect.include" value="com.nicktoony.cstopdown.services.weapons" />
-    <extend-configuration-property name="gdx.reflect.include" value="com.nicktoony.cstopdown.config" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.nicktoony.engine.services.weapons" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.nicktoony.engine.config" />
 </module>

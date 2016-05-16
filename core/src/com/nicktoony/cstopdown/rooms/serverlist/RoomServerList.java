@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.nicktoony.cstopdown.components.Room;
-import com.nicktoony.cstopdown.config.ServerlistConfig;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.rooms.connect.RoomConnect;
-import com.nicktoony.cstopdown.services.SkinManager;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.config.ServerlistConfig;
+import com.nicktoony.engine.rooms.connect.RoomConnect;
+import com.nicktoony.engine.services.SkinManager;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.client.models.Server;
 import com.nicktoony.gameserver.service.host.Host;
@@ -47,7 +47,7 @@ public class RoomServerList extends Room {
             @Override
             public void onSelected(Server server) {
                 if (server.getMeta().containsKey("ip") && server.getMeta().containsKey("port")) {
-                    SBSocket socket = getGame().getPlatformProvider().getWebSocket(
+                    ClientSocket socket = getGame().getPlatformProvider().getWebSocket(
                             server.getMeta().get("ip"), Integer.parseInt(server.getMeta().get("port"))
                     );
 

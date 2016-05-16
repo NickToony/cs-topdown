@@ -2,25 +2,20 @@ package com.nicktoony.cstopdown.rooms.game;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.nicktoony.cstopdown.components.Room;
-import com.nicktoony.cstopdown.networking.client.SBSocket;
-import com.nicktoony.cstopdown.networking.server.SBServer;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.components.Room;
 import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
-import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingNode;
 import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
-import com.nicktoony.cstopdown.services.CharacterManager;
-import com.nicktoony.cstopdown.services.LightManager;
-import com.nicktoony.cstopdown.services.weapons.WeaponManager;
-import com.nicktoony.gameserver.service.client.models.Server;
+import com.nicktoony.engine.services.CharacterManager;
+import com.nicktoony.engine.services.LightManager;
+import com.nicktoony.engine.services.weapons.WeaponManager;
 
 /**
  * Created by Nick on 08/09/2014.
@@ -29,13 +24,13 @@ public class RoomGame extends Room {
     protected Map map;
     protected World world;
     private RayHandlerWrapper rayHandlerWrapper;
-    private SBSocket socket;
+    private ClientSocket socket;
     private GameManager gameManager;
     private float accumulator = 0;
     private HUD hud;
     private SpriteBatch foregroundSpriteBatch;
 
-    public RoomGame(SBSocket socket) {
+    public RoomGame(ClientSocket socket) {
         this.socket = socket;
         this.gameManager = new GameManager(this, socket);
         if (socket != null) {
@@ -194,7 +189,7 @@ public class RoomGame extends Room {
 
     }
 
-    public SBSocket getSocket() {
+    public ClientSocket getSocket() {
         return socket;
     }
 
