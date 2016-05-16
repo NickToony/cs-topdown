@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.networking.server.Server;

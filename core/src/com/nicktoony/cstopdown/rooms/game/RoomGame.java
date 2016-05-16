@@ -5,14 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.nicktoony.engine.networking.client.ClientSocket;
-import com.nicktoony.engine.components.Room;
 import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
 import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
+import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.services.CharacterManager;
 import com.nicktoony.engine.services.LightManager;
 import com.nicktoony.engine.services.weapons.WeaponManager;
@@ -81,19 +81,22 @@ public class RoomGame extends Room {
             hud.step(delta);
         }
 
-        super.step(delta);
-
+        // Handles inputs first
         socket.pushNotifications();
 
-        accumulator += delta;
+        // Update game manager
+        gameManager.update();
 
+        // Update the world
+        super.step(delta);
+
+        // Update the physics
+        world.step(delta, 1, 1);
+//        accumulator += delta;
 //        while (accumulator >= 1) {
 //            world.step(1, 1, 1);
 //            accumulator -= 1;
 //        }
-        world.step(delta, 1, 1);
-
-        gameManager.update();
     }
 
     @Override

@@ -1,18 +1,8 @@
 package com.nicktoony.engine.networking.server;
 
-import com.nicktoony.cstopdown.MyGame;
-import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
-import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
 import com.nicktoony.engine.packets.connection.*;
-import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
-import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
-import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
-import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
-import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
-import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
-import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;

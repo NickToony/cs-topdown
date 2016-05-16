@@ -6,7 +6,6 @@ import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
-import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 
 /**

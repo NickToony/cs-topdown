@@ -3,7 +3,7 @@ package com.nicktoony.cstopdown.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.networking.server.Server;

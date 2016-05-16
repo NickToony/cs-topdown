@@ -1,6 +1,5 @@
 package com.nicktoony.engine;
 
-import com.nicktoony.cstopdown.MyGame;
 import com.nicktoony.engine.networking.server.Server;
 
 import java.util.Timer;

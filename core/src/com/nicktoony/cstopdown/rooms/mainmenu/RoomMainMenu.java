@@ -12,15 +12,15 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nicktoony.cstopdown.networking.CSLocalClientSocket;
 import com.nicktoony.cstopdown.networking.server.CSServer;
-import com.nicktoony.engine.networking.client.ClientSocket;
-import com.nicktoony.engine.networking.client.LocalClientSocket;
+import com.nicktoony.cstopdown.networking.server.CSServerLocal;
+import com.nicktoony.cstopdown.rooms.connect.RoomConnection;
+import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.config.ServerConfig;
-import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.cstopdown.networking.server.CSServerLocal;
+import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.networking.server.Server;
+import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.rooms.connect.RoomConnect;
-import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
 import com.nicktoony.engine.services.Logger;
 import com.nicktoony.engine.services.SkinManager;
 import com.nicktoony.engine.services.SoundManager;
@@ -101,7 +101,7 @@ public class RoomMainMenu extends Room {
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                                 ClientSocket socket = getGame().getPlatformProvider().getWebSocket(
                                         "127.0.0.1", new ServerConfig().sv_port);
-                                getGame().createRoom(new RoomConnect(socket));
+                                getGame().createRoom(new RoomConnection(socket));
                             }
                         }
                 ));
@@ -255,7 +255,7 @@ public class RoomMainMenu extends Room {
             }
         });
 
-        getGame().createRoom(new RoomConnect(socket));
+        getGame().createRoom(new RoomConnection(socket));
     }
 
     private void startMultiPlayer() {
@@ -285,6 +285,6 @@ public class RoomMainMenu extends Room {
             }
         });
 
-        getGame().createRoom(new RoomConnect(socket));
+        getGame().createRoom(new RoomConnection(socket));
     }
 }

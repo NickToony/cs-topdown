@@ -1,15 +1,15 @@
 package com.nicktoony.cstopdown.rooms.game;
 
-import com.nicktoony.engine.networking.client.ClientSocket;
-import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.packets.connection.LoadedPacket;
-import com.nicktoony.engine.packets.connection.PingPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.packets.Packet;
+import com.nicktoony.engine.packets.connection.LoadedPacket;
+import com.nicktoony.engine.packets.connection.PingPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,8 +78,6 @@ public class GameManager implements ClientSocket.SBSocketListener {
     }
 
     private void handleReceivedPacket(DestroyPlayerPacket packet) {
-        System.out.println("DESTROY PLAYER " + packet.id);
-
         // Find the player in question
         Player player = playerIdMap.get(packet.id);
         // If the player exists
@@ -107,9 +105,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
             Player player = playerIdMap.get(packet.id);
             if (player != null) {
                 // Update their position and facing direction
-                //if (Math.abs(player.getX()-packet.x) > 8 || Math.abs(player.getY()-packet.y) > 8) {
-                    player.setPosition(packet.x, packet.y);
-               // }
+                player.setPosition(packet.x, packet.y);
                 player.setDirection(packet.direction);
                 // Update their inputs
                 player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);
@@ -132,9 +128,6 @@ public class GameManager implements ClientSocket.SBSocketListener {
     }
 
     private void handleReceivedPacket(CreatePlayerPacket packet) {
-        System.out.println("CREATE PLAYER " + packet.id);
-
-
         // Create the player in the room
         Player player = roomGame.createPlayer(packet.id,
                 packet.x,

@@ -1,10 +1,7 @@
 package com.nicktoony.cstopdown.networking.server;
 
-import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
-import com.nicktoony.engine.networking.server.Server;
-import com.nicktoony.engine.networking.server.ServerClientHandler;
-import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
+import com.nicktoony.engine.packets.Packet;
 
 /**
  * Created by Nick on 24/03/2016.

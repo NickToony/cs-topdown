@@ -1,6 +1,5 @@
 package com.nicktoony.cstopdown.rooms.game.entities.players;
 
-import box2dLight.Light;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;

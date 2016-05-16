@@ -1,12 +1,12 @@
 package com.nicktoony.engine.packets;
 
-import com.nicktoony.engine.packets.connection.*;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
+import com.nicktoony.engine.packets.connection.*;
 
 import java.util.HashMap;
 import java.util.Map;

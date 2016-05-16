@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.cstopdown.rooms.connect.RoomConnection;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.config.ServerlistConfig;
+import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.rooms.connect.RoomConnect;
 import com.nicktoony.engine.services.SkinManager;
 import com.nicktoony.gameserver.service.GameserverConfig;
@@ -51,7 +52,7 @@ public class RoomServerList extends Room {
                             server.getMeta().get("ip"), Integer.parseInt(server.getMeta().get("port"))
                     );
 
-                    getGame().createRoom(new RoomConnect(socket));
+                    getGame().createRoom(new RoomConnection(socket));
                 }
             }
         });

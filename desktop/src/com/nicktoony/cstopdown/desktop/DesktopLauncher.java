@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.config.GameConfig;

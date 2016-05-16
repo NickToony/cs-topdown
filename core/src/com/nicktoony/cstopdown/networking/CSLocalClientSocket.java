@@ -3,7 +3,6 @@ package com.nicktoony.cstopdown.networking;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.engine.networking.client.LocalClientSocket;
-import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.PacketDefinitions;

@@ -1,7 +1,7 @@
 package com.nicktoony.engine.components;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.services.SoundManager;
 import com.nicktoony.engine.services.TextureManager;
 

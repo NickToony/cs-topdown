@@ -2,7 +2,7 @@ package com.nicktoony.cstopdown.rooms.game.entities.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.XmlReader;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;

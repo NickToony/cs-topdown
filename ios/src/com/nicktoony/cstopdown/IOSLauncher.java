@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown;
 
+import com.nicktoony.engine.MyGame;
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 

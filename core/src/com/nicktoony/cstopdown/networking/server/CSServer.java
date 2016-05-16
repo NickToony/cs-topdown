@@ -4,10 +4,9 @@ package com.nicktoony.cstopdown.networking.server;
  * Created by nick on 13/07/15.
  */
 
-import com.nicktoony.cstopdown.MyGame;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
-import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.TeamDeathMatch;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.engine.config.ServerConfig;

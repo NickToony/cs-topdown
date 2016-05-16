@@ -2,8 +2,8 @@ package com.nicktoony.cstopdown.rooms.game.entities.lights;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicktoony.engine.components.Renderable;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
+import com.nicktoony.engine.components.Renderable;
 
 /**
  * Created by Nick on 14/02/2015.

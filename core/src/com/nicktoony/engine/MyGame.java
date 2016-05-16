@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown;
+package com.nicktoony.engine;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.cstopdown.networking.server.CSServer;
-import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.networking.server.Server;
-import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 import com.nicktoony.engine.services.Logger;
 
 public class MyGame extends ApplicationAdapter implements Server.LoopManager {

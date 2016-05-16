@@ -1,20 +1,18 @@
 package com.nicktoony.engine.rooms.connect;
 
-import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.connection.AcceptPacket;
 import com.nicktoony.engine.packets.connection.ConnectPacket;
 import com.nicktoony.engine.packets.connection.RejectPacket;
-import com.nicktoony.cstopdown.rooms.game.RoomGame;
-import com.nicktoony.cstopdown.rooms.mainmenu.RoomMainMenu;
 
 /**
  * Created by Nick on 03/01/2016.
  */
-public class RoomConnect extends Room {
+public abstract class RoomConnect extends Room {
 
-    private ClientSocket socket;
+    protected ClientSocket socket;
     private boolean connected = false;
 
     public RoomConnect(ClientSocket socket) {
@@ -35,7 +33,7 @@ public class RoomConnect extends Room {
             @Override
             public void onClose(ClientSocket socket) {
                 // Either failed to connect, or rejected
-                getGame().createRoom(new RoomMainMenu());
+                previousRoom();
             }
 
             @Override
@@ -66,7 +64,10 @@ public class RoomConnect extends Room {
         socket.pushNotifications();
 
         if (connected) {
-            getGame().createRoom(new RoomGame(socket));
+            nextRoom();
         }
     }
+
+    public abstract void nextRoom();
+    public abstract void previousRoom();
 }

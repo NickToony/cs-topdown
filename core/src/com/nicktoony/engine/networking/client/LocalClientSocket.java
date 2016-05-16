@@ -2,11 +2,9 @@ package com.nicktoony.engine.networking.client;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
-import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.packets.PacketDefinitions;
-import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.networking.server.Server;
+import com.nicktoony.engine.networking.server.ServerClientHandler;
+import com.nicktoony.engine.packets.Packet;
 
 /**
  * Created by nick on 19/07/15.

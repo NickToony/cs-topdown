@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.nicktoony.engine.components.Entity;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.services.TextureManager;
 
 /**
