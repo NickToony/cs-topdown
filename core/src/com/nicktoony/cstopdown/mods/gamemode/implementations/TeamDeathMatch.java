@@ -18,7 +18,7 @@ public class TeamDeathMatch extends GameModeMod {
     @Override
     public void evRoundStart() {
         for (PlayerModInterface player : getAllPlayers()) {
-            if (player.isBot())
+            //if (!player.isBot())
                 player.spawn();
         }
     }
@@ -59,7 +59,7 @@ public class TeamDeathMatch extends GameModeMod {
             restartGame();
 //        }
 
-//        player.spawn();
+        //player.spawn();
     }
 
     @Override

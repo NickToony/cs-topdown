@@ -55,7 +55,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     private boolean stateChange;
 
 
-    private int weaponCurrent = -1;
+    private int weaponCurrent = 0;
     private int weaponNext = -1;
     private WeaponWrapper weapons[];
     private Bone leftHand;

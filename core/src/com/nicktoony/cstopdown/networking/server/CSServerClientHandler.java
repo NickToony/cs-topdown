@@ -41,18 +41,18 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
 
     @Override
     protected void handleLoadingMessages(Packet packet) {
-
-
         if (packet instanceof LoadedPacket) {
 
             // Notify mods of a player joined
             server.notifyModPlayerConnected(player);
 
+            super.handleLoadingMessages(packet);
+
             // update the player on all OTHER players
             fullUpdate();
         }
 
-        super.handleLoadingMessages(packet);
+
     }
 
     public void update() {
@@ -173,7 +173,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
 
     public void fullUpdate() {
         for (CSServerClientHandler client : server.getClients()) {
-            if (client != this && client.player.isAlive()) {
+            if (client.player.isAlive()) {
                 CreatePlayerPacket packet = new CreatePlayerPacket();
                 packet.id = client.getId();
                 packet.x = client.getPlayer().getX();
@@ -210,7 +210,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         createPlayer.y = player.getY();
         createPlayer.id = this.id;
         createPlayer.weapons = getPlayer().getWeapons();
-        createPlayer.currentWeapon = 0;
+        createPlayer.currentWeapon = getPlayer().getCurrentWeapon();
         server.sendToAll(createPlayer);
     }
 
