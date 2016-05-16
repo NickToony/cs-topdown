@@ -69,7 +69,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
         startRound();
 
         for (int i = 0; i < config.sv_bots; i ++) {
-            CSServerClientHandler client = new ServerBotClientHandler(this);
+            CSServerClientHandler client = new CSServerClientHandlerBot(this);
             handleClientConnected(client);
             client.setState(ServerClientHandler.STATE.LOADING);
             notifyClientMessage(client, new LoadedPacket());

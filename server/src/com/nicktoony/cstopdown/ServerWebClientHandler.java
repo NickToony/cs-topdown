@@ -1,10 +1,9 @@
-package com.nicktoony.engine;
+package com.nicktoony.cstopdown;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.networking.server.ServerClientHandler;
 import org.java_websocket.WebSocket;
 
 /**

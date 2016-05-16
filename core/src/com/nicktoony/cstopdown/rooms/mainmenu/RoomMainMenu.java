@@ -20,7 +20,6 @@ import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.rooms.connect.RoomConnect;
 import com.nicktoony.engine.services.Logger;
 import com.nicktoony.engine.services.SkinManager;
 import com.nicktoony.engine.services.SoundManager;

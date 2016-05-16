@@ -387,13 +387,17 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         getRoom().getWorld().destroyBody(body);
 
         if (render) {
-//                glow.dispose();
-//                torch.dispose();
-//                gunFire.dispose();
-//
-//                glow = null;
-//            torch = null;
-//            gunFire = null;
+            glow.setActive(false);
+            torch.setActive(false);
+            gunFire.setActive(false);
+
+            glow.dispose();
+            torch.dispose();
+            gunFire.dispose();
+
+            glow = null;
+            torch = null;
+            gunFire = null;
         }
     }
 

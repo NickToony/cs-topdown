@@ -1,7 +1,6 @@
-package com.nicktoony.engine;
+package com.nicktoony.cstopdown;
 
 import com.nicktoony.cstopdown.networking.server.CSServer;
-import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.services.Logger;
 import org.java_websocket.WebSocket;

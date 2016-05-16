@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
+import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.config.GameConfig;
@@ -36,7 +37,7 @@ public class HtmlLauncher extends GwtApplication {
                 }
 
                 @Override
-                public Server getLocalServer(Logger logger, ServerConfig config) {
+                public CSServer getLocalServer(Logger logger, ServerConfig config) {
                     return null;
                 }
 

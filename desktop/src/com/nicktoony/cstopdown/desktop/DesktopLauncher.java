@@ -13,7 +13,7 @@ import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.NativeLoopManager;
-import com.nicktoony.engine.ServerSocket;
+import com.nicktoony.cstopdown.ServerSocket;
 import com.nicktoony.engine.ServerUI;
 import com.nicktoony.engine.services.Logger;
 

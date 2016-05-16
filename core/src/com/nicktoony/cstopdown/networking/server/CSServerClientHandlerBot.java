@@ -6,8 +6,8 @@ import com.nicktoony.engine.packets.Packet;
 /**
  * Created by Nick on 24/03/2016.
  */
-public class ServerBotClientHandler extends CSServerClientHandler {
-    public ServerBotClientHandler(CSServer server) {
+public class CSServerClientHandlerBot extends CSServerClientHandler {
+    public CSServerClientHandlerBot(CSServer server) {
         super(server);
     }
 

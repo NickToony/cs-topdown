@@ -8,7 +8,6 @@ import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
-import com.nicktoony.cstopdown.networking.server.ServerBotClientHandler;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingHeuristic;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingNode;
 import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingPath;
@@ -40,12 +39,12 @@ public class BotPlayer extends Player {
     private AIState aiState = AIState.idle;
     private PathSmoother<PathfindingNode, Vector2> pathSmoother;
     private CSServer server;
-    private ServerBotClientHandler player;
+    private CSServerClientHandler player;
     private List<CSServerPlayerWrapper> targets = new ArrayList<CSServerPlayerWrapper>();
     private CSServerPlayerWrapper currentTarget = null;
     private int lastScan = 0;
 
-    public void setupBot(CSServer server, ServerBotClientHandler player) {
+    public void setupBot(CSServer server, CSServerClientHandler player) {
         this.server = server;
         this.player = player;
     }
