@@ -154,16 +154,16 @@ public abstract class ServerClientHandler{
 
     public void insertInputQueue(TimestampedPacket packet) {
         // loop through all elements
-        for (int i = 0; i < inputQueue.size(); i++) {
-            // Skip to next one if smaller
-            if (inputQueue.get(i).timestamp < packet.timestamp) continue;
-
-            System.out.println("WE JUMPED THE QUEUE");
-
-            // Otherwise, found location
-            inputQueue.add(i, packet);
-            return;
-        }
+//        for (int i = 0; i < inputQueue.size(); i++) {
+//            // Skip to next one if smaller
+//            if (inputQueue.get(i).timestamp < packet.timestamp) continue;
+//
+//            System.out.println("WE JUMPED THE QUEUE");
+//
+//            // Otherwise, found location
+//            inputQueue.add(i, packet);
+//            return;
+//        }
         // Jump to end
         inputQueue.add(packet);
     }
@@ -184,15 +184,15 @@ public abstract class ServerClientHandler{
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-            if (packet.timestamp < getTimestamp()
-                    - server.getConfig().sv_min_compensate) {
-                // Latency has been compensated. Process it!
-                iterator.remove();
+//            if (packet.timestamp < getTimestamp()
+//                    - server.getConfig().sv_min_compensate) {
+            // Latency has been compensated. Process it!
+            iterator.remove();
 
-                handleInput(packet);
-            } else {
-                break;
-            }
+            handleInput(packet);
+//            } else {
+//                break;
+//            }
         }
     }
 
