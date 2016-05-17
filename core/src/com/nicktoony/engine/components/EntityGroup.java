@@ -1,6 +1,7 @@
 package com.nicktoony.engine.components;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Contact;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,16 @@ public class EntityGroup<T extends Room> extends Entity<T> {
 
     public Room getUncastedRoom() {
         return room;
+    }
+
+    @Override
+    public boolean collisionEntity(Contact contact, Entity other) {
+        return false;
+    }
+
+    @Override
+    public void collisionOther(Contact contact) {
+
     }
 
     public Renderable addEntity(Entity entity) {

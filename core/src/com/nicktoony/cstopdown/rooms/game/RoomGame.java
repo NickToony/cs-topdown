@@ -54,6 +54,7 @@ public class RoomGame extends Room {
         }
 
         world = new World(new Vector2(0, 0), true);
+        world.setContactListener(new ListenerClass());
         map.addCollisionObjects(world);
 
         if (render) {

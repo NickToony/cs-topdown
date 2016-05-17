@@ -1,5 +1,7 @@
 package com.nicktoony.engine.components;
 
+import com.badlogic.gdx.physics.box2d.Contact;
+
 /**
  * Created by nick on 15/07/15.
  */
@@ -57,5 +59,17 @@ public abstract class Entity<R extends Room> extends Renderable {
 
     public void focused(boolean focused) {
 
+    }
+
+    public boolean collisionEntity(Contact contact, Entity other) {
+        return false;
+    };
+
+    public void collisionOther(Contact contact) {
+
+    };
+
+    public boolean shouldGlide(Contact contact) {
+        return false;
     }
 }

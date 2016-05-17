@@ -11,6 +11,7 @@ import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Event;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
+import com.nicktoony.cstopdown.rooms.game.entities.Bullet;
 import com.nicktoony.cstopdown.rooms.game.entities.SkeletonWrapper;
 import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.services.CharacterManager;
@@ -289,7 +290,8 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
                         // Actually shoot if there was one bullet
                         if (weapons[weaponCurrent].bulletsIn >= 0) {
-
+                            // Figure out end of gun
+                            getRoom().addEntity(new Bullet(x, y, direction, this));
                         }
                     }
                 } else if (weaponNext != -1) {
@@ -542,5 +544,15 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     @Override
     public void focused(boolean focused) {
         glowActive = focused;
+    }
+
+    @Override
+    public boolean collisionEntity(Contact contact, Entity other) {
+        return false;
+    }
+
+    @Override
+    public void collisionOther(Contact contact) {
+
     }
 }
