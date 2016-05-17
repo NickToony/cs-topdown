@@ -37,7 +37,9 @@ public class ServerWebClientHandler extends CSServerClientHandler {
 
     @Override
     public void sendPacket(Packet packet) {
-        socket.send(packetToString(packet));
+        if (socket.isOpen()) {
+            socket.send(packetToString(packet));
+        }
     }
 
     @Override
