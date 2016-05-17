@@ -15,6 +15,7 @@ public class ServerConfig {
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
     public int sv_bots = 10;
+    public String sv_map = "de_dust2";
 
     // Map settings
 

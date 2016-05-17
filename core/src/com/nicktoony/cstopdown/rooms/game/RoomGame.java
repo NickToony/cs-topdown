@@ -48,9 +48,9 @@ public class RoomGame extends Room {
 
         // Create the map
         if (!render) {
-            map = new TexturelessMap("de_dust2"); // TODO: CHANGE BACK EVENTUALLY
+            map = new TexturelessMap(socket.getServerConfig().sv_map);
         } else {
-            map = new Map("de_dust2");
+            map = new Map(socket.getServerConfig().sv_map);
         }
 
         world = new World(new Vector2(0, 0), true);

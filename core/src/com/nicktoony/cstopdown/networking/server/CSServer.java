@@ -47,7 +47,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
-        roomGame = new RoomGame(new FakeClientSocket());
+        roomGame = new RoomGame(new FakeClientSocket(config));
         roomGame.create(false);
 
         // begin server

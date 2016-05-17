@@ -19,7 +19,7 @@ public class RoomConnection extends RoomConnect {
     }
 
     @Override
-    public void previousRoom() {
+    public void previousRoom(ERRORS error) {
         getGame().createRoom(new RoomMainMenu());
     }
 
