@@ -30,6 +30,7 @@ public class ServerConfig {
     public int mp_freeze_time = 5;
     public int mp_round_time = 300;
     public int mp_victory_time = 5;
+    public int mp_bot_engage_range = 200;
 
     // Server rates
     public int sv_tickrate = 60;

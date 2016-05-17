@@ -73,16 +73,17 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
     private SkeletonWrapper skeletonWrapper;
 
-    boolean canSee = false;
+    boolean cannotSee = false;
     Body targetBody = null;
     private RayCastCallback callback = new RayCastCallback() {
         @Override
         public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
             if (!body.getFixtureList().contains(fixture, false)
                     && !targetBody.getFixtureList().contains(fixture, false)) {
-                canSee = true;
+                cannotSee = true;
                 return 0;
             } else {
+                cannotSee = false;
                 return -1;
             }
         }
@@ -530,10 +531,12 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     }
 
     public boolean canSeePlayer(Player player) {
-        canSee = false;
+        cannotSee = true;
         targetBody = player.body;
-        getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
-        return !canSee;
+        if (body.getPosition().dst(player.body.getPosition()) < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
+            getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
+        }
+        return !cannotSee;
     }
 
     @Override
