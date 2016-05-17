@@ -12,11 +12,11 @@ import com.badlogic.gdx.maps.MapProperties;
  */
 public class LightManager {
     public static Light defineTorch(RayHandler rayHandler) {
-        return new ConeLight(rayHandler, 100, Color.WHITE, 400, 16, 16, 0, 25);
+        return new ConeLight(rayHandler, 100, Color.WHITE, 400 / 32f, 16, 16, 0, 25);
     }
 
     public static Light definePlayerGlow(RayHandler rayHandler) {
-        PointLight pointLight = new PointLight(rayHandler, 100, new Color(0, 0, 0, 0.5f), 100, 0, 0);
+        PointLight pointLight = new PointLight(rayHandler, 100, new Color(0, 0, 0, 0.5f), 100 / 32f, 0, 0);
 
         pointLight.setXray(true);
 
@@ -33,7 +33,7 @@ public class LightManager {
         color.a = Float.parseFloat(mapProperties.get("alpha", String.class));
         pointLight.setColor(color);
         // The size
-        pointLight.setDistance(Integer.parseInt(mapProperties.get("distance", String.class)));
+        pointLight.setDistance(Integer.parseInt(mapProperties.get("distance", String.class)) / 32);
         // Position
         pointLight.setPosition(x, y);
 
@@ -41,7 +41,7 @@ public class LightManager {
     }
 
     public static ConeLight defineGunFire(RayHandler handler) {
-        ConeLight coneLight = new ConeLight(handler, 100, Color.YELLOW, 50, 16, 16, 0, 90);
+        ConeLight coneLight = new ConeLight(handler, 100, Color.YELLOW, 50 / 32f, 16, 16, 0, 90);
         coneLight.setXray(true);
         coneLight.getColor().a = .2f;
         return coneLight;

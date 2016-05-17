@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.XmlReader;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.config.ServerConfig;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ public class TexturelessMap extends Map {
     protected XmlReader xml = new XmlReader();
     private XmlReader.Element base;
 
-    public TexturelessMap(String mapName) {
+    public TexturelessMap(ServerConfig gameConfig, String mapName) {
+        super(gameConfig);
         FileHandle file = Gdx.files.internal("maps/" + mapName + "/map.tmx");
 
         try {
@@ -29,8 +32,8 @@ public class TexturelessMap extends Map {
             return;
         }
 
-        mapWidth = Integer.parseInt(base.getAttribute("width")) * CELL_SIZE;
-        mapHeight = Integer.parseInt(base.getAttribute("height")) * CELL_SIZE;
+        mapWidth = Integer.parseInt(base.getAttribute("width")) * gameConfig.sv_cell_size;
+        mapHeight = Integer.parseInt(base.getAttribute("height")) * gameConfig.sv_cell_size;
 
         // Find objectives
         findObjectives();

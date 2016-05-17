@@ -8,14 +8,14 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.components.Entity;
+import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.services.TextureManager;
 
 /**
  * Created by Nick on 17/05/2016.
  */
-public class Bullet extends Entity<RoomGame> {
+public class Bullet extends PhysicsEntity {
 
-    private Body body;
     private Texture texture;
     private Sprite sprite;
     private Player owner;
@@ -30,7 +30,7 @@ public class Bullet extends Entity<RoomGame> {
 
     @Override
     protected void create(boolean render) {
-        setupBody();
+        super.create(render);
 
         if (render) {
             texture = TextureManager.getTexture("weapons/Rifles/rifle_ak47/texture.png");
@@ -40,8 +40,7 @@ public class Bullet extends Entity<RoomGame> {
 
     @Override
     public void step(float delta) {
-        x = body.getPosition().x;
-        y = body.getPosition().y;
+        super.step(delta);
     }
 
     @Override
@@ -53,21 +52,21 @@ public class Bullet extends Entity<RoomGame> {
 
     @Override
     public void dispose(boolean render) {
-        getRoom().getWorld().destroyBody(body);
+        super.dispose(render);
     }
 
-    private void setupBody() {
+    protected Body setupBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.allowSleep = false;
         bodyDef.bullet = true;
-        bodyDef.angle = direction;
+        bodyDef.angle = (float) Math.toRadians(direction+90);
 
-        body = getRoom().getWorld().createBody(bodyDef);
+        Body body = getRoom().getWorld().createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(100, 1);
+        shape.setAsBox(1, 0.1f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -76,15 +75,18 @@ public class Bullet extends Entity<RoomGame> {
         fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef);
-        body.setUserData(this);
         double radians = Math.toRadians(direction+90);
-        body.setLinearVelocity(new Vector2((float)Math.cos(radians), (float)Math.sin(radians)));
+        body.setLinearVelocity(new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).limit(2f));
         shape.dispose();
+
+        return body;
     }
 
     @Override
     public boolean collisionEntity(Contact contact, Entity other) {
         if (other == owner) {
+            return true;
+        } else if (other instanceof Bullet) {
             return true;
         }
 
@@ -93,11 +95,6 @@ public class Bullet extends Entity<RoomGame> {
 
     @Override
     public void collisionOther(Contact contact) {
-        //getRoom().deleteRenderable(this);
-    }
-
-    @Override
-    public boolean shouldGlide(Contact contact) {
-        return true;
+        getRoom().deleteRenderable(this);
     }
 }

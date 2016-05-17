@@ -64,16 +64,6 @@ public class EntityGroup<T extends Room> extends Entity<T> {
         return room;
     }
 
-    @Override
-    public boolean collisionEntity(Contact contact, Entity other) {
-        return false;
-    }
-
-    @Override
-    public void collisionOther(Contact contact) {
-
-    }
-
     public Renderable addEntity(Entity entity) {
         entity.setRoom(room);
         entities.add(entity);

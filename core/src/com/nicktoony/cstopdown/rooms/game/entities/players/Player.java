@@ -14,6 +14,7 @@ import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.Bullet;
 import com.nicktoony.cstopdown.rooms.game.entities.SkeletonWrapper;
 import com.nicktoony.engine.components.Entity;
+import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.services.CharacterManager;
 import com.nicktoony.engine.services.TextureManager;
 import com.nicktoony.engine.services.weapons.Weapon;
@@ -22,10 +23,10 @@ import com.nicktoony.engine.services.weapons.WeaponManager;
 /**
  * Created by Nick on 08/09/2014.
  */
-public class Player extends Entity<RoomGame> implements SkeletonWrapper.AnimationEventListener {
+public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEventListener {
 
-    private final int PLAYER_RADIUS = 12;
-    private final int PLAYER_MOVE_SPEED = 2;
+    private final float PLAYER_RADIUS = 0.3f;
+    private final float PLAYER_MOVE_SPEED = 0.1f;
     private final float PLAYER_ANGLE_SMOOTHING = 0.1f;
 
     private final int STATE_IDLE = 0;
@@ -42,7 +43,6 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     private boolean lightOn = false;
     private boolean lastTorch = false;
     private boolean glowActive = false;
-    private boolean changedPosition = false;
     protected float directionTo;
 
 
@@ -64,8 +64,6 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     private Sprite leftHandSprite;
     private Sprite rightHandSprite;
     private Sprite shadowSprite;
-
-    private Body body;
 
     private Texture gunTexture;
     private Light glow;
@@ -96,9 +94,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
     @Override
     public void create(boolean render) {
-        setupBody();
-
-//        setGun(WeaponManager.getInstance().getWeapon("rifle_ak47"));
+        super.create(render);
 
         if (render) {
             getSkeletonWrapper().setSkeleton(CharacterManager.getInstance()
@@ -115,13 +111,14 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         return skeletonWrapper;
     }
 
-    private void setupBody() {
+    @Override
+    protected Body setupBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x + PLAYER_RADIUS, y + PLAYER_RADIUS);
         bodyDef.allowSleep = false;
 
-        body = getRoom().getWorld().createBody(bodyDef);
+        Body body = getRoom().getWorld().createBody(bodyDef);
 
         Shape shape = new CircleShape();
 //        shape.setAsBox(PLAYER_RADIUS, PLAYER_RADIUS);
@@ -134,6 +131,8 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
         body.createFixture(fixtureDef);
         shape.dispose();
+
+        return body;
     }
 
     public void setNextWeapon(int slot)  {
@@ -216,11 +215,11 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         }
 
         // Update shoot
-        torch.setPosition(vector.x, vector.y);
+        torch.setPosition(vector.x / 32, vector.y / 32);
         torch.setDirection(rightHand.getWorldRotation());
         torch.setActive(lightOn);
         // Update gun fire
-        gunFire.setPosition(vector.x, vector.y);
+        gunFire.setPosition(vector.x / 32, vector.y / 32);
         gunFire.setDirection(rightHand.getWorldRotation());
         gunFire.setActive(stateChange && state == STATE_SHOOTING && weapons[weaponCurrent].bulletsIn >= 0);
 
@@ -247,18 +246,13 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
 
         // Update glow
-        glow.setPosition(x, y);
+        glow.setPosition(x/32, y/32);
         glow.setActive(glowActive);
     }
 
     @Override
     public void step(float delta) {
-        if (changedPosition) {
-            updatePosition();
-        }
-
-        this.x = body.getPosition().x;
-        this.y = body.getPosition().y;
+        super.step(delta);
 
         skeletonWrapper.step();
 
@@ -266,7 +260,6 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         float vSpeed = (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0);
 
         body.setLinearVelocity(hSpeed, vSpeed);
-
 
         // Handle state variables
         if (stateTimer > 0) {
@@ -387,7 +380,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
 
     @Override
     public void dispose(boolean render) {
-        getRoom().getWorld().destroyBody(body);
+        super.dispose(render);
 
         if (render) {
             glow.setActive(false);
@@ -425,27 +418,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
         this.glow = glow;
     }
 
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-        changedPosition = true;
-    }
 
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-        changedPosition = true;
-    }
-
-    public void setPosition(float x, float y) {
-        setX(x);
-        setY(y);
-    }
-
-    public void updatePosition() {
-        body.setTransform(getX(), getY(), 0);
-        changedPosition = false;
-    }
 
     public void setMovement(boolean moveUp, boolean moveRight, boolean moveDown, boolean moveLeft) {
         this.moveUp = moveUp;
@@ -535,7 +508,7 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     public boolean canSeePlayer(Player player) {
         cannotSee = true;
         targetBody = player.body;
-        if (body.getPosition().dst(player.body.getPosition()) < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
+        if (getPosition().dst(player.getPosition()) < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
             getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
         }
         return !cannotSee;
@@ -544,15 +517,5 @@ public class Player extends Entity<RoomGame> implements SkeletonWrapper.Animatio
     @Override
     public void focused(boolean focused) {
         glowActive = focused;
-    }
-
-    @Override
-    public boolean collisionEntity(Contact contact, Entity other) {
-        return false;
-    }
-
-    @Override
-    public void collisionOther(Contact contact) {
-
     }
 }

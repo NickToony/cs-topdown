@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.services.LightManager;
 
 import java.util.ArrayList;
@@ -25,7 +27,6 @@ import java.util.List;
  * Created by Nick on 10/09/2014.
  */
 public class Map {
-    protected final int CELL_SIZE = 32;
     private String mapName;
     private TiledMap map;
     private MapLayer collisionLayer;
@@ -39,14 +40,17 @@ public class Map {
     protected PathfindingGraph pathfindingGraph;
     protected HashMap<Integer, List<Spawn>> spawns;
     public int[] spawnIndex = { 0, 0, 0 };
+    protected ServerConfig gameConfig;
 
     private Player entitySnap;
 
-    protected Map() {
-
+    protected Map(ServerConfig gameConfig) {
+        this.gameConfig = gameConfig;
     }
 
-    public Map(String mapName)    {
+    public Map(ServerConfig gameConfig, String mapName)    {
+        this(gameConfig);
+
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
 
@@ -59,8 +63,8 @@ public class Map {
         ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
         ambientColour.a = Float.parseFloat(mapProperties.get("ambientAlpha", String.class));
 
-        mapWidth = CELL_SIZE * tX;
-        mapHeight = CELL_SIZE * tY;
+        mapWidth = gameConfig.sv_cell_size * tX;
+        mapHeight = gameConfig.sv_cell_size * tY;
 
         // Get the collision layer
         for (MapLayer layer : map.getLayers()) {
@@ -173,7 +177,11 @@ public class Map {
             bodyDef2.position.set(0,0);
             FixtureDef fixtureDef2 = new FixtureDef();
             EdgeShape edgeShape = new EdgeShape();
-            edgeShape.set(mapWidth * value[0], mapHeight * value[1], mapWidth * value[2], mapHeight * value[3]);
+            float x1 = (mapWidth * value[0]) / gameConfig.sv_pixels_per_metre;
+            float y1 = (mapHeight * value[1]) / gameConfig.sv_pixels_per_metre;
+            float x2 = (mapWidth * value[2]) / gameConfig.sv_pixels_per_metre;
+            float y2 = (mapHeight * value[3]) / gameConfig.sv_pixels_per_metre;
+            edgeShape.set(x1, y1, x2, y2);
             fixtureDef2.shape = edgeShape;
 
             Body bodyEdgeScreen = world.createBody(bodyDef2);
@@ -197,15 +205,19 @@ public class Map {
     }
 
     protected void addCollisionWall(World world, float x, float y) {
+        float physicsX = x  / gameConfig.sv_pixels_per_metre;
+        float physicsY = y  / gameConfig.sv_pixels_per_metre;
+        float physicsCellSize = gameConfig.sv_cell_size / gameConfig.sv_pixels_per_metre;
+
         // Resize it to the correct size and location
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + (CELL_SIZE /2), y + (CELL_SIZE /2));
+        bodyDef.position.set(physicsX + (physicsCellSize /2), physicsY + (physicsCellSize /2));
 
         Body body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(CELL_SIZE /2, CELL_SIZE /2);
+        shape.setAsBox(physicsCellSize /2, physicsCellSize /2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -230,19 +242,22 @@ public class Map {
                 // Fetch the rectangle collision box
                 TextureMapObject rectangle = ((TextureMapObject) object);
 
+                float physicsX = rectangle.getX()  / gameConfig.sv_pixels_per_metre;
+                float physicsY = rectangle.getY()  / gameConfig.sv_pixels_per_metre;
+                float physicsCellSize = gameConfig.sv_cell_size / gameConfig.sv_pixels_per_metre;
                 LightManager.definePointLight(rayHandler, mapProperties,
-                        rectangle.getX() + (CELL_SIZE / 2),
-                        rectangle.getY() + (CELL_SIZE / 2));
+                         physicsX + (physicsCellSize / 2),
+                         physicsY + (physicsCellSize / 2));
             }
         }
     }
 
-    public int getMapWidth() {
-        return mapWidth;
-    }
-
     public int getMapHeight() {
         return mapHeight;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
     }
 
     public Color getAmbientColour() {

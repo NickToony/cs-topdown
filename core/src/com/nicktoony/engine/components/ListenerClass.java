@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game;
+package com.nicktoony.engine.components;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -14,9 +14,9 @@ public class ListenerClass implements ContactListener {
     public void beginContact(Contact contact) {
         boolean handled = false;
         if (contact.getFixtureA().getBody().getUserData() != null
-                && contact.getFixtureA().getBody().getUserData() != null) {
-            Entity entityOne = (Entity) contact.getFixtureA().getBody().getUserData();
-            Entity entityTwo = (Entity) contact.getFixtureB().getBody().getUserData();
+                && contact.getFixtureB().getBody().getUserData() != null) {
+            PhysicsEntity entityOne = (PhysicsEntity) contact.getFixtureA().getBody().getUserData();
+            PhysicsEntity entityTwo = (PhysicsEntity) contact.getFixtureB().getBody().getUserData();
             if (entityOne.collisionEntity(contact, entityTwo)) {
                 handled = true;
             }
@@ -24,7 +24,10 @@ public class ListenerClass implements ContactListener {
 
         if (!handled) {
             if (contact.getFixtureA().getBody().getUserData() != null) {
-                Entity entityOne = (Entity) contact.getFixtureA().getBody().getUserData();
+                PhysicsEntity entityOne = (PhysicsEntity) contact.getFixtureA().getBody().getUserData();
+                entityOne.collisionOther(contact);
+            } else if (contact.getFixtureB().getBody().getUserData() != null) {
+                PhysicsEntity entityOne = (PhysicsEntity) contact.getFixtureB().getBody().getUserData();
                 entityOne.collisionOther(contact);
             }
         }
@@ -37,19 +40,7 @@ public class ListenerClass implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-        if (contact.getFixtureA().getBody().getUserData() != null) {
-            Entity entityOne = (Entity) contact.getFixtureA().getBody().getUserData();
-            if (entityOne.shouldGlide(contact)) {
-                //contact.setEnabled(false);
-            }
-        }
 
-        if (contact.getFixtureB().getBody().getUserData() != null) {
-            Entity entityTwo = (Entity) contact.getFixtureB().getBody().getUserData();
-            if (entityTwo.shouldGlide(contact)) {
-                //contact.setEnabled(false);
-            }
-        }
     }
 
     @Override

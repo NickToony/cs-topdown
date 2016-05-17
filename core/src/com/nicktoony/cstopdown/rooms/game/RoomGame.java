@@ -11,7 +11,9 @@ import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
 import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
+import com.nicktoony.engine.components.ListenerClass;
 import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.services.CharacterManager;
 import com.nicktoony.engine.services.LightManager;
@@ -48,9 +50,9 @@ public class RoomGame extends Room {
 
         // Create the map
         if (!render) {
-            map = new TexturelessMap(socket.getServerConfig().sv_map);
+            map = new TexturelessMap(socket.getServerConfig(), socket.getServerConfig().sv_map);
         } else {
-            map = new Map(socket.getServerConfig().sv_map);
+            map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map);
         }
 
         world = new World(new Vector2(0, 0), true);

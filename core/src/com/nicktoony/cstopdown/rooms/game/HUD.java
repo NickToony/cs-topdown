@@ -152,14 +152,4 @@ public class HUD extends Entity<RoomGame> {
     public boolean getKeyboard() {
         return false;
     }
-
-    @Override
-    public boolean collisionEntity(Contact contact, Entity other) {
-        return false;
-    }
-
-    @Override
-    public void collisionOther(Contact contact) {
-
-    }
 }
