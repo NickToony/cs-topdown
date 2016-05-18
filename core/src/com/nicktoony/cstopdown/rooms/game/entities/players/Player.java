@@ -26,7 +26,6 @@ import com.nicktoony.engine.services.weapons.WeaponManager;
 public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEventListener {
 
     private final float PLAYER_RADIUS = 0.3f;
-    private final float PLAYER_MOVE_SPEED = 0.1f;
     private final float PLAYER_ANGLE_SMOOTHING = 0.1f;
 
     private final int STATE_IDLE = 0;
@@ -260,10 +259,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         skeletonWrapper.step();
 
-        float hSpeed = (moveLeft ? -PLAYER_MOVE_SPEED : 0) + (moveRight ? PLAYER_MOVE_SPEED : 0);
-        float vSpeed = (moveUp ? PLAYER_MOVE_SPEED : 0) + (moveDown ? -PLAYER_MOVE_SPEED : 0);
+        float moveSpeed = getRoom().getConfig().mp_player_move_speed;
+        float hSpeed = (moveLeft ? -moveSpeed : 0) + (moveRight ? moveSpeed : 0);
+        float vSpeed = (moveUp ? moveSpeed : 0) + (moveDown ? -moveSpeed : 0);
 
-        body.setLinearVelocity(hSpeed, vSpeed);
+        body.setLinearVelocity(EngineConfig.toMetres(hSpeed),
+                EngineConfig.toMetres(vSpeed));
 
         // Handle state variables
         if (stateTimer > 0) {

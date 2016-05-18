@@ -72,6 +72,9 @@ public class UserPlayer extends Player{
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
+        // We need PhysicsEntity to update the positions
+        super.step(delta);
+
         // Check if changed movement keys
         int newMove = ((moveLeft ? 1 : 0) * 1000)
                 + ((moveRight ? 1 : 0) * 100)
@@ -100,8 +103,6 @@ public class UserPlayer extends Player{
             lastShoot = shootKey;
             lastReload = reloadKey;
         }
-
-        super.step(delta);
 
 
     }

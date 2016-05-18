@@ -12,6 +12,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.engine.components.ListenerClass;
 import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.entities.HUD;
 import com.nicktoony.engine.entities.lights.RayHandlerWrapper;
 import com.nicktoony.engine.entities.world.Map;
@@ -184,4 +185,8 @@ public abstract class RoomGame extends Room {
     protected abstract HUD defineHud();
 
     protected abstract Map defineMap(boolean render);
+
+    public ServerConfig getConfig() {
+        return socket.getServerConfig();
+    }
 }
