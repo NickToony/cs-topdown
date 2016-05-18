@@ -105,7 +105,6 @@ public abstract class ServerClientHandler{
                     pingAverage = p;
                 }
             }
-            System.out.println("PING MAX: " + pingAverage);
 
         } else {
             insertInputQueue((TimestampedPacket) packet);
