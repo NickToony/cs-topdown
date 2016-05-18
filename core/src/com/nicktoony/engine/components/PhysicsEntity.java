@@ -2,7 +2,7 @@ package com.nicktoony.engine.components;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.nicktoony.cstopdown.rooms.game.RoomGame;
+import com.nicktoony.engine.rooms.RoomGame;
 import com.nicktoony.engine.EngineConfig;
 
 /**

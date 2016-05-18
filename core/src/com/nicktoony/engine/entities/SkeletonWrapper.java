@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game.entities;
+package com.nicktoony.engine.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

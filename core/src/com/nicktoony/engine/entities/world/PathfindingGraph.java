@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game.entities.world;
+package com.nicktoony.engine.entities.world;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;

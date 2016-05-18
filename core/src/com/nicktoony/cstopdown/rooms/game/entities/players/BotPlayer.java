@@ -8,10 +8,10 @@ import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
-import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingHeuristic;
-import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingNode;
-import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingPath;
-import com.nicktoony.cstopdown.rooms.game.entities.world.PathfindingRaycastCollisionDetector;
+import com.nicktoony.engine.entities.world.PathfindingHeuristic;
+import com.nicktoony.engine.entities.world.PathfindingNode;
+import com.nicktoony.engine.entities.world.PathfindingPath;
+import com.nicktoony.engine.entities.world.PathfindingRaycastCollisionDetector;
 
 import java.util.ArrayList;
 import java.util.List;

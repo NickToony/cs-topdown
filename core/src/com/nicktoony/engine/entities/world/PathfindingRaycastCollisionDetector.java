@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game.entities.world;
+package com.nicktoony.engine.entities.world;
 
 import com.badlogic.gdx.ai.utils.Collision;
 import com.badlogic.gdx.ai.utils.Ray;

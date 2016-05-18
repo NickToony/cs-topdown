@@ -1,9 +1,9 @@
-package com.nicktoony.cstopdown.rooms.game.entities.lights;
+package com.nicktoony.engine.entities.lights;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
+import com.nicktoony.engine.entities.world.Map;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.Renderable;
 

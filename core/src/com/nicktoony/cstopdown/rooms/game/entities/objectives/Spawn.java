@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game.entities.world.objectives;
+package com.nicktoony.cstopdown.rooms.game.entities.objectives;
 
 /**
  * Created by Nick on 25/03/2016.

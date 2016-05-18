@@ -10,6 +10,7 @@ import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.PingPacket;
+import com.nicktoony.engine.rooms.RoomGame;
 
 import java.util.HashMap;
 import java.util.Map;

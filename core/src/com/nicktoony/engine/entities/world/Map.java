@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game.entities.world;
+package com.nicktoony.engine.entities.world;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
@@ -14,9 +14,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
-import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
+import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
-import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.services.LightManager;
 

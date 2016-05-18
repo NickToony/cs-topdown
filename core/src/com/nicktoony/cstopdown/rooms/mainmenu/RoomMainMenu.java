@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nicktoony.cstopdown.networking.CSLocalClientSocket;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerLocal;
-import com.nicktoony.cstopdown.rooms.connect.RoomConnection;
+import com.nicktoony.cstopdown.rooms.connect.CSRoomConnect;
 import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.config.ServerConfig;
@@ -100,7 +100,7 @@ public class RoomMainMenu extends Room {
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                                 ClientSocket socket = getGame().getPlatformProvider().getWebSocket(
                                         "127.0.0.1", new ServerConfig().sv_port);
-                                getGame().createRoom(new RoomConnection(socket));
+                                getGame().createRoom(new CSRoomConnect(socket));
                             }
                         }
                 ));
@@ -254,7 +254,7 @@ public class RoomMainMenu extends Room {
             }
         });
 
-        getGame().createRoom(new RoomConnection(socket));
+        getGame().createRoom(new CSRoomConnect(socket));
     }
 
     private void startMultiPlayer() {
@@ -284,6 +284,6 @@ public class RoomMainMenu extends Room {
             }
         });
 
-        getGame().createRoom(new RoomConnection(socket));
+        getGame().createRoom(new CSRoomConnect(socket));
     }
 }

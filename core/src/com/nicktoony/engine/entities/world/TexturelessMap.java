@@ -1,13 +1,12 @@
-package com.nicktoony.cstopdown.rooms.game.entities.world;
+package com.nicktoony.engine.entities.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.XmlReader;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
-import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
+import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
-import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.config.ServerConfig;
 
 import java.io.IOException;

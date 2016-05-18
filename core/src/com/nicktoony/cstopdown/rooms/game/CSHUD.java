@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,12 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.components.Entity;
+import com.nicktoony.engine.entities.HUD;
+import com.nicktoony.engine.rooms.RoomGame;
 import com.nicktoony.engine.services.TextureManager;
 
 /**
  * Created by Nick on 18/03/2016.
  */
-public class HUD extends Entity<RoomGame> {
+public class CSHUD extends HUD {
 
     private final int UI_SIZE_X = 1024;
     private final int UI_SIZE_Y = 768;
@@ -145,11 +146,8 @@ public class HUD extends Entity<RoomGame> {
         stage.dispose();
     }
 
+    @Override
     public boolean getMouse() {
         return (chatActive);
-    }
-
-    public boolean getKeyboard() {
-        return false;
     }
 }

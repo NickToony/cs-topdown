@@ -4,11 +4,12 @@ package com.nicktoony.cstopdown.networking.server;
  * Created by nick on 13/07/15.
  */
 
+import com.nicktoony.cstopdown.rooms.game.CSRoomGame;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.TeamDeathMatch;
-import com.nicktoony.cstopdown.rooms.game.RoomGame;
+import com.nicktoony.engine.rooms.RoomGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.networking.client.FakeClientSocket;
 import com.nicktoony.engine.networking.server.Server;
@@ -47,7 +48,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement
-        roomGame = new RoomGame(new FakeClientSocket(config));
+        roomGame = new CSRoomGame(new FakeClientSocket(config));
         roomGame.create(false);
 
         // begin server

@@ -10,13 +10,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Event;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
-import com.nicktoony.cstopdown.rooms.game.RoomGame;
-import com.nicktoony.cstopdown.rooms.game.entities.Bullet;
-import com.nicktoony.cstopdown.rooms.game.entities.SkeletonWrapper;
+import com.nicktoony.engine.entities.Bullet;
+import com.nicktoony.engine.entities.SkeletonWrapper;
 import com.nicktoony.engine.EngineConfig;
-import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.services.CharacterManager;
+import com.nicktoony.engine.services.LightManager;
 import com.nicktoony.engine.services.TextureManager;
 import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponManager;
@@ -104,6 +103,10 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
             rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
 
             shadowSprite = new Sprite(TextureManager.getTexture("shadow.png"));
+
+            setTorch(LightManager.defineTorch(getRoom().getRayHandler()));
+            setGlow(LightManager.definePlayerGlow(getRoom().getRayHandler()));
+            setGunFire(LightManager.defineGunFire(getRoom().getRayHandler()));
         }
 
     }

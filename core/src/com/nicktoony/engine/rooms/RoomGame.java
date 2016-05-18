@@ -1,36 +1,37 @@
-package com.nicktoony.cstopdown.rooms.game;
+package com.nicktoony.engine.rooms;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.nicktoony.cstopdown.rooms.game.entities.lights.RayHandlerWrapper;
+import com.nicktoony.cstopdown.rooms.game.GameManager;
+import com.nicktoony.cstopdown.rooms.game.CSHUD;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
-import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
-import com.nicktoony.cstopdown.rooms.game.entities.world.TexturelessMap;
 import com.nicktoony.engine.components.ListenerClass;
 import com.nicktoony.engine.components.Room;
-import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.entities.HUD;
+import com.nicktoony.engine.entities.lights.RayHandlerWrapper;
+import com.nicktoony.engine.entities.world.Map;
+import com.nicktoony.engine.entities.world.TexturelessMap;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.services.CharacterManager;
-import com.nicktoony.engine.services.LightManager;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 
 /**
  * Created by Nick on 08/09/2014.
  */
-public class RoomGame extends Room {
-    protected Map map;
+public abstract class RoomGame extends Room {
     protected World world;
-    private RayHandlerWrapper rayHandlerWrapper;
-    private ClientSocket socket;
-    private GameManager gameManager;
-    private float accumulator = 0;
-    private HUD hud;
+    protected Map map;
+    protected RayHandlerWrapper rayHandlerWrapper;
+    protected ClientSocket socket;
+    protected GameManager gameManager;
+
     private SpriteBatch foregroundSpriteBatch;
+    private HUD hud;
 
     public RoomGame(ClientSocket socket) {
         this.socket = socket;
@@ -49,11 +50,7 @@ public class RoomGame extends Room {
         WeaponManager.getInstance();
 
         // Create the map
-        if (!render) {
-            map = new TexturelessMap(socket.getServerConfig(), socket.getServerConfig().sv_map);
-        } else {
-            map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map);
-        }
+        map = defineMap(render);
 
         world = new World(new Vector2(0, 0), true);
         world.setContactListener(new ListenerClass());
@@ -75,7 +72,7 @@ public class RoomGame extends Room {
             WeaponManager.getInstance().preloadSounds();
 
             // Add hud
-            hud = (HUD) addSelfManagedEntity(new HUD());
+            hud = (HUD) addSelfManagedEntity(defineHud());
         }
     }
 
@@ -95,11 +92,6 @@ public class RoomGame extends Room {
 
         // Update the physics
         world.step(delta, 1, 1);
-//        accumulator += delta;
-//        while (accumulator >= 1) {
-//            world.step(1, 1, 1);
-//            accumulator -= 1;
-//        }
     }
 
     @Override
@@ -108,14 +100,6 @@ public class RoomGame extends Room {
 
         CharacterManager.getInstance().dispose();
         WeaponManager.getInstance().dispose();
-    }
-
-    public Map getMap() {
-        return map;
-    }
-
-    public World getWorld() {
-        return world;
     }
 
     public Player createPlayer(int id, float x, float y, boolean bot) {
@@ -137,27 +121,12 @@ public class RoomGame extends Room {
         player.setId(id);
         player.setX(x);
         player.setY(y);
-        return setupPlayer(player);
-    }
 
-    protected Player setupPlayer(Player player) {
-        if (isRender()) {
-            player.setTorch(LightManager.defineTorch(rayHandlerWrapper.getHandler()));
-            player.setGlow(LightManager.definePlayerGlow(rayHandlerWrapper.getHandler()));
-            player.setGunFire(LightManager.defineGunFire(rayHandlerWrapper.getHandler()));
-        }
         addEntity(player);
 
         return player;
     }
 
-    public float getMouseX() {
-        return Gdx.input.getX();
-    }
-
-    public float getMouseY() {
-        return Gdx.input.getY();
-    }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
@@ -172,27 +141,12 @@ public class RoomGame extends Room {
         // Render lighting
         rayHandlerWrapper.render(spriteBatch);
 
-        // Debug code
-//        ShapeRenderer shapeRenderer = new ShapeRenderer();
-//        shapeRenderer.setProjectionMatrix(getMap().getCamera().combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(1, 1, 0, 1);
-//        for (PathfindingNode node : getMap().getPathfindingGraph().getNodes()) {
-//            for (Connection<PathfindingNode> connection : node.getConnections()) {
-//
-//
-//                shapeRenderer.line(node.getWorldX(), node.getWorldY(), connection.getToNode().getWorldX(), connection.getToNode().getWorldY());
-//
-//            }
-//        }
-//        shapeRenderer.end();
-
         // Render hud
-        foregroundSpriteBatch.begin();
-        hud.render(foregroundSpriteBatch);
-        foregroundSpriteBatch.end();
-
-
+        if (hud != null) {
+            foregroundSpriteBatch.begin();
+            hud.render(foregroundSpriteBatch);
+            foregroundSpriteBatch.end();
+        }
     }
 
     public ClientSocket getSocket() {
@@ -203,7 +157,31 @@ public class RoomGame extends Room {
         return gameManager;
     }
 
+    public float getMouseX() {
+        return Gdx.input.getX();
+    }
+
+    public float getMouseY() {
+        return Gdx.input.getY();
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public RayHandler getRayHandler() {
+        return rayHandlerWrapper.getHandler();
+    }
+
     public HUD getHud() {
         return hud;
     }
+
+    protected abstract HUD defineHud();
+
+    protected abstract Map defineMap(boolean render);
 }

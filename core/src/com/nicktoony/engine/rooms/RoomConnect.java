@@ -1,4 +1,4 @@
-package com.nicktoony.engine.rooms.connect;
+package com.nicktoony.engine.rooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
