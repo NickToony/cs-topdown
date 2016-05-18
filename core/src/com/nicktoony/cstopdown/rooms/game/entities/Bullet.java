@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.components.PhysicsEntity;
@@ -33,7 +32,7 @@ public class Bullet extends PhysicsEntity {
         super.create(render);
 
         if (render) {
-            texture = TextureManager.getTexture("weapons/Rifles/rifle_ak47/texture.png");
+            texture = TextureManager.getTexture("weapons/bullet.png");
             sprite = new Sprite(texture);
         }
     }
@@ -46,7 +45,7 @@ public class Bullet extends PhysicsEntity {
     @Override
     public void render(SpriteBatch spriteBatch) {
         sprite.setPosition(x, y);
-        sprite.setRotation(direction);
+        sprite.setRotation(direction+90);
         sprite.draw(spriteBatch);
     }
 
