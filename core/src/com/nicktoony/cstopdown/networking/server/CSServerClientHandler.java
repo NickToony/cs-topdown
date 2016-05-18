@@ -92,6 +92,10 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
 
     @Override
     protected void handleInput(TimestampedPacket packet) {
+        if (!player.isAlive()) {
+            return;
+        }
+
         boolean inconsistent = false;
         if (packet instanceof PlayerInputPacket) {
             // Cast to input packet
