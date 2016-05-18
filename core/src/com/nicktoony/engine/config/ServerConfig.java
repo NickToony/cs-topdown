@@ -37,7 +37,4 @@ public class ServerConfig {
 
     // Client rates
     public int cl_tickrate = 4;
-
-    public float sv_pixels_per_metre = 32;
-    public int sv_cell_size = 32;
 }

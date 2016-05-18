@@ -1,9 +1,9 @@
 package com.nicktoony.engine.components;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
+import com.nicktoony.engine.EngineConfig;
 
 /**
  * Created by Nick on 17/05/2016.
@@ -24,13 +24,13 @@ public abstract class PhysicsEntity extends Entity<RoomGame> {
         if (changedPhysicsPosition) {
             updatePhysicsPosition();
         }
-        x = body.getPosition().x * getRoom().getSocket().getServerConfig().sv_pixels_per_metre;
-        y = body.getPosition().y * getRoom().getSocket().getServerConfig().sv_pixels_per_metre;
+        x = EngineConfig.toPixels(body.getPosition().x);
+        y = EngineConfig.toPixels(body.getPosition().y);
     }
 
     public void updatePhysicsPosition() {
-        body.setTransform(getX() / getRoom().getSocket().getServerConfig().sv_pixels_per_metre,
-                getY() / getRoom().getSocket().getServerConfig().sv_pixels_per_metre, 0);
+        body.setTransform(EngineConfig.toMetres(getX()),
+                EngineConfig.toMetres(getY()), 0);
         changedPhysicsPosition = false;
     }
 

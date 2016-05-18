@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.services.LightManager;
@@ -63,8 +64,8 @@ public class Map {
         ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
         ambientColour.a = Float.parseFloat(mapProperties.get("ambientAlpha", String.class));
 
-        mapWidth = gameConfig.sv_cell_size * tX;
-        mapHeight = gameConfig.sv_cell_size * tY;
+        mapWidth = EngineConfig.CELL_SIZE * tX;
+        mapHeight = EngineConfig.CELL_SIZE * tY;
 
         // Get the collision layer
         for (MapLayer layer : map.getLayers()) {
@@ -177,10 +178,10 @@ public class Map {
             bodyDef2.position.set(0,0);
             FixtureDef fixtureDef2 = new FixtureDef();
             EdgeShape edgeShape = new EdgeShape();
-            float x1 = (mapWidth * value[0]) / gameConfig.sv_pixels_per_metre;
-            float y1 = (mapHeight * value[1]) / gameConfig.sv_pixels_per_metre;
-            float x2 = (mapWidth * value[2]) / gameConfig.sv_pixels_per_metre;
-            float y2 = (mapHeight * value[3]) / gameConfig.sv_pixels_per_metre;
+            float x1 = EngineConfig.toMetres(mapWidth * value[0]);
+            float y1 = EngineConfig.toMetres(mapHeight * value[1]);
+            float x2 = EngineConfig.toMetres(mapWidth * value[2]);
+            float y2 = EngineConfig.toMetres(mapHeight * value[3]);
             edgeShape.set(x1, y1, x2, y2);
             fixtureDef2.shape = edgeShape;
 
@@ -205,9 +206,9 @@ public class Map {
     }
 
     protected void addCollisionWall(World world, float x, float y) {
-        float physicsX = x  / gameConfig.sv_pixels_per_metre;
-        float physicsY = y  / gameConfig.sv_pixels_per_metre;
-        float physicsCellSize = gameConfig.sv_cell_size / gameConfig.sv_pixels_per_metre;
+        float physicsX = EngineConfig.toMetres(x);
+        float physicsY = EngineConfig.toMetres(y);
+        float physicsCellSize = EngineConfig.toMetres(EngineConfig.CELL_SIZE);
 
         // Resize it to the correct size and location
         BodyDef bodyDef = new BodyDef();
@@ -242,9 +243,9 @@ public class Map {
                 // Fetch the rectangle collision box
                 TextureMapObject rectangle = ((TextureMapObject) object);
 
-                float physicsX = rectangle.getX()  / gameConfig.sv_pixels_per_metre;
-                float physicsY = rectangle.getY()  / gameConfig.sv_pixels_per_metre;
-                float physicsCellSize = gameConfig.sv_cell_size / gameConfig.sv_pixels_per_metre;
+                float physicsX = EngineConfig.toMetres(rectangle.getX());
+                float physicsY = EngineConfig.toMetres(rectangle.getY());
+                float physicsCellSize = EngineConfig.toMetres(EngineConfig.CELL_SIZE);
                 LightManager.definePointLight(rayHandler, mapProperties,
                          physicsX + (physicsCellSize / 2),
                          physicsY + (physicsCellSize / 2));

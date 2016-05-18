@@ -13,6 +13,7 @@ import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.rooms.game.RoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.Bullet;
 import com.nicktoony.cstopdown.rooms.game.entities.SkeletonWrapper;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.services.CharacterManager;
@@ -215,11 +216,11 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         }
 
         // Update shoot
-        torch.setPosition(vector.x / 32, vector.y / 32);
+        torch.setPosition(EngineConfig.toMetres(vector.x), EngineConfig.toMetres(vector.y));
         torch.setDirection(rightHand.getWorldRotation());
         torch.setActive(lightOn);
         // Update gun fire
-        gunFire.setPosition(vector.x / 32, vector.y / 32);
+        gunFire.setPosition(EngineConfig.toMetres(vector.x), EngineConfig.toMetres(vector.y));
         gunFire.setDirection(rightHand.getWorldRotation());
         gunFire.setActive(stateChange && state == STATE_SHOOTING && weapons[weaponCurrent].bulletsIn >= 0);
 
@@ -246,7 +247,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
 
         // Update glow
-        glow.setPosition(x/32, y/32);
+        glow.setPosition(EngineConfig.toMetres(x), EngineConfig.toMetres(y));
         glow.setActive(glowActive);
     }
 

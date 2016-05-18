@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.XmlReader;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.world.objectives.Spawn;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.config.ServerConfig;
 
@@ -32,8 +33,8 @@ public class TexturelessMap extends Map {
             return;
         }
 
-        mapWidth = Integer.parseInt(base.getAttribute("width")) * gameConfig.sv_cell_size;
-        mapHeight = Integer.parseInt(base.getAttribute("height")) * gameConfig.sv_cell_size;
+        mapWidth = Integer.parseInt(base.getAttribute("width")) * EngineConfig.CELL_SIZE;
+        mapHeight = Integer.parseInt(base.getAttribute("height")) * EngineConfig.CELL_SIZE;
 
         // Find objectives
         findObjectives();

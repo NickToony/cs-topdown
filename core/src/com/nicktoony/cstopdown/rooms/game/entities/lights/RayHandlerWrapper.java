@@ -4,6 +4,7 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.cstopdown.rooms.game.entities.world.Map;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.Renderable;
 
 /**
@@ -19,8 +20,8 @@ public class RayHandlerWrapper extends Renderable {
         this.map = map;
 
         boxLightCamera = new OrthographicCamera();
-        float boxLightViewportWidth = map.getCamera().viewportWidth / 32;
-        float boxLightViewportHeight = map.getCamera().viewportHeight / 32;
+        float boxLightViewportWidth = EngineConfig.toMetres(map.getCamera().viewportWidth);
+        float boxLightViewportHeight = EngineConfig.toMetres(map.getCamera().viewportHeight);
         boxLightCamera.setToOrtho(false, boxLightViewportWidth, boxLightViewportHeight);
         boxLightCamera.zoom = map.getCamera().zoom;
         boxLightCamera.update(true);
@@ -29,7 +30,8 @@ public class RayHandlerWrapper extends Renderable {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        boxLightCamera.position.set(map.getCamera().position.x / 32, map.getCamera().position.y / 32, 0);
+        boxLightCamera.position.set(EngineConfig.toMetres(map.getCamera().position.x),
+                EngineConfig.toMetres(map.getCamera().position.y), 0);
         boxLightCamera.update();
 
         // Render the light over everything
