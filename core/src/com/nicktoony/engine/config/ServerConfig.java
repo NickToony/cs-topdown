@@ -14,7 +14,7 @@ public class ServerConfig {
     public String sv_name = "Dev Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 10;
+    public int sv_bots = 5;
     public String sv_map = "de_dust2";
 
     // Map settings
@@ -30,7 +30,7 @@ public class ServerConfig {
     public int mp_freeze_time = 5;
     public int mp_round_time = 300;
     public int mp_victory_time = 5;
-    public int mp_bot_engage_range = 200;
+    public int mp_bot_engage_range = 400;
 
     // Server rates
     public int sv_tickrate = 60;

@@ -46,6 +46,7 @@ public class Bullet extends PhysicsEntity {
     public void render(SpriteBatch spriteBatch) {
         sprite.setPosition(x, y);
         sprite.setRotation(direction+90);
+        sprite.setOriginCenter();
         sprite.draw(spriteBatch);
     }
 
@@ -65,7 +66,7 @@ public class Bullet extends PhysicsEntity {
         Body body = getRoom().getWorld().createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(1, 0.1f);
+        shape.setAsBox(0.1f, 0.1f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

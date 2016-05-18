@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,7 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Event;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
+import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.entities.Bullet;
 import com.nicktoony.engine.entities.SkeletonWrapper;
 import com.nicktoony.engine.EngineConfig;
@@ -53,6 +56,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private int stateTimer = 0;
     private int stateLast = STATE_IDLE;
     private boolean stateChange;
+    private boolean makeBullet = false;
 
 
     private int weaponCurrent = 0;
@@ -70,6 +74,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private Light gunFire;
 
     private SkeletonWrapper skeletonWrapper;
+    private int health = 100;
+    private PlayerListener listener = null;
+    private int team;
 
     boolean cannotSee = false;
     Body targetBody = null;
@@ -165,11 +172,17 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        // render harry's shadow
+                // render harry's shadow
         shadowSprite.setX(x - shadowSprite.getWidth() / 2);
         shadowSprite.setY(y - shadowSprite.getHeight() / 2);
         shadowSprite.draw(spriteBatch);
 
+        // Render colours
+        if (team == PlayerModInterface.TEAM_CT) {
+            skeletonWrapper.getSkeleton().getColor().set(Color.BLUE);
+        } else if (team == PlayerModInterface.TEAM_T) {
+            skeletonWrapper.getSkeleton().getColor().set(Color.RED);
+        }
         // Render the player entirely
         skeletonWrapper.render(spriteBatch);
 
@@ -251,6 +264,15 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         // Update glow
         glow.setPosition(EngineConfig.toMetres(x), EngineConfig.toMetres(y));
         glow.setActive(glowActive);
+
+        // Create a bullet
+        if (makeBullet) {
+            // Figure out end of gun
+            getRoom().addEntity(new Bullet(vector.x, vector.y, direction, this));
+
+            // Don't make another
+            makeBullet = false;
+        }
     }
 
     @Override
@@ -288,8 +310,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
                         // Actually shoot if there was one bullet
                         if (weapons[weaponCurrent].bulletsIn >= 0) {
-                            // Figure out end of gun
-                            getRoom().addEntity(new Bullet(x, y, direction, this));
+                            // Visual effect
+                            makeBullet = true;
+                            // If a listener exists
+                            if (listener != null) {
+                                listener.shoot(getCurrentWeaponObject());
+                            }
                         }
                     }
                 } else if (weaponNext != -1) {
@@ -523,4 +549,29 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     public void focused(boolean focused) {
         glowActive = focused;
     }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setListener(PlayerListener listener) {
+        this.listener = listener;
+    }
+
+    public float getActualDrection() {
+        return directionTo;
+    }
+
+    public int getTeam() {
+        return team;
+    }
+
+    public void setTeam(int team) {
+        this.team = team;
+    }
 }
+

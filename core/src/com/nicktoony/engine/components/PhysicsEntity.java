@@ -60,4 +60,8 @@ public abstract class PhysicsEntity extends Entity<RoomGame> {
     public void collisionOther(Contact contact) {
 
     };
+
+    public Body getBody() {
+        return body;
+    }
 }

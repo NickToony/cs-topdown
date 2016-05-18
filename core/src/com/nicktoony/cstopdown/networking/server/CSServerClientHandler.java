@@ -9,10 +9,12 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.MyGame;
+import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
+import com.nicktoony.engine.services.weapons.Weapon;
 
 /**
  * Created by nick on 19/07/15.
@@ -84,6 +86,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
            if (leniency > 0) leniency -= 2;
            if (leniency > 100) leniency = 100;
         }
+
+        player.update();
     }
 
     @Override
@@ -183,6 +187,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 packet.light = client.getPlayer().isLightOn();
                 packet.weapons = client.getPlayer().getWeapons();
                 packet.currentWeapon = client.getPlayer().getCurrentWeapon();
+                packet.team = player.getTeam();
                 sendPacket(packet);
             }
         }
@@ -213,6 +218,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         createPlayer.id = this.id;
         createPlayer.weapons = getPlayer().getWeapons();
         createPlayer.currentWeapon = getPlayer().getCurrentWeapon();
+        createPlayer.team = player.getTeam();
         server.sendToAll(createPlayer);
     }
 

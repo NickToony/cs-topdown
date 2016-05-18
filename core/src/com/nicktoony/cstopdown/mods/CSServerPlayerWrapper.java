@@ -1,22 +1,45 @@
 package com.nicktoony.cstopdown.mods;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
+import com.nicktoony.engine.components.PhysicsEntity;
+import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 
 /**
  * Created by Nick on 24/03/2016.
  */
-public abstract class CSServerPlayerWrapper implements PlayerModInterface {
+public abstract class CSServerPlayerWrapper implements PlayerModInterface, PlayerListener {
 
     protected int team = TEAM_SPECTATE;
     protected Player player;
     protected CSServer server;
     protected CSServerClientHandler client;
+    private Player entityHit;
+
+    private RayCastCallback shootCallback = new RayCastCallback() {
+        @Override
+        public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+            if (fixture.getBody().getUserData() != null) {
+                PhysicsEntity entity = (PhysicsEntity) fixture.getBody().getUserData();
+                if (entity == player) {
+                    return -1;
+                } else if (entity instanceof Player) {
+                    entityHit = (Player) entity;
+                    return fraction;
+                }
+            }
+            entityHit = null;
+            return fraction;
+        }
+    };
 
     public CSServerPlayerWrapper(CSServer server, CSServerClientHandler client) {
         this.server = server;
@@ -25,7 +48,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface {
 
     @Override
     public int getHealth() {
-        return 100;
+        return player.getHealth();
     }
 
     @Override
@@ -71,9 +94,9 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface {
     }
 
     @Override
-    public void slay() {
+    public void slay(boolean notify) {
         if (player != null) {
-            destroyPlayer();
+            destroyPlayer(notify);
         }
     }
 
@@ -82,20 +105,22 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface {
 
     }
 
-    public void destroyPlayer() {
+    public void destroyPlayer(boolean notify) {
         // Remove the player from the room (which also disposes the object)
         server.getRoom().deleteRenderable(player);
         // No player
         player = null;
         // Notify all
-        server.notifyModPlayerDestroyed(this);
+        if (notify) {
+            server.notifyModPlayerDestroyed(this);
+        }
 
         client.destroyPlayer();
     }
 
     public void createPlayer(float x, float y) {
         // Destroy current player
-        slay();
+        slay(false);
 
         // Spawn a new one
         player = server.getGame().createPlayer(getID(), x, y, isBot());
@@ -106,6 +131,8 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface {
 
         });
         player.setNextWeapon(0);
+        player.setHealth(getMaxHealth());
+        player.setListener(this);
 
         client.createPlayer();
     }
@@ -124,5 +151,30 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void update() {
+        if (isAlive() && getHealth() <= 0) {
+            slay(true);
+            server.notifyModPlayerKilled(this, this);
+        }
+    }
+
+    @Override
+    public void shoot(WeaponWrapper weapon) {
+        // Figure out where
+        double radians = Math.toRadians(player.getActualDrection()+90);
+        Vector2 vecTo = new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).scl(100).add(player.getBody().getPosition());
+        Vector2 vecFrom = player.getBody().getPosition();
+
+        // Perform a raycast
+        entityHit = null;
+        server.getRoom().getWorld().rayCast(shootCallback, vecFrom, vecTo);
+
+        if (entityHit != null) {
+            // Kill them
+            int currentHealth = entityHit.getHealth();
+            entityHit.setHealth(currentHealth - player.getCurrentWeaponObject().weapon.getDamage().medium);
+        }
     }
 }

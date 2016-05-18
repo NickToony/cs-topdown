@@ -20,7 +20,7 @@ public interface PlayerModInterface {
 
     // Actions
     boolean spawn();
-    void slay();
+    void slay(boolean notify);
     void message(String message);
     void joinTeam(int team);
 

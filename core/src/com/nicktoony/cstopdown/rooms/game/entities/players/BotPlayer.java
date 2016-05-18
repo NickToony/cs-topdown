@@ -141,11 +141,6 @@ public class BotPlayer extends Player {
 
                     directionTo = (float) Math.toDegrees(Math.atan2(currentTarget.getY() - y,
                             currentTarget.getX() - x)) - 90;
-                    if (random.nextInt(1000) < 5) {
-                        currentTarget.slay();
-                        server.notifyModPlayerDestroyed(player.getPlayerWrapper(), currentTarget);
-                        currentTarget = null;
-                    }
                 } else {
                     currentTarget = targets.get(0);
                 }

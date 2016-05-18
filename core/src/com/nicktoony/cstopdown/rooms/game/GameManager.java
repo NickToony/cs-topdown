@@ -151,6 +151,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
         // Weapon
         player.setWeapons(packet.weapons);
         player.setNextWeapon(packet.currentWeapon);
+        player.setTeam(packet.team);
     }
 
     private void handleReceivedPacket(PlayerToggleLight packet) {
