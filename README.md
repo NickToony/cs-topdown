@@ -24,6 +24,7 @@ You can grab recent builds of the server, desktop and html from my server:
 - [Web](http://cstopdown.nick-hope.co.uk/) (Any modern browser)
 - [Desktop Client](http://cstopdown.nick-hope.co.uk/desktop.jar) (Windows, OSX, Linux)
 - [Server](http://cstopdown.nick-hope.co.uk/server.jar) (Windows, OSX, Linux)
+- [Assets](http://cstopdown.nick-hope.co.uk/assets.zip) (NOTE: Required for desktop and server, unzip into same folder)
 
 You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/6).
 
@@ -33,11 +34,12 @@ The server module may be ran with either no GUI, or a simple text-based GUI. Alt
 [Server Config Documentation](SERVERCONFIG.md)
 
 ## Building
-1. Clone the repo 
-	- `git clone git clone git@github.com:NickToony/cs-topdown.git`
+1. Clone the repo, then enter it
+	- `git clone https://github.com/NickToony/cs-topdown.git`
+	- `cd cs-topdown`
 2. Fetch the required submodules
 	- `git submodule update --init --recursive`
-3. Build your preferred platform
+3. Build your preferred platform (requires Java)
 	- Server: `./gradlew server:dist`
 	- Desktop: `./gradlew desktop:dist`
 	- Android: `./gradlew android:dist`
