@@ -20,6 +20,7 @@ public class SkeletonWrapper {
     private String idleAnimation;
     private float idleDuration;
     private AnimationEventListener eventListener;
+    private boolean isIdle = false;
 
     public SkeletonWrapper(Entity entity, AnimationEventListener listener) {
         this.entity = entity;
@@ -83,8 +84,9 @@ public class SkeletonWrapper {
     }
 
     public void startIdle() {
-        if (idleAnimation != null) {
+        if (idleAnimation != null && !isIdle) {
             startAnimation(idleAnimation, idleDuration, true);
+            isIdle = true;
         }
     }
 
@@ -97,6 +99,8 @@ public class SkeletonWrapper {
         if (skeleton == null) {
             return;
         }
+
+        isIdle = false;
 
         this.state.setAnimation(0, animation, loop);
         this.state.setTimeScale(skeleton.getData().findAnimation(animation).getDuration() / duration);

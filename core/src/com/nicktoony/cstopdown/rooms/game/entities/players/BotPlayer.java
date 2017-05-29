@@ -153,7 +153,8 @@ public class BotPlayer extends Player {
     private void scanForEnemies() {
         targets.clear();
         for (CSServerClientHandler otherPlayer : server.getClients()) {
-            if (otherPlayer.getPlayerWrapper().isAlive() && otherPlayer.getPlayerWrapper().getTeam() != player.getPlayerWrapper().getTeam()) {
+            if (otherPlayer.getPlayerWrapper().isAlive()
+                    && otherPlayer.getPlayerWrapper().getTeam() != player.getPlayerWrapper().getTeam()) {
                 if (canSeePlayer(otherPlayer.getPlayer())) {
                     targets.add(otherPlayer.getPlayerWrapper());
                 }

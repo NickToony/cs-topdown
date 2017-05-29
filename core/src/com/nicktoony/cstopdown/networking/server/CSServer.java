@@ -37,6 +37,9 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
     private List<GameModeMod> mods = new ArrayList<GameModeMod>();
 
+    private long fpsLast = 0;
+    private int fps = 0;
+
     /**
      * Create a new CSTDServer with the given logger and config
      *
@@ -89,6 +92,15 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         // Manages round time
         roundStep();
+
+//        fps ++;
+//        if ((now - fpsLast) >= 1000) {
+//            logger.log("Server FPS:" + fps);
+//            logger.log("Server delta: " + delta);
+//            logger.log("Server ms-per-tick:" + MS_PER_TICK);
+//            fps = 0;
+//            fpsLast = now;
+//        }
     }
 
     private void roundStep() {

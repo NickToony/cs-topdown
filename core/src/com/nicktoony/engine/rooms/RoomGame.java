@@ -34,6 +34,10 @@ public abstract class RoomGame extends Room {
     private SpriteBatch foregroundSpriteBatch;
     private HUD hud;
 
+    private long fpsLast = 0;
+    private int fps = 0;
+    private float lastDelta = 0;
+
     public RoomGame(ClientSocket socket) {
         this.socket = socket;
         this.gameManager = new GameManager(this, socket);
@@ -90,6 +94,7 @@ public abstract class RoomGame extends Room {
 
         // Update the world
         super.step(delta);
+        lastDelta = delta;
 
         // Update the physics
         world.step(delta, 1, 1);
@@ -148,6 +153,15 @@ public abstract class RoomGame extends Room {
             hud.render(foregroundSpriteBatch);
             foregroundSpriteBatch.end();
         }
+
+//        long now = System.currentTimeMillis();
+//        fps ++;
+//        if ((now - fpsLast) >= 1000) {
+//            System.out.println("Client FPS:" + fps);
+//            System.out.println("Client delta:" + lastDelta);
+//            fps = 0;
+//            fpsLast = now;
+//        }
     }
 
     public ClientSocket getSocket() {

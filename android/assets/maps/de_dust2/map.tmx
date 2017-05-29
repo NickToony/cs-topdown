@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
  <properties>
-  <property name="ambientAlpha" value="0.2"/>
+  <property name="ambientAlpha" value="0.4"/>
   <property name="ambientColour" value="000000"/>
   <property name="zoom" value="0.75"/>
  </properties>

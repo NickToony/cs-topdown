@@ -18,7 +18,7 @@ import com.nicktoony.engine.services.Logger;
 public class MyGame extends ApplicationAdapter implements Server.LoopManager {
 
     // Hardcoded ticks per second for game simulation
-    public static final int GAME_FPS = 60;
+    public static final float GAME_FPS = 60;
 
     public PlatformProvider getPlatformProvider() {
         return platformProvider;

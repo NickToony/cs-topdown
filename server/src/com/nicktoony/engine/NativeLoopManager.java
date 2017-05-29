@@ -13,7 +13,7 @@ public class NativeLoopManager implements Server.LoopManager {
     private Timer timer;
     private Boolean timerIsRunning = false;
 
-    private final int FPS = 1000 / MyGame.GAME_FPS;
+    private final int FPS = (int) Math.ceil(1000 / MyGame.GAME_FPS);
 
     @Override
     public void startServerLoop(final Server server) {

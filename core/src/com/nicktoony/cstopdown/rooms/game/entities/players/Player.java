@@ -179,9 +179,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         // Render colours
         if (team == PlayerModInterface.TEAM_CT) {
-            skeletonWrapper.getSkeleton().getColor().set(Color.BLUE);
+//            skeletonWrapper.getSkeleton().getColor().set(Color.BLUE);
         } else if (team == PlayerModInterface.TEAM_T) {
-            skeletonWrapper.getSkeleton().getColor().set(Color.RED);
+//            skeletonWrapper.getSkeleton().getColor().set(Color.RED);
         }
         // Render the player entirely
         skeletonWrapper.render(spriteBatch);
@@ -382,6 +382,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
                     getSkeletonWrapper().startIdle();
                     state = STATE_EQUIP;
                     stateTimer = Math.round(weapons[weaponCurrent].weapon.getEquipDuration() * 60);
+
                 }
                 break;
 
