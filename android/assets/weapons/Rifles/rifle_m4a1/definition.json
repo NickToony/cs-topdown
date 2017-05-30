@@ -1,0 +1,47 @@
+{
+  "name": "M4A1",
+  "clipSize": 30,
+  "clipTotal": 90,
+  "rateOfFire": 5,
+  "accuracy": 60,
+  "recoil": 4,
+  "bullets": 1,
+  "spread": 2,
+  "speed": 100,
+  "cost": 1000,
+  "reward": 250,
+  "silencer": false,
+  "zoom": 1,
+  "reloadDuration": 1.6,
+  "cockDuration": 0.6,
+  "equipDuration": 0.3,
+  "reloadType": "full_cock",
+  "damage": {
+    "low": 10,
+    "medium": 18,
+    "high": 75
+  },
+  "animations": {
+    "idle": "rifle_idle",
+    "shoot": "rifle_fire",
+    "reload": "rifle_reload",
+    "equip": "rifle_equip",
+    "unequip": "rifle_dequip",
+    "cock": "sniper_cock"
+  },
+  "sounds": {
+    "shoot": "shoot.wav",
+    "equip": "equip.wav",
+    "dequip": "dequip.wav",
+    "eject": "eject.wav",
+    "insert": "insert.wav",
+    "cock": "cock.wav",
+    "empty": "empty.wav"
+  },
+  "graphics": {
+    "left": false,
+    "right": true,
+    "x_offset": 28,
+    "y_offset": 36
+  }
+}

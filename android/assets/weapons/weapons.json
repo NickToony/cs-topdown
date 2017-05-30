@@ -3,7 +3,9 @@
     {
       "name": "Rifles",
       "weapons": [
-        "rifle_ak47"
+        "rifle_ak47",
+        "rifle_m4a1",
+        "rifle_awp"
       ]
     },
     {

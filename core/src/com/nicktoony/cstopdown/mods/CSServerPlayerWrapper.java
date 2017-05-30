@@ -132,8 +132,10 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         player = server.getGame().createPlayer(getID(), x, y, isBot());
         player.setWeapons(new WeaponWrapper[]{
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
+                new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_m4a1")),
                 new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")),
-                new WeaponWrapper(WeaponManager.getInstance().getWeapon("pistol_pistol"))
+                new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_awp")),
+                new WeaponWrapper(WeaponManager.getInstance().getWeapon("pistol_pistol")),
 
         });
         player.setNextWeapon(0);

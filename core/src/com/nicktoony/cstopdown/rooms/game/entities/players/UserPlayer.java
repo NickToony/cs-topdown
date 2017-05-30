@@ -70,6 +70,21 @@ public class UserPlayer extends Player{
             playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 2;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            setNextWeapon(3);
+            // Tell client
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 3;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            setNextWeapon(4);
+            // Tell client
+            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+            playerSwitchWeapon.slot = 4;
+            getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
         // We need PhysicsEntity to update the positions

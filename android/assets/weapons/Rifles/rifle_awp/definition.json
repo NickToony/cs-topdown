@@ -1,0 +1,47 @@
+{
+  "name": "AWP",
+  "clipSize": 10,
+  "clipTotal": 30,
+  "rateOfFire": -1,
+  "accuracy": 100,
+  "recoil": 10,
+  "bullets": 1,
+  "spread": 0,
+  "speed": 100,
+  "cost": 1000,
+  "reward": 250,
+  "silencer": false,
+  "zoom": 1,
+  "reloadDuration": 3,
+  "cockDuration": 1.5,
+  "equipDuration": 1,
+  "reloadType": "full_cock",
+  "damage": {
+    "low": 80,
+    "medium": 100,
+    "high": 500
+  },
+  "animations": {
+    "idle": "rifle_idle",
+    "shoot": "rifle_fire",
+    "reload": "rifle_reload",
+    "equip": "rifle_equip",
+    "unequip": "rifle_dequip",
+    "cock": "sniper_cock"
+  },
+  "sounds": {
+    "shoot": "shoot.wav",
+    "equip": "equip.wav",
+    "dequip": "dequip.wav",
+    "eject": "eject.wav",
+    "insert": "insert.wav",
+    "cock": "cock.wav",
+    "empty": "empty.wav"
+  },
+  "graphics": {
+    "left": false,
+    "right": true,
+    "x_offset": 28,
+    "y_offset": 34
+  }
+}
