@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonJson;
+import com.esotericsoftware.spine.Skin;
 import com.esotericsoftware.spine.attachments.AtlasAttachmentLoader;
+import com.esotericsoftware.spine.attachments.RegionAttachment;
 
 /**
  * Created by Nick on 21/09/2014.
@@ -18,6 +20,7 @@ public class CharacterSkin  {
     private String folder;
     private String name;
     private SkeletonData data;
+    private TextureAtlas atlas;
 
     public CharacterSkin(String asset, String folder, String name)  {
         this.asset = asset;
@@ -35,24 +38,52 @@ public class CharacterSkin  {
 
     public Skeleton getSkeleton()   {
 
+        loadAtlas();
+
         if (data == null) {
-            FileHandle packedFile = Gdx.files.internal(asset + "/" + name + ".png");
-            FileHandle atlasFile = Gdx.files.internal(asset + "/" + name + ".atlas");
-
-//            if (!packedFile.exists() || !atlasFile.exists()) {
-//                System.out.println("Generating the texture for " + name);
-//                TexturePacker.process(asset, asset, name);
-//            }
-
-            TextureAtlas atlas = new TextureAtlas(atlasFile.path());
-            for (Texture texture : atlas.getTextures()) {
-                texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-            }
             AtlasAttachmentLoader attachmentLoader = new AtlasAttachmentLoader(atlas);
             SkeletonJson json = new SkeletonJson(attachmentLoader);
             data = json.readSkeletonData(Gdx.files.internal(asset + "/skeleton.json"));
         }
 
         return new Skeleton(data);
+    }
+
+    public void applySkin(Skeleton skeleton) {
+
+        loadAtlas();
+
+        applySkinPart(skeleton, atlas, "torso");
+        applySkinPart(skeleton, atlas, "left_hand");
+        applySkinPart(skeleton, atlas, "left_shoulder");
+        applySkinPart(skeleton, atlas, "right_hand");
+        applySkinPart(skeleton, atlas, "right_shoulder");
+        applySkinPart(skeleton, atlas, "head");
+
+
+    }
+
+    private void applySkinPart(Skeleton skeleton, TextureAtlas atlas, String name) {
+        // get existing attachment
+        RegionAttachment attach = (RegionAttachment) skeleton.findSlot(name).getAttachment();
+        attach.setRegion(atlas.findRegion(name));
+    }
+
+    private void loadAtlas() {
+        if (this.atlas == null) {
+            FileHandle packedFile = Gdx.files.internal(asset + "/" + name + ".png");
+            FileHandle atlasFile = Gdx.files.internal(asset + "/" + name + ".atlas");
+            TextureAtlas atlas = new TextureAtlas(atlasFile.path());
+            for (Texture texture : atlas.getTextures()) {
+                texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            }
+            this.atlas = atlas;
+        }
+    }
+
+    public void dispose() {
+        if (atlas != null) {
+            atlas.dispose();
+        }
     }
 }

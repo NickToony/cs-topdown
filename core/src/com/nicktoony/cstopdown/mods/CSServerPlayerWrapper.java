@@ -13,6 +13,8 @@ import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 
+import java.util.Random;
+
 /**
  * Created by Nick on 24/03/2016.
  */
@@ -23,6 +25,8 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     protected CSServer server;
     protected CSServerClientHandler client;
     private Player entityHit;
+    private Vector2 pointHit;
+    private Random random = new Random();
 
     private RayCastCallback shootCallback = new RayCastCallback() {
         @Override
@@ -33,10 +37,12 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                     return -1;
                 } else if (entity instanceof Player) {
                     entityHit = (Player) entity;
+                    pointHit = point;
                     return fraction;
                 }
             }
             entityHit = null;
+            pointHit = null;
             return fraction;
         }
     };
@@ -162,19 +168,33 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public void shoot(WeaponWrapper weapon) {
-        // Figure out where
-        double radians = Math.toRadians(player.getActualDrection()+90);
-        Vector2 vecTo = new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).scl(100).add(player.getBody().getPosition());
-        Vector2 vecFrom = player.getBody().getPosition();
+        for (int i = 0; i < player.getCurrentWeaponObject().weapon.getBullets(); i ++) {
+            // Calculate visual spread
+            float weaponSpread = player.getCurrentWeaponObject().weapon.getSpread();
+            float spread = 0;
+            if (weaponSpread > 0) {
+                spread = random.nextInt((int) weaponSpread * 2) - weaponSpread;
+            }
 
-        // Perform a raycast
-        entityHit = null;
-        server.getRoom().getWorld().rayCast(shootCallback, vecFrom, vecTo);
+            // Figure out where
+            double radians = Math.toRadians(player.getActualDrection()+90+spread);
+            Vector2 vecTo = new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).scl(100).add(player.getBody().getPosition());
+            Vector2 vecFrom = player.getBody().getPosition();
 
-        if (entityHit != null) {
-            // Kill them
-            int currentHealth = entityHit.getHealth();
-            entityHit.setHealth(currentHealth - player.getCurrentWeaponObject().weapon.getDamage().medium);
+            // Perform a raycast
+            entityHit = null;
+            server.getRoom().getWorld().rayCast(shootCallback, vecFrom, vecTo);
+
+            if (entityHit != null) {
+//                System.out.println(pointHit.dst(player.getBody().getPosition()));
+
+                // Kill them
+                int currentHealth = entityHit.getHealth();
+                entityHit.setHealth(currentHealth - player.getCurrentWeaponObject().weapon.getDamage().medium);
+            }
         }
+
+
+
     }
 }

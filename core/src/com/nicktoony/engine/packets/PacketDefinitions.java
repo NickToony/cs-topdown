@@ -1,5 +1,6 @@
 package com.nicktoony.engine.packets;
 
+import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
@@ -39,6 +40,9 @@ public class PacketDefinitions {
         put(11, PlayerUpdatePacket.class);
         put(14, PlayerToggleLight.class);
         put(15, PlayerSwitchWeapon.class);
+
+        // Chat
+        put (17, ChatPacket.class);
 
     }};
 

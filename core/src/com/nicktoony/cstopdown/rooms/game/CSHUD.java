@@ -89,7 +89,7 @@ public class CSHUD extends HUD {
         }
     }
 
-    private void addChatLine(String string) {
+    public void addChatLine(String string) {
         // Add a new row
         chatTable.row().expandX().align(Align.bottom);
         // Define the label

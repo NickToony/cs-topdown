@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.rooms.game;
 
+import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
@@ -75,6 +76,8 @@ public class GameManager implements ClientSocket.SBSocketListener {
             handleReceivedPacket((PlayerSwitchWeapon) packet);
         } else if (packet instanceof PingPacket) {
             handleReceivedPacket((PingPacket) packet);
+        } else if (packet instanceof ChatPacket) {
+            handleReceivedPacket((ChatPacket) packet);
         }
     }
 
@@ -172,6 +175,10 @@ public class GameManager implements ClientSocket.SBSocketListener {
             // Set their light
             player.setNextWeapon(packet.slot);
         }
+    }
+
+    private void handleReceivedPacket(ChatPacket packet) {
+        ((CSHUD)this.roomGame.getHud()).addChatLine(packet.message);
     }
 
     private void handleReceivedPacket(PingPacket packet) {

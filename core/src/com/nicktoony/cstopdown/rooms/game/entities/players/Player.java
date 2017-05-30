@@ -18,10 +18,13 @@ import com.nicktoony.engine.entities.SkeletonWrapper;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.services.CharacterManager;
+import com.nicktoony.engine.services.CharacterSkin;
 import com.nicktoony.engine.services.LightManager;
 import com.nicktoony.engine.services.TextureManager;
 import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponManager;
+
+import java.util.Random;
 
 /**
  * Created by Nick on 08/09/2014.
@@ -73,10 +76,14 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private Light torch;
     private Light gunFire;
 
+    private CharacterSkin charSkin;
+    private boolean charSkinChanged = false;
+
     private SkeletonWrapper skeletonWrapper;
     private int health = 100;
     private PlayerListener listener = null;
     private int team;
+    private Random random = new Random();
 
     boolean cannotSee = false;
     Body targetBody = null;
@@ -103,8 +110,10 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         super.create(render);
 
         if (render) {
-            getSkeletonWrapper().setSkeleton(CharacterManager.getInstance()
-                    .getCharacterCategories(0).getSkins().get(0).getSkeleton());
+            // Set default skin
+            charSkin = CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0);
+            getSkeletonWrapper().setSkeleton(charSkin.getSkeleton());
+
             leftHand = getSkeletonWrapper().getSkeleton().findBone("left_gun");
             rightHand = getSkeletonWrapper().getSkeleton().findBone("right_gun");
 
@@ -172,7 +181,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-                // render harry's shadow
+        // render harry's shadow
         shadowSprite.setX(x - shadowSprite.getWidth() / 2);
         shadowSprite.setY(y - shadowSprite.getHeight() / 2);
         shadowSprite.draw(spriteBatch);
@@ -180,9 +189,24 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         // Render colours
         if (team == PlayerModInterface.TEAM_CT) {
 //            skeletonWrapper.getSkeleton().getColor().set(Color.BLUE);
+            charSkin = CharacterManager.getInstance().getCharacterCategories(0).getSkins().get(0);
+            charSkinChanged = true;
+
         } else if (team == PlayerModInterface.TEAM_T) {
 //            skeletonWrapper.getSkeleton().getColor().set(Color.RED);
+            charSkin = CharacterManager.getInstance().getCharacterCategories(1).getSkins().get(0);
+            charSkinChanged = true;
+
         }
+
+
+        if (charSkinChanged) {
+            charSkinChanged = false;
+//            getSkeletonWrapper().setSkeleton(charSkin.getSkeleton());
+            charSkin.applySkin(getSkeletonWrapper().getSkeleton());
+//            System.out.println("CHANGED SKIN " + x + " " + charSkin);
+        }
+
         // Render the player entirely
         skeletonWrapper.render(spriteBatch);
 
@@ -267,8 +291,16 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         // Create a bullet
         if (makeBullet) {
-            // Figure out end of gun
-            getRoom().addEntity(new Bullet(vector.x, vector.y, direction, this));
+            for (int i = 0; i < weapons[weaponCurrent].weapon.getBullets(); i ++) {
+                // Calculate visual spread
+                float weaponSpread = weapons[weaponCurrent].weapon.getSpread();
+                float spread = 0;
+                if (weaponSpread > 0) {
+                    spread = random.nextInt((int) weaponSpread * 2) - weaponSpread;
+                }
+                // Figure out end of gun
+                getRoom().addEntity(new Bullet(vector.x, vector.y, direction + spread, this));
+            }
 
             // Don't make another
             makeBullet = false;
@@ -408,6 +440,8 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         } else {
             direction += angleDifference * PLAYER_ANGLE_SMOOTHING;
         }
+
+        direction = direction % 360;
     }
 
     @Override
@@ -540,9 +574,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     public boolean canSeePlayer(Player player) {
         cannotSee = true;
         targetBody = player.body;
-        if (getPosition().dst(player.getPosition()) < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
-            getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
-        }
+        getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
         return !cannotSee;
     }
 

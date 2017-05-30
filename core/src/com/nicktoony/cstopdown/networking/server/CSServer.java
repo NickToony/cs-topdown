@@ -5,6 +5,7 @@ package com.nicktoony.cstopdown.networking.server;
  */
 
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
+import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.rooms.game.CSRoomGame;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
@@ -162,30 +163,40 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModRoundStart() {
+        sendToAll(new ChatPacket("[YELLOW]Round Started."));
+
         for (GameModeMod mod : mods) {
             mod.evRoundStart();
         }
     }
 
     public void notifyModFreezeTime() {
+        sendToAll(new ChatPacket("[YELLOW]Fight!"));
+
         for (GameModeMod mod : mods) {
             mod.evFreezeTimeEnd();
         }
     }
 
     public void notifyModRoundEnd() {
+        sendToAll(new ChatPacket("[YELLOW]Round Ended."));
+
         for (GameModeMod mod : mods) {
             mod.evRoundEnd();
         }
     }
 
     public void notifyModPlayerConnected(PlayerModInterface player) {
+        sendToAll(new ChatPacket("[YELLOW]Player connected."));
+
         for (GameModeMod mod : mods) {
             mod.evPlayerConnected(player);
         }
     }
 
     public void notifyModPlayerJoinedTeam(PlayerModInterface player) {
+        sendToAll(new ChatPacket("[YELLOW]Played joined team."));
+
         for (GameModeMod mod : mods) {
             mod.evPlayerJoinedTeam(player);
         }
@@ -198,6 +209,8 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
+        sendToAll(new ChatPacket("[YELLOW]Played killed."));
+
         for (GameModeMod mod : mods) {
             mod.evPlayerKilled(playerKiller, playerKilled);
         }

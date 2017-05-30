@@ -93,6 +93,11 @@ public class CharacterManager {
     }
 
     public void dispose() {
+        for (CharacterCategory category : characterCategories) {
+            for (CharacterSkin skin : category.skins) {
+                skin.dispose();
+            }
+        }
         characterCategories.clear();
         staticInstance = null;
     }

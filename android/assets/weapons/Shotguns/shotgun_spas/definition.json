@@ -5,6 +5,8 @@
   "rateOfFire": -1,
   "accuracy": 90,
   "recoil": 5,
+  "bullets": 6,
+  "spread": 4,
   "speed": 100,
   "cost": 1000,
   "reward": 250,
@@ -15,9 +17,9 @@
   "equipDuration": 0.6,
   "reloadType": "shotgun",
   "damage": {
-    "low": 10,
-    "medium": 25,
-    "high": 75
+    "low": 5,
+    "medium": 18,
+    "high": 40
   },
   "animations": {
     "idle": "rifle_idle",

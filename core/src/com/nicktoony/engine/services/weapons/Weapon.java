@@ -17,6 +17,8 @@ public class Weapon {
     private int rateOfFire = 10;
     private float accuracy = 0;
     private float recoil = 0;
+    private int bullets = 1;
+    private float spread = 0;
     private float speed = 100;
 
     private int cost = 0;
@@ -80,6 +82,14 @@ public class Weapon {
 
     public float getRecoil() {
         return recoil;
+    }
+
+    public int getBullets() {
+        return bullets;
+    }
+
+    public float getSpread() {
+        return spread;
     }
 
     public float getSpeed() {

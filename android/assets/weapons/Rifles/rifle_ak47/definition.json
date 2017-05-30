@@ -5,6 +5,8 @@
   "rateOfFire": 7,
   "accuracy": 90,
   "recoil": 5,
+  "bullets": 1,
+  "spread": 3,
   "speed": 100,
   "cost": 1000,
   "reward": 250,

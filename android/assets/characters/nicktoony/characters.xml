@@ -1,7 +1,10 @@
 <characters>
 
     <category name="United States">
-        <skin>Test</skin>
+        <skin>ct_sas</skin>
+    </category>
+    <category name="China">
+        <skin>ch_recon</skin>
     </category>
 
 </characters>
