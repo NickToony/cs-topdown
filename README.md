@@ -26,7 +26,7 @@ You can grab recent builds of the server, desktop and html from my server:
 - [Server](http://cstopdown.nick-hope.co.uk/server.jar) (Windows, OSX, Linux)
 - [Assets](http://cstopdown.nick-hope.co.uk/assets.zip) (NOTE: Required for desktop and server, unzip into same folder)
 
-You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/6).
+You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/1).
 
 ## Server Hosting
 The server module may be ran with either no GUI, or a simple text-based GUI. Alternatively, you can host a server using the game client on platforms that support it (all except HTML).
