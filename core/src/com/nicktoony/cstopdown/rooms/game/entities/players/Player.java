@@ -41,6 +41,8 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private final int STATE_DEQUIP = 4;
     private final int STATE_EQUIP = 5;
 
+    private final float SOUND_MODIFIER = 0.7f;
+
     protected boolean moveUp = false;
     protected boolean moveDown = false;
     protected boolean moveLeft = false;
@@ -66,7 +68,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private int weaponNext = -1;
     private WeaponWrapper weapons[];
     private Bone leftHand;
-    private Bone rightHand;
+    public Bone rightHand;
     private Sprite leftHandSprite;
     private Sprite rightHandSprite;
     private Sprite shadowSprite;
@@ -532,7 +534,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         int soundRange = getRoom().getGame().getGameConfig().sound_range;
         float volume = Math.max((soundRange - new Vector2(x, y)
                 .dst(getRoom().getMap().getCameraCenterX(),
-                        getRoom().getMap().getCameraCenterY())) / soundRange, 0);
+                        getRoom().getMap().getCameraCenterY())) / soundRange, 0) * SOUND_MODIFIER;
 
         if (event.getData().getName().contentEquals("ev_shoot")) {
             if (weapons[weaponCurrent].bulletsIn >= 0) {

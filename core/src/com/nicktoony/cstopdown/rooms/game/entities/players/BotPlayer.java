@@ -82,10 +82,12 @@ public class BotPlayer extends Player {
         if (!targets.isEmpty()) {
             aiState = AIState.combat;
         } else if (explorePosition != null && aiState != AIState.exploring) {
-            PathfindingNode node = getRoom().getMap().getPathfindingGraph()
-                    .getNodeByWorld(explorePosition.x, explorePosition.y);
-            if (startPath(node)) {
-                aiState = AIState.exploring;
+            if (player.getPlayer().getCurrentWeaponObject().bulletsIn > player.getPlayer().getCurrentWeaponObject().weapon.getClipSize() * .2) {
+                PathfindingNode node = getRoom().getMap().getPathfindingGraph()
+                        .getNodeByWorld(explorePosition.x, explorePosition.y);
+                if (startPath(node)) {
+                    aiState = AIState.exploring;
+                }
             }
         }
 
@@ -122,6 +124,8 @@ public class BotPlayer extends Player {
 
             case exploring:
                 movePath();
+
+                shootKey = false;
 
                 if (pathGoal != null) {
                     directionTo = (float) Math.toDegrees(Math.atan2(pathGoal.y - y,

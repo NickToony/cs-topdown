@@ -170,6 +170,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public void shoot(WeaponWrapper weapon) {
+
         for (int i = 0; i < player.getCurrentWeaponObject().weapon.getBullets(); i ++) {
             // Calculate visual spread
             float weaponSpread = player.getCurrentWeaponObject().weapon.getSpread();

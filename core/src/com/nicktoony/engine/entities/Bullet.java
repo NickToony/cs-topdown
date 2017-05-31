@@ -44,9 +44,9 @@ public class Bullet extends PhysicsEntity {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        sprite.setPosition(x, y);
-        sprite.setRotation(direction+90);
         sprite.setOriginCenter();
+        sprite.setPosition(x-sprite.getWidth()/2, y-sprite.getHeight()/2);
+        sprite.setRotation(direction+90);
         sprite.draw(spriteBatch);
     }
 
@@ -76,7 +76,7 @@ public class Bullet extends PhysicsEntity {
 
         body.createFixture(fixtureDef);
         double radians = Math.toRadians(direction+90);
-        body.setLinearVelocity(new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).limit(2f));
+        body.setLinearVelocity(new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).limit(3f));
         shape.dispose();
 
         return body;

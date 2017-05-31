@@ -1,8 +1,8 @@
 {
   "name": "Pistol",
-  "clipSize": 15,
+  "clipSize": 9,
   "clipTotal": 90,
-  "rateOfFire": 20,
+  "rateOfFire": 26,
   "accuracy": 90,
   "recoil": 5,
   "bullets": 1,
@@ -18,7 +18,7 @@
   "reloadType": "full_cock",
   "damage": {
     "low": 10,
-    "medium": 25,
+    "medium": 36,
     "high": 75
   },
   "animations": {
