@@ -104,8 +104,10 @@ public class TexturelessMap extends Map {
                 for (XmlReader.Element object : layer.getChildrenByName("object")) {
                     int x = Integer.parseInt(object.getAttribute("x"));
                     int y = mapHeight - Integer.parseInt(object.getAttribute("y"));
+                    float width = Float.parseFloat(object.getAttribute("width"));
+                    float height = Float.parseFloat(object.getAttribute("height"));
 
-                    addCollisionWall(world, x, y);
+                    addCollisionWall(world, x, y, width, height);
                 }
             }
         }

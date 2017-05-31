@@ -199,30 +199,32 @@ public class Map {
                 // Fetch the rectangle collision box
                 TextureMapObject rectangle = ((TextureMapObject) object);
 
-                addCollisionWall(world, rectangle.getX(), rectangle.getY() + 32);
+                addCollisionWall(world, rectangle.getX(), rectangle.getY() + (Float) rectangle.getProperties().get("height"),
+                        (Float) rectangle.getProperties().get("width"),  (Float) rectangle.getProperties().get("height") );
 
-                System.out.println(rectangle.getX() + "," + rectangle.getY() + " :: " + rectangle.getOriginY());
+//                System.out.println(rectangle.getX() + "," + rectangle.getY() + " :: " + rectangle.getProperties().get("width") + "," + rectangle.getProperties().get("height"));
             }
         }
     }
 
-    protected void addCollisionWall(World world, float x, float y) {
+    protected void addCollisionWall(World world, float x, float y, float width, float height) {
         float physicsX = EngineConfig.toMetres(x);
         float physicsY = EngineConfig.toMetres(y);
-        float physicsCellSize = EngineConfig.toMetres(EngineConfig.CELL_SIZE);
+        float physicsCellWidth = EngineConfig.toMetres(width);
+        float physiceCellHeight = EngineConfig.toMetres(height);
 
 
 
         // Resize it to the correct size and location
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(physicsX + (physicsCellSize /2), physicsY + (physicsCellSize /2));
+        bodyDef.position.set(physicsX + (physicsCellWidth /2), physicsY + (physiceCellHeight /2));
 //        bodyDef.position.set(physicsX + (physicsCellSize /2), physicsY + (physicsCellSize) + (physicsCellSize/2));
 
         Body body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(physicsCellSize /2, physicsCellSize /2);
+        shape.setAsBox(physicsCellWidth /2, physiceCellHeight /2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -232,7 +234,12 @@ public class Map {
         shape.dispose();
 
         // Pathfinding
-        pathfindingGraph.getNodeByWorld(x, y).setSolid(true);
+        for (float pathX = x; pathX < x + width; pathX += EngineConfig.CELL_SIZE) {
+            for (float pathY = y; pathY < y + height; pathY += EngineConfig.CELL_SIZE) {
+                pathfindingGraph.getNodeByWorld(pathX, pathY).setSolid(true);
+            }
+        }
+
     }
 
     public void addLightObjects(RayHandler rayHandler) {
