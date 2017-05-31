@@ -41,7 +41,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private final int STATE_DEQUIP = 4;
     private final int STATE_EQUIP = 5;
 
-    private final float SOUND_MODIFIER = 0.7f;
+    private final float SOUND_MODIFIER = 0.5f;
 
     protected boolean moveUp = false;
     protected boolean moveDown = false;

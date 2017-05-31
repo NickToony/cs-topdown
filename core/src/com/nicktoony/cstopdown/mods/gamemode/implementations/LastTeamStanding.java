@@ -18,7 +18,7 @@ public class LastTeamStanding extends GameModeMod {
     @Override
     public void evRoundStart() {
         for (PlayerModInterface player : getAllPlayers()) {
-//            if (player.isBot())
+            if (player.isBot())
                 player.spawn();
         }
     }

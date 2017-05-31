@@ -1,499 +1,507 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+<map version="1.0.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="324">
  <properties>
   <property name="ambientAlpha" value="0.4"/>
   <property name="ambientColour" value="000000"/>
   <property name="zoom" value="0.75"/>
  </properties>
- <tileset firstgid="1" name="dust" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dust" tilewidth="32" tileheight="32" tilecount="80" columns="8">
   <image source="dust.png" width="256" height="320"/>
  </tileset>
  <layer name="Background Layer" width="32" height="32">
   <data encoding="base64">
-   AgAAAAsAAAAaAAAAGwAAADcAAAAqAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAPgAAAD8AAAACAAAACwAAADQAAAA3AAAANQAAACoAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAABDAAAARAAAAAIAAAALAAAANwAAADUAAAALAAAACwAAAAIAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAACAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAAgAAAAsAAAAUAAAAFAAAABQAAAALAAAAAgAAAAsAAAA3AAAACwAAAAsAAAALAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAAfAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIAAAAAsAAAACAAAACwAAABQAAAAUAAAAFAAAAAsAAAACAAAACwAAADYAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAfAAAAIgAAACIAAAAiAAAAIgAAACAAAAAmAAAAJgAAACYAAAA+AAAAPwAAAAIAAAALAAAAFAAAABQAAAAUAAAACwAAAAIAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAA2AAAAGwAAAAsAAAALAAAACwAAAAsAAAACAAAACwAAABoAAAAmAAAAJgAAACYAAAAmAAAACwAAABsAAAALAAAACwAAAEMAAABEAAAAAgAAAAIAAAAUAAAAFAAAABQAAAACAAAAAgAAAAsAAAARAAAANQAAAAsAAAALAAAACwAAAAsAAAALAAAAGwAAABoAAAALAAAACwAAAAIAAAALAAAAGQAAAAoAAAALAAAACwAAAAoAAAALAAAANgAAADUAAAA1AAAACwAAAAsAAAALAAAACwAAACsAAAArAAAAKwAAAAsAAAACAAAACwAAAAsAAAA0AAAANAAAAAkAAAAyAAAACwAAAAsAAAAZAAAANgAAADcAAAALAAAAAgAAAAsAAAAyAAAANwAAADkAAAAKAAAANQAAAAsAAAACAAAANQAAAAkAAAA1AAAANQAAABEAAAARAAAAHAAAABEAAAA3AAAACwAAAAIAAAALAAAACQAAAAsAAABNAAAATQAAABoAAAAcAAAACwAAAAsAAAALAAAAEQAAAAsAAAACAAAACwAAADIAAAALAAAACwAAAAsAAAALAAAACwAAAAIAAAALAAAACgAAADYAAAAJAAAACQAAADUAAAAZAAAANgAAAAsAAAALAAAAAgAAAAsAAAALAAAACwAAAE0AAABNAAAATQAAAE0AAAACAAAACwAAAAsAAAAcAAAACwAAAAIAAAAcAAAANwAAAAsAAAALAAAATQAAAE0AAAALAAAAAgAAAAsAAAA0AAAANQAAABkAAAACAAAAAgAAADcAAAARAAAACwAAAAIAAAACAAAACwAAADcAAAA0AAAACQAAAE0AAABNAAAATQAAAAIAAAALAAAACwAAAAoAAAA2AAAACwAAADYAAAALAAAACwAAAE0AAABNAAAATQAAAE0AAAACAAAACwAAABsAAAAzAAAANwAAAAIAAAA0AAAAMwAAADIAAAALAAAACwAAAAIAAAALAAAACwAAADcAAAAZAAAAMwAAAAsAAAALAAAAAgAAAAsAAAALAAAACwAAABoAAAAyAAAACQAAAAsAAAALAAAATQAAAE0AAABNAAAATQAAAAIAAAALAAAAMgAAAAkAAAALAAAAAgAAAAsAAAARAAAAMgAAAAsAAAALAAAAAgAAAAsAAAALAAAACwAAADQAAAAZAAAACwAAAAsAAAACAAAACwAAAAsAAAALAAAACwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAACwAAADUAAAALAAAAPgAAAD8AAAACAAAACwAAAAsAAAALAAAAOgAAADQAAAA0AAAACwAAAAIAAAALAAAACwAAAAsAAAALAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAKAAAANQAAAAsAAABDAAAARAAAAAIAAAA+AAAAPwAAAAsAAAAZAAAACwAAAAsAAAALAAAAAgAAAAsAAAALAAAAPgAAAD8AAAACAAAAAAAAAAAAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAsAAAAZAAAACwAAAD4AAAA/AAAAAgAAAEMAAABEAAAACwAAADcAAAALAAAACwAAAAsAAAACAAAACwAAAAsAAABDAAAARAAAAAIAAAAAAAAAAAAAAAIAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAALAAAAAsAAAAKAAAAQwAAAEQAAAACAAAAAgAAAAIAAAALAAAANQAAAAsAAAACAAAAAgAAAAIAAAALAAAACwAAAD4AAAA/AAAAAgAAAAAAAAAAAAAAAgAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAsAAAACwAAAAoAAAALAAAACwAAAAAAAAAAAAAAAgAAAAsAAAAyAAAACwAAAAIAAAAAAAAAAgAAAAsAAAALAAAAQwAAAEQAAAACAAAAAAAAAAAAAAACAAAAFAAAABQAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAD4AAAA/AAAAGwAAAAsAAAALAAAAAAAAAAAAAAACAAAACQAAABwAAAALAAAAAgAAAAAAAAACAAAACwAAAAsAAAALAAAACwAAAAIAAAAAAAAAAAAAAAIAAAAUAAAAFAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAQwAAAEQAAAALAAAACwAAAAsAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAACAAAAAAAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAAAAAAAAAAAAgAAABQAAAAUAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAAcAAAACwAAAAAAAAAAAAAAAgAAAAsAAAALAAAACwAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAFAAAABQAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAsAAAALAAAACgAAAAsAAAALAAAAAAAAAAAAAAACAAAACwAAABsAAAALAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAUAAAAFAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAADMAAAAKAAAACwAAAAIAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAABQAAAAUAAAAAgAAAAAAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAALAAAACwAAAAsAAAALAAAACwAAAAAAAAAAAAAAAgAAAAsAAAALAAAACwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAACAAAAFAAAABQAAAACAAAAAAAAAAIAAAA+AAAAPwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAADcAAAALAAAAAAAAAAAAAAACAAAAEQAAAAsAAAALAAAACwAAAAsAAAALAAAAFQAAABUAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAUAAAAFAAAAAIAAAAAAAAAAgAAAEMAAABEAAAACwAAAAsAAAAKAAAACwAAADcAAAAzAAAACwAAAAsAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAAKAAAACgAAAAsAAAAVAAAAFQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAgAAABQAAAAUAAAAAgAAAAAAAAACAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAIAAAACAAAAAgAAABQAAAAUAAAAFAAAAAIAAAA0AAAANwAAAAsAAAALAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAFAAAABQAAAACAAAAAgAAAAIAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAAFQAAABUAAAAUAAAAFAAAABQAAAAUAAAAAgAAADUAAAAKAAAACwAAAAsAAAACAAAAPgAAAD8AAAALAAAACwAAAAsAAAArAAAAKwAAAAsAAAALAAAACwAAAAsAAAAKAAAAGwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAVAAAAFQAAABQAAAAUAAAAFAAAABQAAAACAAAACgAAADQAAAAZAAAACwAAAAIAAABDAAAARAAAAAsAAAALAAAACwAAAAsAAAAKAAAANgAAABsAAAAKAAAACwAAABkAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAABUAAAAUAAAAFAAAABQAAAAUAAAAFAAAAAIAAAALAAAACwAAADQAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAZAAAAGQAAADIAAAAZAAAACgAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAAgAAAAsAAAALAAAAGwAAADIAAAALAAAACwAAAAsAAAALAAAACwAAABEAAAAJAAAANwAAADIAAAA2AAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAACAAAACwAAAAsAAAAbAAAACwAAAAsAAAALAAAACwAAADUAAAA1AAAACwAAADcAAAALAAAACwAAAAsAAAALAAAANAAAADQAAAALAAAACwAAAAsAAAALAAAAGwAAAAoAAAAKAAAACwAAAA==
+   AgAAAAsAAAAaAAAAGwAAADcAAAAqAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAPgAAAD8AAAACAAAACwAAADQAAAA3AAAANQAAACoAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAABDAAAARAAAAAIAAAALAAAANwAAADUAAAALAAAACwAAAAIAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAACAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAAgAAAAsAAAAUAAAAFAAAABQAAAALAAAAAgAAAAsAAAA3AAAACwAAAAsAAAALAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAAfAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIAAAAAsAAAACAAAACwAAABQAAAAUAAAAFAAAAAsAAAACAAAACwAAADYAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAfAAAAIgAAACIAAAAiAAAAIgAAACAAAAAmAAAAJgAAACYAAAA+AAAAPwAAAAIAAAALAAAAFAAAABQAAAAUAAAACwAAAAIAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAA2AAAAGwAAAAsAAAALAAAACwAAAAsAAAACAAAACwAAABoAAAAmAAAAJgAAACYAAAAmAAAACwAAABsAAAALAAAACwAAAEMAAABEAAAAAgAAAAIAAAAUAAAAFAAAABQAAAACAAAAAgAAAAsAAAARAAAANQAAAAsAAAALAAAACwAAAAsAAAALAAAAGwAAABoAAAALAAAACwAAAAIAAAALAAAAGQAAAAoAAAALAAAACwAAAAoAAAALAAAANgAAADUAAAA1AAAACwAAAAsAAAALAAAACwAAACsAAAArAAAAKwAAAAsAAAACAAAACwAAAAsAAAA0AAAANAAAAAkAAAAyAAAACwAAAAsAAAAZAAAANgAAADcAAAALAAAAAgAAAAsAAAAyAAAANwAAADkAAAAKAAAANQAAAAsAAAACAAAANQAAAAkAAAA1AAAANQAAABEAAAARAAAAHAAAABEAAAA3AAAACwAAAAIAAAALAAAACQAAAAsAAABNAAAATQAAABoAAAAcAAAACwAAAAsAAAALAAAAEQAAAAsAAAACAAAACwAAADIAAAALAAAACwAAAAsAAAALAAAACwAAAAIAAAALAAAACgAAADYAAAAJAAAACQAAADUAAAAZAAAANgAAAAsAAAALAAAAAgAAAAsAAAALAAAACwAAAE0AAABNAAAATQAAAE0AAAACAAAACwAAAAsAAAAcAAAACwAAAAIAAAAcAAAANwAAAAsAAAALAAAATQAAAE0AAAALAAAAAgAAAAsAAAA0AAAANQAAABkAAAACAAAAAgAAADcAAAARAAAACwAAAAIAAAACAAAACwAAADcAAAA0AAAACQAAAE0AAABNAAAATQAAAAIAAAALAAAACwAAAAoAAAA2AAAACwAAADYAAAALAAAACwAAAE0AAABNAAAATQAAAE0AAAACAAAACwAAABsAAAAzAAAANwAAAAIAAAA0AAAAMwAAADIAAAALAAAACwAAAAIAAAALAAAACwAAADcAAAAZAAAAMwAAAAsAAAALAAAAAgAAAAsAAAALAAAACwAAABoAAAAyAAAACQAAAAsAAAALAAAATQAAAE0AAABNAAAATQAAAAIAAAALAAAAMgAAAAkAAAALAAAAAgAAAAsAAAARAAAAMgAAAAsAAAALAAAAAgAAAAsAAAALAAAACwAAADQAAAAZAAAACwAAAAsAAAACAAAACwAAAAsAAAALAAAACwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAACwAAADUAAAALAAAAPgAAAD8AAAACAAAACwAAAAsAAAALAAAAOgAAADQAAAA0AAAACwAAAAIAAAALAAAACwAAAD4AAAA/AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAKAAAANQAAAAsAAABDAAAARAAAAAIAAAA+AAAAPwAAAAsAAAAZAAAACwAAAAsAAAALAAAAAgAAAAsAAAALAAAAQwAAAEQAAAACAAAAAAAAAAAAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAsAAAAZAAAACwAAAD4AAAA/AAAAAgAAAEMAAABEAAAACwAAADcAAAALAAAACwAAAAsAAAACAAAACwAAAAsAAAA+AAAAPwAAAAIAAAAAAAAAAAAAAAIAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAALAAAAAsAAAAKAAAAQwAAAEQAAAACAAAAAgAAAAIAAAALAAAANQAAAAsAAAACAAAAAgAAAAIAAAALAAAACwAAAEMAAABEAAAAAgAAAAIAAAACAAAAAgAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAsAAAACwAAAAoAAAALAAAACwAAAAAAAAAAAAAAAgAAAAsAAAAyAAAACwAAAAIAAAAAAAAAAgAAAAsAAAALAAAACwAAACoAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAD4AAAA/AAAAGwAAAAsAAAALAAAAAAAAAAAAAAACAAAACQAAABwAAAALAAAAAgAAAAAAAAACAAAACwAAAAsAAAALAAAAKgAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAQwAAAEQAAAALAAAACwAAAAsAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAACAAAAAAAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAABQAAAAUAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAAcAAAACwAAAAAAAAAAAAAAAgAAAAsAAAALAAAACwAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAFAAAABQAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAsAAAALAAAACgAAAAsAAAALAAAAAAAAAAAAAAACAAAACwAAABsAAAALAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAUAAAAFAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAADMAAAAKAAAACwAAAAIAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAABQAAAAUAAAAAgAAAAAAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAALAAAACwAAAAsAAAALAAAACwAAAAAAAAAAAAAAAgAAAAsAAAALAAAACwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAACAAAAFAAAABQAAAACAAAAAAAAAAIAAAA+AAAAPwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAADcAAAALAAAAAAAAAAAAAAACAAAAEQAAAAsAAAALAAAACwAAAAsAAAALAAAAFQAAABUAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAUAAAAFAAAAAIAAAAAAAAAAgAAAEMAAABEAAAACwAAAAsAAAAKAAAACwAAADcAAAAzAAAACwAAAAsAAAAAAAAAAAAAAAIAAAALAAAACwAAAAsAAAAKAAAACgAAAAsAAAAVAAAAFQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAgAAABQAAAAUAAAAAgAAAAAAAAACAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAIAAAACAAAAAgAAABQAAAAUAAAAFAAAAAIAAAA0AAAANwAAAAsAAAALAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAFAAAABQAAAACAAAAAgAAAAIAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAAFQAAABUAAAAUAAAAFAAAABQAAAAUAAAAAgAAADUAAAAKAAAACwAAAAsAAAACAAAAPgAAAD8AAAALAAAACwAAAAsAAAArAAAAKwAAAAsAAAALAAAACwAAAAsAAAAKAAAAGwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAVAAAAFQAAABQAAAAUAAAAFAAAABQAAAACAAAACgAAADQAAAAZAAAACwAAAAIAAABDAAAARAAAAAsAAAALAAAACwAAAAsAAAAKAAAANgAAABsAAAAKAAAACwAAABkAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAABUAAAAUAAAAFAAAABQAAAAUAAAAFAAAAAIAAAALAAAACwAAADQAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAZAAAAGQAAADIAAAAZAAAACgAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAAgAAAAsAAAALAAAAGwAAADIAAAALAAAACwAAAAsAAAALAAAACwAAABEAAAAJAAAANwAAADIAAAA2AAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAACAAAACwAAAAsAAAAbAAAACwAAAAsAAAALAAAACwAAADUAAAA1AAAACwAAADcAAAALAAAACwAAAAsAAAALAAAANAAAADQAAAALAAAACwAAAAsAAAALAAAAGwAAAAoAAAAKAAAACwAAAA==
   </data>
  </layer>
- <objectgroup name="Collision Layer" width="32" height="32">
+ <objectgroup name="Collision Layer">
   <properties>
    <property name="collision" value="true"/>
   </properties>
-  <object gid="2" x="0" y="32"/>
-  <object gid="2" x="0" y="64"/>
-  <object gid="2" x="0" y="96"/>
-  <object gid="2" x="0" y="128"/>
-  <object gid="2" x="0" y="160"/>
-  <object gid="2" x="0" y="192"/>
-  <object gid="2" x="0" y="224"/>
-  <object gid="2" x="0" y="256"/>
-  <object gid="2" x="0" y="288"/>
-  <object gid="2" x="0" y="320"/>
-  <object gid="2" x="0" y="352"/>
-  <object gid="2" x="0" y="384"/>
-  <object gid="2" x="0" y="416"/>
-  <object gid="2" x="0" y="448"/>
-  <object gid="2" x="0" y="480"/>
-  <object gid="2" x="0" y="512"/>
-  <object gid="2" x="0" y="544"/>
-  <object gid="2" x="32" y="544"/>
-  <object gid="2" x="64" y="544"/>
-  <object gid="2" x="64" y="608"/>
-  <object gid="2" x="64" y="576"/>
-  <object gid="2" x="64" y="640"/>
-  <object gid="2" x="64" y="672"/>
-  <object gid="2" x="64" y="704"/>
-  <object gid="2" x="64" y="736"/>
-  <object gid="2" x="64" y="768"/>
-  <object gid="2" x="64" y="800"/>
-  <object gid="2" x="64" y="832"/>
-  <object gid="2" x="64" y="864"/>
-  <object gid="2" x="32" y="864"/>
-  <object gid="2" x="0" y="864"/>
-  <object gid="2" x="192" y="736"/>
-  <object gid="2" x="192" y="736"/>
-  <object gid="2" x="192" y="704"/>
-  <object gid="2" x="192" y="768"/>
-  <object gid="2" x="192" y="672"/>
-  <object gid="2" x="192" y="640"/>
-  <object gid="2" x="192" y="608"/>
-  <object gid="2" x="192" y="544"/>
-  <object gid="2" x="192" y="576"/>
-  <object gid="2" x="224" y="544"/>
-  <object gid="2" x="256" y="544"/>
-  <object gid="2" x="256" y="576"/>
-  <object gid="2" x="256" y="608"/>
-  <object gid="2" x="256" y="640"/>
-  <object gid="2" x="224" y="768"/>
-  <object gid="2" x="256" y="768"/>
-  <object gid="2" x="288" y="768"/>
-  <object gid="2" x="320" y="768"/>
-  <object gid="2" x="352" y="768"/>
-  <object gid="2" x="352" y="832"/>
-  <object gid="2" x="352" y="864"/>
-  <object gid="2" x="352" y="800"/>
-  <object gid="2" x="288" y="640"/>
-  <object gid="2" x="320" y="640"/>
-  <object gid="2" x="352" y="640"/>
-  <object gid="2" x="384" y="640"/>
-  <object gid="2" x="416" y="640"/>
-  <object gid="2" x="416" y="416"/>
-  <object gid="2" x="416" y="448"/>
-  <object gid="2" x="416" y="480"/>
-  <object gid="2" x="416" y="512"/>
-  <object gid="2" x="416" y="544"/>
-  <object gid="2" x="416" y="576"/>
-  <object gid="2" x="416" y="608"/>
-  <object gid="2" x="448" y="416"/>
-  <object gid="2" x="480" y="416"/>
-  <object gid="2" x="384" y="864"/>
-  <object gid="2" x="416" y="864"/>
-  <object gid="2" x="448" y="864"/>
-  <object gid="2" x="480" y="864"/>
-  <object gid="2" x="512" y="864"/>
-  <object gid="2" x="608" y="864"/>
-  <object gid="2" x="640" y="864"/>
-  <object gid="2" x="672" y="864"/>
-  <object gid="2" x="672" y="832"/>
-  <object gid="2" x="672" y="800"/>
-  <object gid="2" x="672" y="768"/>
-  <object gid="2" x="672" y="736"/>
-  <object gid="2" x="704" y="736"/>
-  <object gid="2" x="736" y="736"/>
-  <object gid="2" x="768" y="736"/>
-  <object gid="2" x="800" y="736"/>
-  <object gid="2" x="832" y="736"/>
-  <object gid="2" x="832" y="704"/>
-  <object gid="2" x="832" y="672"/>
-  <object gid="2" x="864" y="704"/>
-  <object gid="2" x="992" y="704"/>
-  <object gid="2" x="832" y="640"/>
-  <object gid="2" x="832" y="608"/>
-  <object gid="2" x="832" y="576"/>
-  <object gid="2" x="832" y="480"/>
-  <object gid="2" x="832" y="448"/>
-  <object gid="2" x="832" y="416"/>
-  <object gid="2" x="800" y="416"/>
-  <object gid="2" x="768" y="416"/>
-  <object gid="2" x="736" y="416"/>
-  <object gid="2" x="704" y="416"/>
-  <object gid="2" x="672" y="416"/>
-  <object gid="2" x="640" y="416"/>
-  <object gid="2" x="608" y="416"/>
-  <object gid="2" x="576" y="416"/>
-  <object gid="2" x="544" y="416"/>
-  <object gid="2" x="512" y="416"/>
-  <object gid="2" x="416" y="320"/>
-  <object gid="2" x="416" y="288"/>
-  <object gid="2" x="416" y="256"/>
-  <object gid="2" x="416" y="224"/>
-  <object gid="2" x="416" y="192"/>
-  <object gid="2" x="416" y="128"/>
-  <object gid="2" x="384" y="128"/>
-  <object gid="2" x="352" y="128"/>
-  <object gid="2" x="320" y="128"/>
-  <object gid="2" x="288" y="128"/>
-  <object gid="2" x="256" y="128"/>
-  <object gid="2" x="224" y="128"/>
-  <object gid="2" x="192" y="128"/>
-  <object gid="2" x="192" y="96"/>
-  <object gid="2" x="512" y="832"/>
-  <object gid="2" x="512" y="800"/>
-  <object gid="2" x="512" y="768"/>
-  <object gid="2" x="512" y="736"/>
-  <object gid="2" x="512" y="704"/>
-  <object gid="2" x="512" y="672"/>
-  <object gid="2" x="512" y="640"/>
-  <object gid="2" x="512" y="608"/>
-  <object gid="2" x="512" y="576"/>
-  <object gid="2" x="512" y="544"/>
-  <object gid="2" x="512" y="512"/>
-  <object gid="2" x="512" y="480"/>
-  <object gid="2" x="544" y="480"/>
-  <object gid="2" x="576" y="480"/>
-  <object gid="2" x="608" y="480"/>
-  <object gid="2" x="640" y="480"/>
-  <object gid="2" x="672" y="480"/>
-  <object gid="2" x="704" y="480"/>
-  <object gid="2" x="736" y="480"/>
-  <object gid="2" x="768" y="480"/>
-  <object gid="2" x="800" y="480"/>
-  <object gid="2" x="608" y="576"/>
-  <object gid="2" x="608" y="608"/>
-  <object gid="2" x="608" y="640"/>
-  <object gid="2" x="608" y="672"/>
-  <object gid="2" x="608" y="704"/>
-  <object gid="2" x="608" y="736"/>
-  <object gid="2" x="608" y="768"/>
-  <object gid="2" x="608" y="800"/>
-  <object gid="2" x="608" y="832"/>
-  <object gid="2" x="640" y="576"/>
-  <object gid="2" x="672" y="576"/>
-  <object gid="2" x="704" y="576"/>
-  <object gid="2" x="736" y="576"/>
-  <object gid="2" x="768" y="576"/>
-  <object gid="2" x="800" y="576"/>
-  <object gid="2" x="832" y="384"/>
-  <object gid="2" x="832" y="352"/>
-  <object gid="2" x="832" y="320"/>
-  <object gid="2" x="864" y="320"/>
-  <object gid="2" x="992" y="320"/>
-  <object gid="2" x="832" y="160"/>
-  <object gid="2" x="832" y="192"/>
-  <object gid="2" x="864" y="192"/>
-  <object gid="2" x="992" y="192"/>
-  <object gid="2" x="672" y="256"/>
-  <object gid="2" x="672" y="288"/>
-  <object gid="2" x="672" y="320"/>
-  <object gid="2" x="672" y="352"/>
-  <object gid="2" x="672" y="384"/>
-  <object gid="2" x="256" y="512"/>
-  <object gid="2" x="256" y="480"/>
-  <object gid="2" x="256" y="448"/>
-  <object gid="2" x="256" y="416"/>
-  <object gid="2" x="256" y="384"/>
-  <object gid="2" x="256" y="352"/>
-  <object gid="2" x="256" y="320"/>
-  <object gid="2" x="192" y="864"/>
-  <object gid="2" x="192" y="896"/>
-  <object gid="2" x="192" y="928"/>
-  <object gid="2" x="192" y="960"/>
-  <object gid="2" x="192" y="992"/>
-  <object gid="2" x="192" y="1024"/>
-  <object gid="2" x="352" y="896"/>
-  <object gid="2" x="352" y="928"/>
-  <object gid="2" x="832" y="128"/>
-  <object gid="2" x="832" y="96"/>
-  <object gid="1" x="128" y="288"/>
-  <object gid="1" x="128" y="320"/>
-  <object gid="1" x="160" y="288"/>
-  <object gid="1" x="160" y="320"/>
-  <object gid="1" x="160" y="352"/>
-  <object gid="1" x="192" y="352"/>
-  <object gid="1" x="192" y="320"/>
-  <object gid="1" x="224" y="320"/>
-  <object gid="1" x="224" y="352"/>
-  <object gid="1" x="32" y="480"/>
-  <object gid="1" x="64" y="480"/>
-  <object gid="1" x="64" y="512"/>
-  <object gid="1" x="32" y="512"/>
-  <object gid="1" x="352" y="480"/>
-  <object gid="1" x="384" y="480"/>
-  <object gid="1" x="384" y="512"/>
-  <object gid="1" x="352" y="512"/>
-  <object gid="1" x="352" y="544"/>
-  <object gid="1" x="352" y="576"/>
-  <object gid="1" x="384" y="576"/>
-  <object gid="1" x="384" y="544"/>
-  <object gid="1" x="0" y="896"/>
-  <object gid="1" x="0" y="928"/>
-  <object gid="1" x="0" y="960"/>
-  <object gid="1" x="32" y="928"/>
-  <object gid="1" x="32" y="896"/>
-  <object gid="1" x="288" y="800"/>
-  <object gid="1" x="288" y="832"/>
-  <object gid="1" x="320" y="832"/>
-  <object gid="1" x="320" y="800"/>
-  <object gid="1" x="544" y="384"/>
-  <object gid="1" x="544" y="352"/>
-  <object gid="1" x="576" y="352"/>
-  <object gid="1" x="576" y="320"/>
-  <object gid="1" x="608" y="320"/>
-  <object gid="1" x="608" y="352"/>
-  <object gid="1" x="640" y="352"/>
-  <object gid="1" x="640" y="384"/>
-  <object gid="1" x="608" y="384"/>
-  <object gid="1" x="576" y="384"/>
-  <object gid="1" x="768" y="192"/>
-  <object gid="1" x="800" y="160"/>
-  <object gid="1" x="768" y="160"/>
-  <object gid="1" x="800" y="192"/>
-  <object gid="1" x="960" y="64"/>
-  <object gid="1" x="960" y="32"/>
-  <object gid="1" x="992" y="32"/>
-  <object gid="1" x="992" y="64"/>
-  <object gid="1" x="960" y="416"/>
-  <object gid="1" x="960" y="448"/>
-  <object gid="1" x="960" y="512"/>
-  <object gid="1" x="960" y="512"/>
-  <object gid="1" x="960" y="480"/>
-  <object gid="1" x="992" y="512"/>
-  <object gid="1" x="992" y="480"/>
-  <object gid="1" x="992" y="448"/>
-  <object gid="1" x="992" y="416"/>
-  <object gid="1" x="864" y="576"/>
-  <object gid="1" x="896" y="576"/>
-  <object gid="1" x="896" y="608"/>
-  <object gid="1" x="864" y="576"/>
-  <object gid="1" x="864" y="608"/>
-  <object gid="1" x="704" y="768"/>
-  <object gid="1" x="736" y="768"/>
-  <object gid="1" x="736" y="800"/>
-  <object gid="1" x="704" y="800"/>
-  <object gid="1" x="384" y="896"/>
-  <object gid="1" x="416" y="896"/>
-  <object gid="1" x="416" y="928"/>
-  <object gid="1" x="384" y="928"/>
-  <object gid="1" x="416" y="96"/>
-  <object gid="1" x="480" y="96"/>
-  <object gid="1" x="448" y="96"/>
-  <object gid="1" x="512" y="96"/>
-  <object gid="1" x="576" y="96"/>
-  <object gid="1" x="544" y="96"/>
-  <object gid="1" x="608" y="96"/>
-  <object gid="1" x="640" y="96"/>
-  <object gid="1" x="672" y="96"/>
-  <object gid="1" x="704" y="96"/>
-  <object gid="1" x="736" y="96"/>
-  <object gid="1" x="768" y="96"/>
-  <object gid="1" x="800" y="96"/>
-  <object gid="1" x="480" y="128"/>
-  <object gid="1" x="512" y="128"/>
-  <object gid="1" x="544" y="128"/>
-  <object gid="1" x="576" y="128"/>
-  <object gid="1" x="512" y="160"/>
-  <object gid="1" x="544" y="160"/>
-  <object gid="1" x="576" y="160"/>
-  <object gid="1" x="608" y="160"/>
-  <object gid="1" x="608" y="128"/>
-  <object gid="1" x="640" y="128"/>
-  <object gid="1" x="672" y="128"/>
-  <object gid="1" x="704" y="128"/>
-  <object gid="1" x="736" y="128"/>
-  <object gid="2" x="0" y="384"/>
+  <object id="1" gid="2" x="0" y="32" width="32" height="32"/>
+  <object id="2" gid="2" x="0" y="64" width="32" height="32"/>
+  <object id="3" gid="2" x="0" y="96" width="32" height="32"/>
+  <object id="4" gid="2" x="0" y="128" width="32" height="32"/>
+  <object id="5" gid="2" x="0" y="160" width="32" height="32"/>
+  <object id="6" gid="2" x="0" y="192" width="32" height="32"/>
+  <object id="7" gid="2" x="0" y="224" width="32" height="32"/>
+  <object id="8" gid="2" x="0" y="256" width="32" height="32"/>
+  <object id="9" gid="2" x="0" y="288" width="32" height="32"/>
+  <object id="10" gid="2" x="0" y="320" width="32" height="32"/>
+  <object id="11" gid="2" x="0" y="352" width="32" height="32"/>
+  <object id="12" gid="2" x="0" y="384" width="32" height="32"/>
+  <object id="13" gid="2" x="0" y="416" width="32" height="32"/>
+  <object id="14" gid="2" x="0" y="448" width="32" height="32"/>
+  <object id="15" gid="2" x="0" y="480" width="32" height="32"/>
+  <object id="16" gid="2" x="0" y="512" width="32" height="32"/>
+  <object id="17" gid="2" x="0" y="544" width="32" height="32"/>
+  <object id="18" gid="2" x="32" y="544" width="32" height="32"/>
+  <object id="19" gid="2" x="64" y="544" width="32" height="32"/>
+  <object id="20" gid="2" x="64" y="608" width="32" height="32"/>
+  <object id="21" gid="2" x="64" y="576" width="32" height="32"/>
+  <object id="22" gid="2" x="64" y="640" width="32" height="32"/>
+  <object id="23" gid="2" x="64" y="672" width="32" height="32"/>
+  <object id="24" gid="2" x="64" y="704" width="32" height="32"/>
+  <object id="25" gid="2" x="64" y="736" width="32" height="32"/>
+  <object id="26" gid="2" x="64" y="768" width="32" height="32"/>
+  <object id="27" gid="2" x="64" y="800" width="32" height="32"/>
+  <object id="28" gid="2" x="64" y="832" width="32" height="32"/>
+  <object id="29" gid="2" x="64" y="864" width="32" height="32"/>
+  <object id="30" gid="2" x="32" y="864" width="32" height="32"/>
+  <object id="31" gid="2" x="0" y="864" width="32" height="32"/>
+  <object id="32" gid="2" x="192" y="736" width="32" height="32"/>
+  <object id="33" gid="2" x="192" y="736" width="32" height="32"/>
+  <object id="34" gid="2" x="192" y="704" width="32" height="32"/>
+  <object id="35" gid="2" x="192" y="768" width="32" height="32"/>
+  <object id="36" gid="2" x="192" y="672" width="32" height="32"/>
+  <object id="37" gid="2" x="192" y="640" width="32" height="32"/>
+  <object id="38" gid="2" x="192" y="608" width="32" height="32"/>
+  <object id="39" gid="2" x="192" y="544" width="32" height="32"/>
+  <object id="40" gid="2" x="192" y="576" width="32" height="32"/>
+  <object id="41" gid="2" x="224" y="544" width="32" height="32"/>
+  <object id="42" gid="2" x="256" y="544" width="32" height="32"/>
+  <object id="43" gid="2" x="256" y="576" width="32" height="32"/>
+  <object id="44" gid="2" x="256" y="608" width="32" height="32"/>
+  <object id="45" gid="2" x="256" y="640" width="32" height="32"/>
+  <object id="46" gid="2" x="224" y="768" width="32" height="32"/>
+  <object id="47" gid="2" x="256" y="768" width="32" height="32"/>
+  <object id="48" gid="2" x="288" y="768" width="32" height="32"/>
+  <object id="49" gid="2" x="320" y="768" width="32" height="32"/>
+  <object id="50" gid="2" x="352" y="768" width="32" height="32"/>
+  <object id="51" gid="2" x="352" y="832" width="32" height="32"/>
+  <object id="52" gid="2" x="352" y="864" width="32" height="32"/>
+  <object id="53" gid="2" x="352" y="800" width="32" height="32"/>
+  <object id="54" gid="2" x="288" y="640" width="32" height="32"/>
+  <object id="55" gid="2" x="320" y="640" width="32" height="32"/>
+  <object id="56" gid="2" x="352" y="640" width="32" height="32"/>
+  <object id="57" gid="2" x="384" y="640" width="32" height="32"/>
+  <object id="58" gid="2" x="416" y="640" width="32" height="32"/>
+  <object id="59" gid="2" x="416" y="416" width="32" height="32"/>
+  <object id="60" gid="2" x="416" y="448" width="32" height="32"/>
+  <object id="61" gid="2" x="416" y="480" width="32" height="32"/>
+  <object id="62" gid="2" x="416" y="512" width="32" height="32"/>
+  <object id="63" gid="2" x="416" y="544" width="32" height="32"/>
+  <object id="66" gid="2" x="448" y="416" width="32" height="32"/>
+  <object id="67" gid="2" x="480" y="416" width="32" height="32"/>
+  <object id="68" gid="2" x="384" y="864" width="32" height="32"/>
+  <object id="69" gid="2" x="416" y="864" width="32" height="32"/>
+  <object id="70" gid="2" x="448" y="864" width="32" height="32"/>
+  <object id="71" gid="2" x="480" y="864" width="32" height="32"/>
+  <object id="72" gid="2" x="512" y="864" width="32" height="32"/>
+  <object id="73" gid="2" x="608" y="864" width="32" height="32"/>
+  <object id="74" gid="2" x="640" y="864" width="32" height="32"/>
+  <object id="75" gid="2" x="672" y="864" width="32" height="32"/>
+  <object id="76" gid="2" x="672" y="832" width="32" height="32"/>
+  <object id="77" gid="2" x="672" y="800" width="32" height="32"/>
+  <object id="78" gid="2" x="672" y="768" width="32" height="32"/>
+  <object id="79" gid="2" x="672" y="736" width="32" height="32"/>
+  <object id="80" gid="2" x="704" y="736" width="32" height="32"/>
+  <object id="81" gid="2" x="736" y="736" width="32" height="32"/>
+  <object id="82" gid="2" x="768" y="736" width="32" height="32"/>
+  <object id="83" gid="2" x="800" y="736" width="32" height="32"/>
+  <object id="84" gid="2" x="832" y="736" width="32" height="32"/>
+  <object id="85" gid="2" x="832" y="704" width="32" height="32"/>
+  <object id="86" gid="2" x="832" y="672" width="32" height="32"/>
+  <object id="87" gid="2" x="864" y="704" width="32" height="32"/>
+  <object id="88" gid="2" x="992" y="704" width="32" height="32"/>
+  <object id="89" gid="2" x="832" y="640" width="32" height="32"/>
+  <object id="90" gid="2" x="832" y="608" width="32" height="32"/>
+  <object id="91" gid="2" x="832" y="576" width="32" height="32"/>
+  <object id="92" gid="2" x="832" y="480" width="32" height="32"/>
+  <object id="93" gid="2" x="832" y="448" width="32" height="32"/>
+  <object id="94" gid="2" x="832" y="416" width="32" height="32"/>
+  <object id="95" gid="2" x="800" y="416" width="32" height="32"/>
+  <object id="96" gid="2" x="768" y="416" width="32" height="32"/>
+  <object id="97" gid="2" x="736" y="416" width="32" height="32"/>
+  <object id="98" gid="2" x="704" y="416" width="32" height="32"/>
+  <object id="99" gid="2" x="672" y="416" width="32" height="32"/>
+  <object id="100" gid="2" x="640" y="416" width="32" height="32"/>
+  <object id="101" gid="2" x="608" y="416" width="32" height="32"/>
+  <object id="102" gid="2" x="576" y="416" width="32" height="32"/>
+  <object id="103" gid="2" x="544" y="416" width="32" height="32"/>
+  <object id="104" gid="2" x="512" y="416" width="32" height="32"/>
+  <object id="105" gid="2" x="416" y="320" width="32" height="32"/>
+  <object id="106" gid="2" x="416" y="288" width="32" height="32"/>
+  <object id="107" gid="2" x="416" y="256" width="32" height="32"/>
+  <object id="108" gid="2" x="416" y="224" width="32" height="32"/>
+  <object id="109" gid="2" x="416" y="192" width="32" height="32"/>
+  <object id="110" gid="2" x="416" y="128" width="32" height="32"/>
+  <object id="111" gid="2" x="384" y="128" width="32" height="32"/>
+  <object id="112" gid="2" x="352" y="128" width="32" height="32"/>
+  <object id="113" gid="2" x="320" y="128" width="32" height="32"/>
+  <object id="114" gid="2" x="288" y="128" width="32" height="32"/>
+  <object id="115" gid="2" x="256" y="128" width="32" height="32"/>
+  <object id="116" gid="2" x="224" y="128" width="32" height="32"/>
+  <object id="117" gid="2" x="192" y="128" width="32" height="32"/>
+  <object id="118" gid="2" x="192" y="96" width="32" height="32"/>
+  <object id="119" gid="2" x="512" y="832" width="32" height="32"/>
+  <object id="120" gid="2" x="512" y="800" width="32" height="32"/>
+  <object id="121" gid="2" x="512" y="768" width="32" height="32"/>
+  <object id="122" gid="2" x="512" y="736" width="32" height="32"/>
+  <object id="123" gid="2" x="512" y="704" width="32" height="32"/>
+  <object id="124" gid="2" x="512" y="672" width="32" height="32"/>
+  <object id="125" gid="2" x="512" y="640" width="32" height="32"/>
+  <object id="128" gid="2" x="512" y="544" width="32" height="32"/>
+  <object id="129" gid="2" x="512" y="512" width="32" height="32"/>
+  <object id="130" gid="2" x="512" y="480" width="32" height="32"/>
+  <object id="131" gid="2" x="544" y="480" width="32" height="32"/>
+  <object id="132" gid="2" x="576" y="480" width="32" height="32"/>
+  <object id="133" gid="2" x="608" y="480" width="32" height="32"/>
+  <object id="134" gid="2" x="640" y="480" width="32" height="32"/>
+  <object id="135" gid="2" x="672" y="480" width="32" height="32"/>
+  <object id="136" gid="2" x="704" y="480" width="32" height="32"/>
+  <object id="137" gid="2" x="736" y="480" width="32" height="32"/>
+  <object id="138" gid="2" x="768" y="480" width="32" height="32"/>
+  <object id="139" gid="2" x="800" y="480" width="32" height="32"/>
+  <object id="140" gid="2" x="608" y="576" width="32" height="32"/>
+  <object id="141" gid="2" x="608" y="608" width="32" height="32"/>
+  <object id="142" gid="2" x="608" y="640" width="32" height="32"/>
+  <object id="143" gid="2" x="608" y="672" width="32" height="32"/>
+  <object id="144" gid="2" x="608" y="704" width="32" height="32"/>
+  <object id="145" gid="2" x="608" y="736" width="32" height="32"/>
+  <object id="146" gid="2" x="608" y="768" width="32" height="32"/>
+  <object id="147" gid="2" x="608" y="800" width="32" height="32"/>
+  <object id="148" gid="2" x="608" y="832" width="32" height="32"/>
+  <object id="149" gid="2" x="640" y="576" width="32" height="32"/>
+  <object id="150" gid="2" x="672" y="576" width="32" height="32"/>
+  <object id="151" gid="2" x="704" y="576" width="32" height="32"/>
+  <object id="152" gid="2" x="736" y="576" width="32" height="32"/>
+  <object id="153" gid="2" x="768" y="576" width="32" height="32"/>
+  <object id="154" gid="2" x="800" y="576" width="32" height="32"/>
+  <object id="155" gid="2" x="832" y="384" width="32" height="32"/>
+  <object id="156" gid="2" x="832" y="352" width="32" height="32"/>
+  <object id="157" gid="2" x="832" y="320" width="32" height="32"/>
+  <object id="158" gid="2" x="864" y="320" width="32" height="32"/>
+  <object id="159" gid="2" x="992" y="320" width="32" height="32"/>
+  <object id="160" gid="2" x="832" y="160" width="32" height="32"/>
+  <object id="161" gid="2" x="832" y="192" width="32" height="32"/>
+  <object id="162" gid="2" x="864" y="192" width="32" height="32"/>
+  <object id="163" gid="2" x="992" y="192" width="32" height="32"/>
+  <object id="164" gid="2" x="672" y="256" width="32" height="32"/>
+  <object id="165" gid="2" x="672" y="288" width="32" height="32"/>
+  <object id="166" gid="2" x="672" y="320" width="32" height="32"/>
+  <object id="167" gid="2" x="672" y="352" width="32" height="32"/>
+  <object id="168" gid="2" x="672" y="384" width="32" height="32"/>
+  <object id="169" gid="2" x="256" y="512" width="32" height="32"/>
+  <object id="170" gid="2" x="256" y="480" width="32" height="32"/>
+  <object id="171" gid="2" x="256" y="448" width="32" height="32"/>
+  <object id="172" gid="2" x="256" y="416" width="32" height="32"/>
+  <object id="173" gid="2" x="256" y="384" width="32" height="32"/>
+  <object id="174" gid="2" x="256" y="352" width="32" height="32"/>
+  <object id="175" gid="2" x="256" y="320" width="32" height="32"/>
+  <object id="176" gid="2" x="192" y="864" width="32" height="32"/>
+  <object id="177" gid="2" x="192" y="896" width="32" height="32"/>
+  <object id="178" gid="2" x="192" y="928" width="32" height="32"/>
+  <object id="179" gid="2" x="192" y="960" width="32" height="32"/>
+  <object id="180" gid="2" x="192" y="992" width="32" height="32"/>
+  <object id="181" gid="2" x="192" y="1024" width="32" height="32"/>
+  <object id="182" gid="2" x="352" y="896" width="32" height="32"/>
+  <object id="183" gid="2" x="352" y="928" width="32" height="32"/>
+  <object id="184" gid="2" x="832" y="128" width="32" height="32"/>
+  <object id="185" gid="2" x="832" y="96" width="32" height="32"/>
+  <object id="186" gid="1" x="128" y="288" width="32" height="32"/>
+  <object id="187" gid="1" x="128" y="320" width="32" height="32"/>
+  <object id="188" gid="1" x="160" y="288" width="32" height="32"/>
+  <object id="189" gid="1" x="160" y="320" width="32" height="32"/>
+  <object id="190" gid="1" x="160" y="352" width="32" height="32"/>
+  <object id="191" gid="1" x="192" y="352" width="32" height="32"/>
+  <object id="192" gid="1" x="192" y="320" width="32" height="32"/>
+  <object id="193" gid="1" x="224" y="320" width="32" height="32"/>
+  <object id="194" gid="1" x="224" y="352" width="32" height="32"/>
+  <object id="195" gid="1" x="32" y="480" width="32" height="32"/>
+  <object id="196" gid="1" x="64" y="480" width="32" height="32"/>
+  <object id="197" gid="1" x="64" y="512" width="32" height="32"/>
+  <object id="198" gid="1" x="32" y="512" width="32" height="32"/>
+  <object id="199" gid="1" x="352" y="448" width="32" height="32"/>
+  <object id="200" gid="1" x="384" y="448" width="32" height="32"/>
+  <object id="201" gid="1" x="384" y="480" width="32" height="32"/>
+  <object id="202" gid="1" x="352" y="480" width="32" height="32"/>
+  <object id="203" gid="1" x="352" y="512" width="32" height="32"/>
+  <object id="204" gid="1" x="352" y="544" width="32" height="32"/>
+  <object id="205" gid="1" x="384" y="544" width="32" height="32"/>
+  <object id="206" gid="1" x="384" y="512" width="32" height="32"/>
+  <object id="207" gid="1" x="0" y="896" width="32" height="32"/>
+  <object id="208" gid="1" x="0" y="928" width="32" height="32"/>
+  <object id="209" gid="1" x="0" y="960" width="32" height="32"/>
+  <object id="210" gid="1" x="32" y="928" width="32" height="32"/>
+  <object id="211" gid="1" x="32" y="896" width="32" height="32"/>
+  <object id="212" gid="1" x="288" y="800" width="32" height="32"/>
+  <object id="213" gid="1" x="288" y="832" width="32" height="32"/>
+  <object id="214" gid="1" x="320" y="832" width="32" height="32"/>
+  <object id="215" gid="1" x="320" y="800" width="32" height="32"/>
+  <object id="216" gid="1" x="544" y="384" width="32" height="32"/>
+  <object id="217" gid="1" x="544" y="352" width="32" height="32"/>
+  <object id="218" gid="1" x="576" y="352" width="32" height="32"/>
+  <object id="219" gid="1" x="576" y="320" width="32" height="32"/>
+  <object id="220" gid="1" x="608" y="320" width="32" height="32"/>
+  <object id="221" gid="1" x="608" y="352" width="32" height="32"/>
+  <object id="222" gid="1" x="640" y="352" width="32" height="32"/>
+  <object id="223" gid="1" x="640" y="384" width="32" height="32"/>
+  <object id="224" gid="1" x="608" y="384" width="32" height="32"/>
+  <object id="225" gid="1" x="576" y="384" width="32" height="32"/>
+  <object id="226" gid="1" x="768" y="192" width="32" height="32"/>
+  <object id="227" gid="1" x="800" y="160" width="32" height="32"/>
+  <object id="228" gid="1" x="768" y="160" width="32" height="32"/>
+  <object id="229" gid="1" x="800" y="192" width="32" height="32"/>
+  <object id="230" gid="1" x="960" y="64" width="32" height="32"/>
+  <object id="231" gid="1" x="960" y="32" width="32" height="32"/>
+  <object id="232" gid="1" x="992" y="32" width="32" height="32"/>
+  <object id="233" gid="1" x="992" y="64" width="32" height="32"/>
+  <object id="234" gid="1" x="960" y="416" width="32" height="32"/>
+  <object id="235" gid="1" x="960" y="448" width="32" height="32"/>
+  <object id="236" gid="1" x="960" y="512" width="32" height="32"/>
+  <object id="237" gid="1" x="960" y="512" width="32" height="32"/>
+  <object id="238" gid="1" x="960" y="480" width="32" height="32"/>
+  <object id="239" gid="1" x="992" y="512" width="32" height="32"/>
+  <object id="240" gid="1" x="992" y="480" width="32" height="32"/>
+  <object id="241" gid="1" x="992" y="448" width="32" height="32"/>
+  <object id="242" gid="1" x="992" y="416" width="32" height="32"/>
+  <object id="243" gid="1" x="864" y="576" width="32" height="32"/>
+  <object id="244" gid="1" x="896" y="576" width="32" height="32"/>
+  <object id="245" gid="1" x="896" y="608" width="32" height="32"/>
+  <object id="246" gid="1" x="864" y="576" width="32" height="32"/>
+  <object id="247" gid="1" x="864" y="608" width="32" height="32"/>
+  <object id="248" gid="1" x="704" y="768" width="32" height="32"/>
+  <object id="249" gid="1" x="736" y="768" width="32" height="32"/>
+  <object id="250" gid="1" x="736" y="800" width="32" height="32"/>
+  <object id="251" gid="1" x="704" y="800" width="32" height="32"/>
+  <object id="252" gid="1" x="384" y="896" width="32" height="32"/>
+  <object id="253" gid="1" x="416" y="896" width="32" height="32"/>
+  <object id="254" gid="1" x="416" y="928" width="32" height="32"/>
+  <object id="255" gid="1" x="384" y="928" width="32" height="32"/>
+  <object id="256" gid="1" x="416" y="96" width="32" height="32"/>
+  <object id="257" gid="1" x="480" y="96" width="32" height="32"/>
+  <object id="258" gid="1" x="448" y="96" width="32" height="32"/>
+  <object id="259" gid="1" x="512" y="96" width="32" height="32"/>
+  <object id="260" gid="1" x="576" y="96" width="32" height="32"/>
+  <object id="261" gid="1" x="544" y="96" width="32" height="32"/>
+  <object id="262" gid="1" x="608" y="96" width="32" height="32"/>
+  <object id="263" gid="1" x="640" y="96" width="32" height="32"/>
+  <object id="264" gid="1" x="672" y="96" width="32" height="32"/>
+  <object id="265" gid="1" x="704" y="96" width="32" height="32"/>
+  <object id="266" gid="1" x="736" y="96" width="32" height="32"/>
+  <object id="267" gid="1" x="768" y="96" width="32" height="32"/>
+  <object id="268" gid="1" x="800" y="96" width="32" height="32"/>
+  <object id="282" gid="2" x="0" y="384" width="32" height="32"/>
+  <object id="320" gid="2" x="448" y="544" width="32" height="32"/>
+  <object id="321" gid="2" x="480" y="544" width="32" height="32"/>
+  <object id="322" gid="2" x="448" y="640" width="32" height="32"/>
+  <object id="323" gid="2" x="480" y="640" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Objective Layer" width="32" height="32">
+ <objectgroup name="Objective Layer">
   <properties>
    <property name="objectives" value="true"/>
   </properties>
-  <object type="spawn" gid="1" x="96" y="64">
+  <object id="283" type="spawn" gid="1" x="96" y="64" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="32" y="64">
+  <object id="284" type="spawn" gid="1" x="32" y="64" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="160" y="64">
+  <object id="285" type="spawn" gid="1" x="160" y="64" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="160" y="128">
+  <object id="286" type="spawn" gid="1" x="160" y="128" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="96" y="128">
+  <object id="287" type="spawn" gid="1" x="96" y="128" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="32" y="128">
+  <object id="288" type="spawn" gid="1" x="32" y="128" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="32" y="192">
+  <object id="289" type="spawn" gid="1" x="32" y="192" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="96" y="192">
+  <object id="290" type="spawn" gid="1" x="96" y="192" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="160" y="192">
+  <object id="291" type="spawn" gid="1" x="160" y="192" width="32" height="32">
    <properties>
     <property name="team" value="1"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="960" y="992">
+  <object id="292" type="spawn" gid="1" x="960" y="992" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="896" y="992">
+  <object id="293" type="spawn" gid="1" x="896" y="992" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="832" y="992">
+  <object id="294" type="spawn" gid="1" x="832" y="992" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="832" y="864">
+  <object id="295" type="spawn" gid="1" x="832" y="864" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="832" y="928">
+  <object id="296" type="spawn" gid="1" x="832" y="928" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="896" y="928">
+  <object id="297" type="spawn" gid="1" x="896" y="928" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="960" y="928">
+  <object id="298" type="spawn" gid="1" x="960" y="928" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="960" y="864">
+  <object id="299" type="spawn" gid="1" x="960" y="864" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="spawn" gid="1" x="896" y="864">
+  <object id="300" type="spawn" gid="1" x="896" y="864" width="32" height="32">
    <properties>
     <property name="team" value="2"/>
    </properties>
   </object>
-  <object type="objective" gid="1" x="128" y="448">
+  <object id="301" type="objective" gid="1" x="128" y="448" width="32" height="32">
    <properties>
     <property name="bomb" value="b"/>
    </properties>
   </object>
-  <object type="objective" gid="1" x="544" y="256">
+  <object id="302" type="objective" gid="1" x="544" y="256" width="32" height="32">
    <properties>
     <property name="bomb" value="a"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Light Layer" width="32" height="32">
+ <objectgroup name="Light Layer">
   <properties>
    <property name="lights" value="true"/>
   </properties>
-  <object gid="65" x="544" y="832">
+  <object id="303" gid="65" x="544" y="832" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="150"/>
    </properties>
   </object>
-  <object gid="65" x="544" y="672">
+  <object id="304" gid="65" x="544" y="672" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="150"/>
    </properties>
   </object>
-  <object gid="65" x="544" y="512">
+  <object id="305" gid="65" x="544" y="512" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="150"/>
    </properties>
   </object>
-  <object gid="65" x="128" y="992">
+  <object id="306" gid="65" x="128" y="992" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="250"/>
    </properties>
   </object>
-  <object gid="65" x="704" y="512">
+  <object id="307" gid="65" x="704" y="512" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="150"/>
    </properties>
   </object>
-  <object gid="65" x="32" y="384">
+  <object id="308" gid="65" x="32" y="384" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="400"/>
    </properties>
   </object>
-  <object gid="65" x="96" y="32">
+  <object id="309" gid="65" x="96" y="32" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="400"/>
    </properties>
   </object>
-  <object gid="65" x="896" y="32">
+  <object id="310" gid="65" x="896" y="32" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="300"/>
    </properties>
   </object>
-  <object gid="65" x="928" y="704">
+  <object id="311" gid="65" x="928" y="704" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="400"/>
    </properties>
   </object>
-  <object gid="65" x="288" y="608">
+  <object id="312" gid="65" x="288" y="608" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="E80C0C"/>
     <property name="distance" value="300"/>
    </properties>
   </object>
-  <object gid="65" x="448" y="256">
+  <object id="313" gid="65" x="448" y="256" width="32" height="32">
+   <properties>
+    <property name="alpha" value="0.5"/>
+    <property name="color" value="ffffff"/>
+    <property name="distance" value="600"/>
+   </properties>
+  </object>
+  <object id="314" gid="65" x="992" y="256" width="32" height="32">
+   <properties>
+    <property name="alpha" value="0.5"/>
+    <property name="color" value="ffffff"/>
+    <property name="distance" value="600"/>
+   </properties>
+  </object>
+  <object id="315" gid="65" x="480" y="1024" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="400"/>
    </properties>
   </object>
-  <object gid="65" x="992" y="256">
+  <object id="316" gid="65" x="272" y="880" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>
     <property name="distance" value="400"/>
    </properties>
   </object>
-  <object gid="65" x="608" y="1024">
+  <object id="317" gid="65" x="864" y="1024" width="32" height="32">
+   <properties>
+    <property name="alpha" value="0.5"/>
+    <property name="color" value="ffffff"/>
+    <property name="distance" value="400"/>
+   </properties>
+  </object>
+  <object id="318" gid="65" x="320" y="224" width="32" height="32">
    <properties>
     <property name="alpha" value="0.5"/>
     <property name="color" value="ffffff"/>

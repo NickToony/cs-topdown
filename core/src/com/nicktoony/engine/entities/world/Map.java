@@ -199,7 +199,9 @@ public class Map {
                 // Fetch the rectangle collision box
                 TextureMapObject rectangle = ((TextureMapObject) object);
 
-                addCollisionWall(world, rectangle.getX(), rectangle.getY());
+                addCollisionWall(world, rectangle.getX(), rectangle.getY() + 32);
+
+                System.out.println(rectangle.getX() + "," + rectangle.getY() + " :: " + rectangle.getOriginY());
             }
         }
     }
@@ -209,10 +211,13 @@ public class Map {
         float physicsY = EngineConfig.toMetres(y);
         float physicsCellSize = EngineConfig.toMetres(EngineConfig.CELL_SIZE);
 
+
+
         // Resize it to the correct size and location
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(physicsX + (physicsCellSize /2), physicsY + (physicsCellSize /2));
+//        bodyDef.position.set(physicsX + (physicsCellSize /2), physicsY + (physicsCellSize) + (physicsCellSize/2));
 
         Body body = world.createBody(bodyDef);
 
