@@ -147,7 +147,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 0.1f;
+        fixtureDef.density = 10f;
         fixtureDef.restitution = 0f;
 
         body.createFixture(fixtureDef);
@@ -431,19 +431,25 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
             stateChange = true;
         }
 
+//        direction = directionTo;
         smoothRotation();
     }
 
     private void smoothRotation() {
-        double angleDifference = (directionTo - direction + 180) % (360) - 180;
+//        double angleDifference = (directionTo - direction + 180) % (360) - 180;
+//
+//        if (Math.abs(angleDifference) < 1) {
+//            direction = directionTo;
+//        } else {
+//            direction += angleDifference * PLAYER_ANGLE_SMOOTHING;
+//        }
+//
+//        direction = direction % 360;
 
-        if (Math.abs(angleDifference) < 1) {
-            direction = directionTo;
-        } else {
-            direction += angleDifference * PLAYER_ANGLE_SMOOTHING;
-        }
-
-        direction = direction % 360;
+        Vector2 angleFrom = new Vector2(0, 1).setAngle(direction);
+        Vector2 angleTo = new Vector2(0, 1).setAngle(directionTo);
+        Vector2 angleNew = angleFrom.lerp(angleTo, 0.1f);
+        direction = angleNew.angle();
     }
 
     @Override
@@ -607,6 +613,10 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     public void setTeam(int team) {
         this.team = team;
+    }
+
+    public boolean isMoving() {
+        return moveDown || moveUp || moveRight || moveLeft;
     }
 }
 

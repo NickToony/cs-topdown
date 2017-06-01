@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.nicktoony.engine.EngineConfig;
 
 /**
  * Created by Nick on 25/03/2016.
@@ -29,7 +30,9 @@ public class PathfindingRaycastCollisionDetector implements RaycastCollisionDete
     @Override
     public boolean collides(Ray<Vector2> ray) {
         hasCollided = false;
-        world.rayCast(callback, ray.start.scl(32).add(16, 16), ray.end.scl(32).add(16, 16));
+        Vector2 start = ray.start.scl(32);
+        Vector2 end = ray.end.scl(32);
+        world.rayCast(callback, EngineConfig.toMetres(start), EngineConfig.toMetres(end) );
         return hasCollided;
     }
 

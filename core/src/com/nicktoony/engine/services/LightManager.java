@@ -13,7 +13,9 @@ import com.nicktoony.engine.EngineConfig;
  */
 public class LightManager {
     public static Light defineTorch(RayHandler rayHandler) {
-        return new ConeLight(rayHandler, 100, Color.WHITE, EngineConfig.toMetres(400), 16, 16, 0, 25);
+        return new ConeLight(rayHandler, 100,
+                new Color(1, 1, 1, 0.7f)
+                , EngineConfig.toMetres(400), 16, 16, 0, 20);
     }
 
     public static Light definePlayerGlow(RayHandler rayHandler) {

@@ -14,8 +14,9 @@ public class ServerConfig {
     public String sv_name = "Dev Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 14;
+    public int sv_bots = 13;
     public String sv_map = "de_dust2";
+//    public String sv_map = "cstd_docks";
 
     // Map settings
 

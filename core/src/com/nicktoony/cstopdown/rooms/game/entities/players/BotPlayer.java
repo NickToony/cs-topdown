@@ -8,6 +8,7 @@ import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.entities.world.PathfindingHeuristic;
 import com.nicktoony.engine.entities.world.PathfindingNode;
@@ -48,6 +49,7 @@ public class BotPlayer extends Player {
     private int lastScan = 0;
     private int pause = 0;
     private Vector2 explorePosition = null;
+    private Vector2 positionSinceLastScan;
 
     public void setupBot(CSServer server, CSServerClientHandler player) {
         this.server = server;
@@ -63,6 +65,8 @@ public class BotPlayer extends Player {
         heuristic = new PathfindingHeuristic();
         pathSmoother = new PathSmoother<PathfindingNode, Vector2>(
                 new PathfindingRaycastCollisionDetector(getRoom().getWorld()));
+
+        positionSinceLastScan = getPosition();
     }
 
     @Override
@@ -77,6 +81,15 @@ public class BotPlayer extends Player {
             pause = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
 
             if (aiState == AIState.combat) { pause /= 2; }
+
+            // If the bot appears to be stuck
+            if (aiState == AIState.moving || aiState == AIState.exploring) {
+                if (EngineConfig.toPixels(positionSinceLastScan.dst(getPosition())) < 5) {
+                    // Try doing something else
+                    aiState = AIState.idle;
+                }
+            }
+            positionSinceLastScan = getPosition();
         }
 
         if (!targets.isEmpty()) {
@@ -170,7 +183,7 @@ public class BotPlayer extends Player {
                     if (canSeePlayer(otherPlayer.getPlayer())) {
                         targets.add(otherPlayer.getPlayerWrapper());
                     }
-                    else {
+                    else if (otherPlayer.getPlayer().isMoving()) {
                         // we heard them...
                         explorePosition = otherPlayer.getPlayer().getPosition();
 //                        System.out.println("EXPLORE TIME¬!" + getPosition().dst(player.getPlayer().getPosition()));
@@ -187,7 +200,7 @@ public class BotPlayer extends Player {
                 node, heuristic, path);
 
         if (success) {
-//                    pathSmoother.smoothPath(path);
+//            pathSmoother.smoothPath(path);
             pathIndex = 0;
             pathGoal = node.getWorldPos();
             return true;
@@ -198,6 +211,7 @@ public class BotPlayer extends Player {
 
     private void movePath() {
         PathfindingNode targetNode = path.get(pathIndex);
+        PathfindingNode currentNode = path.get(Math.max(0, pathIndex-2));
         if (new Vector2(x, y).dst(targetNode.getWorldPos()) <= 20) {
             pathIndex += 1;
             if (pathIndex >= path.getCount()) {
@@ -209,8 +223,8 @@ public class BotPlayer extends Player {
             moveLeft = x - 8 > targetNode.getWorldX();
             moveUp = y + 8 < targetNode.getWorldY();
             moveDown = y - 8 > targetNode.getWorldY();
-            directionTo = (float) Math.toDegrees(Math.atan2(targetNode.getWorldY() - y,
-                    targetNode.getWorldX() - x)) - 90;
+            directionTo = (float) Math.toDegrees(Math.atan2(targetNode.getWorldY() - currentNode.getWorldY(),
+                    targetNode.getWorldX() - currentNode.getWorldX())) - 90;
         }
     }
 }

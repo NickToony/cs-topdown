@@ -46,8 +46,9 @@ public class UserPlayer extends Player{
             shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
         }
 
-        direction = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
-        directionTo = direction;
+//        direction = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
+        directionTo = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
+//        directionTo = direction;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             setNextWeapon(0);

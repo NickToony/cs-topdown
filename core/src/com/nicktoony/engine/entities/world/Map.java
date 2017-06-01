@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
@@ -139,7 +140,10 @@ public class Map {
 
     public void step() {
         if (entitySnap != null) {
-            camera.translate(Math.round(entitySnap.getX() - camera.position.x), Math.round(entitySnap.getY() - camera.position.y));
+            Vector2 offset = new Vector2(100, 0).setAngle(entitySnap.getDirection() + 90);
+            float toX = entitySnap.getX() + offset.x;
+            float toY = entitySnap.getY() + offset.y;
+            camera.translate(Math.round(toX - camera.position.x), Math.round(toY - camera.position.y));
         }
 
         camera.update();
@@ -254,8 +258,8 @@ public class Map {
                 // Fetch the rectangle collision box
                 TextureMapObject rectangle = ((TextureMapObject) object);
 
-                float physicsX = EngineConfig.toMetres(rectangle.getX());
-                float physicsY = EngineConfig.toMetres(rectangle.getY());
+                float physicsX = EngineConfig.toMetres(rectangle.getX() + (Float) rectangle.getProperties().get("width"));
+                float physicsY = EngineConfig.toMetres(rectangle.getY() + (Float) rectangle.getProperties().get("height"));
                 float physicsCellSize = EngineConfig.toMetres(EngineConfig.CELL_SIZE);
                 LightManager.definePointLight(rayHandler, mapProperties,
                          physicsX + (physicsCellSize / 2),

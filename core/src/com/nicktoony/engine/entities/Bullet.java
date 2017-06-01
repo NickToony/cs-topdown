@@ -66,7 +66,7 @@ public class Bullet extends PhysicsEntity {
         Body body = getRoom().getWorld().createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(0.1f, 0.1f);
+        shape.setAsBox(0.5f, 0.5f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -76,7 +76,7 @@ public class Bullet extends PhysicsEntity {
 
         body.createFixture(fixtureDef);
         double radians = Math.toRadians(direction+90);
-        body.setLinearVelocity(new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).limit(3f));
+        body.setLinearVelocity(new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).limit(4f)); //speed
         shape.dispose();
 
         return body;

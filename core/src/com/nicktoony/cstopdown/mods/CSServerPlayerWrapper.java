@@ -148,6 +148,9 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public void joinTeam(int team) {
         this.team = team;
+        if (isAlive()) {
+            getPlayer().setTeam(team);
+        }
 
         server.notifyModPlayerJoinedTeam(this);
     }

@@ -86,6 +86,10 @@ public class WeaponManager {
     }
 
     public Sound loadSound(Weapon weapon, SoundType soundType) {
+        if (loadedSounds.get(weapon) == null) {
+            return null;
+        }
+
         // If already loaded
         if (loadedSounds.get(weapon).containsKey(soundType)) {
             // Just return that
