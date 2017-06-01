@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
+import com.google.gwt.user.client.Window;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.networking.client.ClientSocket;
@@ -15,7 +16,7 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public GwtApplicationConfiguration getConfig () {
-            return new GwtApplicationConfiguration(new GameConfig().game_resolution_x, new GameConfig().game_resolution_y);
+            return new GwtApplicationConfiguration(Window.getClientWidth(), Window.getClientHeight());
         }
 
         @Override

@@ -35,10 +35,11 @@ Server Rates
 **sv_tickrate (integer)**
 This defines the number of times the server should update clients on the position of other clients per second. Higher values gives much greater accuracy of player locations for clients, but costs more processing time and bandwidth.
 *Recommended/Default (for LAN)*: 60
+*Recommended (for Internet)*: 20
 
 **sv_lag_compensate (integer)**
 
 Defines the amount of compensation to allow for latency, in ms. The server will wait this amount of time before processing inputs. It is part of the system that ensures fairness and synchronization across clients. Having it too low will result in laggy gameplay.
 *Recommended*: 100
-(this feature is still experimental)
+(this feature is not currently included.)
 

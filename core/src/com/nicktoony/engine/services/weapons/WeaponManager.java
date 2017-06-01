@@ -75,13 +75,14 @@ public class WeaponManager {
 
     public void preloadSounds() {
         for (Weapon weapon : weapons.values()) {
-            playSound(weapon, SoundType.SHOOT, 0);
-            playSound(weapon, SoundType.EQUIP, 0);
-            playSound(weapon, SoundType.DEQUIP, 0);
-            playSound(weapon, SoundType.EJECT, 0);
-            playSound(weapon, SoundType.INSERT, 0);
-            playSound(weapon, SoundType.COCK, 0);
-            playSound(weapon, SoundType.EMPTY, 0);
+            float volume = 0.01f;
+            playSound(weapon, SoundType.SHOOT, volume);
+            playSound(weapon, SoundType.EQUIP, volume);
+            playSound(weapon, SoundType.DEQUIP, volume);
+            playSound(weapon, SoundType.EJECT, volume);
+            playSound(weapon, SoundType.INSERT, volume);
+            playSound(weapon, SoundType.COCK, volume);
+            playSound(weapon, SoundType.EMPTY, volume);
         }
     }
 

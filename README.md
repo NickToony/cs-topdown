@@ -22,16 +22,18 @@ A quick adventure into the world of LibGDX: topdown 2D shooter based on the popu
 ## Play Now
 You can grab recent builds of the server, desktop and html from my server:
 - [Web](http://cstopdown.nick-hope.co.uk/) (Any modern browser)
-- [Desktop Client](http://cstopdown.nick-hope.co.uk/desktop.jar) (Windows, OSX, Linux)
-- [Server](http://cstopdown.nick-hope.co.uk/server.jar) (Windows, OSX, Linux)
-- [Assets](http://cstopdown.nick-hope.co.uk/assets.zip) (NOTE: Required for desktop and server, unzip into same folder)
+- [Desktop Client](http://cstopdown.nick-hope.co.uk/desktop.zip) (Windows, OSX, Linux)
+- [Server](http://cstopdown.nick-hope.co.uk/server.zip) (Windows, OSX, Linux)
+- [Assets](http://cstopdown.nick-hope.co.uk/assets.zip) (If using standalone JARs)
 
 You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/1).
 
 ## Server Hosting
-The server module may be ran with either no GUI, or a simple text-based GUI. Alternatively, you can host a server using the game client on platforms that support it (all except HTML).
+The server module may be ran with either no GUI (default), or a simple text-based GUI. Alternatively, you can host a server using the game client on platforms that support it (all except HTML).
 
 [Server Config Documentation](SERVERCONFIG.md)
+
+Example CLI run: `java -jar Server.jar`
 
 ## Building
 1. Clone the repo, then enter it

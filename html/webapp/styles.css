@@ -1,10 +1,23 @@
 canvas {
     cursor: default;
     outline: none;
+    width: 100% !important;
+    height: 100vh !important;
+}
+
+table {
+  width: 100% !important;
+  height: 100vh !important;
+}
+
+.gwt-TextArea {
+  display: none;
 }
 
 body {
     background-color: #222222;
+    margin: 0;
+    overflow: hidden;
 }
 
 .superdev {
@@ -25,6 +38,8 @@ body {
     border-radius: 35px;
     text-align: center;
     line-height: 68px;
+
+    display: none;
 }
 
 .superdev:active {
