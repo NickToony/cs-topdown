@@ -64,9 +64,9 @@ public class DesktopLauncher {
             }
 
             @Override
-            public int[][] imageToPixels(FileHandle file) {
+            public int[][] imageToPixels(String file) {
 
-                Pixmap pixmap = new Pixmap(file);
+                Pixmap pixmap = new Pixmap(Gdx.files.internal(file));
                 int pixels[][] = new int[pixmap.getWidth()][pixmap.getHeight()];
                 for (int x = 0; x < pixmap.getWidth(); x ++) {
                     for (int y = 0; y < pixmap.getHeight(); y ++) {

@@ -32,7 +32,7 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         CSServer getLocalServer(Logger logger, ServerConfig config);
         Server.LoopManager getLoopManager();
         boolean canHost();
-        int[][] imageToPixels(FileHandle file);
+        int[][] imageToPixels(String file);
     }
 
     public interface GameConfigLoader {

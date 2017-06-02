@@ -140,7 +140,7 @@ public class TexturelessMap extends Map {
             FileHandle file = Gdx.files.internal("maps/" + mapName + "/" + tilesetName);
 //            Pixmap pixmap = new Pixmap(file);
 
-            images[i] = platformProvider.imageToPixels(file);
+            images[i] = platformProvider.imageToPixels(file.path());
 
         }
         return images;

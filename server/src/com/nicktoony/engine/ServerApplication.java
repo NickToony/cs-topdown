@@ -48,10 +48,10 @@ public class ServerApplication {
         }
 
         @Override
-        public int[][] imageToPixels(FileHandle file) {
+        public int[][] imageToPixels(String file) {
             BufferedImage image = null;
             try {
-                image = ImageIO.read(file.file());
+                image = ImageIO.read(new File(file));
                 int pixels[][] = new int[image.getWidth()][image.getHeight()];
 
                 for (int x = 0; x < image.getWidth(); x ++) {
