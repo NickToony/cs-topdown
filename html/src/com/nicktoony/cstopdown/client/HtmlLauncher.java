@@ -57,7 +57,7 @@ public class HtmlLauncher extends GwtApplication {
 
                 @Override
                 public int[][] imageToPixels(String file) {
-                    Pixmap pixmap = new Pixmap(Gdx.files.internal(file));
+                    Pixmap pixmap = new Pixmap(Gdx.files.local(file));
                     int pixels[][] = new int[pixmap.getWidth()][pixmap.getHeight()];
                     for (int x = 0; x < pixmap.getWidth(); x ++) {
                         for (int y = 0; y < pixmap.getHeight(); y ++) {
