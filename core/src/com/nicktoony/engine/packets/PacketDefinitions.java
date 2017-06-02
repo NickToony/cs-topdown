@@ -30,6 +30,7 @@ public class PacketDefinitions {
         put(8, RejectPacket.class);
         put(12, LoadedPacket.class);
         put(16, PingPacket.class);
+        put(18, MapPacket.class);
 
         // Game
         put(9, CreatePlayerPacket.class);

@@ -1,22 +1,43 @@
 package com.nicktoony.engine.rooms;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.connection.AcceptPacket;
 import com.nicktoony.engine.packets.connection.ConnectPacket;
+import com.nicktoony.engine.packets.connection.MapPacket;
 import com.nicktoony.engine.packets.connection.RejectPacket;
+import com.nicktoony.engine.services.SkinManager;
 
 /**
  * Created by Nick on 03/01/2016.
  */
 public abstract class RoomConnect extends Room {
 
+    private final int UI_SIZE_X = 1920;
+    private final int UI_SIZE_Y = 1080;
+
+    private Stage uiStage;
+    private Table uiTable;
+    private Label uiLabel;
+
     protected ClientSocket socket;
     private boolean connected = false;
     private boolean thrownError = false;
+    private String currentTask = "";
+    protected MapPacket mapWrapper = null;
+    enum STAGE {
+        REQUEST_MAP,
+        RECEIVE_MAP,
+        FINISHED
+    }
+    private STAGE stage = STAGE.REQUEST_MAP;
 
     protected enum ERRORS {
         UNKNOWN_MAP,
@@ -28,6 +49,22 @@ public abstract class RoomConnect extends Room {
 
     public RoomConnect(ClientSocket socket) {
         this.socket = socket;
+        this.currentTask = "Connecting...";
+
+        uiStage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
+
+        // Table layout
+        uiTable = new Table();
+//        table.setFillParent(true);
+        uiTable.pad(40).left().bottom();
+
+        uiLabel = new Label("", SkinManager.getUiSkin());
+        uiLabel.setColor(Color.WHITE);
+        uiStage.addActor(uiLabel);
+        uiLabel.setPosition(UI_SIZE_X/2, UI_SIZE_Y/2);
+
+//        uiStage.addActor(uiTable);
+
     }
 
     @Override
@@ -39,6 +76,7 @@ public abstract class RoomConnect extends Room {
             public void onOpen(ClientSocket socket) {
                 // Send a connect request
                 socket.sendMessage(new ConnectPacket());
+                currentTask = "Sending client info...";
             }
 
             @Override
@@ -57,6 +95,9 @@ public abstract class RoomConnect extends Room {
                     // Rejected..
                     // onClose will probably be called anyway
                     triggerPreviousRoom(ERRORS.REJECTED);
+                } else if (packet instanceof MapPacket) {
+                    mapWrapper = ((MapPacket) packet);
+                    currentTask = "Processing map...";
                 }
             }
 
@@ -75,16 +116,42 @@ public abstract class RoomConnect extends Room {
         super.step(delta);
 
         socket.pushNotifications();
+        uiLabel.setText(currentTask);
 
         if (connected) {
-            FileHandle file = Gdx.files.internal("maps/" + socket.getServerConfig().sv_map + "/map.tmx");
 
-            if (file.exists()) {
-                nextRoom();
-            } else {
-                triggerPreviousRoom(ERRORS.UNKNOWN_MAP);
+            switch (stage) {
+                case REQUEST_MAP:
+                    socket.sendMessage(new MapPacket());
+                    stage = STAGE.RECEIVE_MAP;
+                    currentTask = "Downloading map...";
+                    break;
+
+                case RECEIVE_MAP:
+                    if (mapWrapper != null) {
+                        stage = STAGE.FINISHED;
+                    }
+                    break;
+
+                case FINISHED:
+                    nextRoom();
+                    break;
             }
+
+//            FileHandle file = Gdx.files.internal("maps/" + socket.getServerConfig().sv_map + "/map.tmx");
+//
+//            if (file.exists()) {
+//                nextRoom();
+//            } else {
+//                triggerPreviousRoom(ERRORS.UNKNOWN_MAP);
+//            }
         }
+    }
+
+    @Override
+    public void render(SpriteBatch spriteBatch) {
+        super.render(spriteBatch);
+        uiStage.draw();
     }
 
     public abstract void nextRoom();

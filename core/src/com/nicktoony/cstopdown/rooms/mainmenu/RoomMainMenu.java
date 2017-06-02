@@ -37,7 +37,6 @@ public class RoomMainMenu extends Room {
     private final int UI_SIZE_Y = 1080;
 
     private Stage stage;
-    private Viewport viewport;
     private Table table;
 
     @Override

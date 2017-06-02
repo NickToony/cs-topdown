@@ -2,6 +2,7 @@ package com.nicktoony.engine.entities.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.XmlReader;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
@@ -20,10 +21,13 @@ import java.util.List;
 public class TexturelessMap extends Map {
     protected XmlReader xml = new XmlReader();
     private XmlReader.Element base;
+    protected List<String> tilesets =  new ArrayList<String>();
 
     public TexturelessMap(ServerConfig gameConfig, String mapName) {
         super(gameConfig);
+
         FileHandle file = Gdx.files.internal("maps/" + mapName + "/map.tmx");
+        this.mapName = mapName;
 
         try {
             base = xml.parse(file);
@@ -37,6 +41,9 @@ public class TexturelessMap extends Map {
 
         // Find objectives
         findObjectives();
+
+        // Find tilesets
+        findTilesetNames();
 
         // Setup pathfinding
         pathfindingGraph = new PathfindingGraph(Integer.parseInt(base.getAttribute("width")),
@@ -111,5 +118,37 @@ public class TexturelessMap extends Map {
                 }
             }
         }
+    }
+
+    @Override
+    protected void findTilesetNames() {
+        for (XmlReader.Element layer : base.getChildrenByName("tileset")) {
+            XmlReader.Element properties = layer.getChildByName("image");
+            String name = properties.get("source");
+            tilesets.add(name);
+        }
+    }
+
+    @Override
+    public int[][][] getTilesetImages() {
+        int[][][] images = new int[tilesets.size()][][];
+        for (int i = 0; i < tilesets.size(); i ++) {
+            String tilesetName = tilesets.get(i);
+            FileHandle file = Gdx.files.internal("maps/" + mapName + "/" + tilesetName);
+            Pixmap pixmap = new Pixmap(file);
+            images[i] = new int[pixmap.getWidth()][pixmap.getHeight()];
+            for (int x = 0; x < pixmap.getWidth(); x ++) {
+                for (int y = 0; y < pixmap.getHeight(); y ++) {
+                    images[i][x][y] = pixmap.getPixel(x, y);
+                }
+            }
+            pixmap.dispose();
+        }
+        return images;
+    }
+
+    @Override
+    public List<String> getTilesetNames() {
+        return tilesets;
     }
 }

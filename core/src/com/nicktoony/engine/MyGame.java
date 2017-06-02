@@ -3,6 +3,7 @@ package com.nicktoony.engine;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,6 +44,8 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
     private SpriteBatch spriteBatch;
     private Server linearLoop;
     private FPSLogger fpsLogger;
+
+    private AssetManager assetManager;
 
     public MyGame(PlatformProvider platformProvider) {
         this.platformProvider = platformProvider;
@@ -103,6 +106,8 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         super.dispose();
 
         spriteBatch.dispose();
+        assetManager.dispose();
+
     }
 
     @Override
@@ -123,6 +128,8 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             configDesktop(gameConfig);
         }
+
+        clearAssetManager();
     }
 
     /**
@@ -169,4 +176,17 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
     public void endServerLoop() {
         linearLoop = null;
     }
+
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    private void clearAssetManager() {
+        if (this.assetManager != null) {
+            this.assetManager.dispose();
+        }
+        this.assetManager = new AssetManager();
+    }
+
 }

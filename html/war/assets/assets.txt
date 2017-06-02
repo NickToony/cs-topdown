@@ -32,7 +32,6 @@ d:maps:0:application/unknown
 d:maps/cstd_docks:0:application/unknown
 i:maps/cstd_docks/cs2dnorm.bmp:783414:image/bmp
 b:maps/cstd_docks/map.tmx:57816:application/unknown
-i:maps/cstd_docks/tilesheet.png:167126:image/png
 d:maps/de_dust2:0:application/unknown
 i:maps/de_dust2/dust.png:221003:image/png
 b:maps/de_dust2/map.tmx:31731:application/unknown

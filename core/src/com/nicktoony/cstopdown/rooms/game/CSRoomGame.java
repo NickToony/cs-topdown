@@ -5,6 +5,7 @@ import com.nicktoony.engine.entities.HUD;
 import com.nicktoony.engine.entities.world.Map;
 import com.nicktoony.engine.entities.world.TexturelessMap;
 import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.packets.connection.MapPacket;
 import com.nicktoony.engine.rooms.RoomGame;
 
 /**
@@ -12,9 +13,15 @@ import com.nicktoony.engine.rooms.RoomGame;
  */
 public class CSRoomGame extends RoomGame {
     private CSHUD hud;
+    private MapPacket mapWrapper = null;
 
     public CSRoomGame(ClientSocket socket) {
         super(socket);
+    }
+
+    public CSRoomGame(ClientSocket socket, MapPacket mapWrapper) {
+        super(socket);
+        this.mapWrapper = mapWrapper;
     }
 
     @Override
@@ -51,7 +58,11 @@ public class CSRoomGame extends RoomGame {
         if (!render) {
             map = new TexturelessMap(socket.getServerConfig(), socket.getServerConfig().sv_map);
         } else {
-            map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map);
+            if (mapWrapper == null) {
+                map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map);
+            } else {
+                map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map, mapWrapper);
+            }
         }
         return map;
     }

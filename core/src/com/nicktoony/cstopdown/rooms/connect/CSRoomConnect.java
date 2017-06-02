@@ -16,7 +16,7 @@ public class CSRoomConnect extends RoomConnect {
 
     @Override
     public void nextRoom() {
-        getGame().createRoom(new CSRoomGame(socket));
+        getGame().createRoom(new CSRoomGame(socket, mapWrapper));
     }
 
     @Override

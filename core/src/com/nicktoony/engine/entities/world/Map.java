@@ -18,6 +18,8 @@ import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.packets.connection.MapPacket;
+import com.nicktoony.engine.services.AdvancedTmxMapLoader;
 import com.nicktoony.engine.services.LightManager;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.List;
  * Created by Nick on 10/09/2014.
  */
 public class Map {
-    private String mapName;
+    protected String mapName;
     private TiledMap map;
     private MapLayer collisionLayer;
     private MapLayer objectiveLayer;
@@ -43,10 +45,21 @@ public class Map {
     public int[] spawnIndex = { 0, 0, 0 };
     protected ServerConfig gameConfig;
 
+
     private Player entitySnap;
 
     protected Map(ServerConfig gameConfig) {
         this.gameConfig = gameConfig;
+    }
+
+    public Map(ServerConfig gameConfig, String mapName, MapPacket mapWrapper) {
+        this(gameConfig);
+
+        // Load the map
+        map = new AdvancedTmxMapLoader(mapWrapper).load("/"); // the location does not matter at all
+        this.mapName = mapName;
+
+        performSetup();
     }
 
     public Map(ServerConfig gameConfig, String mapName)    {
@@ -54,7 +67,12 @@ public class Map {
 
         // Load the map
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
+        this.mapName = mapName;
 
+        performSetup();
+    }
+
+    private void performSetup() {
         // Calculate map size
         MapProperties mapProperties = map.getProperties();
         int tX = mapProperties.get("width", Integer.class);
@@ -286,5 +304,22 @@ public class Map {
 
     public List<Spawn> getSpawns(int team) {
         return spawns.get(team);
+    }
+
+    @Override
+    public String toString() {
+        return Gdx.files.internal("maps/" + mapName + "/map.tmx").readString();
+    }
+
+    protected void findTilesetNames() {
+        // unnecessary on Map.java
+    }
+
+    public int[][][] getTilesetImages() {
+        return null; // unnecessary on Map.java
+    }
+
+    public List<String> getTilesetNames() {
+        return null; // unnecessary on Map.java
     }
 }
