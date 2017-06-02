@@ -64,6 +64,7 @@ public class ServerApplication {
                 return pixels;
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println(file);
             }
 
             return null;
