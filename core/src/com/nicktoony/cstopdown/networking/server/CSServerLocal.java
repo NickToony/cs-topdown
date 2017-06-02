@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.networking.server;
 
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.services.Logger;
 
@@ -8,8 +9,8 @@ import com.nicktoony.engine.services.Logger;
  */
 public class CSServerLocal extends CSServer {
 
-    public CSServerLocal(Logger logger, ServerConfig config, LoopManager loopManager) {
-        super(logger, config, loopManager);
+    public CSServerLocal(Logger logger, ServerConfig config, LoopManager loopManager, MyGame.PlatformProvider platformProvider) {
+        super(logger, config, loopManager, platformProvider);
         publicServerList = false;
     }
 

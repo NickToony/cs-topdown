@@ -226,7 +226,7 @@ public class RoomMainMenu extends Room {
                                     public void log(Exception exception) {
                                         System.out.println(exception.getMessage());
                                     }
-                                }, new ServerConfig(), loopManager);
+                                }, new ServerConfig(), loopManager, getGame().getPlatformProvider());
 
 
         ClientSocket socket = new CSLocalClientSocket(server);

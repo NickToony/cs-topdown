@@ -3,6 +3,8 @@ package com.nicktoony.cstopdown.desktop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -17,6 +19,8 @@ import com.nicktoony.cstopdown.ServerSocket;
 import com.nicktoony.engine.ServerUI;
 import com.nicktoony.engine.services.Logger;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class DesktopLauncher {
@@ -46,7 +50,7 @@ public class DesktopLauncher {
 
                     }
                 }); }
-                return new ServerSocket(logger, config, getLoopManager());
+                return new ServerSocket(logger, config, getLoopManager(), this);
             }
 
             @Override
@@ -57,6 +61,21 @@ public class DesktopLauncher {
             @Override
             public boolean canHost() {
                 return true;
+            }
+
+            @Override
+            public int[][] imageToPixels(FileHandle file) {
+
+                Pixmap pixmap = new Pixmap(file);
+                int pixels[][] = new int[pixmap.getWidth()][pixmap.getHeight()];
+                for (int x = 0; x < pixmap.getWidth(); x ++) {
+                    for (int y = 0; y < pixmap.getHeight(); y ++) {
+                        pixels[x][y] = pixmap.getPixel(x, y);
+                    }
+                }
+                pixmap.dispose();
+                return pixels;
+
             }
 
 

@@ -8,8 +8,11 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.config.ServerConfig;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,19 +133,15 @@ public class TexturelessMap extends Map {
     }
 
     @Override
-    public int[][][] getTilesetImages() {
+    public int[][][] getTilesetImages(MyGame.PlatformProvider platformProvider) {
         int[][][] images = new int[tilesets.size()][][];
         for (int i = 0; i < tilesets.size(); i ++) {
             String tilesetName = tilesets.get(i);
             FileHandle file = Gdx.files.internal("maps/" + mapName + "/" + tilesetName);
-            Pixmap pixmap = new Pixmap(file);
-            images[i] = new int[pixmap.getWidth()][pixmap.getHeight()];
-            for (int x = 0; x < pixmap.getWidth(); x ++) {
-                for (int y = 0; y < pixmap.getHeight(); y ++) {
-                    images[i][x][y] = pixmap.getPixel(x, y);
-                }
-            }
-            pixmap.dispose();
+//            Pixmap pixmap = new Pixmap(file);
+
+            images[i] = platformProvider.imageToPixels(file);
+
         }
         return images;
     }

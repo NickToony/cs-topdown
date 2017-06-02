@@ -48,8 +48,10 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
      * @param logger
      * @param config
      */
-    public CSServer(Logger logger, ServerConfig config, Server.LoopManager loopManager) {
+    public CSServer(Logger logger, ServerConfig config, Server.LoopManager loopManager, MyGame.PlatformProvider platformProvider) {
         super(logger, config, loopManager);
+
+        this.platformProvider = platformProvider;
 
         logger.log("Server started up");
 //        // Game room that loads the map, validates collisions/movement

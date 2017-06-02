@@ -17,6 +17,7 @@ import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.packets.connection.MapPacket;
 import com.nicktoony.engine.services.AdvancedTmxMapLoader;
@@ -315,7 +316,7 @@ public class Map {
         // unnecessary on Map.java
     }
 
-    public int[][][] getTilesetImages() {
+    public int[][][] getTilesetImages(MyGame.PlatformProvider platformProvider) {
         return null; // unnecessary on Map.java
     }
 

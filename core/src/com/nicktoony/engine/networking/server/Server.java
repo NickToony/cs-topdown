@@ -6,6 +6,7 @@ package com.nicktoony.engine.networking.server;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.config.ServerlistConfig;
 import com.nicktoony.engine.packets.Packet;
@@ -42,7 +43,8 @@ public abstract class Server<T extends ServerClientHandler> {
     protected Logger logger;
     private Host host;
     private Json json;
-    private LoopManager loopManager;
+    protected LoopManager loopManager;
+    protected MyGame.PlatformProvider platformProvider;
     protected boolean publicServerList = true;
     private List<T> clients = new ArrayList<T>();
 
@@ -222,6 +224,15 @@ public abstract class Server<T extends ServerClientHandler> {
         return clients;
     }
 
+    public MyGame.PlatformProvider getPlatformProvider() {
+        if (platformProvider != null) {
+            return platformProvider;
+        }
+        return null;
+    }
 
+    public void setPlatformProvider(MyGame.PlatformProvider platformProvider) {
+        this.platformProvider = platformProvider;
+    }
 }
 

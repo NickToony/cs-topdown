@@ -9,11 +9,21 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.MyGame;
+import com.nicktoony.engine.config.GameConfig;
+import com.nicktoony.engine.config.ServerConfig;
+import com.nicktoony.engine.networking.client.ClientSocket;
+import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.MapPacket;
+import com.nicktoony.engine.services.Logger;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by nick on 19/07/15.
@@ -57,7 +67,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             // They want the map file
             MapPacket mapWrapper = new MapPacket();
             mapWrapper.map = server.getRoom().getMap().toString();
-            mapWrapper.pixels = server.getRoom().getMap().getTilesetImages();
+            mapWrapper.pixels = server.getRoom().getMap().getTilesetImages(server.getPlatformProvider());
             mapWrapper.tilesets = server.getRoom().getMap().getTilesetNames().toArray(new String[server.getRoom().getMap().getTilesetNames().size()]);
 //            MapPacket mapPacket = new MapPacket();
 //            mapPacket.mapWrapper = mapWrapper;

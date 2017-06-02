@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,6 +32,7 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         CSServer getLocalServer(Logger logger, ServerConfig config);
         Server.LoopManager getLoopManager();
         boolean canHost();
+        int[][] imageToPixels(FileHandle file);
     }
 
     public interface GameConfigLoader {

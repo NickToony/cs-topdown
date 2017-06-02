@@ -1,6 +1,7 @@
 package com.nicktoony.cstopdown;
 
 import com.nicktoony.cstopdown.networking.server.CSServer;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.services.Logger;
 import org.java_websocket.WebSocket;
@@ -19,8 +20,8 @@ public class ServerSocket extends CSServer {
     private WebSocketServer serverSocket;
     private Map<WebSocket, ServerWebClientHandler> clientSockets = new HashMap<WebSocket, ServerWebClientHandler>();
 
-    public ServerSocket(Logger logger, ServerConfig config, LoopManager loopManager) {
-        super(logger, config, loopManager);
+    public ServerSocket(Logger logger, ServerConfig config, LoopManager loopManager, MyGame.PlatformProvider platformProvider) {
+        super(logger, config, loopManager, platformProvider);
     }
 
     @Override
