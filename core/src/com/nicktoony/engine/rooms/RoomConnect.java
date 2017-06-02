@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nicktoony.engine.components.Room;
+import com.nicktoony.engine.entities.world.Map;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.connection.AcceptPacket;
@@ -32,9 +33,12 @@ public abstract class RoomConnect extends Room {
     private boolean thrownError = false;
     private String currentTask = "";
     protected MapPacket mapWrapper = null;
+    protected Map map = null;
+    private boolean letRedraw = false;
     enum STAGE {
         REQUEST_MAP,
         RECEIVE_MAP,
+        LOAD_MAP,
         FINISHED
     }
     private STAGE stage = STAGE.REQUEST_MAP;
@@ -97,7 +101,6 @@ public abstract class RoomConnect extends Room {
                     triggerPreviousRoom(ERRORS.REJECTED);
                 } else if (packet instanceof MapPacket) {
                     mapWrapper = ((MapPacket) packet);
-                    currentTask = "Processing map...";
                 }
             }
 
@@ -118,7 +121,7 @@ public abstract class RoomConnect extends Room {
         socket.pushNotifications();
         uiLabel.setText(currentTask);
 
-        if (connected) {
+        if (connected && !letRedraw) {
 
             switch (stage) {
                 case REQUEST_MAP:
@@ -129,9 +132,15 @@ public abstract class RoomConnect extends Room {
 
                 case RECEIVE_MAP:
                     if (mapWrapper != null) {
-                        stage = STAGE.FINISHED;
+                        stage = STAGE.LOAD_MAP;
+                        currentTask = "Loading map...";
+                        letRedraw = true;
                     }
                     break;
+
+                case LOAD_MAP:
+                    map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map, mapWrapper);
+                    stage = STAGE.FINISHED;
 
                 case FINISHED:
                     nextRoom();
@@ -145,6 +154,8 @@ public abstract class RoomConnect extends Room {
 //            } else {
 //                triggerPreviousRoom(ERRORS.UNKNOWN_MAP);
 //            }
+        } else {
+            letRedraw = false;
         }
     }
 

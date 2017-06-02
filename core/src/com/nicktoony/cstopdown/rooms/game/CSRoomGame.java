@@ -13,15 +13,14 @@ import com.nicktoony.engine.rooms.RoomGame;
  */
 public class CSRoomGame extends RoomGame {
     private CSHUD hud;
-    private MapPacket mapWrapper = null;
 
     public CSRoomGame(ClientSocket socket) {
         super(socket);
     }
 
-    public CSRoomGame(ClientSocket socket, MapPacket mapWrapper) {
+    public CSRoomGame(ClientSocket socket, Map map) {
         super(socket);
-        this.mapWrapper = mapWrapper;
+        this.map = map;
     }
 
     @Override
@@ -58,10 +57,10 @@ public class CSRoomGame extends RoomGame {
         if (!render) {
             map = new TexturelessMap(socket.getServerConfig(), socket.getServerConfig().sv_map);
         } else {
-            if (mapWrapper == null) {
+            if (this.map == null) {
                 map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map);
             } else {
-                map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map, mapWrapper);
+                map = this.map;
             }
         }
         return map;
