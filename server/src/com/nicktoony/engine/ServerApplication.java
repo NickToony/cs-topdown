@@ -51,6 +51,9 @@ public class ServerApplication {
         public int[][] imageToPixels(String file) {
             BufferedImage image = null;
             try {
+                if (!file.contains("assets")) {
+                    file = "assets/" + file;
+                }
                 image = ImageIO.read(Gdx.files.local(file).file());
                 int pixels[][] = new int[image.getWidth()][image.getHeight()];
 
