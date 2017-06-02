@@ -2,6 +2,6 @@
   "name": "A brand new server",
   "max_players": 32,
   "port": 3453,
-  "map": "de_dust2",
+  "map": "cstd_docks",
   "ip": "127.0.0.1"
 }

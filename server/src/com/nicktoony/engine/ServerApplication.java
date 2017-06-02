@@ -51,10 +51,12 @@ public class ServerApplication {
         public int[][] imageToPixels(String file) {
             BufferedImage image = null;
             try {
-                if (!file.contains("assets")) {
+                File f =  Gdx.files.local(file).file();
+                if (!f.exists()) {
                     file = "assets/" + file;
+                    f =  Gdx.files.local(file).file();
                 }
-                image = ImageIO.read(Gdx.files.local(file).file());
+                image = ImageIO.read(f);
                 int pixels[][] = new int[image.getWidth()][image.getHeight()];
 
                 for (int x = 0; x < image.getWidth(); x ++) {
