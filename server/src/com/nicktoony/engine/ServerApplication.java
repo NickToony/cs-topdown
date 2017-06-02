@@ -51,7 +51,7 @@ public class ServerApplication {
         public int[][] imageToPixels(String file) {
             BufferedImage image = null;
             try {
-                image = ImageIO.read(new File(file));
+                image = ImageIO.read(Gdx.files.local(file).file());
                 int pixels[][] = new int[image.getWidth()][image.getHeight()];
 
                 for (int x = 0; x < image.getWidth(); x ++) {
