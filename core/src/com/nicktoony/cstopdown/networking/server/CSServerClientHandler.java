@@ -166,6 +166,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             // Attach the SERVER position
             inputPacket.x = getPlayer().getX();
             inputPacket.y = getPlayer().getY();
+            inputPacket.timestamp = getTimestamp();
             server.sendToOthers(packet, this);
         } else if (packet instanceof PlayerToggleLight) {
             PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
