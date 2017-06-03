@@ -56,6 +56,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     protected boolean reloadKey = false;
     protected boolean shootKey = false;
     private boolean lastShootKey = shootKey;
+    protected boolean zoomKey = false;
 
     private int state = STATE_IDLE;
     private int stateTimer = 0;
@@ -77,6 +78,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private Light glow;
     private Light torch;
     private Light gunFire;
+    protected float mouseDistance = 100;
 
     private CharacterSkin charSkin;
     private boolean charSkinChanged = false;
@@ -293,6 +295,11 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         // Create a bullet
         if (makeBullet) {
+            float range = weapons[weaponCurrent].weapon.getRange();
+            if (range == -1) {
+                range = EngineConfig.toPixels(100);
+            }
+
             for (int i = 0; i < weapons[weaponCurrent].weapon.getBullets(); i ++) {
                 // Calculate visual spread
                 float weaponSpread = weapons[weaponCurrent].weapon.getSpread();
@@ -301,7 +308,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
                     spread = random.nextInt((int) weaponSpread * 2) - weaponSpread;
                 }
                 // Figure out end of gun
-                getRoom().addEntity(new Bullet(vector.x, vector.y, direction + spread, this));
+                getRoom().addEntity(new Bullet(vector.x, vector.y, direction + spread, this, range));
             }
 
             // Don't make another
@@ -472,7 +479,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     }
 
     protected float calculateDirection(int aimX, int aimY){
-        return (float) ((Math.atan2((aimX - getRoom().getMap().getCamera().viewportWidth/2), (aimY - getRoom().getMap().getCamera().viewportHeight/2)) * 180.0f / Math.PI) + 180f);
+        return (float) ((Math.atan2((aimX - getRoom().getMap().getCamera().viewportWidth/2),
+                (aimY - getRoom().getMap().getCamera().viewportHeight/2)) * 180.0f / Math.PI) + 180f);
+    }
+
+    protected float calculateDistance(int aimX, int aimY){
+        return new Vector2(getRoom().getMap().getCamera().viewportWidth/2, getRoom().getMap().getCamera().viewportHeight/2).dst(aimX, aimY);
     }
 
     public void setTorch(Light torch) {
@@ -617,6 +629,14 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     public boolean isMoving() {
         return moveDown || moveUp || moveRight || moveLeft;
+    }
+
+    public float getMouseDistance() {
+        return mouseDistance;
+    }
+
+    public boolean getZoomKey() {
+        return zoomKey;
     }
 }
 

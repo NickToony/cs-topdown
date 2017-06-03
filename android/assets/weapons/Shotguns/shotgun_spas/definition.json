@@ -16,6 +16,10 @@
   "cockDuration": 1,
   "equipDuration": 0.6,
   "reloadType": "shotgun",
+  "range": -1,
+  "ai": {
+    "engage": 300
+  },
   "damage": {
     "low": 5,
     "medium": 18,

@@ -25,7 +25,6 @@ public abstract class RoomConnect extends Room {
     private final int UI_SIZE_Y = 1080;
 
     private Stage uiStage;
-    private Table uiTable;
     private Label uiLabel;
 
     protected ClientSocket socket;
@@ -56,11 +55,6 @@ public abstract class RoomConnect extends Room {
         this.currentTask = "Connecting...";
 
         uiStage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
-
-        // Table layout
-        uiTable = new Table();
-//        table.setFillParent(true);
-        uiTable.pad(40).left().bottom();
 
         uiLabel = new Label("", SkinManager.getUiSkin());
         uiLabel.setColor(Color.WHITE);
@@ -163,6 +157,13 @@ public abstract class RoomConnect extends Room {
     public void render(SpriteBatch spriteBatch) {
         super.render(spriteBatch);
         uiStage.draw();
+    }
+
+    @Override
+    public void dispose(boolean render) {
+        super.dispose(render);
+
+        this.uiStage.dispose();
     }
 
     public abstract void nextRoom();

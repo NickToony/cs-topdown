@@ -9,6 +9,7 @@ import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.services.weapons.WeaponManager;
@@ -184,7 +185,13 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
             // Figure out where
             double radians = Math.toRadians(player.getActualDrection()+90+spread);
-            Vector2 vecTo = new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).scl(100).add(player.getBody().getPosition());
+            float range = weapon.weapon.getRange();
+            if (range == -1) {
+                range = 100;
+            } else {
+                range = EngineConfig.toMetres(range);
+            }
+            Vector2 vecTo = new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).scl(range).add(player.getBody().getPosition());
             Vector2 vecFrom = player.getBody().getPosition();
 
             // Perform a raycast

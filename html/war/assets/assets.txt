@@ -31,7 +31,7 @@ t:config.json:91:application/unknown
 d:maps:0:application/unknown
 d:maps/cstd_docks:0:application/unknown
 i:maps/cstd_docks/cs2dnorm.bmp:783414:image/bmp
-b:maps/cstd_docks/map.tmx:57816:application/unknown
+b:maps/cstd_docks/map.tmx:57547:application/unknown
 d:maps/de_dust2:0:application/unknown
 i:maps/de_dust2/dust.png:221003:image/png
 b:maps/de_dust2/map.tmx:31731:application/unknown
@@ -39,7 +39,7 @@ d:maps/harry:0:application/unknown
 i:maps/harry/dust.png:221003:image/png
 b:maps/harry/map.tmx:609:application/unknown
 d:server:0:application/unknown
-t:server/config.json:278:application/unknown
+t:server/config.json:305:application/unknown
 i:shadow.png:1046:image/png
 d:skins:0:application/unknown
 d:skins/default:0:application/unknown

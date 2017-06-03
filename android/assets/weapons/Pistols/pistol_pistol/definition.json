@@ -16,6 +16,10 @@
   "cockDuration": 0.5,
   "equipDuration": 0.3,
   "reloadType": "full_cock",
+  "range": -1,
+  "ai": {
+    
+  },
   "damage": {
     "low": 10,
     "medium": 36,

@@ -44,10 +44,12 @@ public class UserPlayer extends Player{
 
         if (!getRoom().getHud().getMouse()) {
             shootKey = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
+            zoomKey = Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
         }
 
 //        direction = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
         directionTo = calculateDirection((int) getRoom().getMouseX(), (int) getRoom().getMouseY());
+        mouseDistance = calculateDistance((int) getRoom().getMouseX(), (int) getRoom().getMouseY()) / (getRoom().getMap().getCamera().viewportHeight/2);
 //        directionTo = direction;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {

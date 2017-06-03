@@ -11,11 +11,15 @@
   "cost": 1000,
   "reward": 250,
   "silencer": false,
-  "zoom": 1,
+  "zoom": 3,
   "reloadDuration": 3,
   "cockDuration": 1.5,
   "equipDuration": 1,
   "reloadType": "full_cock",
+  "range": -1,
+  "ai": {
+    "style": "sniper"
+  },
   "damage": {
     "low": 80,
     "medium": 100,

@@ -11,11 +11,15 @@
   "cost": 1000,
   "reward": 250,
   "silencer": false,
-  "zoom": 1,
+  "zoom": 1.6,
   "reloadDuration": 1.6,
   "cockDuration": 0.6,
   "equipDuration": 0.3,
   "reloadType": "full_cock",
+  "range": -1,
+  "ai": {
+
+  },
   "damage": {
     "low": 10,
     "medium": 18,

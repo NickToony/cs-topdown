@@ -1,5 +1,7 @@
 package com.nicktoony.engine.services.weapons;
 
+import com.nicktoony.engine.services.WeaponAI;
+
 /**
  * Created by Nick on 25/09/2014.
  */
@@ -30,6 +32,9 @@ public class Weapon {
     private float reloadDuration = 2;
     private float equipDuration = 0.5f;
     private String reloadType = "";
+    private int range = -1;
+
+    private WeaponAI ai = new WeaponAI();
 
     private WeaponDamage damage = new WeaponDamage();
     private WeaponAnimation animations = new WeaponAnimation();
@@ -158,4 +163,13 @@ public class Weapon {
     public float getEquipDuration() {
         return equipDuration;
     }
+
+    public int getRange() {
+        return range;
+    }
+
+    public WeaponAI getAi() {
+        return ai;
+    }
 }
+

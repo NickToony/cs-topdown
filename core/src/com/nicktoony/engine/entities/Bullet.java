@@ -18,13 +18,17 @@ public class Bullet extends PhysicsEntity {
     private Texture texture;
     private Sprite sprite;
     private Player owner;
+    private Vector2 initialPosition;
+    private float range;
 
 
-    public Bullet(float x, float y, float direction, Player owner) {
+    public Bullet(float x, float y, float direction, Player owner, float range) {
         setX(x);
         setY(y);
         setDirection(direction);
         this.owner = owner;
+        this.initialPosition = getPosition();
+        this.range = range;
     }
 
     @Override
@@ -40,6 +44,10 @@ public class Bullet extends PhysicsEntity {
     @Override
     public void step(float delta) {
         super.step(delta);
+
+        if (initialPosition.dst(getPosition()) >= range) {
+            this.getRoom().deleteRenderable(this);
+        }
     }
 
     @Override
