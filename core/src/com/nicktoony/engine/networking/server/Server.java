@@ -11,6 +11,7 @@ import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.config.ServerlistConfig;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.PacketDefinitions;
+import com.nicktoony.engine.packets.TimestampedPacket;
 import com.nicktoony.engine.services.Logger;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.host.Host;
@@ -176,6 +177,9 @@ public abstract class Server<T extends ServerClientHandler> {
 
     public void sendToAll(Packet packet) {
         for (ServerClientHandler client : clients) {
+            if (packet instanceof TimestampedPacket) {
+                ((TimestampedPacket) packet).timestamp = client.getTimestamp();
+            }
             if (client.getState() == ServerClientHandler.STATE.INGAME) {
                 client.sendPacket(packet);
             }
@@ -184,6 +188,9 @@ public abstract class Server<T extends ServerClientHandler> {
 
     public void sendToOthers(Packet packet, ServerClientHandler self) {
         for (ServerClientHandler client : clients) {
+            if (packet instanceof TimestampedPacket) {
+                ((TimestampedPacket) packet).timestamp = client.getTimestamp();
+            }
             if (client != self && client.getState() == ServerClientHandler.STATE.INGAME) {
                 client.sendPacket(packet);
             }
