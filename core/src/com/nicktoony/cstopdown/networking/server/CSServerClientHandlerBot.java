@@ -29,6 +29,7 @@ public class CSServerClientHandlerBot extends CSServerClientHandler {
         if (getPlayerWrapper().isAlive() && getPlayer().isPlayerChanged()) {
             PlayerInputPacket updatePacket = getPlayer().constructUpdatePacket();
             updatePacket.id = getID();
+            updatePacket.timestamp = getTimestamp();
             server.sendToOthers(updatePacket, this);
         }
     }
