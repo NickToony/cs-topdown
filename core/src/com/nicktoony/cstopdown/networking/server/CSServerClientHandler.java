@@ -98,7 +98,9 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     packet.shooting = player.getPlayer().getShooting();
                     packet.reloading = player.getPlayer().getReloading();
                     packet.zoom = player.getPlayer().getZoomKey();
-                    server.sendToOthers(packet, this);
+                    packet.health = player.getPlayer().getHealth();
+                    server.sendToAll(packet);
+//                    server.sendToOthers(packet, this);
 //                    for (CSServerClientHandler client : server.getClients()) {
 //                        if (client != this && client.getState() == ServerClientHandler.STATE.INGAME) {
 //                            if (!client.getPlayerWrapper().isAlive() || !this.getPlayerWrapper().isAlive()) {
@@ -158,6 +160,9 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             } else {
                 inconsistent = true;
             }
+
+            ((PlayerInputPacket) packet).id = getID();
+            server.sendToOthers(packet, this);
         } else if (packet instanceof PlayerToggleLight) {
             PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
             getPlayer().setLightOn(lightPacket.light);

@@ -22,7 +22,7 @@
   },
   "damage": {
     "low": 10,
-    "medium": 18,
+    "medium": 21,
     "high": 75
   },
   "animations": {

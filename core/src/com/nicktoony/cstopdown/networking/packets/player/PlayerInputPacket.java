@@ -18,6 +18,7 @@ public class PlayerInputPacket extends TimestampedPacket {
     public boolean shoot = false;
     public boolean reload = false;
     public boolean zoom = false;
+    public int id;
 
     public PlayerInputPacket() {
     }

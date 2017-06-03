@@ -62,7 +62,7 @@ public abstract class LocalClientSocket<T extends Server> extends ClientSocket {
 //
 //        if (timer + (1000 * 10) < System.currentTimeMillis()) {
 //            timer = System.currentTimeMillis();
-//            System.out.println("Past 10 seconds of packets to SERVER:");
+//            System.out.println("Past 10 seconds of packets from SERVER:");
 //            for (Map.Entry<String, Integer> entry : packetCount.entrySet()) {
 //                System.out.println(entry.getKey() + ": " + entry.getValue() + " (" + (entry.getValue()/10) + ")");
 //            }

@@ -12,6 +12,7 @@ import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Event;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.entities.Bullet;
 import com.nicktoony.engine.entities.SkeletonWrapper;
@@ -88,6 +89,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private PlayerListener listener = null;
     private int team;
     private Random random = new Random();
+
+    private int lastMove = 0;
+    private boolean lastShoot = false;
+    private boolean lastReload = false;
+    private long lastUpdate = 0;
+    private boolean lastZoom = false;
 
     boolean cannotSee = false;
     Body targetBody = null;
@@ -641,6 +648,46 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     public void setZoom(boolean zoom) {
         this.zoomKey = zoom;
+    }
+
+    public boolean isPlayerChanged() {
+        int newMove = ((moveLeft ? 1 : 0) * 1000)
+                + ((moveRight ? 1 : 0) * 100)
+                + ((moveUp ? 1 : 0) * 10)
+                + ((moveDown ? 1 : 0));
+        if (newMove != lastMove
+                || lastShoot != shootKey
+                || lastReload != reloadKey
+                || lastZoom != zoomKey
+                || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
+
+            lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
+            lastMove = newMove;
+            lastShoot = shootKey;
+            lastReload = reloadKey;
+            lastZoom = zoomKey;
+
+            return true;
+        }
+        return false;
+    }
+
+    public PlayerInputPacket constructUpdatePacket() {
+        // Send move packet
+        PlayerInputPacket playerMovePacket = new PlayerInputPacket();
+        playerMovePacket.moveLeft = moveLeft;
+        playerMovePacket.moveRight = moveRight;
+        playerMovePacket.moveUp = moveUp;
+        playerMovePacket.moveDown = moveDown;
+        playerMovePacket.direction = getDirection();
+        playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
+        playerMovePacket.x = x;
+        playerMovePacket.y = y;
+        playerMovePacket.reload = reloadKey;
+        playerMovePacket.shoot = shootKey;
+        playerMovePacket.zoom = zoomKey;
+
+        return playerMovePacket;
     }
 }
 

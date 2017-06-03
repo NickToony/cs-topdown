@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.rooms.game;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
@@ -78,6 +79,21 @@ public class GameManager implements ClientSocket.SBSocketListener {
             handleReceivedPacket((PingPacket) packet);
         } else if (packet instanceof ChatPacket) {
             handleReceivedPacket((ChatPacket) packet);
+        } else if (packet instanceof PlayerInputPacket) {
+            handleReceivedPacket((PlayerInputPacket) packet);
+        }
+    }
+
+    private void handleReceivedPacket(PlayerInputPacket packet) {
+// Find the player in question
+        Player player = playerIdMap.get(packet.id);
+        // If the player exists
+        if (player != null) {
+            player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);
+            player.setZoom(packet.zoom);
+            player.setShooting(packet.shoot);
+            player.setReloading(packet.reload);
+            player.setDirection(packet.direction);
         }
     }
 
@@ -123,18 +139,22 @@ public class GameManager implements ClientSocket.SBSocketListener {
                 player.setShooting(packet.shooting);
                 player.setReloading(packet.reloading);
                 player.setZoom(packet.zoom);
+                player.setHealth(packet.health);
             }
         } else {
             // It's our player. We received this because our simulation desync'd too much
             Player player = playerIdMap.get(packet.id);
             if (player != null) {
-                // Fix the desync by jumping to server position
-                float xDiff = (packet.x - player.getX())/2;
-                float yDiff = (packet.y - player.getY())/2;
-                if (Math.abs(xDiff + yDiff) > 4) {
-                    player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
+                if (packet.health == -1) {
+                    // Fix the desync by jumping to server position
+                    float xDiff = (packet.x - player.getX()) / 2;
+                    float yDiff = (packet.y - player.getY()) / 2;
+                    if (Math.abs(xDiff + yDiff) > 4) {
+                        player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
+                    }
+                } else {
+                    player.setHealth(packet.health);
                 }
-
             }
         }
     }

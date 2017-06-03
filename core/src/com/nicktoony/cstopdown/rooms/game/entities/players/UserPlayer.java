@@ -2,7 +2,6 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 
@@ -11,11 +10,6 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
  */
 public class UserPlayer extends Player{
 
-    private int lastMove = 0;
-    private boolean lastShoot = false;
-    private boolean lastReload = false;
-    private long lastUpdate = 0;
-    private boolean lastZoom = false;
 
     @Override
     public void step(float delta){
@@ -95,35 +89,8 @@ public class UserPlayer extends Player{
         super.step(delta);
 
         // Check if changed movement keys
-        int newMove = ((moveLeft ? 1 : 0) * 1000)
-                + ((moveRight ? 1 : 0) * 100)
-                + ((moveUp ? 1 : 0) * 10)
-                + ((moveDown ? 1 : 0));
-        if (newMove != lastMove
-                || lastShoot != shootKey
-                || lastReload != reloadKey
-                || lastZoom != zoomKey
-                || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
-            // Send move packet
-            PlayerInputPacket playerMovePacket = new PlayerInputPacket();
-            playerMovePacket.moveLeft = moveLeft;
-            playerMovePacket.moveRight = moveRight;
-            playerMovePacket.moveUp = moveUp;
-            playerMovePacket.moveDown = moveDown;
-            playerMovePacket.direction = getDirection();
-            playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
-            playerMovePacket.x = x;
-            playerMovePacket.y = y;
-            playerMovePacket.reload = reloadKey;
-            playerMovePacket.shoot = shootKey;
-            playerMovePacket.zoom = zoomKey;
-            getRoom().getSocket().sendMessage(playerMovePacket);
-
-            lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
-            lastMove = newMove;
-            lastShoot = shootKey;
-            lastReload = reloadKey;
-            lastZoom = zoomKey;
+        if (this.isPlayerChanged()) {
+            getRoom().getSocket().sendMessage(constructUpdatePacket());
         }
 
 
