@@ -35,6 +35,7 @@ public class CSHUD extends HUD {
     private boolean chatActive = false;
     private boolean chatJustAdded = false;
     private Label ammoLabel;
+    private Label healthLabel;
 
     @Override
     protected void create(boolean render) {
@@ -83,8 +84,15 @@ public class CSHUD extends HUD {
             style.font = hudFont;
             style.fontColor = hudFont.getColor();
             ammoLabel = new Label("", style);
-            ammoLabel.setPosition(50, 50);
+            ammoLabel.setPosition(50, 10);
+            ammoLabel.setAlignment(Align.bottomLeft);
             stage.addActor(ammoLabel);
+
+            // Health label
+            healthLabel = new Label("", style);
+            healthLabel.setPosition(Gdx.graphics.getWidth() - 50, 10);
+            healthLabel.setAlignment(Align.bottomRight);
+            stage.addActor(healthLabel);
 
         }
     }
@@ -120,14 +128,18 @@ public class CSHUD extends HUD {
     public void render(SpriteBatch spriteBatch) {
 
         Player player = getRoom().getMap().getEntitySnap();
-        if (player != null && player.getCurrentWeaponObject() != null) {
-            StringBuilder b = new StringBuilder();
-            b.append(player.getCurrentWeaponObject().bulletsIn);
-            b.append(" | ");
-            b.append(player.getCurrentWeaponObject().bulletsOut);
-            b.append("      ");
-            b.append(player.getCurrentWeaponObject().weapon.getName());
-            ammoLabel.setText(b.toString());
+        if (player != null ) {
+            healthLabel.setText("" + player.getHealth());
+
+            if (player.getCurrentWeaponObject() != null) {
+                StringBuilder b = new StringBuilder();
+                b.append(player.getCurrentWeaponObject().bulletsIn);
+                b.append(" | ");
+                b.append(player.getCurrentWeaponObject().bulletsOut);
+                b.append("      ");
+                b.append(player.getCurrentWeaponObject().weapon.getName());
+                ammoLabel.setText(b.toString());
+            }
         }
 
         stage.draw();

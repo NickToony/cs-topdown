@@ -122,6 +122,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
                 // Weapons
                 player.setShooting(packet.shooting);
                 player.setReloading(packet.reloading);
+                player.setZoom(packet.zoom);
             }
         } else {
             // It's our player. We received this because our simulation desync'd too much

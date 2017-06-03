@@ -638,5 +638,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     public boolean getZoomKey() {
         return zoomKey;
     }
+
+    public void setZoom(boolean zoom) {
+        this.zoomKey = zoom;
+    }
 }
 

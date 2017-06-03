@@ -16,4 +16,5 @@ public class PlayerUpdatePacket extends Packet {
     public boolean moveRight;
     public boolean shooting;
     public boolean reloading;
+    public boolean zoom;
 }

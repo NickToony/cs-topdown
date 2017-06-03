@@ -15,6 +15,7 @@ public class UserPlayer extends Player{
     private boolean lastShoot = false;
     private boolean lastReload = false;
     private long lastUpdate = 0;
+    private boolean lastZoom = false;
 
     @Override
     public void step(float delta){
@@ -101,6 +102,7 @@ public class UserPlayer extends Player{
         if (newMove != lastMove
                 || lastShoot != shootKey
                 || lastReload != reloadKey
+                || lastZoom != zoomKey
                 || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
             // Send move packet
             PlayerInputPacket playerMovePacket = new PlayerInputPacket();
@@ -114,12 +116,14 @@ public class UserPlayer extends Player{
             playerMovePacket.y = y;
             playerMovePacket.reload = reloadKey;
             playerMovePacket.shoot = shootKey;
+            playerMovePacket.zoom = zoomKey;
             getRoom().getSocket().sendMessage(playerMovePacket);
 
             lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
             lastMove = newMove;
             lastShoot = shootKey;
             lastReload = reloadKey;
+            lastZoom = zoomKey;
         }
 
 

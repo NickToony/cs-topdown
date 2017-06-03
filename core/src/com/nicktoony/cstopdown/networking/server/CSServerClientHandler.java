@@ -97,7 +97,19 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     packet.moveRight = player.getPlayer().getMoveRight();
                     packet.shooting = player.getPlayer().getShooting();
                     packet.reloading = player.getPlayer().getReloading();
+                    packet.zoom = player.getPlayer().getZoomKey();
                     server.sendToOthers(packet, this);
+//                    for (CSServerClientHandler client : server.getClients()) {
+//                        if (client != this && client.getState() == ServerClientHandler.STATE.INGAME) {
+//                            if (!client.getPlayerWrapper().isAlive() || !this.getPlayerWrapper().isAlive()) {
+//                                client.sendPacket(packet);
+//                            } else {
+//                                if (client.getPlayer().canSeePlayer(getPlayer())) {
+//                                    client.sendPacket(packet);
+//                                }
+//                            }
+//                        }
+//                    }
 
                 }
             }
@@ -127,6 +139,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             // Update shooting
             getPlayer().setShooting(inputPacket.shoot);
             getPlayer().setReloading(inputPacket.reload);
+            getPlayer().setZoom(inputPacket.zoom);
 
             // Calculate how much leniency we're providing
             leniency += Math.abs(player.getX() - inputPacket.x)
@@ -164,6 +177,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         }
 
         if (inconsistent) {
+
             // The client simulation is way off, correct them
             PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
             fixPacket.x = player.getX();
