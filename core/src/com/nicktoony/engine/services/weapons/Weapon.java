@@ -1,7 +1,5 @@
 package com.nicktoony.engine.services.weapons;
 
-import com.nicktoony.engine.services.WeaponAI;
-
 /**
  * Created by Nick on 25/09/2014.
  */
@@ -34,12 +32,11 @@ public class Weapon {
     private String reloadType = "";
     private int range = -1;
 
-    private WeaponAI ai = new WeaponAI();
-
     private WeaponDamage damage = new WeaponDamage();
     private WeaponAnimation animations = new WeaponAnimation();
     private WeaponSound sounds = new WeaponSound();
     private WeaponGraphic graphics = new WeaponGraphic();
+    private WeaponAI ai = new WeaponAI();
 
     private String key;
     private String category;

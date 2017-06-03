@@ -35,7 +35,7 @@ public class ServerConfig {
 
     // Server rates
     public int sv_tickrate = 1;
-    public int sv_lag_compensate = 50;
+    public int sv_lag_compensate = 80;
 
     // Client rates
     public int cl_tickrate = 4;

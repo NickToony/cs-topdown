@@ -1,4 +1,4 @@
-package com.nicktoony.engine.services;
+package com.nicktoony.engine.services.weapons;
 
 /**
  * Created by Nick on 03/06/2017.
