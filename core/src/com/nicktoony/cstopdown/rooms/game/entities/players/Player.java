@@ -680,7 +680,6 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         playerMovePacket.moveUp = moveUp;
         playerMovePacket.moveDown = moveDown;
         playerMovePacket.direction = getDirection();
-        playerMovePacket.timestamp = getRoom().getGameManager().getTimestamp();
         playerMovePacket.x = x;
         playerMovePacket.y = y;
         playerMovePacket.reload = reloadKey;

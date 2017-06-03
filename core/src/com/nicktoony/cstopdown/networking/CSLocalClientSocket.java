@@ -6,6 +6,7 @@ import com.nicktoony.engine.networking.client.LocalClientSocket;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.PacketDefinitions;
+import com.nicktoony.engine.packets.TimestampedPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,9 @@ public class CSLocalClientSocket extends LocalClientSocket<CSServer> {
             @Override
             public void sendPacket(Packet packet) {
                 packet.prepareMessageId();
+                if (packet instanceof TimestampedPacket) {
+                    ((TimestampedPacket) packet).timestamp = getTimestamp();
+                }
                 notifyMessage(CSLocalClientSocket.this, (Packet) getJson()
                         .fromJson((Class) PacketDefinitions.PACKET_DEFITIONS
                                 .get(packet.getMessage_id()), getJson().toJson(packet)));

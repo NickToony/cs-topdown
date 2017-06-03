@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.rooms.game;
 
+import com.badlogic.gdx.math.Vector2;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -28,7 +29,8 @@ public class GameManager implements ClientSocket.SBSocketListener {
     private RoomGame roomGame;
     private ClientSocket socket;
     private Map<Integer, Player> playerIdMap = new LinkedHashMap<Integer, Player>();
-    private long initialTimestamp;
+    private final int ALLOWANCE = 4;
+    private final float ALLOWANCE_MULTIPLIER = 2;
 
 
     public GameManager(RoomGame roomGame, ClientSocket socket) {
@@ -38,7 +40,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
         // Game manager is created when the map is loaded, so we're good to go!
         socket.sendMessage(new LoadedPacket());
 
-        initialTimestamp = System.currentTimeMillis();
+        socket.prepareTimestamp();
     }
 
     /**
@@ -46,7 +48,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
      * @return long timestamp
      */
     public long getTimestamp() {
-        return (System.currentTimeMillis() - initialTimestamp);
+        return socket.getTimestamp();
     }
 
     @Override
@@ -97,13 +99,28 @@ public class GameManager implements ClientSocket.SBSocketListener {
             player.setReloading(packet.reload);
             player.setDirection(packet.direction);
 
-            // Fix the desync by jumping to server position
-            float xDiff = (packet.x - player.getX())/2;
-            float yDiff = (packet.y - player.getY())/2;
-            if (Math.abs(xDiff + yDiff) > 4) {
-                player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
-            }
+            resolveConflict(player, packet.x, packet.y);
         }
+    }
+
+    private void resolveConflict(Player player, float x, float y) {
+        // Fix the desync by jumping to server position
+//        float xDiff = (x - player.getX())/2;
+//        float yDiff = (y - player.getY())/2;
+//        if (Math.abs(xDiff + yDiff) > ALLOWANCE) {
+//            player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
+//        }
+
+        Vector2 from = player.getPosition();
+        Vector2 to = new Vector2(x, y);
+
+        if (from.dst(to) > 10) {
+            player.setPosition(player.getPosition().lerp(new Vector2(x, y), Math.max(0, Math.min(1f, (from.dst(to)) / 100f))));
+        }
+//        } else {
+//            player.setPosition(player.getPosition().lerp(new Vector2(x, y), .3f));
+
+//        }
     }
 
     private void handleReceivedPacket(DestroyPlayerPacket packet) {
@@ -135,12 +152,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
             // Find the player
             Player player = playerIdMap.get(packet.id);
             if (player != null) {
-                // Fix the desync by jumping to server position
-                float xDiff = (packet.x - player.getX())/2;
-                float yDiff = (packet.y - player.getY())/2;
-                if (Math.abs(xDiff + yDiff) > 4) {
-                    player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
-                }
+                resolveConflict(player, packet.x, packet.y);
 
                 // Update other variables
                 player.setDirection(packet.direction);
@@ -158,11 +170,12 @@ public class GameManager implements ClientSocket.SBSocketListener {
             if (player != null) {
                 if (packet.health == -1) {
                     // Fix the desync by jumping to server position
-                    float xDiff = (packet.x - player.getX()) / 2;
-                    float yDiff = (packet.y - player.getY()) / 2;
-                    if (Math.abs(xDiff + yDiff) > 4) {
+                    float xDiff = (packet.x - player.getX()) / ALLOWANCE_MULTIPLIER;
+                    float yDiff = (packet.y - player.getY()) / ALLOWANCE_MULTIPLIER;
+                    if (Math.abs(xDiff + yDiff) > ALLOWANCE) {
                         player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
                     }
+                    System.out.println("Server warned us of desync.");
                 } else {
                     player.setHealth(packet.health);
                 }
@@ -218,6 +231,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
     }
 
     public boolean isSpectating() {
+        if (roomGame.getMap().getEntitySnap() == null) {
+            return false;
+        }
         return roomGame.getMap().getEntitySnap().getId() != socket.getId();
     }
 

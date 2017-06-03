@@ -177,9 +177,6 @@ public abstract class Server<T extends ServerClientHandler> {
 
     public void sendToAll(Packet packet) {
         for (ServerClientHandler client : clients) {
-            if (packet instanceof TimestampedPacket) {
-                ((TimestampedPacket) packet).timestamp = client.getTimestamp();
-            }
             if (client.getState() == ServerClientHandler.STATE.INGAME) {
                 client.sendPacket(packet);
             }
@@ -188,9 +185,6 @@ public abstract class Server<T extends ServerClientHandler> {
 
     public void sendToOthers(Packet packet, ServerClientHandler self) {
         for (ServerClientHandler client : clients) {
-            if (packet instanceof TimestampedPacket) {
-                ((TimestampedPacket) packet).timestamp = client.getTimestamp();
-            }
             if (client != self && client.getState() == ServerClientHandler.STATE.INGAME) {
                 client.sendPacket(packet);
             }

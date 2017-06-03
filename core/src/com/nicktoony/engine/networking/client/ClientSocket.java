@@ -1,7 +1,9 @@
 package com.nicktoony.engine.networking.client;
 
+import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.packets.Packet;
+import com.nicktoony.engine.packets.TimestampedPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,9 @@ public abstract class ClientSocket {
     private List<ClientSocket> openQueue;
     private List<ClientSocket> closeQueue;
     private List<ReceivedPacket> messageQueue;
+    private List<ReceivedPacket> messageKeepQueue;
     private List<ReceivedError> errorQueue;
+    private long initialTimestamp;
 
     public ClientSocket(String ip, int port) {
         this.ip = ip;
@@ -56,7 +60,16 @@ public abstract class ClientSocket {
         this.openQueue = new ArrayList<ClientSocket>();
         this.closeQueue = new ArrayList<ClientSocket>();
         this.messageQueue = new ArrayList<ReceivedPacket>();
+        this.messageKeepQueue = new ArrayList<ReceivedPacket>();
         this.errorQueue = new ArrayList<ReceivedError>();
+    }
+
+    public void prepareTimestamp() {
+        initialTimestamp = System.currentTimeMillis();
+    }
+
+    public long getTimestamp() {
+        return (System.currentTimeMillis() - initialTimestamp);
     }
 
     public abstract boolean open();
@@ -65,6 +78,9 @@ public abstract class ClientSocket {
 
     public boolean sendMessage(Packet packet) {
         packet.prepareMessageId();
+        if (packet instanceof TimestampedPacket) {
+            ((TimestampedPacket) packet).timestamp = getTimestamp();
+        }
         return sendPacket(packet);
     }
 
@@ -121,8 +137,18 @@ public abstract class ClientSocket {
         }
 
         for (ReceivedPacket receivedPacket : messageQueue) {
-            for (SBSocketListener listener : listeners) {
-                listener.onMessage(receivedPacket.socket, receivedPacket.packet);
+            if (receivedPacket.packet instanceof TimestampedPacket) {
+                if (getTimestamp() >= ((TimestampedPacket) receivedPacket.packet).timestamp + 100) {
+                    for (SBSocketListener listener : listeners) {
+                        listener.onMessage(receivedPacket.socket, receivedPacket.packet);
+                    }
+                } else {
+                    messageKeepQueue.add(receivedPacket);
+                }
+            } else {
+                for (SBSocketListener listener : listeners) {
+                    listener.onMessage(receivedPacket.socket, receivedPacket.packet);
+                }
             }
         }
 
@@ -142,6 +168,9 @@ public abstract class ClientSocket {
         messageQueue.clear();
         closeQueue.clear();
         errorQueue.clear();
+
+        messageQueue.addAll(messageKeepQueue);
+        messageKeepQueue.clear();
     }
 
 }

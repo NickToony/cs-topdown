@@ -50,6 +50,11 @@ public abstract class Entity<R extends Room> extends Renderable {
         setY(y);
     }
 
+    public void setPosition(Vector2 v) {
+        setX(v.x);
+        setY(v.y);
+    }
+
     public float getDirection() {
         return direction;
     }
