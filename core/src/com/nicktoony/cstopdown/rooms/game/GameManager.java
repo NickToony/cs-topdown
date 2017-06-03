@@ -96,6 +96,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
             player.setShooting(packet.shoot);
             player.setReloading(packet.reload);
             player.setDirection(packet.direction);
+            player.setPosition(packet.x, packet.y);
         }
     }
 

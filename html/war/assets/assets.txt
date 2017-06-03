@@ -65,7 +65,7 @@ i:weapons/bullet.png:130:image/png
 d:weapons/Pistols:0:application/unknown
 d:weapons/Pistols/pistol_pistol:0:application/unknown
 a:weapons/Pistols/pistol_pistol/cock.wav:65730:audio/x-wav
-t:weapons/Pistols/pistol_pistol/definition.json:934:application/unknown
+t:weapons/Pistols/pistol_pistol/definition.json:973:application/unknown
 a:weapons/Pistols/pistol_pistol/dequip.wav:59610:audio/x-wav
 a:weapons/Pistols/pistol_pistol/eject.wav:46212:audio/x-wav
 a:weapons/Pistols/pistol_pistol/empty.wav:69448:audio/x-wav
@@ -76,7 +76,7 @@ i:weapons/Pistols/pistol_pistol/texture.png:458:image/png
 d:weapons/Rifles:0:application/unknown
 d:weapons/Rifles/rifle_ak47:0:application/unknown
 a:weapons/Rifles/rifle_ak47/cock.wav:59602:audio/x-wav
-t:weapons/Rifles/rifle_ak47/definition.json:925:application/unknown
+t:weapons/Rifles/rifle_ak47/definition.json:962:application/unknown
 a:weapons/Rifles/rifle_ak47/dequip.wav:83534:audio/x-wav
 a:weapons/Rifles/rifle_ak47/eject.wav:23986:audio/x-wav
 a:weapons/Rifles/rifle_ak47/empty.wav:82232:audio/x-wav
@@ -86,7 +86,7 @@ a:weapons/Rifles/rifle_ak47/shoot.wav:385694:audio/x-wav
 i:weapons/Rifles/rifle_ak47/texture.png:948:image/png
 d:weapons/Rifles/rifle_awp:0:application/unknown
 a:weapons/Rifles/rifle_awp/cock.wav:64140:audio/x-wav
-t:weapons/Rifles/rifle_awp/definition.json:930:application/unknown
+t:weapons/Rifles/rifle_awp/definition.json:986:application/unknown
 a:weapons/Rifles/rifle_awp/dequip.wav:83534:audio/x-wav
 a:weapons/Rifles/rifle_awp/eject.wav:62082:audio/x-wav
 a:weapons/Rifles/rifle_awp/empty.wav:18536:audio/x-wav
@@ -96,7 +96,7 @@ a:weapons/Rifles/rifle_awp/shoot.wav:311582:audio/x-wav
 i:weapons/Rifles/rifle_awp/texture.png:423:image/png
 d:weapons/Rifles/rifle_m4a1:0:application/unknown
 a:weapons/Rifles/rifle_m4a1/cock.wav:64140:audio/x-wav
-t:weapons/Rifles/rifle_m4a1/definition.json:930:application/unknown
+t:weapons/Rifles/rifle_m4a1/definition.json:967:application/unknown
 a:weapons/Rifles/rifle_m4a1/dequip.wav:83534:audio/x-wav
 a:weapons/Rifles/rifle_m4a1/eject.wav:34034:audio/x-wav
 a:weapons/Rifles/rifle_m4a1/empty.wav:68086:audio/x-wav
@@ -107,7 +107,7 @@ i:weapons/Rifles/rifle_m4a1/texture.png:441:image/png
 d:weapons/Shotguns:0:application/unknown
 d:weapons/Shotguns/shotgun_spas:0:application/unknown
 a:weapons/Shotguns/shotgun_spas/cock.wav:163790:audio/x-wav
-t:weapons/Shotguns/shotgun_spas/definition.json:899:application/unknown
+t:weapons/Shotguns/shotgun_spas/definition.json:951:application/unknown
 a:weapons/Shotguns/shotgun_spas/dequip.wav:44422:audio/x-wav
 a:weapons/Shotguns/shotgun_spas/empty.wav:25588:audio/x-wav
 a:weapons/Shotguns/shotgun_spas/equip.wav:69012:audio/x-wav

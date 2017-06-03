@@ -161,7 +161,11 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 inconsistent = true;
             }
 
-            ((PlayerInputPacket) packet).id = getID();
+            // Attach the id
+            inputPacket.id = getID();
+            // Attach the SERVER position
+            inputPacket.x = getPlayer().getX();
+            inputPacket.y = getPlayer().getY();
             server.sendToOthers(packet, this);
         } else if (packet instanceof PlayerToggleLight) {
             PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
