@@ -31,6 +31,7 @@ public abstract class GameModeMod {
     public abstract void evPlayerJoinedTeam(PlayerModInterface player);
     public abstract void evFreezeTimeEnd();
     public abstract void evPlayerDestroyed(PlayerModInterface player);
+    public abstract void evStep();
 
     protected ServerConfig getServerConfig() {
         return server.getConfig();

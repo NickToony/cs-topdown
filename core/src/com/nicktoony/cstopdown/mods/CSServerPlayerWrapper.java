@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
+import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
@@ -28,6 +29,9 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     private Player entityHit;
     private Vector2 pointHit;
     private Random random = new Random();
+    private long toSpawn = -1;
+    private CSServerPlayerWrapper lastHit;
+    private CSServerPlayerWrapper killer;
 
     private RayCastCallback shootCallback = new RayCastCallback() {
         @Override
@@ -85,15 +89,24 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public boolean spawn() {
-        if (team != TEAM_SPECTATE) {
-            int index = server.getRoom().getMap().spawnIndex[getTeam()];
-            Spawn spawn = server.getRoom().getMap().getSpawns(team).get(index);
-            createPlayer(spawn.x, spawn.y);
-            index ++;
-            if (index >= server.getRoom().getMap().getSpawns(team).size()) {
-                index = 0;
+        return this.spawn(0);
+    }
+
+    @Override
+    public boolean spawn(int seconds) {
+        if (team != TEAM_SPECTATE && !isAlive()) {
+            if (seconds == 0) {
+                int index = server.getRoom().getMap().spawnIndex[getTeam()];
+                Spawn spawn = server.getRoom().getMap().getSpawns(team).get(index);
+                createPlayer(spawn.x, spawn.y);
+                index++;
+                if (index >= server.getRoom().getMap().getSpawns(team).size()) {
+                    index = 0;
+                }
+                server.getRoom().getMap().spawnIndex[getTeam()] = index;
+            } else {
+                toSpawn = System.currentTimeMillis() + (1000 * seconds);
             }
-            server.getRoom().getMap().spawnIndex[getTeam()] = index;
             return true;
         } else {
             return false;
@@ -109,7 +122,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public void message(String message) {
-
+        client.sendPacket(new ChatPacket(message));
     }
 
     public void destroyPlayer(boolean notify) {
@@ -122,7 +135,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
             server.notifyModPlayerDestroyed(this);
         }
 
-        client.destroyPlayer();
+        client.destroyPlayer(killer);
     }
 
     public void createPlayer(float x, float y) {
@@ -168,14 +181,20 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     public void update() {
         if (isAlive() && getHealth() <= 0) {
             slay(true);
-            server.notifyModPlayerKilled(this, this);
+            server.notifyModPlayerKilled(this, killer);
+        }
+
+        if (toSpawn != -1 && toSpawn < System.currentTimeMillis()) {
+            toSpawn = -1;
+
+            spawn();
         }
     }
 
     @Override
     public void shoot(WeaponWrapper weapon) {
 
-        for (int i = 0; i < player.getCurrentWeaponObject().weapon.getBullets(); i ++) {
+        for (int i = 0; i < player.getCurrentWeaponObject().weapon.getBullets(); i++) {
             // Calculate visual spread
             float weaponSpread = player.getCurrentWeaponObject().weapon.getSpread();
             float spread = 0;
@@ -184,14 +203,14 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
             }
 
             // Figure out where
-            double radians = Math.toRadians(player.getActualDrection()+90+spread);
+            double radians = Math.toRadians(player.getActualDrection() + 90 + spread);
             float range = weapon.weapon.getRange();
             if (range == -1) {
                 range = 100;
             } else {
                 range = EngineConfig.toMetres(range);
             }
-            Vector2 vecTo = new Vector2((float)Math.cos(radians), (float)Math.sin(radians)).scl(range).add(player.getBody().getPosition());
+            Vector2 vecTo = new Vector2((float) Math.cos(radians), (float) Math.sin(radians)).scl(range).add(player.getBody().getPosition());
             Vector2 vecFrom = player.getBody().getPosition();
 
             // Perform a raycast
@@ -204,10 +223,20 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 // Kill them
                 int currentHealth = entityHit.getHealth();
                 entityHit.setHealth(currentHealth - player.getCurrentWeaponObject().weapon.getDamage().medium);
+                server.findClientForPlayer(entityHit).getPlayerWrapper().setLastHit(this);
             }
         }
+    }
 
+    @Override
+    public void setHealth(int health) {
+        player.setHealth(Math.min(getMaxHealth(), health));
+    }
 
-
+    public void setLastHit(CSServerPlayerWrapper who) {
+        this.lastHit = who;
+        if (getHealth() <= 0) {
+            this.killer = who;
+        }
     }
 }

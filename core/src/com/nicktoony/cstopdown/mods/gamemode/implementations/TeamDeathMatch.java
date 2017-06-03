@@ -9,6 +9,7 @@ import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 public class TeamDeathMatch extends GameModeMod {
 
     private int lastTeam = PlayerModInterface.TEAM_CT;
+    private long time = System.currentTimeMillis();
 
     @Override
     public void evInit() {
@@ -18,7 +19,7 @@ public class TeamDeathMatch extends GameModeMod {
     @Override
     public void evRoundStart() {
         for (PlayerModInterface player : getAllPlayers()) {
-            //if (!player.isBot())
+//            if (player.isBot())
                 player.spawn();
         }
     }
@@ -30,7 +31,8 @@ public class TeamDeathMatch extends GameModeMod {
 
     @Override
     public void evPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
-        playerKilled.spawn();
+        playerKilled.spawn(3);
+        playerKilled.message("[WHITE]You will respawn in 3 seconds.");
     }
 
     @Override
@@ -58,7 +60,7 @@ public class TeamDeathMatch extends GameModeMod {
         if (getActivePlayers().size() == 1) {
             restartGame();
         } else {
-            player.spawn();
+            player.spawn(3);
         }
     }
 
@@ -70,5 +72,15 @@ public class TeamDeathMatch extends GameModeMod {
     @Override
     public void evPlayerDestroyed(PlayerModInterface player) {
 
+    }
+
+    @Override
+    public void evStep() {
+        if (time + (1000) < System.currentTimeMillis()) {
+            for (PlayerModInterface player : getAlivePlayers()) {
+                player.setHealth(player.getHealth() + 2);
+            }
+            time = System.currentTimeMillis();
+        }
     }
 }

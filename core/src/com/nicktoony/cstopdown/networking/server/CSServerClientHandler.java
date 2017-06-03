@@ -246,9 +246,14 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     }
 
     public void destroyPlayer() {
+        this.destroyPlayer(null);
+    }
+
+    public void destroyPlayer(CSServerPlayerWrapper killer) {
         // Send packet to all
         DestroyPlayerPacket destroyPlayerPacket = new DestroyPlayerPacket();
         destroyPlayerPacket.id = id;
+        destroyPlayerPacket.killer = killer == null ? -1 : killer.getID();
         server.sendToAll(destroyPlayerPacket);
     }
 

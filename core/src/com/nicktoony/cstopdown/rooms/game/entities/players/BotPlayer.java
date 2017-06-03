@@ -67,6 +67,8 @@ public class BotPlayer extends Player {
                 new PathfindingRaycastCollisionDetector(getRoom().getWorld()));
 
         positionSinceLastScan = getPosition();
+
+        mouseDistance = 0;
     }
 
     @Override
@@ -165,7 +167,12 @@ public class BotPlayer extends Player {
                     directionTo = (float) Math.toDegrees(Math.atan2(currentTarget.getY() - y,
                             currentTarget.getX() - x)) - 90;
                 } else {
-                    currentTarget = targets.get(0);
+                    for (CSServerPlayerWrapper otherPlayer : targets) {
+                        if (otherPlayer.isAlive()) {
+                            currentTarget = otherPlayer;
+                            break;
+                        }
+                    }
                 }
 
 
@@ -175,6 +182,7 @@ public class BotPlayer extends Player {
 
     private void scanForEnemies() {
         targets.clear();
+        currentTarget = null;
         explorePosition = null;
         for (CSServerClientHandler otherPlayer : server.getClients()) {
             if (otherPlayer.getPlayerWrapper().isAlive()

@@ -17,9 +17,11 @@ public interface PlayerModInterface {
     int getID();
     int getTeam();
     boolean isBot();
+    void setHealth(int health);
 
     // Actions
     boolean spawn();
+    boolean spawn(int seconds);
     void slay(boolean notify);
     void message(String message);
     void joinTeam(int team);

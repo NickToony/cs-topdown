@@ -15,6 +15,8 @@ import com.nicktoony.engine.packets.connection.PingPacket;
 import com.nicktoony.engine.rooms.RoomGame;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -25,7 +27,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     private RoomGame roomGame;
     private ClientSocket socket;
-    private Map<Integer, Player> playerIdMap = new HashMap<Integer, Player>();
+    private Map<Integer, Player> playerIdMap = new LinkedHashMap<Integer, Player>();
     private long initialTimestamp;
 
 
@@ -111,7 +113,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
             // If it was the entity snap
             if (player == roomGame.getMap().getEntitySnap()) {
                 roomGame.getMap().setEntitySnap(null);
-                if (!playerIdMap.isEmpty()) {
+                if (playerIdMap.get(packet.killer) != null) {
+                    roomGame.getMap().setEntitySnap(playerIdMap.get(packet.killer));
+                } else if (!playerIdMap.isEmpty()) {
                     roomGame.getMap().setEntitySnap(playerIdMap.values().iterator().next());
                 }
             }
@@ -204,5 +208,53 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     private void handleReceivedPacket(PingPacket packet) {
         socket.sendMessage(packet);
+    }
+
+    public boolean isSpectating() {
+        return roomGame.getMap().getEntitySnap().getId() != socket.getId();
+    }
+
+    public void spectateNext() {
+        if (isSpectating() && playerIdMap.size() > 0) {
+            boolean next = false;
+            boolean done = false;
+            // For each player
+            for (Map.Entry<Integer, Player> playerEntry : playerIdMap.entrySet()) {
+
+                // If we're at the next in chain
+                if (next) {
+                    // Set entity snap
+                    roomGame.getMap().setEntitySnap(playerEntry.getValue());
+                    done = true;
+                    break;
+                } else {
+                    // Check if this is current one
+                    if (playerEntry.getKey() == roomGame.getMap().getEntitySnap().getId()) {
+                        next = true;
+                    }
+                }
+            }
+
+            if (!done) {
+                // wasn't another in chain.. probs end of list. let's wrap around
+                roomGame.getMap().setEntitySnap(playerIdMap.entrySet().iterator().next().getValue());
+            }
+        }
+    }
+
+    public void spectatePrevious() {
+        if (isSpectating() && playerIdMap.size() > 0) {
+            Iterator<Map.Entry<Integer, Player>> iterator = playerIdMap.entrySet().iterator();
+            Map.Entry<Integer, Player> previous = iterator.next();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, Player> next = iterator.next();
+                if (next.getKey() == roomGame.getMap().getEntitySnap().getId()) {
+                    break;
+                }
+                previous = next;
+            }
+
+            roomGame.getMap().setEntitySnap(previous.getValue());
+        }
     }
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.entities.HUD;
 import com.nicktoony.engine.rooms.RoomGame;
@@ -36,6 +37,8 @@ public class CSHUD extends HUD {
     private boolean chatJustAdded = false;
     private Label ammoLabel;
     private Label healthLabel;
+    boolean leftJustPressed = false;
+    boolean rightJustPressed = false;
 
     @Override
     protected void create(boolean render) {
@@ -120,6 +123,19 @@ public class CSHUD extends HUD {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
             chatActive = !chatActive;
             chatScrollPane.setFlickScroll(chatActive);
+        }
+
+        if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) { leftJustPressed = false; }
+        if (!Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) { rightJustPressed = false; }
+
+        if (!getMouse()) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !leftJustPressed) {
+                getRoom().getGameManager().spectateNext();
+                leftJustPressed = true;
+            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && !rightJustPressed) {
+                getRoom().getGameManager().spectatePrevious();
+                rightJustPressed = true;
+            }
         }
 
     }

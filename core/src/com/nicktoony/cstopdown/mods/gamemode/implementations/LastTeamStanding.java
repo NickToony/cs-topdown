@@ -88,4 +88,9 @@ public class LastTeamStanding extends GameModeMod {
             endRound();
         }
     }
+
+    @Override
+    public void evStep() {
+
+    }
 }
