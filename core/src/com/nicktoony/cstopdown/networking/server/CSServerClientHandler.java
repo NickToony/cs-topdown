@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.networking.server;
 
+import com.badlogic.gdx.math.Vector2;
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -34,6 +35,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     protected CSServerPlayerWrapper player;
     protected CSServer server;
     private long lastUpdate = 0;
+    private long lastInput = System.currentTimeMillis();
     private float leniency = 0;
 
     public CSServerClientHandler(CSServer server) {
@@ -144,22 +146,39 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             getPlayer().setZoom(inputPacket.zoom);
 
             // Calculate how much leniency we're providing
-            leniency += Math.abs(player.getX() - inputPacket.x)
-                    + Math.abs(player.getY() - inputPacket.y);
+//            leniency += Math.abs(player.getX() - inputPacket.x)
+//                    + Math.abs(player.getY() - inputPacket.y);
 
             // If leniency is within expected parameters
             // Calculation: (1000/cl_tickrate) / (1000/SIMULATION_FPS)
             // 16 is a good value for 4 updates a second..
-            if (leniency <= Math.max((1000/server.getConfig().cl_tickrate)
-                    / (1000 / MyGame.GAME_FPS), 8) ) {
-                // Accept the clients simulation
-                getPlayer().setPosition(inputPacket.x, inputPacket.y);
+//            if (leniency <= Math.max((1000/server.getConfig().cl_tickrate)
+//                    / (1000 / MyGame.GAME_FPS), 20) ) {
+//                // Accept the clients simulation
+//                getPlayer().setPosition(inputPacket.x, inputPacket.y);
+//
+//                // We should send an update to all players ASAP
+////                lastUpdate = 0;
+//            } else {
+//                inconsistent = true;
+//            }
 
-                // We should send an update to all players ASAP
-                lastUpdate = 0;
+            long timeSinceLastInput = System.currentTimeMillis() - lastInput;
+            float framesSinceLastInput = Math.max(timeSinceLastInput / 16.6f, 1);
+            float allowedMovementSinceLastInput = framesSinceLastInput * server.getConfig().mp_player_move_speed + 10;
+
+            if (getPlayer().getPosition().dst(inputPacket.x, inputPacket.y) <= allowedMovementSinceLastInput) {
+                getPlayer().setPosition(getPlayer().getPosition().lerp(new Vector2(inputPacket.x, inputPacket.y), 0.1f));
             } else {
                 inconsistent = true;
+
+//                System.out.println("Frames since last input: " + framesSinceLastInput);
+//                System.out.println("Allowed movement since last input: " + allowedMovementSinceLastInput);
+//                System.out.println("Actual movement: " + getPlayer().getPosition().dst(inputPacket.x, inputPacket.y) );
+//                System.out.println();
             }
+
+            lastInput = System.currentTimeMillis();
 
             // Attach the id
             inputPacket.id = getID();

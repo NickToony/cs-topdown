@@ -2,6 +2,8 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -330,6 +332,10 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         skeletonWrapper.step();
 
         float moveSpeed = getRoom().getConfig().mp_player_move_speed;
+//        if (Gdx.input != null) {
+//            moveSpeed += (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? .5f : 0);
+//        }
+//        float moveSpeed = 3f;
         float hSpeed = (moveLeft ? -moveSpeed : 0) + (moveRight ? moveSpeed : 0);
         float vSpeed = (moveUp ? moveSpeed : 0) + (moveDown ? -moveSpeed : 0);
 
