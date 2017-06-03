@@ -34,7 +34,7 @@ import java.util.Random;
  */
 public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEventListener {
 
-    private final float PLAYER_RADIUS = 0.3f;
+    private final float PLAYER_RADIUS = EngineConfig.toMetres(14);
     private final float PLAYER_ANGLE_SMOOTHING = 0.1f;
 
     private final int STATE_IDLE = 0;

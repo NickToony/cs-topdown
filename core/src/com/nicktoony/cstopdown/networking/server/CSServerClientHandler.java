@@ -165,7 +165,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
 
             long timeSinceLastInput = System.currentTimeMillis() - lastInput;
             float framesSinceLastInput = Math.max(timeSinceLastInput / 16.6f, 1);
-            float allowedMovementSinceLastInput = framesSinceLastInput * server.getConfig().mp_player_move_speed + 12;
+            float allowedMovementSinceLastInput = framesSinceLastInput * server.getConfig().mp_player_move_speed + 20;
 
             if (getPlayer().getPosition().dst(inputPacket.x, inputPacket.y) <= allowedMovementSinceLastInput) {
                 getPlayer().setPosition(getPlayer().getPosition().lerp(new Vector2(inputPacket.x, inputPacket.y), 0.1f));

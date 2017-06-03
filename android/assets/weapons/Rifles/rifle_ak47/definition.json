@@ -2,7 +2,7 @@
   "name": "AK47",
   "clipSize": 30,
   "clipTotal": 90,
-  "rateOfFire": 7,
+  "rateOfFire": 8,
   "accuracy": 90,
   "recoil": 5,
   "bullets": 1,
@@ -22,7 +22,7 @@
   },
   "damage": {
     "low": 10,
-    "medium": 25,
+    "medium": 33,
     "high": 75
   },
   "animations": {
