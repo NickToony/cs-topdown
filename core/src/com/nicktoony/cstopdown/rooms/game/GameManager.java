@@ -96,7 +96,13 @@ public class GameManager implements ClientSocket.SBSocketListener {
             player.setShooting(packet.shoot);
             player.setReloading(packet.reload);
             player.setDirection(packet.direction);
-            player.setPosition(packet.x, packet.y);
+
+            // Fix the desync by jumping to server position
+            float xDiff = (packet.x - player.getX())/2;
+            float yDiff = (packet.y - player.getY())/2;
+            if (Math.abs(xDiff + yDiff) > 4) {
+                player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
+            }
         }
     }
 
