@@ -223,7 +223,10 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 // Kill them
                 int currentHealth = entityHit.getHealth();
                 entityHit.setHealth(currentHealth - player.getCurrentWeaponObject().weapon.getDamage().medium);
-                server.findClientForPlayer(entityHit).getPlayerWrapper().setLastHit(this);
+                CSServerClientHandler hitPlayer = server.findClientForPlayer(entityHit);
+                if (hitPlayer != null) {
+                    hitPlayer.getPlayerWrapper().setLastHit(this);
+                }
             }
         }
     }
