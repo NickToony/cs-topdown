@@ -6,6 +6,7 @@ import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -66,6 +67,7 @@ public abstract class ClientSocket {
 
     public void prepareTimestamp() {
         initialTimestamp = System.currentTimeMillis();
+        System.out.println(getTimestamp());
     }
 
     public long getTimestamp() {
@@ -136,19 +138,39 @@ public abstract class ClientSocket {
             }
         }
 
-        for (ReceivedPacket receivedPacket : messageQueue) {
+//        for (ReceivedPacket receivedPacket : messageQueue) {
+//            if (receivedPacket.packet instanceof TimestampedPacket) {
+//                if (getTimestamp() >= ((TimestampedPacket) receivedPacket.packet).timestamp + 100) {
+//                    for (SBSocketListener listener : listeners) {
+//                        listener.onMessage(receivedPacket.socket, receivedPacket.packet);
+//                    }
+//                } else {
+//                    messageKeepQueue.add(receivedPacket);
+//                }
+//            } else {
+//                for (SBSocketListener listener : listeners) {
+//                    listener.onMessage(receivedPacket.socket, receivedPacket.packet);
+//                }
+//            }
+//        }
+
+        Iterator<ReceivedPacket> iterator = messageQueue.iterator();
+        while (iterator.hasNext()) {
+            ReceivedPacket receivedPacket = iterator.next();
             if (receivedPacket.packet instanceof TimestampedPacket) {
-                if (getTimestamp() >= ((TimestampedPacket) receivedPacket.packet).timestamp + 100) {
+                if (getTimestamp() >= ((TimestampedPacket) receivedPacket.packet).timestamp + getServerConfig().sv_lag_compensate) {
                     for (SBSocketListener listener : listeners) {
                         listener.onMessage(receivedPacket.socket, receivedPacket.packet);
                     }
+                    iterator.remove();
                 } else {
-                    messageKeepQueue.add(receivedPacket);
+//                    System.out.println(getTimestamp() + " :: " + (((TimestampedPacket) receivedPacket.packet).timestamp + getServerConfig().sv_lag_compensate));
                 }
             } else {
                 for (SBSocketListener listener : listeners) {
                     listener.onMessage(receivedPacket.socket, receivedPacket.packet);
                 }
+                iterator.remove();
             }
         }
 
@@ -165,7 +187,7 @@ public abstract class ClientSocket {
         }
 
         openQueue.clear();
-        messageQueue.clear();
+//        messageQueue.clear();
         closeQueue.clear();
         errorQueue.clear();
 

@@ -135,6 +135,7 @@ public abstract class RoomConnect extends Room {
                 case LOAD_MAP:
                     map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map, mapWrapper);
                     stage = STAGE.FINISHED;
+                    break;
 
                 case FINISHED:
                     nextRoom();

@@ -187,6 +187,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         }
 
         if (inconsistent) {
+            System.out.println("Played has desynced slightly, warning them.");
 
             // The client simulation is way off, correct them
             PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();

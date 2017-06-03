@@ -105,18 +105,18 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     private void resolveConflict(Player player, float x, float y) {
         // Fix the desync by jumping to server position
-//        float xDiff = (x - player.getX())/2;
-//        float yDiff = (y - player.getY())/2;
-//        if (Math.abs(xDiff + yDiff) > ALLOWANCE) {
-//            player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
-//        }
-
-        Vector2 from = player.getPosition();
-        Vector2 to = new Vector2(x, y);
-
-        if (from.dst(to) > 10) {
-            player.setPosition(player.getPosition().lerp(new Vector2(x, y), Math.max(0, Math.min(1f, (from.dst(to)) / 100f))));
+        float xDiff = (x - player.getX())/2;
+        float yDiff = (y - player.getY())/2;
+        if (Math.abs(xDiff + yDiff) > ALLOWANCE) {
+            player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
         }
+
+//        Vector2 from = player.getPosition();
+//        Vector2 to = new Vector2(x, y);
+//
+//        if (from.dst(to) > 10) {
+//            player.setPosition(player.getPosition().lerp(new Vector2(x, y), Math.max(0, Math.min(1f, (from.dst(to)-10) / 100f))));
+//        }
 //        } else {
 //            player.setPosition(player.getPosition().lerp(new Vector2(x, y), .3f));
 
