@@ -1,6 +1,8 @@
 package com.nicktoony.cstopdown.rooms.game;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -31,6 +33,16 @@ public class GameManager implements ClientSocket.SBSocketListener {
     private Map<Integer, Player> playerIdMap = new LinkedHashMap<Integer, Player>();
     private final int ALLOWANCE = 4;
     private final float ALLOWANCE_MULTIPLIER = 2;
+    public OrderedMap<Integer, Float[]> storedPositions = new OrderedMap<Integer, Float[]>();
+    public int number = 0;
+
+    public int getInputNumber(float x, float y) {
+        number ++;
+
+        storedPositions.put(number - 1, new Float[] { x, y});
+
+        return number - 1;
+    }
 
 
     public GameManager(RoomGame roomGame, ClientSocket socket) {
@@ -100,6 +112,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
             player.setDirection(packet.direction);
 
             resolveConflict(player, packet.x, packet.y);
+            System.out.println("INPUT");
         }
     }
 
@@ -173,17 +186,71 @@ public class GameManager implements ClientSocket.SBSocketListener {
                     float xDiff = (packet.x - player.getX()) / ALLOWANCE_MULTIPLIER;
                     float yDiff = (packet.y - player.getY()) / ALLOWANCE_MULTIPLIER;
                     if (Math.abs(xDiff + yDiff) > ALLOWANCE) {
-                        player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
+//                        player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
                     }
                     System.out.println("Server warned us of desync.");
                 } else {
                     player.setHealth(packet.health);
+
+                    System.out.println("Last processed:" + packet.lastProcessed);
+
+                    float lx = 0;
+                    float ly = 0;
+
+                    if (packet.lastProcessed == -1) {
+                        player.setX(packet.x);
+                        player.setY(packet.y);
+                    } else {
+                        ObjectMap.Entries<Integer, Float[]> iterator = storedPositions.iterator();
+                        Float[] found = null;
+                        while (iterator.hasNext()) {
+                            ObjectMap.Entry<Integer, Float[]> entry =  iterator.next();
+                            if (entry.key < packet.lastProcessed) {
+                                iterator.remove();
+                                iterator.reset();
+                            } else if (entry.key == packet.lastProcessed) {
+                                found = entry.value;
+                                lx = (packet.x - found[0])/4;
+                                ly = (packet.y - found[1])/4;
+
+                                lx = Math.abs(lx) < .2f ? 0 : lx;
+                                ly = Math.abs(ly) < .2f ? 0 : ly;
+                            } else {
+                                if (found != null) {
+                                    storedPositions.put(entry.key, new Float[] {
+                                            entry.value[0] + lx,
+                                            entry.value[1] + ly
+                                    });
+                                }
+//                                break;
+                            }
+                        }
+
+                        if (found != null) {
+//                            System.out.println(found[0]);
+//                            System.out.println(packet.x);
+                            player.setX(player.getX() + lx);
+                            player.setY(player.getY() + ly);
+                        }
+
+                        if (found == null
+
+                                || (Math.abs(player.getX()-packet.x) > 5
+                                || Math.abs(player.getY()-packet.y) > 5)) {
+//                            player.setX(packet.x);
+//                            player.setY(packet.y);
+
+                            System.out.println("OVERRIDE");
+                        }
+                    }
+
                 }
             }
         }
     }
 
     public void update() {
+
 
     }
 
@@ -200,6 +267,11 @@ public class GameManager implements ClientSocket.SBSocketListener {
         player.setWeapons(packet.weapons);
         player.setNextWeapon(packet.currentWeapon);
         player.setTeam(packet.team);
+    }
+
+    private int smartMod(int a, int b) {
+        int mod = (a < 0) ? (b - (Math.abs(a) % b) ) %b : (a % b);
+        return mod;
     }
 
     private void handleReceivedPacket(PlayerToggleLight packet) {

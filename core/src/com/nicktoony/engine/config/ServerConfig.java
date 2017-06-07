@@ -14,7 +14,7 @@ public class ServerConfig {
     public String sv_name = "Dev Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 7;
+    public int sv_bots = 0;
     public String sv_map = "de_dust2";
 //    public String sv_map = "cstd_docks";
 
@@ -34,9 +34,9 @@ public class ServerConfig {
     public int mp_bot_engage_range = 400;
 
     // Server rates
-    public int sv_tickrate = 1;
-    public int sv_lag_compensate = 80;
+    public int sv_tickrate = 20;
+    public int sv_lag_compensate = 100;
 
     // Client rates
-    public int cl_tickrate = 4;
+    public int cl_tickrate = 20;
 }

@@ -19,4 +19,5 @@ public class PlayerUpdatePacket extends TimestampedPacket {
     public boolean reloading;
     public boolean zoom;
     public int health = -1;
+    public int lastProcessed;
 }

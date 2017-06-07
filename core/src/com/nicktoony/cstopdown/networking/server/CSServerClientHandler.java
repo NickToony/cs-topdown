@@ -37,6 +37,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     private long lastUpdate = 0;
     private long lastInput = System.currentTimeMillis();
     private float leniency = 0;
+    private int lastProcessed = -1;
 
     public CSServerClientHandler(CSServer server) {
         super(server);
@@ -101,6 +102,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     packet.reloading = player.getPlayer().getReloading();
                     packet.zoom = player.getPlayer().getZoomKey();
                     packet.health = player.getPlayer().getHealth();
+                    packet.lastProcessed = lastProcessed;
                     server.sendToAll(packet);
 //                    server.sendToOthers(packet, this);
 //                    for (CSServerClientHandler client : server.getClients()) {
@@ -145,6 +147,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             getPlayer().setReloading(inputPacket.reload);
             getPlayer().setZoom(inputPacket.zoom);
 
+            lastProcessed = inputPacket.number;
+
             // Calculate how much leniency we're providing
 //            leniency += Math.abs(player.getX() - inputPacket.x)
 //                    + Math.abs(player.getY() - inputPacket.y);
@@ -168,9 +172,9 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             float allowedMovementSinceLastInput = framesSinceLastInput * server.getConfig().mp_player_move_speed + 20;
 
             if (getPlayer().getPosition().dst(inputPacket.x, inputPacket.y) <= allowedMovementSinceLastInput) {
-                getPlayer().setPosition(getPlayer().getPosition().lerp(new Vector2(inputPacket.x, inputPacket.y), 0.1f));
+//                getPlayer().setPosition(getPlayer().getPosition().lerp(new Vector2(inputPacket.x, inputPacket.y), 0.1f));
             } else {
-                inconsistent = true;
+//                inconsistent = true;
 
 //                System.out.println("Frames since last input: " + framesSinceLastInput);
 //                System.out.println("Allowed movement since last input: " + allowedMovementSinceLastInput);

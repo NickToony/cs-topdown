@@ -183,15 +183,15 @@ public abstract class ServerClientHandler{
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-//            if (packet.timestamp < getTimestamp()
-//                    - server.getConfig().sv_min_compensate) {
+            if (packet.timestamp < getTimestamp()
+                    - server.getConfig().sv_lag_compensate) {
             // Latency has been compensated. Process it!
             iterator.remove();
 
             handleInput(packet);
-//            } else {
-//                break;
-//            }
+            } else {
+                break;
+            }
         }
     }
 

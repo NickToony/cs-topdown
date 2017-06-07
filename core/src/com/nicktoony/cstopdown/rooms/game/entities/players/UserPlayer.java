@@ -13,6 +13,8 @@ public class UserPlayer extends Player{
 
     @Override
     public void step(float delta){
+        // Check if changed movement keys
+        if (this.isPlayerChanged()) {
         this.moveUp = Gdx.input.isKeyPressed(Input.Keys.W);
         this.moveDown = Gdx.input.isKeyPressed(Input.Keys.S);
         this.moveLeft = Gdx.input.isKeyPressed(Input.Keys.A);
@@ -85,13 +87,14 @@ public class UserPlayer extends Player{
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
-        // We need PhysicsEntity to update the positions
-        super.step(delta);
 
-        // Check if changed movement keys
-        if (this.isPlayerChanged()) {
+
+
             getRoom().getSocket().sendMessage(constructUpdatePacket());
         }
+
+        // We need PhysicsEntity to update the positions
+        super.step(delta);
 
 
     }

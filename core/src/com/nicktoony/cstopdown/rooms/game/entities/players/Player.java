@@ -657,18 +657,19 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     }
 
     public boolean isPlayerChanged() {
-        int newMove = ((moveLeft ? 1 : 0) * 1000)
-                + ((moveRight ? 1 : 0) * 100)
-                + ((moveUp ? 1 : 0) * 10)
-                + ((moveDown ? 1 : 0));
-        if (newMove != lastMove
-                || lastShoot != shootKey
-                || lastReload != reloadKey
-                || lastZoom != zoomKey
-                || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
+//        int newMove = ((moveLeft ? 1 : 0) * 1000)
+//                + ((moveRight ? 1 : 0) * 100)
+//                + ((moveUp ? 1 : 0) * 10)
+//                + ((moveDown ? 1 : 0));
+//        if (newMove != lastMove
+//                || lastShoot != shootKey
+//                || lastReload != reloadKey
+//                || lastZoom != zoomKey
+//                || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
+        if (lastUpdate <= getRoom().getGameManager().getTimestamp()) {
 
             lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
-            lastMove = newMove;
+            lastMove = 0;
             lastShoot = shootKey;
             lastReload = reloadKey;
             lastZoom = zoomKey;
@@ -691,6 +692,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         playerMovePacket.reload = reloadKey;
         playerMovePacket.shoot = shootKey;
         playerMovePacket.zoom = zoomKey;
+        playerMovePacket.number = getRoom().getGameManager().getInputNumber(x, y);
 
         return playerMovePacket;
     }
