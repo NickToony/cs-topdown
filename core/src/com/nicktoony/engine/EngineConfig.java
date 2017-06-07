@@ -21,4 +21,13 @@ public class EngineConfig {
     public static float toPixels(float metres) {
         return metres * PIXELS_PER_METRE;
     }
+
+    public static Vector2 toPixels(Vector2 pointHit) {
+        return new Vector2(toPixels(pointHit.x), toPixels(pointHit.y));
+    }
+
+    public static float angleBetweenPoints(Vector2 vecFrom, Vector2 vecTo){
+        return (float) ((Math.atan2((vecTo.x - vecFrom.x),
+                (vecTo.y - vecFrom.y)) * 180.0f / Math.PI) + 180f);
+    }
 }

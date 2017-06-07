@@ -28,6 +28,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     protected CSServerClientHandler client;
     private Player entityHit;
     private Vector2 pointHit;
+    private Vector2 normalHit;
     private Random random = new Random();
     private long toSpawn = -1;
     private CSServerPlayerWrapper lastHit;
@@ -43,11 +44,14 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 } else if (entity instanceof Player) {
                     entityHit = (Player) entity;
                     pointHit = point;
+                    normalHit = normal;
                     return fraction;
                 }
             }
+
             entityHit = null;
             pointHit = null;
+            normalHit = null;
             return fraction;
         }
     };
@@ -215,14 +219,35 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
             // Perform a raycast
             entityHit = null;
+            pointHit = null;
+            normalHit = null;
             server.getRoom().getWorld().rayCast(shootCallback, vecFrom, vecTo);
 
             if (entityHit != null) {
 //                System.out.println(pointHit.dst(player.getBody().getPosition()));
 
+                // Get angle
+                Vector2 vecContact = EngineConfig.toPixels(pointHit);
+                Vector2 vecEntity = entityHit.getPosition();
+
+                // Calculate angle
+                float calc = (normalHit.angle()-(player.getActualDrection()-90));
+                while (calc > 180) { calc -= 360; };
+                calc = Math.abs(calc);
+
+                // Calculate damage
+                int damage;
+                if (calc <= -1) { // never happen - headshots are silly
+                    damage = player.getCurrentWeaponObject().weapon.getDamage().high;
+                } else if (calc <= 50) {
+                    damage = player.getCurrentWeaponObject().weapon.getDamage().medium;
+                } else {
+                    damage = player.getCurrentWeaponObject().weapon.getDamage().low;
+                }
+
                 // Kill them
                 int currentHealth = entityHit.getHealth();
-                entityHit.setHealth(currentHealth - player.getCurrentWeaponObject().weapon.getDamage().medium);
+                entityHit.setHealth(currentHealth - damage);
                 CSServerClientHandler hitPlayer = server.findClientForPlayer(entityHit);
                 if (hitPlayer != null) {
                     hitPlayer.getPlayerWrapper().setLastHit(this);

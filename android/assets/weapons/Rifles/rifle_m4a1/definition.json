@@ -23,7 +23,7 @@
   "damage": {
     "low": 10,
     "medium": 25,
-    "high": 75
+    "high": 50
   },
   "animations": {
     "idle": "rifle_idle",

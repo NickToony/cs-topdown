@@ -75,8 +75,8 @@ public class TexturelessMap extends Map {
             // It's the collision layer, awesome
             if (isObjective) {
                 for (XmlReader.Element object : layer.getChildrenByName("object")) {
-                    int x = Integer.parseInt(object.getAttribute("x"));
-                    int y = mapHeight - Integer.parseInt(object.getAttribute("y"));
+                    float x = Float.parseFloat(object.getAttribute("x"));
+                    float y = mapHeight - Float.parseFloat(object.getAttribute("y"));
 
                     if (object.getAttribute("type").contentEquals("spawn")) {
                         int team = 0;
