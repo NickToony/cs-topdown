@@ -29,10 +29,13 @@ public abstract class PhysicsEntity extends Entity<RoomGame> {
     }
 
     public void updatePhysicsPosition() {
-        body.setTransform(EngineConfig.toMetres(getX()),
-                EngineConfig.toMetres(getY()), 0);
-        changedPhysicsPosition = false;
+        if (body != null) {
+            body.setTransform(EngineConfig.toMetres(getX()),
+                    EngineConfig.toMetres(getY()), 0);
+            changedPhysicsPosition = false;
+        }
     }
+
 
     protected abstract Body setupBody();
 
@@ -45,12 +48,14 @@ public abstract class PhysicsEntity extends Entity<RoomGame> {
     public void setX(float x) {
         super.setX(x);
         changedPhysicsPosition = true;
+        updatePhysicsPosition();
     }
 
     @Override
     public void setY(float y) {
         super.setY(y);
         changedPhysicsPosition = true;
+        updatePhysicsPosition();
     }
 
     public boolean collisionEntity(Contact contact, Entity other) {

@@ -13,6 +13,8 @@ public class UserPlayer extends Player{
 
     @Override
     public void step(float delta){
+        // Check if changed movement keys
+
         this.moveUp = Gdx.input.isKeyPressed(Input.Keys.W);
         this.moveDown = Gdx.input.isKeyPressed(Input.Keys.S);
         this.moveLeft = Gdx.input.isKeyPressed(Input.Keys.A);
@@ -31,10 +33,10 @@ public class UserPlayer extends Player{
 
         this.reloadKey = Gdx.input.isKeyPressed(Input.Keys.R);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-            setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX()),
-                    ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY()));
-        }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+//            setPosition((getRoom().getMouseX() + getRoom().getMap().getCameraX()),
+//                    ((Gdx.graphics.getHeight() - getRoom().getMouseY()) + getRoom().getMap().getCameraY()));
+//        }
 
 
         if (!getRoom().getHud().getMouse()) {
@@ -85,13 +87,14 @@ public class UserPlayer extends Player{
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
 
-        // We need PhysicsEntity to update the positions
-        super.step(delta);
 
-        // Check if changed movement keys
+
         if (this.isPlayerChanged()) {
             getRoom().getSocket().sendMessage(constructUpdatePacket());
         }
+
+        // We need PhysicsEntity to update the positions
+        super.step(delta);
 
 
     }

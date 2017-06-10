@@ -37,6 +37,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     private long lastUpdate = 0;
     private long lastInput = System.currentTimeMillis();
     private float leniency = 0;
+    private int lastProcessed = -1;
 
     public CSServerClientHandler(CSServer server) {
         super(server);
@@ -81,8 +82,6 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     }
 
     public void update() {
-        super.update();
-
         if (state == STATE.INGAME) {
             if (player.isAlive()) {
                 if (lastUpdate + (1000 / server.getConfig().sv_tickrate) < System.currentTimeMillis()) {
@@ -101,6 +100,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     packet.reloading = player.getPlayer().getReloading();
                     packet.zoom = player.getPlayer().getZoomKey();
                     packet.health = player.getPlayer().getHealth();
+                    packet.lastProcessed = lastProcessed;
                     server.sendToAll(packet);
 //                    server.sendToOthers(packet, this);
 //                    for (CSServerClientHandler client : server.getClients()) {
@@ -118,6 +118,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 }
             }
 
+        super.update();
+
            if (leniency > 0) leniency -= 2;
            if (leniency > 100) leniency = 100;
         }
@@ -131,7 +133,6 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             return;
         }
 
-        boolean inconsistent = false;
         if (packet instanceof PlayerInputPacket) {
             // Cast to input packet
             PlayerInputPacket inputPacket = (PlayerInputPacket) packet;
@@ -145,48 +146,22 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             getPlayer().setReloading(inputPacket.reload);
             getPlayer().setZoom(inputPacket.zoom);
 
-            // Calculate how much leniency we're providing
-//            leniency += Math.abs(player.getX() - inputPacket.x)
-//                    + Math.abs(player.getY() - inputPacket.y);
+            // Store which input we're processing
+            lastProcessed = inputPacket.number;
 
-            // If leniency is within expected parameters
-            // Calculation: (1000/cl_tickrate) / (1000/SIMULATION_FPS)
-            // 16 is a good value for 4 updates a second..
-//            if (leniency <= Math.max((1000/server.getConfig().cl_tickrate)
-//                    / (1000 / MyGame.GAME_FPS), 20) ) {
-//                // Accept the clients simulation
-//                getPlayer().setPosition(inputPacket.x, inputPacket.y);
-//
-//                // We should send an update to all players ASAP
-////                lastUpdate = 0;
-//            } else {
-//                inconsistent = true;
-//            }
-
-            long timeSinceLastInput = System.currentTimeMillis() - lastInput;
-            float framesSinceLastInput = Math.max(timeSinceLastInput / 16.6f, 1);
-            float allowedMovementSinceLastInput = framesSinceLastInput * server.getConfig().mp_player_move_speed + 20;
-
-            if (getPlayer().getPosition().dst(inputPacket.x, inputPacket.y) <= allowedMovementSinceLastInput) {
-                getPlayer().setPosition(getPlayer().getPosition().lerp(new Vector2(inputPacket.x, inputPacket.y), 0.1f));
-            } else {
-                inconsistent = true;
-
-//                System.out.println("Frames since last input: " + framesSinceLastInput);
-//                System.out.println("Allowed movement since last input: " + allowedMovementSinceLastInput);
-//                System.out.println("Actual movement: " + getPlayer().getPosition().dst(inputPacket.x, inputPacket.y) );
-//                System.out.println();
-            }
-
+            // Time since last input was 0
             lastInput = System.currentTimeMillis();
 
             // Attach the id
             inputPacket.id = getID();
             // Attach the SERVER position
-            inputPacket.x = getPlayer().getX();
-            inputPacket.y = getPlayer().getY();
-            inputPacket.timestamp = getTimestamp();
-            server.sendToOthers(packet, this);
+//            inputPacket.x = getPlayer().getX();
+//            inputPacket.y = getPlayer().getY();
+//            inputPacket.timestamp = getTimestamp();
+//            server.sendToOthers(packet, this);
+
+            // Trigger immediate update
+            lastUpdate = -1;
         } else if (packet instanceof PlayerToggleLight) {
             PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
             getPlayer().setLightOn(lightPacket.light);
@@ -203,19 +178,6 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             playerSwitchWeapon.id = id;
 
             server.sendToOthers(playerSwitchWeapon, this);
-        }
-
-        if (inconsistent) {
-            System.out.println("Played has desynced slightly, warning them.");
-
-            // The client simulation is way off, correct them
-            PlayerUpdatePacket fixPacket = new PlayerUpdatePacket();
-            fixPacket.x = player.getX();
-            fixPacket.y = player.getY();
-            fixPacket.direction = player.getPlayer().getDirection();
-            fixPacket.id = id;
-            // We don't send movement.. the player knows that already
-            sendPacket(fixPacket);
         }
 
     }

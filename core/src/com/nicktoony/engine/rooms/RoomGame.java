@@ -89,15 +89,15 @@ public abstract class RoomGame extends Room {
         // Handles inputs first
         socket.pushNotifications();
 
-        // Update game manager
-        gameManager.update();
+        // Update the physics
+        world.step(delta, 1, 1);
 
         // Update the world
         super.step(delta);
         lastDelta = delta;
 
-        // Update the physics
-        world.step(delta, 1, 1);
+        // Update game manager
+        gameManager.update();
     }
 
     @Override

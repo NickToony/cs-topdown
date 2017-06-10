@@ -666,9 +666,10 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
                 || lastReload != reloadKey
                 || lastZoom != zoomKey
                 || lastUpdate <= getRoom().getGameManager().getTimestamp()) {
+//        if (lastUpdate <= getRoom().getGameManager().getTimestamp()) {
 
             lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
-            lastMove = newMove;
+            lastMove = 0;
             lastShoot = shootKey;
             lastReload = reloadKey;
             lastZoom = zoomKey;
@@ -691,6 +692,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         playerMovePacket.reload = reloadKey;
         playerMovePacket.shoot = shootKey;
         playerMovePacket.zoom = zoomKey;
+        playerMovePacket.number = getRoom().getGameManager().getInputNumber(x, y);
 
         return playerMovePacket;
     }
