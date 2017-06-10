@@ -34,9 +34,9 @@ public class ServerConfig {
     public int mp_bot_engage_range = 400;
 
     // Server rates
-    public int sv_tickrate = 20;
+    public int sv_tickrate = 1;
     public int sv_lag_compensate = 100;
 
     // Client rates
-    public int cl_tickrate = 20;
+    public int cl_tickrate = 5;
 }

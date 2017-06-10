@@ -112,7 +112,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
             player.setDirection(packet.direction);
 
             resolveConflict(player, packet.x, packet.y);
-            System.out.println("INPUT");
+//            System.out.println("INPUT");
         }
     }
 
@@ -182,17 +182,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
             Player player = playerIdMap.get(packet.id);
             if (player != null) {
                 if (packet.health == -1) {
-                    // Fix the desync by jumping to server position
-                    float xDiff = (packet.x - player.getX()) / ALLOWANCE_MULTIPLIER;
-                    float yDiff = (packet.y - player.getY()) / ALLOWANCE_MULTIPLIER;
-                    if (Math.abs(xDiff + yDiff) > ALLOWANCE) {
-//                        player.setPosition(player.getX() + xDiff, player.getY() + yDiff);
-                    }
                     System.out.println("Server warned us of desync.");
                 } else {
                     player.setHealth(packet.health);
-
-                    System.out.println("Last processed:" + packet.lastProcessed);
 
                     float lx = 0;
                     float ly = 0;
@@ -210,11 +202,8 @@ public class GameManager implements ClientSocket.SBSocketListener {
                                 iterator.reset();
                             } else if (entry.key == packet.lastProcessed) {
                                 found = entry.value;
-                                lx = (packet.x - found[0])/4;
-                                ly = (packet.y - found[1])/4;
-
-                                lx = Math.abs(lx) < .2f ? 0 : lx;
-                                ly = Math.abs(ly) < .2f ? 0 : ly;
+                                lx = (packet.x - found[0])/16;
+                                ly = (packet.y - found[1])/16;
                             } else {
                                 if (found != null) {
                                     storedPositions.put(entry.key, new Float[] {
@@ -227,20 +216,16 @@ public class GameManager implements ClientSocket.SBSocketListener {
                         }
 
                         if (found != null) {
-//                            System.out.println(found[0]);
-//                            System.out.println(packet.x);
                             player.setX(player.getX() + lx);
                             player.setY(player.getY() + ly);
                         }
 
                         if (found == null
-
-                                || (Math.abs(player.getX()-packet.x) > 5
-                                || Math.abs(player.getY()-packet.y) > 5)) {
-//                            player.setX(packet.x);
-//                            player.setY(packet.y);
-
-                            System.out.println("OVERRIDE");
+//                                || (Math.abs(player.getX()-packet.x) > 32
+//                                || Math.abs(player.getY()-packet.y) > 32)
+                                ) {
+                            player.setX(packet.x);
+                            player.setY(packet.y);
                         }
                     }
 
