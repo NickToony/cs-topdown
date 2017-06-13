@@ -160,7 +160,7 @@ public class Map {
     public void step() {
         if (entitySnap != null) {
 //            float offsetValue = Math.max(15, Math.min(100, entitySnap.getMouseDistance()) * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().weapon.getZoom() : 1));
-            float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().weapon.getZoom() : 1);
+            float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().getWeapon(entitySnap.getRoom().getWeaponManager()).getZoom() : 1);
 
             Vector2 offset = new Vector2(offsetValue, 0).setAngle(entitySnap.getDirection() + 90);
             float toX = entitySnap.getX() + offset.x;

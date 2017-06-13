@@ -1,5 +1,6 @@
 package com.nicktoony.engine.components;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -74,4 +75,13 @@ public abstract class Entity<R extends Room> extends Renderable {
     public void focused(boolean focused) {
 
     }
+
+    public <T> T getAsset (String fileName, Class<T> type) {
+        return getRoom().getAsset(fileName, type);
+    }
+
+    public AssetManager getAssetManager() {
+        return getRoom().getAssetManager();
+    }
+
 }

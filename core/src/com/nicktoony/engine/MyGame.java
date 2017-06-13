@@ -56,6 +56,7 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
 	@Override
 	public void create () {
         configure();
+        preloadAssets();
 
         this.spriteBatch = new SpriteBatch();
 
@@ -103,6 +104,21 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         room = null;
     }
 
+    /*
+    Fetches the asset from AssetManager, forcing immediate load if it isn't there
+     */
+    public <T> T getAsset (String fileName, Class<T> type) {
+        if (!assetManager.isLoaded(fileName)) {
+           assetManager.load(fileName, type);
+           assetManager.finishLoading();
+        }
+        return  assetManager.get(fileName, type);
+    }
+
+    private void preloadAssets() {
+        clearAssetManager();
+    }
+
     @Override
     public void dispose() {
         super.dispose();
@@ -130,8 +146,6 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             configDesktop(gameConfig);
         }
-
-        clearAssetManager();
     }
 
     /**

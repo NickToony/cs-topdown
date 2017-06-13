@@ -97,7 +97,7 @@ public class BotPlayer extends Player {
         if (!targets.isEmpty()) {
             aiState = AIState.combat;
         } else if (explorePosition != null && aiState != AIState.exploring) {
-            if (player.getPlayer().getCurrentWeaponObject().bulletsIn > player.getPlayer().getCurrentWeaponObject().weapon.getClipSize() * .2) {
+            if (player.getPlayer().getCurrentWeaponObject().bulletsIn > player.getPlayer().getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getClipSize() * .2) {
                 PathfindingNode node = getRoom().getMap().getPathfindingGraph()
                         .getNodeByWorld(explorePosition.x, explorePosition.y);
                 if (startPath(node)) {
@@ -113,7 +113,7 @@ public class BotPlayer extends Player {
                 moveUp = false;
                 moveDown = false;
                 shootKey = false;
-                reloadKey = (player.getPlayer().getCurrentWeaponObject().bulletsIn < player.getPlayer().getCurrentWeaponObject().weapon.getClipSize() * .8);
+                reloadKey = (player.getPlayer().getCurrentWeaponObject().bulletsIn < player.getPlayer().getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getClipSize() * .8);
 
                 PathfindingNode node = null;
                 while (node == null || node.isSolid()) {

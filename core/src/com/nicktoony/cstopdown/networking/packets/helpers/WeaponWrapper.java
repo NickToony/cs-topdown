@@ -9,7 +9,8 @@ import com.nicktoony.engine.services.weapons.WeaponManager;
  * Created by Nick on 18/03/2016.
  */
 public class WeaponWrapper implements Json.Serializable {
-    public Weapon weapon;
+    private Weapon weapon = null;
+    public String weaponKey;
     public int bulletsIn;
     public int bulletsOut;
 
@@ -24,16 +25,27 @@ public class WeaponWrapper implements Json.Serializable {
 
     @Override
     public void write(Json json) {
-        json.writeValue("weapon", weapon.getKey());
+        json.writeValue("weaponKey", weapon.getKey());
         json.writeValue("bulletsIn", bulletsIn);
         json.writeValue("bulletsOut", bulletsOut);
     }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-        String weaponKey = jsonData.getString("weapon");
-        this.weapon = WeaponManager.getInstance().getWeapon(weaponKey);
+        this.weaponKey = jsonData.getString("weaponKey");
+        this.weapon = null;
         this.bulletsIn = jsonData.getInt("bulletsIn");
         this.bulletsOut = jsonData.getInt("bulletsOut");
+    }
+
+    public Weapon getWeapon(WeaponManager weaponManager) {
+        if (this.weapon == null) {
+            this.weapon =  weaponManager.getWeapon(this.weaponKey);
+        }
+        return this.weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
     }
 }

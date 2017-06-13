@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nicktoony.cstopdown.rooms.game.GameManager;
-import com.nicktoony.cstopdown.rooms.game.CSHUD;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
@@ -16,7 +15,6 @@ import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.entities.HUD;
 import com.nicktoony.engine.entities.lights.RayHandlerWrapper;
 import com.nicktoony.engine.entities.world.Map;
-import com.nicktoony.engine.entities.world.TexturelessMap;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.services.CharacterManager;
 import com.nicktoony.engine.services.weapons.WeaponManager;
@@ -30,6 +28,8 @@ public abstract class RoomGame extends Room {
     protected RayHandlerWrapper rayHandlerWrapper;
     protected ClientSocket socket;
     protected GameManager gameManager;
+    private CharacterManager characterManager;
+    private WeaponManager weaponManager;
 
     private SpriteBatch foregroundSpriteBatch;
     private HUD hud;
@@ -51,8 +51,9 @@ public abstract class RoomGame extends Room {
         super.create(render);
 
         // Force it to load the instances
-        CharacterManager.getInstance();
-        WeaponManager.getInstance();
+//        CharacterManager.getInstance();
+        this.characterManager = new CharacterManager();
+        this.weaponManager = new WeaponManager();
 
         // Create the map
         map = defineMap(render);
@@ -72,9 +73,6 @@ public abstract class RoomGame extends Room {
             rayHandlerWrapper = new RayHandlerWrapper(rayHandler, map);
             // Add map lights
             map.addLightObjects(rayHandler);
-
-            // Preload all sounds
-            WeaponManager.getInstance().preloadSounds();
 
             // Add hud
             hud = (HUD) addSelfManagedEntity(defineHud());
@@ -104,8 +102,8 @@ public abstract class RoomGame extends Room {
     public void dispose(boolean render) {
         super.dispose(render);
 
-        CharacterManager.getInstance().dispose();
-        WeaponManager.getInstance().dispose();
+        this.characterManager.dispose();
+        this.weaponManager.dispose();
     }
 
     public Player createPlayer(int id, float x, float y, boolean bot) {
@@ -162,6 +160,14 @@ public abstract class RoomGame extends Room {
 //            fps = 0;
 //            fpsLast = now;
 //        }
+    }
+
+    public CharacterManager getCharacterManager() {
+        return characterManager;
+    }
+
+    public WeaponManager getWeaponManager() {
+        return weaponManager;
     }
 
     public ClientSocket getSocket() {

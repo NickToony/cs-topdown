@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.services.SoundManager;
 import com.nicktoony.engine.services.weapons.config.WeaponCategoryConfig;
 import com.nicktoony.engine.services.weapons.config.WeaponCategoryConfigWrapper;
@@ -28,20 +29,8 @@ public class WeaponManager {
         EMPTY
     }
 
-    // SINGULAR BEGIN
-    private static WeaponManager instance;
-
-    public static WeaponManager getInstance()   {
-        if (instance == null)   {
-            instance = new WeaponManager();
-        }
-        return instance;
-    }
-    // SINGULAR END
-
     private List<WeaponCategory> weaponCategories = new ArrayList<WeaponCategory>();
     private Map<String, Weapon> weapons = new HashMap<String, Weapon>();
-    private Map<Weapon, Map<SoundType, Sound>> loadedSounds = new HashMap<Weapon, Map<SoundType, Sound>>();
 
     public WeaponManager() {
         FileHandle file = Gdx.files.internal("weapons/weapons.json");
@@ -61,7 +50,6 @@ public class WeaponManager {
                         Gdx.files.internal("weapons/" + weaponCategory.getName()
                                 + "/" + weaponName + "/definition.json"));
                 weapons.put(weaponName, weapon);
-                loadedSounds.put(weapon, new HashMap<SoundType, Sound>());
 
                 // assign category
                 weapon.setCategory(weaponCategory.getName());
@@ -86,16 +74,7 @@ public class WeaponManager {
 //        }
     }
 
-    public Sound loadSound(Weapon weapon, SoundType soundType) {
-        if (loadedSounds.get(weapon) == null) {
-            return null;
-        }
-
-        // If already loaded
-        if (loadedSounds.get(weapon).containsKey(soundType)) {
-            // Just return that
-            return loadedSounds.get(weapon).get(soundType);
-        } else {
+    public Sound loadSound(Weapon weapon, SoundType soundType, MyGame game) {
             String fileName;
             switch (soundType) {
                 case SHOOT:
@@ -125,7 +104,6 @@ public class WeaponManager {
 
             // If it's undefined, we have nothing to load
             if (fileName.isEmpty()) {
-                loadedSounds.get(weapon).put(soundType, null);
                 return null;
             }
 
@@ -134,30 +112,17 @@ public class WeaponManager {
                     + "/" + weapon.getKey() + "/" + fileName);
 
             // File doesn't exist? we can't load it
-            if (!fileHandle.exists()) {
-                loadedSounds.get(weapon).put(soundType, null);
-                return null;
-            }
-
-            Sound sound = SoundManager.getSound(fileHandle);
-            if (sound != null) {
-                loadedSounds.get(weapon).put(soundType, sound);
-                return sound;
-            } else {
-                return null;
-            }
-        }
+            return game.getAsset(fileHandle.toString(), Sound.class);
     }
 
-    public void playSound(Weapon weapon, SoundType soundType, float volume) {
-        if (loadSound(weapon, soundType) != null) {
-            loadSound(weapon, soundType).play(volume);
+    public void playSound(Weapon weapon, SoundType soundType, float volume, MyGame game) {
+        if (loadSound(weapon, soundType, game) != null) {
+            loadSound(weapon, soundType, game).play(volume);
         }
     }
 
     public void dispose() {
         weaponCategories.clear();
-        instance = null;
     }
 
     public Weapon getWeapon(String string) {

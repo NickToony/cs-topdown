@@ -149,11 +149,11 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         // Spawn a new one
         player = server.getGame().createPlayer(getID(), x, y, isBot());
         player.setWeapons(new WeaponWrapper[]{
-                new WeaponWrapper(WeaponManager.getInstance().getWeapon("shotgun_spas")),
-                new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_m4a1")),
-                new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_ak47")),
-                new WeaponWrapper(WeaponManager.getInstance().getWeapon("rifle_awp")),
-                new WeaponWrapper(WeaponManager.getInstance().getWeapon("pistol_pistol")),
+                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("shotgun_spas")),
+                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_m4a1")),
+                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_ak47")),
+                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_awp")),
+                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("pistol_pistol")),
 
         });
         player.setNextWeapon(0);
@@ -198,9 +198,9 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public void shoot(WeaponWrapper weapon) {
 
-        for (int i = 0; i < player.getCurrentWeaponObject().weapon.getBullets(); i++) {
+        for (int i = 0; i < player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getBullets(); i++) {
             // Calculate visual spread
-            float weaponSpread = player.getCurrentWeaponObject().weapon.getSpread();
+            float weaponSpread = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getSpread();
             float spread = 0;
             if (weaponSpread > 0) {
                 spread = random.nextInt((int) weaponSpread * 2) - weaponSpread;
@@ -208,7 +208,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
             // Figure out where
             double radians = Math.toRadians(player.getActualDrection() + 90 + spread);
-            float range = weapon.weapon.getRange();
+            float range = weapon.getWeapon(server.getRoom().getWeaponManager()).getRange();
             if (range == -1) {
                 range = 100;
             } else {
@@ -238,11 +238,11 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 // Calculate damage
                 int damage;
                 if (calc <= -1) { // never happen - headshots are silly
-                    damage = player.getCurrentWeaponObject().weapon.getDamage().high;
+                    damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().high;
                 } else if (calc <= 50) {
-                    damage = player.getCurrentWeaponObject().weapon.getDamage().medium;
+                    damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().medium;
                 } else {
-                    damage = player.getCurrentWeaponObject().weapon.getDamage().low;
+                    damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().low;
                 }
 
                 // Kill them

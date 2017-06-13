@@ -1,5 +1,6 @@
 package com.nicktoony.engine.components;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.services.SoundManager;
@@ -124,6 +125,14 @@ public class Room extends Renderable {
 
     public MyGame getGame() {
         return game;
+    }
+
+    public <T> T getAsset (String fileName, Class<T> type) {
+        return getGame().getAsset(fileName, type);
+    }
+
+    public AssetManager getAssetManager() {
+        return getGame().getAssetManager();
     }
 
     public void setGame(MyGame game) {

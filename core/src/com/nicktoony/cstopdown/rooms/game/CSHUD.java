@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.rooms.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -59,7 +60,7 @@ public class CSHUD extends HUD {
             stage.addActor(chatContainer);
             // Chat background
             SpriteDrawable chatBackgroundDrawable =
-                    new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/hud/chat_bg.png")));
+                    new SpriteDrawable(new Sprite(getAsset("ui/hud/chat_bg.png", Texture.class)));
             chatContainer.setBackground(chatBackgroundDrawable);
             // Set size
             chatContainer.setSize(chatBackgroundDrawable.getSprite().getWidth() * 1.5f,
@@ -153,7 +154,7 @@ public class CSHUD extends HUD {
                 b.append(" | ");
                 b.append(player.getCurrentWeaponObject().bulletsOut);
                 b.append("      ");
-                b.append(player.getCurrentWeaponObject().weapon.getName());
+                b.append(player.getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getName());
                 ammoLabel.setText(b.toString());
             }
         }
