@@ -10,9 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
+import com.nicktoony.cstopdown.Strings;
 import com.nicktoony.cstopdown.networking.CSLocalClientSocket;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerLocal;
@@ -34,9 +38,6 @@ import java.util.List;
  */
 public class RoomMainMenu extends Room {
 
-    private final int UI_SIZE_X = 1920;
-    private final int UI_SIZE_Y = 1080;
-
     private Stage stage;
     private Table table;
 
@@ -50,7 +51,7 @@ public class RoomMainMenu extends Room {
         VisUI.load();
 
         // A stage
-        stage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
+        stage = new Stage(new ScreenViewport());
 
         // Handle input, and add the actor
         Gdx.input.setInputProcessor(stage);
@@ -143,10 +144,10 @@ public class RoomMainMenu extends Room {
 
         };
 
-        Dialog dialog = new Dialog("Enter name", getAsset(EngineConfig.Skins.SGX, Skin.class));
-        dialog.text("Since this is your first time playing, please enter a name:");
-        dialog.button("Okay");
-        dialog.show(stage);
+        row(table);
+        Image logo = new Image(getAsset("logo.png", Texture.class));
+        logo.setAlign(Align.center);
+        table.add(logo).left().fillX().height(150);
 
         for (Actor label : labels) {
             row(table);
@@ -154,13 +155,17 @@ public class RoomMainMenu extends Room {
         }
 
         stage.addActor(table);
+
+        showNameDialog();
     }
 
     @Override
     public void resize(int width, int height) {
         if (stage != null) {
-            stage.getViewport().update(width, height);
+            stage.getViewport().update(width, height, true);
+            System.out.println(stage.getWidth());
         }
+
     }
 
     private Actor buttonWithListener(Label label, EventListener listener) {
@@ -291,5 +296,37 @@ public class RoomMainMenu extends Room {
         });
 
         getGame().createRoom(new CSRoomConnect(socket));
+    }
+
+    private void showNameDialog() {
+        Skin skin =  getAsset(EngineConfig.Skins.SGX, Skin.class);
+
+        // Dialog
+        final Dialog dialog = new Dialog("Enter name", skin);
+
+        // Contents
+        dialog.row().prefWidth(600);
+        Label label = new Label(Strings.NAME_DIALOG_TEXT, skin);
+        label.setWrap(true);
+        label.setAlignment(Align.center);
+        dialog.add(label);
+        dialog.row();
+
+        dialog.add(new TextField("Player", skin)).prefWidth(300);
+        dialog.row();
+
+        Button button = new Button(skin);
+        button.add(new Label(Strings.NAME_DIALOG_BUTTON, skin));
+        button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                dialog.hide();
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        dialog.add(button).padBottom(6);
+        // Show
+        dialog.show(stage);
     }
 }

@@ -3,6 +3,7 @@ package com.nicktoony.engine;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -156,6 +157,9 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         // Only the desktop should change its display mode
 //        Gdx.graphics.setDisplayMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y, gameConfig.game_fullscreen);
         Gdx.graphics.setWindowedMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y);
+        if (gameConfig.game_fullscreen) {
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
     }
 
     private Logger getLogger() {

@@ -14,6 +14,7 @@ public class EngineConfig {
         public static String DEFAULT = "skins/default/uiskin.json";
         public static String TRACER = "skins/tracerui/tracer-ui.json";
         public static String SGX = "skins/sgxui/sgx-ui.json";
+        public static String CLEAN = "skins/cleancrispyui/clean-crispy-ui.json";
 
     }
 
