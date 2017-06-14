@@ -141,14 +141,6 @@ public abstract class RoomConnect extends Room {
                     nextRoom();
                     break;
             }
-
-//            FileHandle file = Gdx.files.internal("maps/" + socket.getServerConfig().sv_map + "/map.tmx");
-//
-//            if (file.exists()) {
-//                nextRoom();
-//            } else {
-//                triggerPreviousRoom(ERRORS.UNKNOWN_MAP);
-//            }
         } else {
             letRedraw = false;
         }

@@ -34,7 +34,7 @@ public class ServerWebClientHandler extends CSServerClientHandler {
     protected String packetToString(Packet packet) {
         packet.prepareMessageId();
         if (packet instanceof TimestampedPacket) {
-            ((TimestampedPacket) packet).timestamp = getTimestamp();
+            ((TimestampedPacket) packet).setTimestamp(getTimestamp());
         }
         return getJson().toJson(packet);
     }

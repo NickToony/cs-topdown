@@ -2,6 +2,8 @@ package com.nicktoony.cstopdown.rooms.mainmenu;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -21,9 +23,6 @@ import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.services.Logger;
-import com.nicktoony.engine.services.SkinManager;
-import com.nicktoony.engine.services.SoundManager;
-import com.nicktoony.engine.services.TextureManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class RoomMainMenu extends Room {
         super.create(render);
 
         Gdx.app.setLogLevel(Application.LOG_INFO);
-        Gdx.app.log("LogTest", "Hello World");
+//        Gdx.app.log("LogTest", "Hello World");
 
         // A stage
         stage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
@@ -58,22 +57,23 @@ public class RoomMainMenu extends Room {
         table.pad(40).left().bottom();
 
         // Add background
-        Image background = new Image(TextureManager.getTexture("ui/main_menu/background.jpg"));
+        Image background = new Image(getGame().getAsset("ui/main_menu/background.jpg", Texture.class));
         background.setFillParent(true);
         stage.addActor(background);
 
         // Add background
-        Actor menuBackground = new Image(TextureManager.getTexture("ui/main_menu/left_side_bg.png"));
+        Actor menuBackground = new Image(getGame().getAsset("ui/main_menu/left_side_bg.png", Texture.class));
         menuBackground.setPosition(30, 0);
-        table.setBackground(new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/main_menu/background.jpg"))));
+        table.setBackground(new SpriteDrawable(new Sprite(getGame().getAsset("ui/main_menu/background.jpg", Texture.class))));
         stage.addActor(menuBackground);
 
+        final Skin skin = getAsset("skins/tracerui/tracer-ui.json", Skin.class);
         // Define all labels
         List<Actor> labels = new ArrayList<Actor>()
         {{
                 // Single player
                 add(buttonWithListener(
-                        new Label("Single Player", SkinManager.getUiSkin()),
+                        new Label("Single Player", skin),
                         new ClickListener() {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -84,7 +84,7 @@ public class RoomMainMenu extends Room {
                 ));
                 // Join server
                 add(buttonWithListener(
-                        new Label("Join Server", SkinManager.getUiSkin()),
+                        new Label("Join Server", skin),
                         new ClickListener() {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -93,7 +93,7 @@ public class RoomMainMenu extends Room {
                         }
                 ));
                 add(buttonWithListener(
-                        new Label("Join Local", SkinManager.getUiSkin()),
+                        new Label("Join Local", skin),
                         new ClickListener() {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -106,7 +106,7 @@ public class RoomMainMenu extends Room {
                 // Create server
                 if (getGame().getPlatformProvider().canHost()) {
                     add(buttonWithListener(
-                            new Label("Create Server", SkinManager.getUiSkin()),
+                            new Label("Create Server", skin),
                             new ClickListener() {
                                 @Override
                                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -117,7 +117,7 @@ public class RoomMainMenu extends Room {
                 }
                 // Options
                 add(buttonWithListener(
-                        new Label("Options", SkinManager.getUiSkin()),
+                        new Label("Options", skin),
                         new ClickListener() {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -127,7 +127,7 @@ public class RoomMainMenu extends Room {
                 ));
                 // Quit
                 add(buttonWithListener(
-                        new Label("Quit", SkinManager.getUiSkin()),
+                        new Label("Quit", skin),
                         new ClickListener() {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -158,9 +158,9 @@ public class RoomMainMenu extends Room {
 
     private Actor buttonWithListener(Label label, EventListener listener) {
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        buttonStyle.over = new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/main_menu/button_hover.png")));
-        buttonStyle.up = new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/main_menu/button_normal.png")));
-        buttonStyle.down = new SpriteDrawable(new Sprite(TextureManager.getTexture("ui/main_menu/button_active.png")));
+        buttonStyle.over = new SpriteDrawable(new Sprite(getGame().getAsset("ui/main_menu/button_hover.png", Texture.class)));
+        buttonStyle.up = new SpriteDrawable(new Sprite(getGame().getAsset("ui/main_menu/button_normal.png", Texture.class)));
+        buttonStyle.down = new SpriteDrawable(new Sprite(getGame().getAsset("ui/main_menu/button_active.png", Texture.class)));
         Button button = new Button(buttonStyle);
         button.add(label);
         button.addListener(listener);
@@ -171,13 +171,13 @@ public class RoomMainMenu extends Room {
                 super.enter(event, x, y, pointer, fromActor);
 
                 if (event.getTarget() == event.getListenerActor()) {
-                    SoundManager.getSound(Gdx.files.internal("sounds/rollover.ogg")).play();
+                    getAsset("sounds/rollover.ogg", Sound.class).play();
                 }
             }
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                SoundManager.getSound(Gdx.files.internal("sounds/click.ogg")).play();
+                getAsset("sounds/click.ogg", Sound.class).play();
 
                 return super.touchDown(event, x, y, pointer, button);
             }

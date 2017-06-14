@@ -8,8 +8,8 @@
     <inherits name='com.nicktoony.cstopdown.GdxDefinition' />
     
     <collapse-all-properties />
-    
-	<add-linker name="xsiframe"/>	
+
+	<add-linker name="xsiframe"/>
 	<set-configuration-property name="devModeRedirectEnabled" value="true"/>
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>	
 </module>

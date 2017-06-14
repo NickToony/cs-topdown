@@ -36,7 +36,7 @@ public class Bullet extends PhysicsEntity {
         super.create(render);
 
         if (render) {
-            texture = TextureManager.getTexture("weapons/bullet.png");
+            texture = getAsset("weapons/bullet.png", Texture.class);
             sprite = new Sprite(texture);
         }
     }

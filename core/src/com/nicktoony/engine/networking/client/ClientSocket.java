@@ -81,7 +81,7 @@ public abstract class ClientSocket {
     public boolean sendMessage(Packet packet) {
         packet.prepareMessageId();
         if (packet instanceof TimestampedPacket) {
-            ((TimestampedPacket) packet).timestamp = getTimestamp();
+            ((TimestampedPacket) packet).setTimestamp(getTimestamp());
         }
         return sendPacket(packet);
     }
@@ -158,7 +158,7 @@ public abstract class ClientSocket {
         while (iterator.hasNext()) {
             ReceivedPacket receivedPacket = iterator.next();
             if (receivedPacket.packet instanceof TimestampedPacket) {
-                if (getTimestamp() >= ((TimestampedPacket) receivedPacket.packet).timestamp + getServerConfig().sv_lag_compensate) {
+                if (getTimestamp() >= ((TimestampedPacket) receivedPacket.packet).getTimestamp() + getServerConfig().sv_lag_compensate) {
                     for (SBSocketListener listener : listeners) {
                         listener.onMessage(receivedPacket.socket, receivedPacket.packet);
                     }

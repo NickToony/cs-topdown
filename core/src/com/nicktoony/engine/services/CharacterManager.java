@@ -1,6 +1,7 @@
 package com.nicktoony.engine.services;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
@@ -14,18 +15,10 @@ import java.util.List;
  */
 public class CharacterManager {
     private static final String DEBUG = "CharacterManager: ";
-    private static CharacterManager staticInstance;
 
     List<CharacterCategory> characterCategories = new ArrayList<CharacterCategory>();
 
-    public static CharacterManager getInstance()    {
-        if (staticInstance == null)   {
-            staticInstance = new CharacterManager();
-        }
-        return staticInstance;
-    }
-
-    private CharacterManager()   {
+    public CharacterManager()   {
         setupCharacterList();
     }
 
@@ -99,7 +92,6 @@ public class CharacterManager {
             }
         }
         characterCategories.clear();
-        staticInstance = null;
     }
 
     public class CharacterCategory  {

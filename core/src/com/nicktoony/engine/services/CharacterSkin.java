@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonJson;
-import com.esotericsoftware.spine.Skin;
 import com.esotericsoftware.spine.attachments.AtlasAttachmentLoader;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
 
@@ -28,13 +26,13 @@ public class CharacterSkin  {
         this.name = name;
     }
 
-    public TextureRegion getTexture() {
-        Texture texture = TextureManager.getTexture(asset + "/head.png");
-        TextureRegion textureRegion = new TextureRegion(texture);
-        textureRegion.setRegion(0, 0, 32, 32);
-
-        return textureRegion;
-    }
+//    public TextureRegion getTexture() {
+//        Texture texture = TextureManager.getTexture(asset + "/head.png");
+//        TextureRegion textureRegion = new TextureRegion(texture);
+//        textureRegion.setRegion(0, 0, 32, 32);
+//
+//        return textureRegion;
+//    }
 
     public Skeleton getSkeleton()   {
 

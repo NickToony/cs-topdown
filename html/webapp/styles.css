@@ -11,7 +11,7 @@ table {
 }
 
 .gwt-TextArea {
-  display: none;
+
 }
 
 body {
@@ -38,8 +38,6 @@ body {
     border-radius: 35px;
     text-align: center;
     line-height: 68px;
-
-    display: none;
 }
 
 .superdev:active {

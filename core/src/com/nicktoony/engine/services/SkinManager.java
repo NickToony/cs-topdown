@@ -11,7 +11,7 @@ public class SkinManager {
 
     public static Skin getUiSkin() {
         if (uiSkin == null) {
-            uiSkin = new Skin(Gdx.files.internal("skins/default/uiskin.json"));
+            uiSkin = new Skin(Gdx.files.internal("skins/tracerui/tracer-ui.json"));
         }
         return uiSkin;
     }
