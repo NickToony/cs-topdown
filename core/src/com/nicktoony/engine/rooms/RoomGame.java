@@ -101,6 +101,17 @@ public abstract class RoomGame extends Room {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+
+        if (isRender()) {
+            hud.resize(width, height);
+
+            map.resize(width, height);
+        }
+    }
+
+    @Override
     public void dispose(boolean render) {
         super.dispose(render);
 

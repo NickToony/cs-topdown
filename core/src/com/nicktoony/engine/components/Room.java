@@ -116,7 +116,11 @@ public class Room extends Renderable {
     }
 
     public void resize(int width, int height) {
+        if (renderables == null) return;
 
+        for (Renderable renderable : renderables) {
+            renderable.resize(width, height);
+        }
     }
 
     public MyGame getGame() {

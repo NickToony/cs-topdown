@@ -26,4 +26,6 @@ public abstract class Renderable {
      * The animationEvent of being disposed. This is where it should free up its memory.
      */
     public abstract void dispose(boolean render);
+
+    public abstract void resize(int x, int y);
 }

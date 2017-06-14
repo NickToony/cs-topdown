@@ -167,6 +167,7 @@ public class RoomMainMenu extends Room {
 
     @Override
     public void resize(int width, int height) {
+        super.resize(width, height);
         if (stage != null) {
             stage.getViewport().update(width, height, true);
             System.out.println(stage.getWidth());

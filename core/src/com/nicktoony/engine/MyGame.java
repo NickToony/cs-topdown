@@ -40,6 +40,8 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
     private SpriteBatch spriteBatch;
     private Server linearLoop;
     private FPSLogger fpsLogger;
+    private Room nextRoom;
+
 
     private AssetManager assetManager;
 
@@ -63,6 +65,11 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
 	public void render () {
 //        fpsLogger.log();
 
+        if (nextRoom != null) {
+            createRoom(nextRoom);
+            nextRoom = null;
+        }
+
         if (room != null) {
             if (!room.isCreated()) {
                 room.create(true);
@@ -83,6 +90,10 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
             linearLoop.step();
         }
 	}
+
+    public void setNextRoom(Room nextRoom) {
+        this.nextRoom = nextRoom;
+    }
 
     public void createRoom(Room room) {
         if (this.room != null) {

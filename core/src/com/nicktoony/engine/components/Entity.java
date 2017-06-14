@@ -84,4 +84,8 @@ public abstract class Entity<R extends Room> extends Renderable {
         return getRoom().getAssetManager();
     }
 
+    @Override
+    public void resize(int x, int y) {
+
+    }
 }

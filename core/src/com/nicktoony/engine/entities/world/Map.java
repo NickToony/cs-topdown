@@ -327,4 +327,8 @@ public class Map {
     public List<String> getTilesetNames() {
         return null; // unnecessary on Map.java
     }
+
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
 }

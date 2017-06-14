@@ -22,8 +22,6 @@ import com.nicktoony.engine.entities.HUD;
  */
 public class CSHUD extends HUD {
 
-    private final int UI_SIZE_X = 1024;
-    private final int UI_SIZE_Y = 768;
     private BitmapFont hudFont;
     private BitmapFont chatFont;
     private Stage stage;
@@ -36,6 +34,7 @@ public class CSHUD extends HUD {
     private Label healthLabel;
     boolean leftJustPressed = false;
     boolean rightJustPressed = false;
+    private OptionsMenu optionsMenu;
 
     @Override
     protected void create(boolean render) {
@@ -94,6 +93,8 @@ public class CSHUD extends HUD {
             healthLabel.setAlignment(Align.bottomRight);
             stage.addActor(healthLabel);
 
+            this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
+
         }
     }
 
@@ -114,8 +115,39 @@ public class CSHUD extends HUD {
     }
 
     @Override
+    public void resize(int x, int y) {
+        super.resize(x, y);
+
+        if (stage != null) {
+            stage.getViewport().update(x, y, true);
+        }
+
+        optionsMenu.resize(x, y);
+    }
+
+    @Override
     public void step(float delta) {
         stage.act(delta);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (optionsMenu.isVisible()) {
+                optionsMenu.hide();
+                Gdx.input.setInputProcessor(this.stage);
+            } else {
+                Gdx.input.setInputProcessor(optionsMenu.getStage());
+                optionsMenu.show();
+            }
+        }
+
+        if (optionsMenu.isVisible()) {
+            optionsMenu.step(delta);
+            return;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            chatActive = !chatActive;
+            chatScrollPane.setFlickScroll(chatActive);
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
             chatActive = !chatActive;
@@ -134,32 +166,36 @@ public class CSHUD extends HUD {
                 rightJustPressed = true;
             }
         }
-
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
 
-        Player player = getRoom().getMap().getEntitySnap();
-        if (player != null ) {
-            healthLabel.setText("" + player.getHealth());
+        if (optionsMenu.isVisible()) {
+            optionsMenu.render(spriteBatch);
+        } else {
 
-            if (player.getCurrentWeaponObject() != null) {
-                StringBuilder b = new StringBuilder();
-                b.append(player.getCurrentWeaponObject().bulletsIn);
-                b.append(" | ");
-                b.append(player.getCurrentWeaponObject().bulletsOut);
-                b.append("      ");
-                b.append(player.getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getName());
-                ammoLabel.setText(b.toString());
+            Player player = getRoom().getMap().getEntitySnap();
+            if (player != null) {
+                healthLabel.setText("" + player.getHealth());
+
+                if (player.getCurrentWeaponObject() != null) {
+                    StringBuilder b = new StringBuilder();
+                    b.append(player.getCurrentWeaponObject().bulletsIn);
+                    b.append(" | ");
+                    b.append(player.getCurrentWeaponObject().bulletsOut);
+                    b.append("      ");
+                    b.append(player.getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getName());
+                    ammoLabel.setText(b.toString());
+                }
             }
-        }
 
-        stage.draw();
+            stage.draw();
 
-        if (chatJustAdded) {
-            chatScrollPane.scrollTo(0, 0, 0, 0);
-            chatJustAdded = false;
+            if (chatJustAdded) {
+                chatScrollPane.scrollTo(0, 0, 0, 0);
+                chatJustAdded = false;
+            }
         }
 
     }
@@ -169,10 +205,12 @@ public class CSHUD extends HUD {
         hudFont.dispose();
         chatFont.dispose();
         stage.dispose();
+
+        optionsMenu.dispose(render);
     }
 
     @Override
     public boolean getMouse() {
-        return (chatActive);
+        return (chatActive || optionsMenu.isVisible());
     }
 }

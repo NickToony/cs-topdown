@@ -57,6 +57,11 @@ public class RayHandlerWrapper extends Renderable {
         handler.dispose();
     }
 
+    @Override
+    public void resize(int x, int y) {
+
+    }
+
     public RayHandler getHandler() {
         return handler;
     }

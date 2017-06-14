@@ -337,4 +337,8 @@ public class GameManager implements ClientSocket.SBSocketListener {
             roomGame.getMap().setEntitySnap(previous.getValue());
         }
     }
+
+    public void disconnect() {
+        socket.close();
+    }
 }
