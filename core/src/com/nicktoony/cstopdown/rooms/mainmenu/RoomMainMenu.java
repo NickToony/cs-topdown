@@ -67,7 +67,7 @@ public class RoomMainMenu extends Room {
         table.setBackground(new SpriteDrawable(new Sprite(getGame().getAsset("ui/main_menu/background.jpg", Texture.class))));
         stage.addActor(menuBackground);
 
-        final Skin skin = getAsset("skins/tracerui/tracer-ui.json", Skin.class);
+        final Skin skin = getAsset("skins/default/uiskin.json", Skin.class);
         // Define all labels
         List<Actor> labels = new ArrayList<Actor>()
         {{
@@ -152,7 +152,6 @@ public class RoomMainMenu extends Room {
     public void resize(int width, int height) {
         if (stage != null) {
             stage.getViewport().update(width, height);
-            System.out.println("YES");
         }
     }
 
