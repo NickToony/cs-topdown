@@ -21,6 +21,10 @@ public class EngineConfig {
         "de_dust2", "cstd_docks"
     };
 
+    public static String[] MODES = new String[] {
+            "TeamDeathmatch", "LastTeamStanding"
+    };
+
     public static float toMetres(float pixels) {
         return pixels * METRES_PER_PIXEL;
     }

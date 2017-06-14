@@ -17,6 +17,7 @@ public class SinglePlayerDialogWrapper {
     private TextField fieldMaxPlayers;
     private TextField fieldBots;
     private SelectBox<String> fieldMap;
+    private SelectBox<String> fieldMode;
     private CheckBox fieldPlayerCollisions;
     private TextField fieldPlayerSpeed;
     private TextField fieldFreezeTime;
@@ -94,6 +95,12 @@ public class SinglePlayerDialogWrapper {
         dialog.add(fieldMap).prefWidth(rightSize);
         dialog.row();
 
+        dialog.add(new Label("Mode", skin)).prefWidth(leftSize);
+        fieldMode = new SelectBox<String>(skin);
+        fieldMode.setItems(EngineConfig.MODES);
+        dialog.add(fieldMode).prefWidth(rightSize);
+        dialog.row();
+
         dialog.add(new Label("Player Collisions", skin)).prefWidth(leftSize);
         fieldPlayerCollisions = new CheckBox("", skin);
         fieldPlayerCollisions.setChecked(serverConfig.mp_player_collisions);
@@ -151,6 +158,9 @@ public class SinglePlayerDialogWrapper {
         error = ServerConfigValidator.validateMap(fieldMap.getSelected());
         if (error != null) return error;
 
+        error = ServerConfigValidator.validateMode(fieldMode.getSelected());
+        if (error != null) return error;
+
         return null;
     }
 
@@ -165,6 +175,7 @@ public class SinglePlayerDialogWrapper {
         serverConfig.mp_freeze_time = Integer.parseInt(fieldFreezeTime.getText());
         serverConfig.mp_round_time = Integer.parseInt(fieldRoundTime.getText());
         serverConfig.sv_map = fieldMap.getSelected();
+        serverConfig.sv_mode = fieldMode.getSelected();
 
         return serverConfig;
     }

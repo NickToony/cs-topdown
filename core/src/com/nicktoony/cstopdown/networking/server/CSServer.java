@@ -4,9 +4,11 @@ package com.nicktoony.cstopdown.networking.server;
  * Created by nick on 13/07/15.
  */
 
+import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.rooms.game.CSRoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
@@ -67,8 +69,13 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         this.lastTime = System.currentTimeMillis();
 
-//        GameModeMod gameModeMod = new LastTeamStanding();
-        GameModeMod gameModeMod = new TeamDeathMatch();
+        // Decide which game mode (temporary implementation)
+        GameModeMod gameModeMod = new LastTeamStanding();
+        if (config.sv_mode.contentEquals("TeamDeathmatch")) {
+            gameModeMod = new TeamDeathMatch();
+        } else if (config.sv_mode.contentEquals("LastTeamStanding")) {
+            gameModeMod = new LastTeamStanding();;
+        }
         gameModeMod.setup(this);
         mods.add(gameModeMod);
 

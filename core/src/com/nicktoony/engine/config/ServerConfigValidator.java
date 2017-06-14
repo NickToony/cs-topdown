@@ -32,6 +32,11 @@ public class ServerConfigValidator {
         return validateString(map);
     }
 
+    public static String validateMode(String map) {
+        return validateString(map);
+    }
+
+
     public static String validatePlayerMoveSpeed(String input) {
         float number;
         try {

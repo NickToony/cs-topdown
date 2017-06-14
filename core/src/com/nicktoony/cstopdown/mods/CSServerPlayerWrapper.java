@@ -98,7 +98,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public boolean spawn(int seconds) {
-        if (team != TEAM_SPECTATE && !isAlive()) {
+        if (team != TEAM_SPECTATE) {
             if (seconds == 0) {
                 int index = server.getRoom().getMap().spawnIndex[getTeam()];
                 Spawn spawn = server.getRoom().getMap().getSpawns(team).get(index);

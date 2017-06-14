@@ -1,5 +1,7 @@
 package com.nicktoony.engine.config;
 
+import com.nicktoony.engine.EngineConfig;
+
 /**
  * Created by nick on 13/07/15.
  *
@@ -14,9 +16,9 @@ public class ServerConfig {
     public String sv_name = "Dev Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 7;
-    public String sv_map = "de_dust2";
-//    public String sv_map = "cstd_docks";
+    public int sv_bots = 0;
+    public String sv_map = EngineConfig.MAPS[0];
+    public String sv_mode = EngineConfig.MODES[0];
 
     // Map settings
 
@@ -36,7 +38,7 @@ public class ServerConfig {
 
     // Server rates
     public int sv_tickrate = 1;
-    public int sv_lag_compensate = 100;
+    public int sv_lag_compensate = 30;
 
     // Client rates
     public int cl_tickrate = 5;
