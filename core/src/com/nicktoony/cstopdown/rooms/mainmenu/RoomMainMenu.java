@@ -49,8 +49,6 @@ public class RoomMainMenu extends Room {
         Gdx.app.setLogLevel(Application.LOG_INFO);
 //        Gdx.app.log("LogTest", "Hello World");
 
-        VisUI.load();
-
         // A stage
         stage = new Stage(new ScreenViewport());
 
