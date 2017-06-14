@@ -26,7 +26,7 @@ public class ServerConfig {
     public String sv_password = "";
 
     // Gameplay settings
-    public boolean mp_player_collisions = false;
+    public boolean mp_player_collisions = true;
     public float mp_player_move_speed = 2;
     public int mp_freeze_time = 5;
     public int mp_round_time = 300;

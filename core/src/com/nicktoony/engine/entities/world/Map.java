@@ -81,7 +81,7 @@ public class Map {
 
         // Ambient colours
         ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
-        ambientColour.a = Float.parseFloat(mapProperties.get("ambientAlpha", String.class));
+        ambientColour.a = mapProperties.get("ambientAlpha", Float.class);
 
         mapWidth = EngineConfig.CELL_SIZE * tX;
         mapHeight = EngineConfig.CELL_SIZE * tY;
@@ -114,7 +114,7 @@ public class Map {
         // Setup the camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.zoom = Float.parseFloat(mapProperties.get("zoom", String.class));
+        camera.zoom = mapProperties.get("zoom", Float.class);
         renderer.setView(camera);
 
         // Objectivbes

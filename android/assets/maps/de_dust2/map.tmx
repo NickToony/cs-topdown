@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="324">
  <properties>
-  <property name="ambientAlpha" value="0.4"/>
+  <property name="ambientAlpha" type="float" value="0.4"/>
   <property name="ambientColour" value="000000"/>
-  <property name="zoom" value="0.75"/>
+  <property name="zoom" type="float" value="0.75"/>
  </properties>
  <tileset firstgid="1" name="dust" tilewidth="32" tileheight="32" tilecount="80" columns="8">
   <image source="dust.png" width="256" height="320"/>

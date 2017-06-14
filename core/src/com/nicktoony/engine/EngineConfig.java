@@ -15,8 +15,11 @@ public class EngineConfig {
         public static String TRACER = "skins/tracerui/tracer-ui.json";
         public static String SGX = "skins/sgxui/sgx-ui.json";
         public static String CLEAN = "skins/cleancrispyui/clean-crispy-ui.json";
-
     }
+
+    public static String[] MAPS = new String[] {
+        "de_dust2", "cstd_docks"
+    };
 
     public static float toMetres(float pixels) {
         return pixels * METRES_PER_PIXEL;

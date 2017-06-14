@@ -40,6 +40,7 @@ public class RoomMainMenu extends Room {
 
     private Stage stage;
     private Table table;
+    private Dialog dialog;
 
     @Override
     public void create(boolean render) {
@@ -80,10 +81,11 @@ public class RoomMainMenu extends Room {
                         new Label("Single Player", skin),
                         new ClickListener() {
                             @Override
-                            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                startSinglePlayer();
-                            }
+                            public void clicked(InputEvent event, float x, float y) {
+                                super.clicked(event, x, y);
 
+                                showNewGameDialog("Single Player");
+                            }
                         }
                 ));
                 // Join server
@@ -190,6 +192,7 @@ public class RoomMainMenu extends Room {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 getAsset("sounds/click.ogg", Sound.class).play();
+                System.out.println("OKAY");
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -220,7 +223,7 @@ public class RoomMainMenu extends Room {
         stage.dispose();
     }
 
-    private void startSinglePlayer() {
+    private void startSinglePlayer(ServerConfig serverConfig) {
 
         Server.LoopManager loopManager = getGame().getPlatformProvider().getLoopManager();
         // If a looper isn't presented (i.e. a threading system)
@@ -238,7 +241,7 @@ public class RoomMainMenu extends Room {
                                     public void log(Exception exception) {
                                         System.out.println(exception.getMessage());
                                     }
-                                }, new ServerConfig(), loopManager, getGame().getPlatformProvider());
+                                }, serverConfig, loopManager, getGame().getPlatformProvider());
 
 
         ClientSocket socket = new CSLocalClientSocket(server);
@@ -302,7 +305,7 @@ public class RoomMainMenu extends Room {
         Skin skin =  getAsset(EngineConfig.Skins.SGX, Skin.class);
 
         // Dialog
-        final Dialog dialog = new Dialog("Enter name", skin);
+        dialog = new Dialog("Enter name", skin);
 
         // Contents
         dialog.row().prefWidth(600);
@@ -328,5 +331,17 @@ public class RoomMainMenu extends Room {
         dialog.add(button).padBottom(6);
         // Show
         dialog.show(stage);
+    }
+
+    private void showNewGameDialog(String title) {
+        Skin skin = getAsset(EngineConfig.Skins.SGX, Skin.class);
+        SinglePlayerDialogWrapper dialogWrapper = new SinglePlayerDialogWrapper(skin);
+        dialogWrapper.setListener(new SinglePlayerDialogWrapper.SuccessListener() {
+            @Override
+            public void onSuccess(ServerConfig serverConfig) {
+                startSinglePlayer(serverConfig);
+            }
+        });
+        dialogWrapper.show(stage);
     }
 }
