@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.engine.MyGame;
@@ -17,8 +19,10 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public GwtApplicationConfiguration getConfig () {
-            return new GwtApplicationConfiguration(Window.getClientWidth(), Window.getClientHeight());
-        }
+            int height = com.google.gwt.user.client.Window.getClientHeight();
+            int width = com.google.gwt.user.client.Window.getClientWidth();
+            GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(width, height);
+            return cfg;        }
 
         @Override
         public ApplicationListener getApplicationListener () {
@@ -58,6 +62,16 @@ public class HtmlLauncher extends GwtApplication {
 
 
         }
+
+    @Override
+    public void onModuleLoad () {
+        super.onModuleLoad();
+        com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler() {
+            public void onResize(ResizeEvent ev) {
+                Gdx.graphics.setWindowedMode(ev.getWidth(),ev.getHeight());
+            }
+        });
+    }
 
     @Override
     public ApplicationListener createApplicationListener() {

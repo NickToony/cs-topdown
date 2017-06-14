@@ -59,7 +59,9 @@ public class RayHandlerWrapper extends Renderable {
 
     @Override
     public void resize(int x, int y) {
-
+        float boxLightViewportWidth = EngineConfig.toMetres(map.getCamera().viewportWidth);
+        float boxLightViewportHeight = EngineConfig.toMetres(map.getCamera().viewportHeight);
+        boxLightCamera.setToOrtho(false, boxLightViewportWidth, boxLightViewportHeight);
     }
 
     public RayHandler getHandler() {

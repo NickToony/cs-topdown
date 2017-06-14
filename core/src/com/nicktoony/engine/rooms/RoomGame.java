@@ -106,8 +106,8 @@ public abstract class RoomGame extends Room {
 
         if (isRender()) {
             hud.resize(width, height);
-
             map.resize(width, height);
+            rayHandlerWrapper.resize(width, height);
         }
     }
 
