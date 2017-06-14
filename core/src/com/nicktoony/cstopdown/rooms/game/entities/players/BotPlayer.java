@@ -126,7 +126,7 @@ public class BotPlayer extends Player {
 
                     // Tell client
                     PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-                    playerSwitchWeapon.timestamp = player.getTimestamp();
+                    playerSwitchWeapon.setTimestamp(player.getTimestamp());
                     playerSwitchWeapon.slot = random.nextInt(getWeapons().length);
                     player.handleReceivedMessage(playerSwitchWeapon);
                 }

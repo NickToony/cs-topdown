@@ -30,8 +30,11 @@ public class CSLocalClientSocket extends LocalClientSocket<CSServer> {
             public void sendPacket(Packet packet) {
                 packet.prepareMessageId();
                 if (packet instanceof TimestampedPacket) {
-                    ((TimestampedPacket) packet).timestamp = getTimestamp();
+                    ((TimestampedPacket) packet).setTimestamp(getTimestamp());
                 }
+
+
+
                 notifyMessage(CSLocalClientSocket.this, (Packet) getJson()
                         .fromJson((Class) PacketDefinitions.PACKET_DEFITIONS
                                 .get(packet.getMessage_id()), getJson().toJson(packet)));

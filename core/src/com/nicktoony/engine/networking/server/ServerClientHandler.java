@@ -88,11 +88,11 @@ public abstract class ServerClientHandler{
             if (ping == null) {
                 ping = new long[10];
                 for (int i = 0; i < ping.length; i ++) {
-                    ping[i] =  getTimestamp() - (long) ((PingPacket) packet).timestamp;
+                    ping[i] =  getTimestamp() - (long) ((PingPacket) packet).getTimestamp();
                 }
             }
 
-            ping[pingIndex] = getTimestamp() - (long) ((PingPacket) packet).timestamp;
+            ping[pingIndex] = getTimestamp() - (long) ((PingPacket) packet).getTimestamp();
             pingIndex += 1;
             if (pingIndex >= ping.length) {
                 pingIndex = 0;
@@ -116,7 +116,7 @@ public abstract class ServerClientHandler{
         if (state == STATE.INGAME) {
             if (lastPing < getTimestamp() - PING_TIMER) {
                 PingPacket packet = new PingPacket();
-                packet.timestamp = getTimestamp();
+                packet.setTimestamp(getTimestamp());
                 sendPacket(packet);
                 lastPing = getTimestamp();
             }
@@ -183,7 +183,7 @@ public abstract class ServerClientHandler{
         while (iterator.hasNext()) {
             TimestampedPacket packet = iterator.next();
             // Wait until we've compensated for latency
-            if (packet.timestamp < getTimestamp()
+            if (packet.getTimestamp() < getTimestamp()
                     - server.getConfig().sv_lag_compensate) {
             // Latency has been compensated. Process it!
             iterator.remove();

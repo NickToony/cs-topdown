@@ -26,7 +26,7 @@ public class UserPlayer extends Player{
 
             // Update server
             PlayerToggleLight toggleLight = new PlayerToggleLight();
-            toggleLight.timestamp = getRoom().getGameManager().getTimestamp();
+//            toggleLight.setTimestamp(getRoom().getGameManager().getTimestamp());
             toggleLight.light = isLightOn();
             getRoom().getSocket().sendMessage(toggleLight);
         }
@@ -53,28 +53,28 @@ public class UserPlayer extends Player{
             setNextWeapon(0);
             // Tell server
             PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+//            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 0;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             setNextWeapon(1);
             // Tell client
             PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+//            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 1;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
             setNextWeapon(2);
             // Tell client
             PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+//            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 2;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
             setNextWeapon(3);
             // Tell client
             PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+//            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 3;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
@@ -82,7 +82,7 @@ public class UserPlayer extends Player{
             setNextWeapon(4);
             // Tell client
             PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
+//            playerSwitchWeapon.timestamp = getRoom().getGameManager().getTimestamp();
             playerSwitchWeapon.slot = 4;
             getRoom().getSocket().sendMessage(playerSwitchWeapon);
         }
