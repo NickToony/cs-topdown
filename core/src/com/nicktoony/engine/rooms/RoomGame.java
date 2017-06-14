@@ -76,6 +76,8 @@ public abstract class RoomGame extends Room {
 
             // Add hud
             hud = (HUD) addSelfManagedEntity(defineHud());
+
+            this.weaponManager.preloadSounds(getGame());
         }
     }
 
