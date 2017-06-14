@@ -71,7 +71,7 @@ public abstract class RoomConnect extends Room {
             @Override
             public void onOpen(ClientSocket socket) {
                 // Send a connect request
-                socket.sendMessage(new ConnectPacket());
+                socket.sendMessage(new ConnectPacket(getGame().getGameConfig().name));
                 currentTask = "Sending client info...";
             }
 

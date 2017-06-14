@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 import box2dLight.ConeLight;
 import box2dLight.Light;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -61,7 +62,6 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private int stateLast = STATE_IDLE;
     private boolean stateChange;
     private boolean makeBullet = false;
-
 
     private int weaponCurrent = 0;
     private int weaponNext = -1;

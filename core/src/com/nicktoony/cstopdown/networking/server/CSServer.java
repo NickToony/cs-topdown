@@ -89,6 +89,8 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
             handleClientConnected(client);
             client.setState(ServerClientHandler.STATE.LOADING);
             notifyClientMessage(client, new LoadedPacket());
+
+            client.getPlayerWrapper().getPlayerDetails().name = EngineConfig.BOT_NAMES[0] + " " + i;
         }
     }
 

@@ -1,11 +1,12 @@
 package com.nicktoony.cstopdown.rooms.game;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
+import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
@@ -17,10 +18,7 @@ import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.PingPacket;
 import com.nicktoony.engine.rooms.RoomGame;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Nick on 03/01/2016.
@@ -31,6 +29,8 @@ public class GameManager implements ClientSocket.SBSocketListener {
     private RoomGame roomGame;
     private ClientSocket socket;
     private Map<Integer, Player> playerIdMap = new LinkedHashMap<Integer, Player>();
+    private Map<Integer, PlayerDetailsWrapper> playerDetailsMap = new LinkedHashMap<Integer, PlayerDetailsWrapper>();
+
     private final int ALLOWANCE = 4;
     private final float ALLOWANCE_MULTIPLIER = 2;
     public OrderedMap<Integer, Float[]> storedPositions = new OrderedMap<Integer, Float[]>();
@@ -97,6 +97,18 @@ public class GameManager implements ClientSocket.SBSocketListener {
             handleReceivedPacket((ChatPacket) packet);
         } else if (packet instanceof PlayerInputPacket) {
             handleReceivedPacket((PlayerInputPacket) packet);
+        } else if (packet instanceof PlayerDetailsPacket) {
+            handleReceivedPacket((PlayerDetailsPacket) packet);
+        }
+    }
+
+    private void handleReceivedPacket(PlayerDetailsPacket packet) {
+        for (PlayerDetailsWrapper wrapper : packet.playerDetails) {
+            playerDetailsMap.put(wrapper.id, wrapper);
+        }
+
+        for (int left : packet.left) {
+            playerDetailsMap.remove(left);
         }
     }
 
@@ -340,5 +352,14 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     public void disconnect() {
         socket.close();
+    }
+
+    public PlayerDetailsWrapper getPlayerDetails(int id) {
+        PlayerDetailsWrapper wrapper = playerDetailsMap.get(id);
+        return wrapper != null ? wrapper : new PlayerDetailsWrapper();
+    }
+
+    public Collection<Player> getPlayers() {
+        return playerIdMap.values();
     }
 }

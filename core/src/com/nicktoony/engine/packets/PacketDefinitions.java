@@ -3,6 +3,7 @@ package com.nicktoony.engine.packets;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
@@ -35,6 +36,7 @@ public class PacketDefinitions {
         // Game
         put(9, CreatePlayerPacket.class);
         put(13, DestroyPlayerPacket.class);
+        put(19, PlayerDetailsPacket.class);
 
         // Player
         put(10, PlayerInputPacket.class);

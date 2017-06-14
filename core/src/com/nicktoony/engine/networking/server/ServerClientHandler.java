@@ -58,7 +58,7 @@ public abstract class ServerClientHandler{
         }
     }
 
-    private void handleConnectingMessages(Packet packet) {
+    protected void handleConnectingMessages(Packet packet) {
         if (packet instanceof ConnectPacket) {
             // TODO: connect request validation
 

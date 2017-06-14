@@ -115,6 +115,7 @@ public class Map {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = mapProperties.get("zoom", Float.class);
+//        camera.zoom = 1;
         renderer.setView(camera);
 
         // Objectivbes
@@ -180,7 +181,7 @@ public class Map {
     }
 
     public float getCameraY()   {
-        return camera.position.y;
+        return camera.position.y - camera.viewportHeight/2;
     }
 
     public float getCameraCenterY() {
@@ -330,5 +331,9 @@ public class Map {
 
     public void resize(int width, int height) {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    public float getCameraZoom() {
+        return camera.zoom;
     }
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.entities.HUD;
 
@@ -24,6 +25,7 @@ public class CSHUD extends HUD {
 
     private BitmapFont hudFont;
     private BitmapFont chatFont;
+    private BitmapFont nameFont;
     private Stage stage;
     private ScrollPane chatScrollPane;
     private Table chatTable;
@@ -35,6 +37,7 @@ public class CSHUD extends HUD {
     boolean leftJustPressed = false;
     boolean rightJustPressed = false;
     private OptionsMenu optionsMenu;
+    private Label playerLabels[];
 
     @Override
     protected void create(boolean render) {
@@ -46,8 +49,13 @@ public class CSHUD extends HUD {
             chatFont = new BitmapFont();
             chatFont.getData().markupEnabled = true;
 
+            nameFont = new BitmapFont();
+            nameFont.setColor(0.91f, 0.73f, 0.23f, 0.95f);
+            nameFont.getData().scale(1f);
+
             // A stage
-            stage = new Stage();
+            stage = new Stage(new ScreenViewport());
+//            stage.setViewport();
             Gdx.input.setInputProcessor(stage);
 
             // Chat container
@@ -93,8 +101,20 @@ public class CSHUD extends HUD {
             healthLabel.setAlignment(Align.bottomRight);
             stage.addActor(healthLabel);
 
-            this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
+            // Player labels
+            playerLabels = new Label[getRoom().getConfig().sv_max_players];
+            Label.LabelStyle playerLabelStyle = new Label.LabelStyle();
+            playerLabelStyle.font = nameFont;
+            playerLabelStyle.fontColor = nameFont.getColor();
+            for (int i = 0; i < playerLabels.length; i++) {
+                Label label = new Label("", playerLabelStyle);
+                label.setVisible(false);
+                label.setAlignment(Align.center);
+                stage.addActor(label);
+                playerLabels[i] = label;
+            }
 
+            this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
         }
     }
 
@@ -173,30 +193,61 @@ public class CSHUD extends HUD {
 
         if (optionsMenu.isVisible()) {
             optionsMenu.render(spriteBatch);
-        } else {
+            return;
+        }
 
-            Player player = getRoom().getMap().getEntitySnap();
-            if (player != null) {
-                healthLabel.setText("" + player.getHealth());
 
-                if (player.getCurrentWeaponObject() != null) {
-                    StringBuilder b = new StringBuilder();
-                    b.append(player.getCurrentWeaponObject().bulletsIn);
-                    b.append(" | ");
-                    b.append(player.getCurrentWeaponObject().bulletsOut);
-                    b.append("      ");
-                    b.append(player.getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getName());
-                    ammoLabel.setText(b.toString());
-                }
-            }
 
-            stage.draw();
 
-            if (chatJustAdded) {
-                chatScrollPane.scrollTo(0, 0, 0, 0);
-                chatJustAdded = false;
+        Player playerSnap = getRoom().getMap().getEntitySnap();
+
+        if (playerSnap != null) {
+            healthLabel.setText("" + playerSnap.getHealth());
+
+            if (playerSnap.getCurrentWeaponObject() != null) {
+                StringBuilder b = new StringBuilder();
+                b.append(playerSnap.getCurrentWeaponObject().bulletsIn);
+                b.append(" | ");
+                b.append(playerSnap.getCurrentWeaponObject().bulletsOut);
+                b.append("      ");
+                b.append(playerSnap.getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getName());
+                ammoLabel.setText(b.toString());
             }
         }
+
+        // Draw names
+        int i = 0;
+        for (Player player : getRoom().getGameManager().getPlayers()) {
+            if (player != playerSnap) {
+                if (i < playerLabels.length) {
+                    Label label = playerLabels[i];
+                    float zoom = getRoom().getMap().getCameraZoom();
+                    float X = (player.getX() - getRoom().getMap().getCameraCenterX())/(100*zoom)*100;
+                    float Y = (player.getY() - getRoom().getMap().getCameraCenterY())/(100*zoom)*100;
+                    float offsetX = ((getRoom().getMap().getCamera().viewportWidth/2));
+                    float offsetY = ((getRoom().getMap().getCamera().viewportHeight/2)) + 40;
+                    label.setPosition(X + offsetX,Y + offsetY);
+                    label.setText(getRoom().getGameManager().getPlayerDetails(player.getId()).name);
+                    label.setVisible(true);
+
+                    i ++;
+                }
+            }
+        }
+
+        while (i < playerLabels.length) {
+            playerLabels[i].setVisible(false);
+            i++;
+        }
+
+        stage.draw();
+
+        if (chatJustAdded) {
+            chatScrollPane.scrollTo(0, 0, 0, 0);
+            chatJustAdded = false;
+        }
+
+
 
     }
 

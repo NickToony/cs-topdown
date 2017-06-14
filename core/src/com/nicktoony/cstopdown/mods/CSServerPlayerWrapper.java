@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
+import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
@@ -33,6 +34,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     private long toSpawn = -1;
     private CSServerPlayerWrapper lastHit;
     private CSServerPlayerWrapper killer;
+    private PlayerDetailsWrapper playerDetails = new PlayerDetailsWrapper();
 
     private RayCastCallback shootCallback = new RayCastCallback() {
         @Override
@@ -59,6 +61,8 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     public CSServerPlayerWrapper(CSServer server, CSServerClientHandler client) {
         this.server = server;
         this.client = client;
+
+        playerDetails.id = client.getID();
     }
 
     @Override
@@ -266,5 +270,9 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         if (getHealth() <= 0) {
             this.killer = who;
         }
+    }
+
+    public PlayerDetailsWrapper getPlayerDetails() {
+        return playerDetails;
     }
 }

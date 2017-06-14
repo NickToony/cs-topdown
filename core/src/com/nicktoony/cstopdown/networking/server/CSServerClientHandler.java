@@ -1,30 +1,24 @@
 package com.nicktoony.cstopdown.networking.server;
 
-import com.badlogic.gdx.math.Vector2;
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
+import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
+import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
-import com.nicktoony.engine.MyGame;
-import com.nicktoony.engine.config.GameConfig;
-import com.nicktoony.engine.config.ServerConfig;
-import com.nicktoony.engine.networking.client.ClientSocket;
-import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
+import com.nicktoony.engine.packets.connection.ConnectPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.MapPacket;
-import com.nicktoony.engine.services.Logger;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nick on 19/07/15.
@@ -79,6 +73,15 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         }
 
 
+    }
+
+    @Override
+    protected void handleConnectingMessages(Packet packet) {
+        super.handleConnectingMessages(packet);
+
+        if (packet instanceof ConnectPacket) {
+            player.getPlayerDetails().name = ((ConnectPacket)packet).name;
+        }
     }
 
     public void update() {
@@ -182,12 +185,11 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
 
     }
 
-    public int getId() {
-        return id;
-    }
-
+    @Override
     public void setId(int id) {
-        this.id = id;
+        super.setId(id);
+
+        this.player.getPlayerDetails().id = id;
     }
 
     public STATE getState() {
@@ -207,7 +209,18 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     }
 
     public void fullUpdate() {
+
+        List<PlayerDetailsWrapper> playerDetails = new ArrayList<PlayerDetailsWrapper>();
         for (CSServerClientHandler client : server.getClients()) {
+            playerDetails.add(client.getPlayerWrapper().getPlayerDetails());
+        }
+        PlayerDetailsPacket detailsPacket = new PlayerDetailsPacket();
+        detailsPacket.playerDetails = playerDetails.toArray(new PlayerDetailsWrapper[playerDetails.size()]);
+        detailsPacket.left = new int[0];
+        sendPacket(detailsPacket);
+
+        for (CSServerClientHandler client : server.getClients()) {
+
             if (client.player.isAlive()) {
                 CreatePlayerPacket packet = new CreatePlayerPacket();
                 packet.id = client.getId();
