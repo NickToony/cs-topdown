@@ -22,8 +22,8 @@ public class SinglePlayerDialogWrapper {
     private TextField fieldFreezeTime;
     private TextField fieldRoundTime;
     private TextField fieldName;
-    private Dialog dialog;
-    private Skin skin;
+    protected Dialog dialog;
+    protected Skin skin;
     private SuccessListener listener;
 
     public interface SuccessListener {

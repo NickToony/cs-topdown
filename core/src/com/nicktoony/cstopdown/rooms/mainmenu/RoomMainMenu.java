@@ -115,8 +115,10 @@ public class RoomMainMenu extends Room {
                             new Label("Create Server", skin),
                             new ClickListener() {
                                 @Override
-                                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                    startMultiPlayer();
+                                public void clicked(InputEvent event, float x, float y) {
+                                    super.clicked(event, x, y);
+
+                                    showCreateServerDialog();
                                 }
                             }
                     ));
@@ -274,8 +276,8 @@ public class RoomMainMenu extends Room {
         getGame().createRoom(new CSRoomConnect(socket));
     }
 
-    private void startMultiPlayer() {
-        final CSServer server = getGame().getPlatformProvider().getLocalServer(null, new ServerConfig());
+    private void startMultiPlayer(ServerConfig serverConfig) {
+        final CSServer server = getGame().getPlatformProvider().getLocalServer(null, serverConfig);
 
         ClientSocket socket = new CSLocalClientSocket(server);
         socket.addListener(new ClientSocket.SBSocketListener() {
@@ -362,6 +364,18 @@ public class RoomMainMenu extends Room {
             @Override
             public void saved() {
                 getGame().reconfigure();
+            }
+        });
+        dialogWrapper.show(stage);
+    }
+
+    private void showCreateServerDialog() {
+        Skin skin = getAsset(EngineConfig.Skins.SGX, Skin.class);
+        CreateServerDialogWrapper dialogWrapper = new CreateServerDialogWrapper(skin);
+        dialogWrapper.setListener(new SinglePlayerDialogWrapper.SuccessListener() {
+            @Override
+            public void onSuccess(ServerConfig serverConfig) {
+                startMultiPlayer(serverConfig);
             }
         });
         dialogWrapper.show(stage);

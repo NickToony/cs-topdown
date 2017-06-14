@@ -62,6 +62,21 @@ public class ServerConfigValidator {
         return validateRange(number, 1, 9999);
     }
 
+    public static String validateIP(String map) {
+        return validateString(map);
+    }
+
+    public static String validatePort(String input) {
+        int number;
+        try {
+            number = Integer.parseInt(input);
+        } catch (Exception e) {
+            return "must be a number";
+        }
+        return validateRange(number, 1, 65555);
+    }
+
+
 
 
 
