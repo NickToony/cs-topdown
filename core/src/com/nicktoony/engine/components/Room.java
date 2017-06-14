@@ -3,8 +3,6 @@ package com.nicktoony.engine.components;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicktoony.engine.MyGame;
-import com.nicktoony.engine.services.SoundManager;
-import com.nicktoony.engine.services.TextureManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,8 +69,6 @@ public class Room extends Renderable {
         for (Renderable renderable : renderables) {
             renderable.dispose(render);
         }
-        TextureManager.dispose();
-        SoundManager.dispose();
     }
 
     public  Renderable addRenderable(Renderable renderable) {

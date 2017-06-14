@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.components.PhysicsEntity;
-import com.nicktoony.engine.services.TextureManager;
 
 /**
  * Created by Nick on 17/05/2016.

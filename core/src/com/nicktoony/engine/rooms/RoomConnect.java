@@ -4,8 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.entities.world.Map;
 import com.nicktoony.engine.networking.client.ClientSocket;
@@ -14,7 +16,6 @@ import com.nicktoony.engine.packets.connection.AcceptPacket;
 import com.nicktoony.engine.packets.connection.ConnectPacket;
 import com.nicktoony.engine.packets.connection.MapPacket;
 import com.nicktoony.engine.packets.connection.RejectPacket;
-import com.nicktoony.engine.services.SkinManager;
 
 /**
  * Created by Nick on 03/01/2016.
@@ -53,21 +54,18 @@ public abstract class RoomConnect extends Room {
     public RoomConnect(ClientSocket socket) {
         this.socket = socket;
         this.currentTask = "Connecting...";
-
-        uiStage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
-
-        uiLabel = new Label("", SkinManager.getUiSkin());
-        uiLabel.setColor(Color.WHITE);
-        uiStage.addActor(uiLabel);
-        uiLabel.setPosition(UI_SIZE_X/2, UI_SIZE_Y/2);
-
-//        uiStage.addActor(uiTable);
-
     }
 
     @Override
     public void create(boolean render) {
         super.create(render);
+
+        uiStage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
+
+        uiLabel = new Label("", getAsset(EngineConfig.Skins.DEFAULT, Skin.class));
+        uiLabel.setColor(Color.WHITE);
+        uiStage.addActor(uiLabel);
+        uiLabel.setPosition(UI_SIZE_X/2, UI_SIZE_Y/2);
 
         socket.addListener(new ClientSocket.SBSocketListener() {
             @Override

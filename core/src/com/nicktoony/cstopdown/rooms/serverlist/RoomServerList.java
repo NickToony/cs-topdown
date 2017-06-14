@@ -3,12 +3,13 @@ package com.nicktoony.cstopdown.rooms.serverlist;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.nicktoony.cstopdown.rooms.connect.CSRoomConnect;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.config.ServerlistConfig;
 import com.nicktoony.engine.networking.client.ClientSocket;
-import com.nicktoony.engine.services.SkinManager;
 import com.nicktoony.gameserver.service.GameserverConfig;
 import com.nicktoony.gameserver.service.client.models.Server;
 import com.nicktoony.gameserver.service.host.Host;
@@ -36,7 +37,7 @@ public class RoomServerList extends Room {
                 getGame().getGameConfig().game_resolution_y));
 
         // The server list (which is an actor)
-        serverList = new ServerList(SkinManager.getUiSkin());
+        serverList = new ServerList(getAsset(EngineConfig.Skins.DEFAULT, Skin.class));
 //        serverList.setDebug(true, true);
         serverList.pad(20);
         // Add meta

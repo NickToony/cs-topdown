@@ -10,6 +10,12 @@ public class EngineConfig {
     public static final float METRES_PER_PIXEL = 1 / PIXELS_PER_METRE;
     public static final int CELL_SIZE = 32;
 
+    public static class Skins {
+        public static String DEFAULT = "skins/default/uiskin.json";
+        public static String TRACER = "skins/tracerui/tracer-ui.json";
+
+    }
+
     public static float toMetres(float pixels) {
         return pixels * METRES_PER_PIXEL;
     }

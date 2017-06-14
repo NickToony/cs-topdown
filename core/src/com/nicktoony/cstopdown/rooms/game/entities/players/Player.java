@@ -2,9 +2,6 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,15 +12,13 @@ import com.esotericsoftware.spine.Event;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
+import com.nicktoony.engine.EngineConfig;
+import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.entities.Bullet;
 import com.nicktoony.engine.entities.SkeletonWrapper;
-import com.nicktoony.engine.EngineConfig;
-import com.nicktoony.engine.components.PhysicsEntity;
-import com.nicktoony.engine.services.CharacterManager;
 import com.nicktoony.engine.services.CharacterSkin;
 import com.nicktoony.engine.services.LightManager;
-import com.nicktoony.engine.services.TextureManager;
 import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 

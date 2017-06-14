@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.nicktoony.engine.MyGame;
-import com.nicktoony.engine.services.SoundManager;
 import com.nicktoony.engine.services.weapons.config.WeaponCategoryConfig;
 import com.nicktoony.engine.services.weapons.config.WeaponCategoryConfigWrapper;
 
