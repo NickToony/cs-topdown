@@ -84,7 +84,7 @@ public class RoomMainMenu extends Room {
                             public void clicked(InputEvent event, float x, float y) {
                                 super.clicked(event, x, y);
 
-                                showNewGameDialog("Single Player");
+                                showNewGameDialog();
                             }
                         }
                 ));
@@ -126,8 +126,10 @@ public class RoomMainMenu extends Room {
                         new Label("Options", skin),
                         new ClickListener() {
                             @Override
-                            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                                // do nothing
+                            public void clicked(InputEvent event, float x, float y) {
+                                super.clicked(event, x, y);
+
+                                showOptionsDialog();
                             }
                         }
                 ));
@@ -158,7 +160,9 @@ public class RoomMainMenu extends Room {
 
         stage.addActor(table);
 
-        showNameDialog();
+        if (getGame().getGameConfig().name.isEmpty()) {
+            showNameDialog();
+        }
     }
 
     @Override
@@ -192,7 +196,6 @@ public class RoomMainMenu extends Room {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 getAsset("sounds/click.ogg", Sound.class).play();
-                System.out.println("OKAY");
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -315,7 +318,8 @@ public class RoomMainMenu extends Room {
         dialog.add(label);
         dialog.row();
 
-        dialog.add(new TextField("Player", skin)).prefWidth(300);
+        final TextField fieldName = new TextField("Player", skin);
+        dialog.add(fieldName).prefWidth(300);
         dialog.row();
 
         Button button = new Button(skin);
@@ -323,7 +327,13 @@ public class RoomMainMenu extends Room {
         button.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                dialog.hide();
+
+                if (!fieldName.getText().isEmpty()) {
+                    dialog.hide();
+
+                    getGame().getGameConfig().name = fieldName.getText();
+                    getGame().getGameConfig().save();
+                }
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -333,13 +343,25 @@ public class RoomMainMenu extends Room {
         dialog.show(stage);
     }
 
-    private void showNewGameDialog(String title) {
+    private void showNewGameDialog() {
         Skin skin = getAsset(EngineConfig.Skins.SGX, Skin.class);
         SinglePlayerDialogWrapper dialogWrapper = new SinglePlayerDialogWrapper(skin);
         dialogWrapper.setListener(new SinglePlayerDialogWrapper.SuccessListener() {
             @Override
             public void onSuccess(ServerConfig serverConfig) {
                 startSinglePlayer(serverConfig);
+            }
+        });
+        dialogWrapper.show(stage);
+    }
+
+    private void showOptionsDialog() {
+        Skin skin = getAsset(EngineConfig.Skins.SGX, Skin.class);
+        OptionsDialogWrapper dialogWrapper = new OptionsDialogWrapper(getGame().getGameConfig(), skin);
+        dialogWrapper.setListener(new OptionsDialogWrapper.SuccessListener() {
+            @Override
+            public void saved() {
+                getGame().reconfigure();
             }
         });
         dialogWrapper.show(stage);

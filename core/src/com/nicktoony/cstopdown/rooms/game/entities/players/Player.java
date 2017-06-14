@@ -557,7 +557,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     @Override
     public void animationEvent(Event event) {
-        int soundRange = getRoom().getGame().getGameConfig().sound_range;
+        int soundRange = getRoom().getConfig().mp_sound_range;
         float volume = Math.max((soundRange - new Vector2(x, y)
                 .dst(getRoom().getMap().getCameraCenterX(),
                         getRoom().getMap().getCameraCenterY())) / soundRange, 0) * SOUND_MODIFIER;

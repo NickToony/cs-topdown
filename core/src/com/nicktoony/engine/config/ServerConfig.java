@@ -32,6 +32,7 @@ public class ServerConfig {
     public int mp_round_time = 300;
     public int mp_victory_time = 5;
     public int mp_bot_engage_range = 400;
+    public int mp_sound_range = 800;
 
     // Server rates
     public int sv_tickrate = 1;

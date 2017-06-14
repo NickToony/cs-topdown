@@ -33,16 +33,6 @@ public class DesktopLauncher {
             }
 
             @Override
-            public MyGame.GameConfigLoader getGameConfigLoader() {
-                return new MyGame.GameConfigLoader() {
-                    @Override
-                    public GameConfig getGameConfig(Logger logger) {
-                        return findConfig(logger);
-                    }
-                };
-            }
-
-            @Override
             public CSServer getLocalServer(Logger logger, ServerConfig config) {
                 if (logger == null) { logger = new ServerUI(new ServerUI.UIListener() {
                     @Override

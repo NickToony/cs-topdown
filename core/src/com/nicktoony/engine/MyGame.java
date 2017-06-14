@@ -3,9 +3,7 @@ package com.nicktoony.engine;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,15 +27,10 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
 
     public interface PlatformProvider {
         ClientSocket getWebSocket(String ip, int port);
-        GameConfigLoader getGameConfigLoader();
         CSServer getLocalServer(Logger logger, ServerConfig config);
         Server.LoopManager getLoopManager();
         boolean canHost();
         int[][] imageToPixels(String file);
-    }
-
-    public interface GameConfigLoader {
-        GameConfig getGameConfig(Logger logger);
     }
 
     private Logger logger;
@@ -142,8 +135,13 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
      */
     private void configure() {
 
-        gameConfig = platformProvider.getGameConfigLoader().getGameConfig(getLogger());
+        gameConfig = new GameConfig();
+        gameConfig.load();
 
+        reconfigure();
+    }
+
+    public void reconfigure() {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             configDesktop(gameConfig);
         }
@@ -155,10 +153,11 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
      */
     private void configDesktop(GameConfig gameConfig) {
         // Only the desktop should change its display mode
-//        Gdx.graphics.setDisplayMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y, gameConfig.game_fullscreen);
-        Gdx.graphics.setWindowedMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y);
-        if (gameConfig.game_fullscreen) {
+//        Gdx.graphics.setDisplayMode(gameConfig.resolution_x, gameConfig.resolution_y, gameConfig.fullscreen);
+        if (gameConfig.fullscreen) {
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else {
+            Gdx.graphics.setWindowedMode(gameConfig.resolution_x, gameConfig.resolution_y);
         }
     }
 

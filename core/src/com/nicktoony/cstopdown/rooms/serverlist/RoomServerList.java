@@ -33,8 +33,8 @@ public class RoomServerList extends Room {
         // set gameserver config.json
         GameserverConfig.setConfig(new ServerlistConfig());
         // A stage
-        stage = new Stage(new StretchViewport(getGame().getGameConfig().game_resolution_x,
-                getGame().getGameConfig().game_resolution_y));
+        stage = new Stage(new StretchViewport(getGame().getGameConfig().resolution_x,
+                getGame().getGameConfig().resolution_y));
 
         // The server list (which is an actor)
         serverList = new ServerList(getAsset(EngineConfig.Skins.DEFAULT, Skin.class));

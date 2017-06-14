@@ -28,11 +28,6 @@ public class ServerApplication {
         }
 
         @Override
-        public MyGame.GameConfigLoader getGameConfigLoader() {
-            return null;
-        }
-
-        @Override
         public CSServer getLocalServer(Logger logger, ServerConfig config) {
             return null;
         }
