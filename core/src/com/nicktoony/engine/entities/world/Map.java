@@ -225,7 +225,7 @@ public class Map {
                 // Fetch the rectangle collision box
                 TextureMapObject rectangle = ((TextureMapObject) object);
 
-                addCollisionWall(world, rectangle.getX(), rectangle.getY() + (Float) rectangle.getProperties().get("height"),
+                addCollisionWall(world, rectangle.getX(), rectangle.getY(),
                         (Float) rectangle.getProperties().get("width"),  (Float) rectangle.getProperties().get("height") );
 
 //                System.out.println(rectangle.getX() + "," + rectangle.getY() + " :: " + rectangle.getProperties().get("width") + "," + rectangle.getProperties().get("height"));
@@ -262,6 +262,7 @@ public class Map {
         // Pathfinding
         for (float pathX = x; pathX < x + width; pathX += EngineConfig.CELL_SIZE) {
             for (float pathY = y; pathY < y + height; pathY += EngineConfig.CELL_SIZE) {
+                System.out.println(x + "," + y);
                 pathfindingGraph.getNodeByWorld(pathX, pathY).setSolid(true);
             }
         }

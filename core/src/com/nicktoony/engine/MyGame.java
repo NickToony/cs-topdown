@@ -154,7 +154,8 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
      */
     private void configDesktop(GameConfig gameConfig) {
         // Only the desktop should change its display mode
-        Gdx.graphics.setDisplayMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y, gameConfig.game_fullscreen);
+//        Gdx.graphics.setDisplayMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y, gameConfig.game_fullscreen);
+        Gdx.graphics.setWindowedMode(gameConfig.game_resolution_x, gameConfig.game_resolution_y);
     }
 
     private Logger getLogger() {

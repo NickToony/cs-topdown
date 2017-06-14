@@ -6,6 +6,7 @@
 	<inherits name='Box2DLights' />
     <inherits name="com.sksamuel.gwt.GwtWebsockets" />
 	<inherits name='com.badlogic.gdx.ai' />
+	<inherits name='com.kotcrab.vis.vis-ui' />
 
 	<inherits name='MyGame' />
 	<entry-point class='com.nicktoony.cstopdown.client.HtmlLauncher' />

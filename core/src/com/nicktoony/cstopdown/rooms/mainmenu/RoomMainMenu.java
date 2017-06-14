@@ -12,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.VisUI;
 import com.nicktoony.cstopdown.networking.CSLocalClientSocket;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerLocal;
 import com.nicktoony.cstopdown.rooms.connect.CSRoomConnect;
 import com.nicktoony.cstopdown.rooms.serverlist.RoomServerList;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.Room;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.networking.client.ClientSocket;
@@ -45,6 +47,8 @@ public class RoomMainMenu extends Room {
         Gdx.app.setLogLevel(Application.LOG_INFO);
 //        Gdx.app.log("LogTest", "Hello World");
 
+        VisUI.load();
+
         // A stage
         stage = new Stage(new StretchViewport(UI_SIZE_X, UI_SIZE_Y));
 
@@ -53,7 +57,6 @@ public class RoomMainMenu extends Room {
 
         // Table layout
         table = new Table();
-//        table.setFillParent(true);
         table.pad(40).left().bottom();
 
         // Add background
@@ -139,6 +142,11 @@ public class RoomMainMenu extends Room {
 
 
         };
+
+        Dialog dialog = new Dialog("Enter name", getAsset(EngineConfig.Skins.SGX, Skin.class));
+        dialog.text("Since this is your first time playing, please enter a name:");
+        dialog.button("Okay");
+        dialog.show(stage);
 
         for (Actor label : labels) {
             row(table);
