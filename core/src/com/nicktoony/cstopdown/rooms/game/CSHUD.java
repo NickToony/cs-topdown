@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.engine.entities.HUD;
 
 /**
@@ -218,7 +219,11 @@ public class CSHUD extends HUD {
         // Draw names
         int i = 0;
         for (Player player : getRoom().getGameManager().getPlayers()) {
-            if (player != playerSnap) {
+            boolean isUserPlayer = playerSnap instanceof UserPlayer;
+            boolean showName = (isUserPlayer && player != playerSnap && playerSnap.getTeam() == player.getTeam())
+                    || (!isUserPlayer);
+
+            if (showName) {
                 if (i < playerLabels.length) {
                     Label label = playerLabels[i];
                     float zoom = getRoom().getMap().getCameraZoom();
