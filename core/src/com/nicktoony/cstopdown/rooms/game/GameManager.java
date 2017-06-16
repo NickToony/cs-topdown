@@ -227,8 +227,12 @@ public class GameManager implements ClientSocket.SBSocketListener {
                                 iterator.reset();
                             } else if (entry.key == packet.lastProcessed) {
                                 found = entry.value;
-                                lx = (packet.x - found[0])/16;
-                                ly = (packet.y - found[1])/16;
+                                lx = (packet.x - found[0])/8;
+                                ly = (packet.y - found[1])/8;
+
+                                if (Math.abs(lx + ly) < 1) {
+                                    lx = ly = 0;
+                                }
                             } else {
                                 if (found != null) {
                                     storedPositions.put(entry.key, new Float[] {

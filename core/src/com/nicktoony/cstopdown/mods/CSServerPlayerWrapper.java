@@ -92,7 +92,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public String getName() {
-        return "Player " + this;
+        return playerDetails.name;
     }
 
     @Override

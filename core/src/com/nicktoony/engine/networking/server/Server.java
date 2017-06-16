@@ -79,7 +79,6 @@ public abstract class Server<T extends ServerClientHandler> {
 
     public void step() {
         if (lastFPSCount < System.currentTimeMillis() - 1000) {
-//            System.out.println("Server FPS: " + fpsFrames);
             fpsFrames = 0;
             lastFPSCount = System.currentTimeMillis();
         }

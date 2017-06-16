@@ -13,10 +13,11 @@ import com.nicktoony.engine.EngineConfig;
  */
 public class ServerConfig {
     // Server settings
-    public String sv_name = "Dev Server";
+    public String sv_name = "CS Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 0;
+    public int sv_bots = 7;
+    public String sv_bot_prefix = "";
     public String sv_map = EngineConfig.MAPS[0];
     public String sv_mode = EngineConfig.MODES[0];
 
@@ -29,7 +30,7 @@ public class ServerConfig {
 
     // Gameplay settings
     public boolean mp_player_collisions = true;
-    public float mp_player_move_speed = 2;
+    public float mp_player_move_speed = 2.5f;
     public int mp_freeze_time = 5;
     public int mp_round_time = 300;
     public int mp_victory_time = 5;
@@ -38,8 +39,8 @@ public class ServerConfig {
 
     // Server rates
     public int sv_tickrate = 1;
-    public int sv_lag_compensate = 0;
+    public int sv_lag_compensate = 10;
 
     // Client rates
-    public int cl_tickrate = 5;
+    public int cl_tickrate = 4;
 }

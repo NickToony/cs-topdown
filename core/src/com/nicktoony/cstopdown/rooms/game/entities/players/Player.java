@@ -664,7 +664,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 //        if (lastUpdate <= getRoom().getGameManager().getTimestamp()) {
 
             lastUpdate = getRoom().getGameManager().getTimestamp() + 1000/getRoom().getSocket().getServerConfig().cl_tickrate;
-            lastMove = 0;
+            lastMove = newMove;
             lastShoot = shootKey;
             lastReload = reloadKey;
             lastZoom = zoomKey;

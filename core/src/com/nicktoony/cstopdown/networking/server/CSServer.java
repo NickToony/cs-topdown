@@ -4,6 +4,7 @@ package com.nicktoony.cstopdown.networking.server;
  * Created by nick on 13/07/15.
  */
 
+import com.nicktoony.cstopdown.Strings;
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
@@ -26,6 +27,7 @@ import com.nicktoony.engine.services.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class CSServer extends Server<CSServerClientHandler> {
 
@@ -35,6 +37,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
     private List<PlayerDetailsWrapper> changed = new ArrayList<PlayerDetailsWrapper>();
+    private Random random = new Random();
 
     private enum STATE {
         ROUND_START,
@@ -94,7 +97,20 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
             client.setState(ServerClientHandler.STATE.LOADING);
             notifyClientMessage(client, new LoadedPacket());
 
-            client.getPlayerWrapper().getPlayerDetails().name = EngineConfig.BOT_NAMES[0] + " " + i;
+            String name;
+            while (true) {
+                name = config.sv_bot_prefix + Strings.BOT_NAMES[random.nextInt(Strings.BOT_NAMES.length)];
+                boolean okay = true;
+                for (CSServerClientHandler otherPlayer : getClients()) {
+                    if (otherPlayer.getPlayerWrapper().getPlayerDetails().name.contentEquals(name)) {
+                        okay = false;
+                    }
+                }
+                if (okay) {
+                    break;
+                }
+            }
+            client.getPlayerWrapper().getPlayerDetails().name = name;
         }
     }
 
@@ -104,6 +120,9 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
         long now = System.currentTimeMillis();
         delta = (float) ((now - lastTime) / MS_PER_TICK);
         lastTime = now;
+
+//        System.out.println(delta + " :: " + fps);
+
         // Update world
         roomGame.step(delta);
 
@@ -248,7 +267,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
-        sendToAll(new ChatPacket("[YELLOW]Played killed."));
+        sendToAll(new ChatPacket("[YELLOW]" + playerKilled.getName() + " killed by " + playerKiller.getName() + "."));
 
         for (GameModeMod mod : mods) {
             mod.evPlayerKilled(playerKilled, playerKiller);

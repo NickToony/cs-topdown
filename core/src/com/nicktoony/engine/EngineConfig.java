@@ -25,10 +25,6 @@ public class EngineConfig {
             "TeamDeathmatch", "LastTeamStanding"
     };
 
-    public static String[] BOT_NAMES = new String[] {
-            "Bot"
-    };
-
     public static float toMetres(float pixels) {
         return pixels * METRES_PER_PIXEL;
     }
