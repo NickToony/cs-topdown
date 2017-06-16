@@ -263,7 +263,7 @@ public class Map {
         // Pathfinding
         for (float pathX = x; pathX < x + width; pathX += EngineConfig.CELL_SIZE) {
             for (float pathY = y; pathY < y + height; pathY += EngineConfig.CELL_SIZE) {
-                System.out.println(x + "," + y);
+//                System.out.println(x + "," + y);
                 pathfindingGraph.getNodeByWorld(pathX, pathY).setSolid(true);
             }
         }
