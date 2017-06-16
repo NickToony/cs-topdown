@@ -12,7 +12,23 @@ public class PlayerDetailsWrapper implements Json.Serializable {
     public int kills = 0;
     public int deaths = 0;
     public int ping = 0;
+    public int team = 0;
     public boolean changed = false;
+
+    public void setKills(int kills) {
+        this.kills = kills;
+        changed = true;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        changed = true;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
+        changed = true;
+    }
 
     @Override
     public void write(Json json) {
@@ -21,6 +37,7 @@ public class PlayerDetailsWrapper implements Json.Serializable {
         json.writeValue("kills", kills);
         json.writeValue("deaths", deaths);
         json.writeValue("ping", ping);
+        json.writeValue("team", team);
     }
 
     @Override
@@ -30,5 +47,6 @@ public class PlayerDetailsWrapper implements Json.Serializable {
         kills = jsonData.getInt("kills");
         deaths = jsonData.getInt("deaths");
         ping = jsonData.getInt("ping");
+        team = jsonData.getInt("team");
     }
 }

@@ -173,6 +173,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         if (isAlive()) {
             getPlayer().setTeam(team);
         }
+        this.playerDetails.team = team;
 
         server.notifyModPlayerJoinedTeam(this);
     }
@@ -189,6 +190,8 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     public void update() {
         if (isAlive() && getHealth() <= 0) {
             slay(true);
+            killer.playerDetails.setKills(killer.playerDetails.kills + 1);
+            playerDetails.setDeaths(playerDetails.deaths + 1);
             server.notifyModPlayerKilled(this, killer);
         }
 

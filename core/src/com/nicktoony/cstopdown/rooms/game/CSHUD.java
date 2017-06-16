@@ -38,6 +38,7 @@ public class CSHUD extends HUD {
     boolean leftJustPressed = false;
     boolean rightJustPressed = false;
     private OptionsMenu optionsMenu;
+    private Scoreboard scoreboard;
     private Label playerLabels[];
 
     @Override
@@ -116,6 +117,7 @@ public class CSHUD extends HUD {
             }
 
             this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
+            this.scoreboard = (Scoreboard) getRoom().addSelfManagedEntity(new Scoreboard());
         }
     }
 
@@ -144,12 +146,14 @@ public class CSHUD extends HUD {
         }
 
         optionsMenu.resize(x, y);
+        scoreboard.resize(x, y);
     }
 
     @Override
     public void step(float delta) {
         stage.act(delta);
 
+        // Show menu (toggle)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (optionsMenu.isVisible()) {
                 optionsMenu.hide();
@@ -160,9 +164,24 @@ public class CSHUD extends HUD {
             }
         }
 
+        // Scoreboard (hold)
+        boolean tab = Gdx.input.isKeyPressed(Input.Keys.TAB);
+        if (tab && !scoreboard.isVisible()) {
+            scoreboard.show();
+            Gdx.input.setInputProcessor(scoreboard.getStage());
+        } else if (!tab && scoreboard.isVisible()) {
+            scoreboard.hide();
+            Gdx.input.setInputProcessor(scoreboard.getStage());
+        }
+
         if (optionsMenu.isVisible()) {
             optionsMenu.step(delta);
             return;
+        }
+
+        if (scoreboard.isVisible()) {
+            scoreboard.step(delta);
+//            return;
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
@@ -195,6 +214,11 @@ public class CSHUD extends HUD {
         if (optionsMenu.isVisible()) {
             optionsMenu.render(spriteBatch);
             return;
+        }
+
+        if (scoreboard.isVisible()) {
+            scoreboard.render(spriteBatch);
+//            return;
         }
 
 
@@ -263,6 +287,7 @@ public class CSHUD extends HUD {
         stage.dispose();
 
         optionsMenu.dispose(render);
+        scoreboard.dispose(render);
     }
 
     @Override

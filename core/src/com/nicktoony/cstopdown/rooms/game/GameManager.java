@@ -35,6 +35,8 @@ public class GameManager implements ClientSocket.SBSocketListener {
     private final float ALLOWANCE_MULTIPLIER = 2;
     public OrderedMap<Integer, Float[]> storedPositions = new OrderedMap<Integer, Float[]>();
     public int number = 0;
+    private boolean scoreboardChanged = true;
+
 
     public int getInputNumber(float x, float y) {
         number ++;
@@ -104,11 +106,22 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     private void handleReceivedPacket(PlayerDetailsPacket packet) {
         for (PlayerDetailsWrapper wrapper : packet.playerDetails) {
-            playerDetailsMap.put(wrapper.id, wrapper);
+            PlayerDetailsWrapper existingWrapper  = playerDetailsMap.get(wrapper.id);
+            if (existingWrapper == null) {
+                existingWrapper = wrapper;
+                playerDetailsMap.put(wrapper.id, existingWrapper);
+                scoreboardChanged = true;
+            } else {
+                existingWrapper.name = wrapper.name;
+                existingWrapper.kills = wrapper.kills;
+                existingWrapper.deaths = wrapper.deaths;
+                existingWrapper.ping = wrapper.ping;
+            }
         }
 
         for (int left : packet.left) {
             playerDetailsMap.remove(left);
+            scoreboardChanged = true;
         }
     }
 
@@ -359,7 +372,19 @@ public class GameManager implements ClientSocket.SBSocketListener {
         return wrapper != null ? wrapper : new PlayerDetailsWrapper();
     }
 
+    public Collection<PlayerDetailsWrapper> getPlayerDetails() {
+        return playerDetailsMap.values();
+    }
+
     public Collection<Player> getPlayers() {
         return playerIdMap.values();
+    }
+
+    public boolean getScoreboardChanged() {
+        return scoreboardChanged;
+    }
+
+    public void setScoreboardChanged(boolean newValue) {
+        this.scoreboardChanged = newValue;
     }
 }

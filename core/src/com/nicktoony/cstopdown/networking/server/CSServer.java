@@ -4,8 +4,11 @@ package com.nicktoony.cstopdown.networking.server;
  * Created by nick on 13/07/15.
  */
 
+import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
+import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
+import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.rooms.game.CSRoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.EngineConfig;
@@ -31,6 +34,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private long lastTime;
     private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
+    private List<PlayerDetailsWrapper> changed = new ArrayList<PlayerDetailsWrapper>();
 
     private enum STATE {
         ROUND_START,
@@ -105,6 +109,21 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         // Manages round time
         roundStep();
+
+        changed.clear();
+        for (CSServerClientHandler client : getClients()) {
+            PlayerDetailsWrapper wrapper = client.getPlayerWrapper().getPlayerDetails();
+            if (wrapper.changed) {
+                changed.add(wrapper);
+                wrapper.changed = false;
+            }
+        }
+        if (changed.size() != 0) {
+            PlayerDetailsPacket packet = new PlayerDetailsPacket();
+            packet.playerDetails = changed.toArray(new PlayerDetailsWrapper[changed.size()]);
+            packet.left = new int[0];
+            sendToAll(packet);
+        }
 
 //        fps ++;
 //        if ((now - fpsLast) >= 1000) {

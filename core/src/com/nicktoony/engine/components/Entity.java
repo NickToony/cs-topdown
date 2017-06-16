@@ -85,7 +85,7 @@ public abstract class Entity<R extends Room> extends Renderable {
     }
 
     @Override
-    public void resize(int x, int y) {
+    public void resize(int width, int height) {
 
     }
 }

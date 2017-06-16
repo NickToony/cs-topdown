@@ -159,7 +159,7 @@ public class OptionsMenu extends Entity<RoomGame> {
 
     public void step(float delta) {
         if (visible)
-            stage.act(Gdx.graphics.getDeltaTime());
+            stage.act(delta);
     }
 
     @Override
@@ -180,7 +180,6 @@ public class OptionsMenu extends Entity<RoomGame> {
         if (stage != null) {
             stage.getViewport().update(width, height, true);
         }
-        System.out.println("RESIZED");
     }
 
     public void show() {
