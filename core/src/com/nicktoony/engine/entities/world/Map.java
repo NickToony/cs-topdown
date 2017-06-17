@@ -115,7 +115,7 @@ public class Map {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = mapProperties.get("zoom", Float.class);
-//        camera.zoom = 1;
+        camera.zoom = 0.625f; // override
         renderer.setView(camera);
 
         // Objectivbes

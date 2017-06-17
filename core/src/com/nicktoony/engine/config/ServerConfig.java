@@ -30,7 +30,7 @@ public class ServerConfig {
 
     // Gameplay settings
     public boolean mp_player_collisions = true;
-    public float mp_player_move_speed = 2.5f;
+    public float mp_player_move_speed = 2.2f;
     public int mp_freeze_time = 5;
     public int mp_round_time = 300;
     public int mp_victory_time = 5;

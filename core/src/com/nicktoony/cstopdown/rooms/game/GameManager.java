@@ -174,6 +174,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
             // If it was the entity snap
             if (player == roomGame.getMap().getEntitySnap()) {
+                // clear stored
+                storedPositions.clear();
+
                 roomGame.getMap().setEntitySnap(null);
                 if (playerIdMap.get(packet.killer) != null) {
                     roomGame.getMap().setEntitySnap(playerIdMap.get(packet.killer));
