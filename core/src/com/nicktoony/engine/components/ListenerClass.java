@@ -40,7 +40,25 @@ public class ListenerClass implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        boolean handled = false;
+        if (contact.getFixtureA().getBody().getUserData() != null
+                && contact.getFixtureB().getBody().getUserData() != null) {
+            PhysicsEntity entityOne = (PhysicsEntity) contact.getFixtureA().getBody().getUserData();
+            PhysicsEntity entityTwo = (PhysicsEntity) contact.getFixtureB().getBody().getUserData();
+            if (entityOne.presolveEntity(contact, entityTwo)) {
+                handled = true;
+            }
+        }
 
+        if (!handled) {
+            if (contact.getFixtureA().getBody().getUserData() != null) {
+                PhysicsEntity entityOne = (PhysicsEntity) contact.getFixtureA().getBody().getUserData();
+                entityOne.presolveOther(contact);
+            } else if (contact.getFixtureB().getBody().getUserData() != null) {
+                PhysicsEntity entityOne = (PhysicsEntity) contact.getFixtureB().getBody().getUserData();
+                entityOne.presolveOther(contact);
+            }
+        }
     }
 
     @Override

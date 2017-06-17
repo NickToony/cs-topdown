@@ -14,6 +14,7 @@ import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.engine.EngineConfig;
+import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.entities.Bullet;
@@ -153,13 +154,32 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 10f;
+        fixtureDef.density = 50f;
         fixtureDef.restitution = 0f;
+//        fixtureDef.filter.categoryBits = 0x0002;
+//        fixtureDef.filter.maskBits = 0x0001;
 
         body.createFixture(fixtureDef);
         shape.dispose();
 
         return body;
+    }
+
+    @Override
+    public boolean presolveEntity(Contact contact, Entity other) {
+        if (other instanceof Player) {
+            contact.setEnabled(false);
+
+            if (getRoom().getConfig().mp_player_collisions) {
+                Vector2 move = new Vector2(0, .2f);
+                move.setAngle(EngineConfig.angleBetweenPoints(other.getPosition(), getPosition()));
+                Vector2 pos = body.getPosition();
+                this.body.applyLinearImpulse(move.x, move.y, pos.x, pos.y, true);
+                return true;
+            }
+        }
+
+        return super.presolveEntity(contact, other);
     }
 
     public void setNextWeapon(int slot)  {

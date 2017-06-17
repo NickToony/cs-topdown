@@ -66,6 +66,14 @@ public abstract class PhysicsEntity extends Entity<RoomGame> {
 
     };
 
+    public boolean presolveEntity(Contact contact, Entity other) {
+        return false;
+    };
+
+    public void presolveOther(Contact contact) {
+
+    };
+
     public Body getBody() {
         return body;
     }

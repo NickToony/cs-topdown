@@ -44,9 +44,14 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 if (entity == player) {
                     return -1;
                 } else if (entity instanceof Player) {
-                    entityHit = (Player) entity;
-                    pointHit = point;
-                    normalHit = normal;
+                    Player hitPlayer = (Player) entity;
+
+                    if ( (server.getConfig().mp_friendly_fire)
+                            || (hitPlayer.getTeam() != getTeam())) {
+                        entityHit = hitPlayer;
+                        pointHit = point;
+                        normalHit = normal;
+                    }
                     return fraction;
                 }
             }
@@ -163,6 +168,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         player.setNextWeapon(0);
         player.setHealth(getMaxHealth());
         player.setListener(this);
+        player.setTeam(team);
 
         client.createPlayer();
     }
@@ -190,7 +196,11 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     public void update() {
         if (isAlive() && getHealth() <= 0) {
             slay(true);
-            killer.playerDetails.setKills(killer.playerDetails.kills + 1);
+            if (killer.getTeam() != getTeam()) {
+                killer.playerDetails.setKills(killer.playerDetails.kills + 1);
+            } else {
+                killer.playerDetails.setKills(killer.playerDetails.kills - 1);
+            }
             playerDetails.setDeaths(playerDetails.deaths + 1);
             server.notifyModPlayerKilled(this, killer);
         }
