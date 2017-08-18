@@ -30,6 +30,11 @@ public class TeamDeathMatch extends GameModeMod {
     }
 
     @Override
+    public void evPlayerShot(PlayerModInterface shooter, PlayerModInterface shot, int damage, boolean valid) {
+
+    }
+
+    @Override
     public void evPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
         playerKilled.spawn(3);
         playerKilled.message("[WHITE]You will respawn in 3 seconds.");

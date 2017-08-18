@@ -24,6 +24,7 @@ public abstract class GameModeMod {
     public abstract void evInit();
     public abstract void evRoundStart();
     public abstract void evRoundEnd();
+    public abstract void evPlayerShot(PlayerModInterface shooter, PlayerModInterface shot, int damage, boolean valid);
     public abstract void evPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller);
     public abstract void evPlayerConnected(PlayerModInterface player);
     public abstract void evPlayerDisconnected(PlayerModInterface player);

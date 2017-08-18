@@ -15,7 +15,7 @@ public class ServerConfigValidator {
         } catch (Exception e) {
             return "must be a number";
         }
-        return validateRange(number, 1, 16);
+        return validateRange(number, 1, 32);
     }
 
     public static String validateBots(String input, int maxPlayers) {

@@ -283,5 +283,15 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         return null;
     }
+
+    public void notifyModPlayerShot(PlayerModInterface shooter, PlayerModInterface shot, int damage, boolean valid) {
+        if (valid && shooter.getTeam() == shot.getTeam()) {
+            sendToAll(new ChatPacket("[YELLOW]" + shooter.getName() + " shot a team mate."));
+        }
+
+        for (GameModeMod mod : mods) {
+            mod.evPlayerShot(shooter, shot, damage, valid);
+        }
+    }
 }
 

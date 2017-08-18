@@ -15,7 +15,10 @@ import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
 import com.nicktoony.engine.services.weapons.WeaponManager;
+import javafx.collections.transformation.SortedList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,14 +30,22 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     protected Player player;
     protected CSServer server;
     protected CSServerClientHandler client;
-    private Player entityHit;
-    private Vector2 pointHit;
-    private Vector2 normalHit;
+    private List<HitPlayer> entityHit = new ArrayList<HitPlayer>();
     private Random random = new Random();
     private long toSpawn = -1;
     private CSServerPlayerWrapper lastHit;
     private CSServerPlayerWrapper killer;
     private PlayerDetailsWrapper playerDetails = new PlayerDetailsWrapper();
+
+    class HitPlayer {
+        Player player;
+        float fraction;
+
+        public HitPlayer(Player player, float fraction) {
+            this.player = player;
+            this.fraction = fraction;
+        }
+    }
 
     private RayCastCallback shootCallback = new RayCastCallback() {
         @Override
@@ -46,19 +57,26 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 } else if (entity instanceof Player) {
                     Player hitPlayer = (Player) entity;
 
-                    if ( (server.getConfig().mp_friendly_fire)
-                            || (hitPlayer.getTeam() != getTeam())) {
-                        entityHit = hitPlayer;
-                        pointHit = point;
-                        normalHit = normal;
+                    // Added
+                    boolean added = false;
+                    for (int i = 0; i < entityHit.size(); i ++) {
+                        if (entityHit.get(i).fraction > fraction) {
+                            entityHit.add(i, new HitPlayer(hitPlayer, fraction));
+                            added = true;
+                            break;
+                        }
                     }
-                    return fraction;
+                    if (!added) {
+                        entityHit.add(new HitPlayer(hitPlayer, fraction));
+                    }
+
+                    return 1;
                 }
             }
 
-            entityHit = null;
-            pointHit = null;
-            normalHit = null;
+//            entityHit = null;
+//            pointHit = null;
+//            normalHit = null;
             return fraction;
         }
     };
@@ -235,40 +253,45 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
             Vector2 vecFrom = player.getBody().getPosition();
 
             // Perform a raycast
-            entityHit = null;
-            pointHit = null;
-            normalHit = null;
+            entityHit.clear();
             server.getRoom().getWorld().rayCast(shootCallback, vecFrom, vecTo);
 
-            if (entityHit != null) {
-//                System.out.println(pointHit.dst(player.getBody().getPosition()));
+            if (!entityHit.isEmpty()) {
 
-                // Get angle
-                Vector2 vecContact = EngineConfig.toPixels(pointHit);
-                Vector2 vecEntity = entityHit.getPosition();
+                System.out.println("HIT " + entityHit.size() + " players.");
 
-                // Calculate angle
-                float calc = (normalHit.angle()-(player.getActualDrection()-90));
-                while (calc > 180) { calc -= 360; };
-                calc = Math.abs(calc);
+                // Figure out damage
+                int damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().medium;
 
-                // Calculate damage
-                int damage;
-                if (calc <= -1) { // never happen - headshots are silly
-                    damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().high;
-                } else if (calc <= 50) {
-                    damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().medium;
-                } else {
-                    damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().low;
+                for (HitPlayer hitOtherPlayer : entityHit) {
+                    Player otherPlayer = hitOtherPlayer.player;
+                    CSServerClientHandler hitPlayer = server.findClientForPlayer(otherPlayer);
+
+                    // Check if we're allowed to hurt them
+                    if ( (server.getConfig().mp_friendly_fire)
+                            || (otherPlayer.getTeam() != getTeam())) {
+
+                        // Kill them
+                        int currentHealth = otherPlayer.getHealth();
+                        otherPlayer.setHealth(currentHealth - damage);
+
+                        if (hitPlayer != null) {
+                            hitPlayer.getPlayerWrapper().setLastHit(this);
+                            server.notifyModPlayerShot(this, hitPlayer.getPlayerWrapper(), damage, true);
+                        }
+
+                    } else {
+                        if (hitPlayer != null) {
+                            hitPlayer.getPlayerWrapper().setLastHit(this);
+                            server.notifyModPlayerShot(this, hitPlayer.getPlayerWrapper(), 0, false);
+                        }
+                    }
+
+                    // Damage reduces when passing through players
+                    damage /= 2;
+
                 }
 
-                // Kill them
-                int currentHealth = entityHit.getHealth();
-                entityHit.setHealth(currentHealth - damage);
-                CSServerClientHandler hitPlayer = server.findClientForPlayer(entityHit);
-                if (hitPlayer != null) {
-                    hitPlayer.getPlayerWrapper().setLastHit(this);
-                }
             }
         }
     }

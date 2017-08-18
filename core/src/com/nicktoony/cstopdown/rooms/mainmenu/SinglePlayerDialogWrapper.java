@@ -19,6 +19,7 @@ public class SinglePlayerDialogWrapper {
     private SelectBox<String> fieldMap;
     private SelectBox<String> fieldMode;
     private CheckBox fieldPlayerCollisions;
+    private CheckBox fieldFriendlyFire;
     private TextField fieldPlayerSpeed;
     private TextField fieldFreezeTime;
     private TextField fieldRoundTime;
@@ -101,6 +102,12 @@ public class SinglePlayerDialogWrapper {
         dialog.add(fieldMode).prefWidth(rightSize);
         dialog.row();
 
+        dialog.add(new Label("Friendly Fire", skin)).prefWidth(leftSize);
+        fieldFriendlyFire = new CheckBox("", skin);
+        fieldFriendlyFire.setChecked(serverConfig.mp_friendly_fire);
+        dialog.add(fieldFriendlyFire).prefWidth(rightSize);
+        dialog.row();
+
         dialog.add(new Label("Player Collisions", skin)).prefWidth(leftSize);
         fieldPlayerCollisions = new CheckBox("", skin);
         fieldPlayerCollisions.setChecked(serverConfig.mp_player_collisions);
@@ -172,6 +179,7 @@ public class SinglePlayerDialogWrapper {
         serverConfig.sv_bots = Integer.parseInt(fieldBots.getText());
         serverConfig.mp_player_move_speed = Float.parseFloat(fieldPlayerSpeed.getText());
         serverConfig.mp_player_collisions = fieldPlayerCollisions.isChecked();
+        serverConfig.mp_friendly_fire = fieldFriendlyFire.isChecked();
         serverConfig.mp_freeze_time = Integer.parseInt(fieldFreezeTime.getText());
         serverConfig.mp_round_time = Integer.parseInt(fieldRoundTime.getText());
         serverConfig.sv_map = fieldMap.getSelected();

@@ -29,6 +29,11 @@ public class LastTeamStanding extends GameModeMod {
     }
 
     @Override
+    public void evPlayerShot(PlayerModInterface shooter, PlayerModInterface shot, int damage, boolean valid) {
+
+    }
+
+    @Override
     public void evPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
 
     }

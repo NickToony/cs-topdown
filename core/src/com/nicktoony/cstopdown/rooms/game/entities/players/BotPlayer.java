@@ -77,16 +77,21 @@ public class BotPlayer extends Player {
 
         lastScan --;
         if (lastScan < 0) {
+            lastScan = 10;
+            if (pause <= 0) {
+                pause = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
+                if (aiState == AIState.combat) {
+                    pause /= 3;
+                }
+            }
+
             scanForEnemies();
 
-            lastScan = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
-            pause = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
-
-            if (aiState == AIState.combat) { pause /= 2; }
+//            if (aiState == AIState.combat) { pause /= 2; }
 
             // If the bot appears to be stuck
             if (aiState == AIState.moving || aiState == AIState.exploring) {
-                if (EngineConfig.toPixels(positionSinceLastScan.dst(getPosition())) < 5) {
+                if (EngineConfig.toPixels(positionSinceLastScan.dst(getPosition())) < 1) {
                     // Try doing something else
                     aiState = AIState.idle;
                 }
