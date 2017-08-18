@@ -78,10 +78,10 @@ public class BotPlayer extends Player {
         lastScan --;
         if (lastScan < 0) {
             lastScan = 10;
-            if (pause <= 0) {
+            if (pause <= 0 || aiState != AIState.combat) {
                 pause = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
                 if (aiState == AIState.combat) {
-                    pause /= 3;
+                    pause /= 2;
                 }
             }
 
