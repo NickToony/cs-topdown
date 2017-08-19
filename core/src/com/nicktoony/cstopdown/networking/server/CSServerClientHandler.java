@@ -254,6 +254,12 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         DestroyPlayerPacket destroyPlayerPacket = new DestroyPlayerPacket();
         destroyPlayerPacket.id = id;
         destroyPlayerPacket.killer = killer == null ? -1 : killer.getID();
+        destroyPlayerPacket.cause = killer == null ? "SLAYED" : killer.getWeaponName();
+//        destroyPlayerPacket.victimName = player.getName();
+//        if (killer != null) {
+//            destroyPlayerPacket.killerName = killer.getName();
+//            destroyPlayerPacket.weapon = killer.getWeaponName();
+//        }
         server.sendToAll(destroyPlayerPacket);
     }
 

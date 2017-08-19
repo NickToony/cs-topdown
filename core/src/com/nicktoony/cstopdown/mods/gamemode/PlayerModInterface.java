@@ -14,6 +14,7 @@ public interface PlayerModInterface {
     float getY();
     boolean isAlive();
     String getName();
+    String getWeaponName();
     int getID();
     int getTeam();
     boolean isBot();

@@ -1,5 +1,6 @@
 package com.nicktoony.cstopdown.rooms.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
@@ -36,6 +37,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
     public OrderedMap<Integer, Float[]> storedPositions = new OrderedMap<Integer, Float[]>();
     public int number = 0;
     private boolean scoreboardChanged = true;
+    private int team = -1;
 
 
     public int getInputNumber(float x, float y) {
@@ -116,6 +118,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
                 existingWrapper.kills = wrapper.kills;
                 existingWrapper.deaths = wrapper.deaths;
                 existingWrapper.ping = wrapper.ping;
+                scoreboardChanged = true;
             }
         }
 
@@ -184,7 +187,30 @@ public class GameManager implements ClientSocket.SBSocketListener {
                     roomGame.getMap().setEntitySnap(playerIdMap.values().iterator().next());
                 }
             }
+
         }
+
+
+        PlayerDetailsWrapper killedPlayer = getPlayerDetails(packet.id);
+
+        if (killedPlayer != null) {
+            PlayerDetailsWrapper killerPlayer = getPlayerDetails(packet.killer);
+
+            Color killerColor = Color.WHITE;
+            Color killedColor = Color.WHITE;
+            if (team != -1) {
+                killerColor = killerPlayer != null && killerPlayer.team == team ? Color.SKY : Color.CORAL;
+                killedColor = killedPlayer.team == team ? Color.SKY : Color.CORAL;
+            }
+
+            ((CSHUD) this.roomGame.getHud()).addFrag(
+                    new FragUI.Frag(
+                            "[#" + killerColor + "]"
+                                    + (killerPlayer != null ? killerPlayer.name : ""),
+                            "[#" + killedColor + "]" + killedPlayer.name,
+                            packet.cause));
+        }
+
     }
 
     private void handleReceivedPacket(PlayerUpdatePacket packet) {
@@ -284,6 +310,11 @@ public class GameManager implements ClientSocket.SBSocketListener {
         player.setWeapons(packet.weapons);
         player.setNextWeapon(packet.currentWeapon);
         player.setTeam(packet.team);
+
+        // Is it my player?
+        if (socket != null && packet.id == socket.getId()) {
+            team = packet.team;
+        }
     }
 
     private int smartMod(int a, int b) {
@@ -393,5 +424,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     public void setScoreboardChanged(boolean newValue) {
         this.scoreboardChanged = newValue;
+    }
+
+    public int getTeam() {
+        return team;
     }
 }

@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -30,6 +27,7 @@ public class CSHUD extends HUD {
     private Stage stage;
     private ScrollPane chatScrollPane;
     private Table chatTable;
+    private Table uiTable;
     private Container<ScrollPane> chatContainer;
     private boolean chatActive = false;
     private boolean chatJustAdded = false;
@@ -40,6 +38,7 @@ public class CSHUD extends HUD {
     private OptionsMenu optionsMenu;
     private Scoreboard scoreboard;
     private Label playerLabels[];
+    private FragUI fragContainer;
 
     @Override
     protected void create(boolean render) {
@@ -116,6 +115,16 @@ public class CSHUD extends HUD {
                 playerLabels[i] = label;
             }
 
+            // UI Table
+            uiTable = new Table();
+            uiTable.setFillParent(true);
+            stage.addActor(uiTable);
+
+            // Frag container
+            fragContainer = new FragUI();
+            uiTable.add(fragContainer).expandX().expandY().top().right();
+//            fragContainer.setPosition(Gdx.graphics.getWidth() - 0, Gdx.graphics.getHeight() - 0);
+
             this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
             this.scoreboard = (Scoreboard) getRoom().addSelfManagedEntity(new Scoreboard());
         }
@@ -152,6 +161,8 @@ public class CSHUD extends HUD {
     @Override
     public void step(float delta) {
         stage.act(delta);
+
+        fragContainer.update();
 
         // Show menu (toggle)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -288,10 +299,18 @@ public class CSHUD extends HUD {
 
         optionsMenu.dispose(render);
         scoreboard.dispose(render);
+
+        if (render) {
+            fragContainer.dispose();
+        }
     }
 
     @Override
     public boolean getMouse() {
         return (chatActive || optionsMenu.isVisible());
+    }
+
+    public void addFrag(FragUI.Frag frag) {
+        fragContainer.addFrag(frag);
     }
 }

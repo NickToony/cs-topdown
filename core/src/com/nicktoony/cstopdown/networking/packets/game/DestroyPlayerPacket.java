@@ -8,4 +8,5 @@ import com.nicktoony.engine.packets.Packet;
 public class DestroyPlayerPacket extends Packet {
     public int id;
     public int killer = -1;
+    public String cause = "";
 }

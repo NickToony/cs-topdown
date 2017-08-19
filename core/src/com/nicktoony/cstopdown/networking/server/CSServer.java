@@ -267,7 +267,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModPlayerKilled(PlayerModInterface playerKilled, PlayerModInterface playerKiller) {
-        sendToAll(new ChatPacket("[YELLOW]" + playerKilled.getName() + " killed by " + playerKiller.getName() + "."));
+//        sendToAll(new ChatPacket("[YELLOW]" + playerKilled.getName() + " killed by " + playerKiller.getName() + "."));
 
         for (GameModeMod mod : mods) {
             mod.evPlayerKilled(playerKilled, playerKiller);

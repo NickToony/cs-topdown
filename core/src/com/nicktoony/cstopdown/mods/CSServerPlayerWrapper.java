@@ -14,6 +14,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
+import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 import javafx.collections.transformation.SortedList;
 
@@ -116,6 +117,14 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public String getName() {
         return playerDetails.name;
+    }
+
+    @Override
+    public String getWeaponName() {
+
+        return player != null ?
+                player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getName()
+                : "KILLED";
     }
 
     @Override
@@ -257,8 +266,6 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
             server.getRoom().getWorld().rayCast(shootCallback, vecFrom, vecTo);
 
             if (!entityHit.isEmpty()) {
-
-                System.out.println("HIT " + entityHit.size() + " players.");
 
                 // Figure out damage
                 int damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().medium;
