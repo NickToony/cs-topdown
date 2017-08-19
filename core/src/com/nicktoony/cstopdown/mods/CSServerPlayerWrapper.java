@@ -14,9 +14,6 @@ import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
-import com.nicktoony.engine.services.weapons.Weapon;
-import com.nicktoony.engine.services.weapons.WeaponManager;
-import javafx.collections.transformation.SortedList;
 
 import java.util.ArrayList;
 import java.util.List;
