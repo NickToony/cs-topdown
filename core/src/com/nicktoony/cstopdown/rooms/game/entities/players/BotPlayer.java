@@ -82,7 +82,7 @@ public class BotPlayer extends Player {
 
         lastScan --;
         if (lastScan < 0) {
-            lastScan = nearbyTargets > 0 ? 10 : 60;
+            lastScan = nearbyTargets > 0 ? 10 : 30;
             if (pause <= 0 || aiState != AIState.combat) {
                 pause = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
                 if (aiState == AIState.combat) {
@@ -167,11 +167,19 @@ public class BotPlayer extends Player {
                 if (currentTarget != null && currentTarget.isAlive()) {
                     if (pause > 0) pause --;
 
-                    moveRight = false;
-                    moveLeft = false;
-                    moveUp = false;
-                    moveDown = false;
-                    shootKey = (pause <= 0);
+                    float distance = getPosition().dst(currentTarget.getPlayer().getPosition());
+                    boolean inRange = (distance <= getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange()
+                            || getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange() == -1);
+
+                    if (!inRange) {
+                        moveRight = x + 8 < currentTarget.getX();
+                        moveLeft = x - 8 > currentTarget.getX();
+                        moveUp = y + 8 < currentTarget.getY();
+                        moveDown = y - 8 > currentTarget.getY();
+                    } else {
+                        moveLeft = moveRight = moveUp = moveDown = false;
+                    }
+                    shootKey = (pause <= 0 && inRange);
                     reloadKey = (getCurrentWeaponObject().bulletsIn <= 0);
 
                     directionTo = (float) Math.toDegrees(Math.atan2(currentTarget.getY() - y,
@@ -201,13 +209,7 @@ public class BotPlayer extends Player {
                 float distance = getPosition().dst(otherPlayer.getPlayer().getPosition());
                 if (distance < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
                     if (canSeePlayer(otherPlayer.getPlayer())) {
-                        if (distance <= getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange()
-                                || getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange() == -1) {
                             targets.add(otherPlayer.getPlayerWrapper());
-                        } else {
-                            explorePosition = otherPlayer.getPlayer().getPosition();
-                        }
-                        nearbyTargets ++;
                     }
                     else if (otherPlayer.getPlayer().isMoving()) {
                         // we heard them...
