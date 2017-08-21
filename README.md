@@ -1,4 +1,4 @@
-![](https://github.com/NickToony/cs-topdown/blob/master/screenshots/screenshot3.png)
+![](https://github.com/NickToony/cs-topdown/blob/master/screenshots/screenshot4.png)
 
 CS Top Down
 =====================
@@ -31,6 +31,8 @@ An adventure into the world of LibGDX: A multiplayer top-down 2D shooter with pr
 - Flashlight: F
 - Reload: R
 - Switch weapons: 1/2/3/4/5
+- Tab: Scoreboard
+- ESC: Menu
 
 ## Play Now
 You can grab recent builds of the server, desktop and html from my server:
