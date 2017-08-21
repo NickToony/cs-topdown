@@ -118,7 +118,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public String getWeaponName() {
-
+        // TODO: track lastWeapon used, in case the killer already died!
         return player != null ?
                 player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getName()
                 : "KILLED";

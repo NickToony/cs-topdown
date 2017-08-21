@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.rooms.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
@@ -48,28 +49,27 @@ public class FragUI extends Table {
         Frag frag;
         while (fragIterator.hasNext()) {
             frag = fragIterator.next();
-            if (frag.label != null &&
-                    (count > 5 || frag.added + 4000 < System.currentTimeMillis())) {
-                    frag.label.getColor().a -= 0.2f;
-                    if (frag.label.getColor().a <= 0) {
-                        frag.label.remove();
-                        fragIterator.remove();
-                    }
-            } else {
-                if (frag.label == null) {
+            if (frag.label == null) {
                     frag.label =  new Label(frag.killer +
                             "   [YELLOW]" + frag.weapon +
                             "   " + frag.killed,
                             new Label.LabelStyle(fragFont, Color.WHITE));
                     frag.label.setAlignment(Align.right);
                     this.row();
-                    this.add(frag.label).expandX()
-                            .padBottom(1)
-                             .padLeft(8).padRight(8);
+                    this.add(frag.label);//.expandX()
+                          //  .padBottom(1)
+                            // .padLeft(8).padRight(8);
 
-                }
+            } else if (count > 6 || frag.added + 4000 < System.currentTimeMillis()) {
+                frag.label.getColor().a -= 0.2f;
 
-            }
+                    if (frag.label.getColor().a <= 0) {
+//                        removeActor(frag.row);
+                        if (frag.label.remove()) {
+                            fragIterator.remove();
+                        }
+                    }
+              }
 
             count --;
         }
