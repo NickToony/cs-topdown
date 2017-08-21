@@ -146,6 +146,8 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
      */
     private void configure() {
 
+        Gdx.graphics.setTitle("CS: Topdown");
+
         gameConfig = new GameConfig();
         gameConfig.load();
 
