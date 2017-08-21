@@ -77,6 +77,16 @@ public abstract class GameModeMod {
         return list;
     }
 
+    protected List<PlayerModInterface> getActivePlayers(int team) {
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        for (PlayerModInterface player : getAllPlayers()) {
+            if (player.getTeam() == team) {
+                list.add(player);
+            }
+        }
+        return list;
+    }
+
     protected List<PlayerModInterface> getActivePlayers() {
         List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
         for (PlayerModInterface player : getAllPlayers()) {

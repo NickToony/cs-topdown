@@ -135,10 +135,13 @@ public class BotPlayer extends Player {
                     aiState = AIState.moving;
 
                     // Tell client
-                    PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
-                    playerSwitchWeapon.setTimestamp(player.getTimestamp());
-                    playerSwitchWeapon.slot = random.nextInt(getWeapons().length);
-                    player.handleReceivedMessage(playerSwitchWeapon);
+                    int nextWeapon = random.nextInt(getWeapons().length);
+                    if (nextWeapon != getCurrentWeapon()) {
+                        PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+                        playerSwitchWeapon.setTimestamp(player.getTimestamp());
+                        playerSwitchWeapon.slot = nextWeapon;
+                        player.handleReceivedMessage(playerSwitchWeapon);
+                    }
                 }
 
                 break;
@@ -168,7 +171,7 @@ public class BotPlayer extends Player {
                     if (pause > 0) pause --;
 
                     float distance = getPosition().dst(currentTarget.getPlayer().getPosition());
-                    boolean inRange = (distance <= getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange()
+                    boolean inRange = (distance <= getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange() - 8
                             || getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange() == -1);
 
                     if (!inRange) {

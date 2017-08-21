@@ -34,9 +34,9 @@
     "cock": "pistol_cock"
   },
   "sounds": {
-    "shoot": "shoot.wav",
-    "equip": "equip.wav",
-    "dequip": "dequip.wav",
+    "shoot": "shoot.ogg",
+    "equip": "equip.ogg",
+    "dequip": "dequip.ogg",
     "eject": "eject.wav",
     "insert": "insert.wav",
     "cock": "cock.wav",

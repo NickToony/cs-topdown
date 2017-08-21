@@ -79,8 +79,7 @@ public class Zombies extends GameModeMod {
     @Override
     public void evPlayerJoinedTeam(PlayerModInterface player) {
         // If it was the only player
-        if (getAlivePlayers(PlayerModInterface.TEAM_CT).size() == 0
-                || getAlivePlayers(PlayerModInterface.TEAM_T).size() == 0) {
+        if (getActivePlayers().size() == 1) {
             if (isRoundActive()) {
                 message("No humans alive. Ending round.");
                 endRound();

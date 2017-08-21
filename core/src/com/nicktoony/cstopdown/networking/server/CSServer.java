@@ -198,7 +198,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void startRound() {
-        roundState = STATE.ROUND_FREEZETIME;
+        roundState = STATE.ROUND_START;
         roundTimer = System.currentTimeMillis();
 
         notifyModRoundStart();
