@@ -157,7 +157,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         fixtureDef.shape = shape;
         fixtureDef.density = 50f;
         fixtureDef.restitution = 0f;
-//        fixtureDef.filter.categoryBits = 0x0002;
+        fixtureDef.filter.categoryBits = 0x0002;
 //        fixtureDef.filter.maskBits = 0x0001;
 
         body.createFixture(fixtureDef);
@@ -169,9 +169,10 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     @Override
     public boolean presolveEntity(Contact contact, Entity other) {
         if (other instanceof Player) {
-            contact.setEnabled(false);
-
-            if (getRoom().getConfig().mp_player_collisions) {
+            if (!getRoom().getConfig().mp_player_collisions){
+                contact.setEnabled(false);
+                return true;
+            } else {
                 Vector2 move = new Vector2(0, .2f);
                 move.setAngle(EngineConfig.angleBetweenPoints(other.getPosition(), getPosition()));
                 Vector2 pos = body.getPosition();

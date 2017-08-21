@@ -289,10 +289,12 @@ public class Map {
                 float physicsY = EngineConfig.toMetres(rectangle.getY() + (Float) rectangle.getProperties().get("height"));
                 float physicsCellSize = EngineConfig.toMetres(EngineConfig.CELL_SIZE);
                 LightManager.definePointLight(rayHandler, mapProperties,
-                         physicsX + (physicsCellSize / 2),
-                         physicsY + (physicsCellSize / 2));
+                         physicsX - (physicsCellSize / 2),
+                         physicsY - (physicsCellSize / 2));
             }
         }
+
+        rayHandler.update();
     }
 
     public int getMapHeight() {

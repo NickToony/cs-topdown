@@ -6,6 +6,7 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.nicktoony.engine.EngineConfig;
 
 /**
@@ -35,6 +36,9 @@ public class LightManager {
         Color color = Color.valueOf(mapProperties.get("color", String.class));
         color.a = Float.parseFloat(mapProperties.get("alpha", String.class));
         pointLight.setColor(color);
+        Filter filter = new Filter();
+        filter.maskBits = 0x0001;
+        pointLight.setContactFilter(filter);
         // The size
         pointLight.setDistance(EngineConfig.toMetres(Integer.parseInt(mapProperties.get("distance", String.class))));
         // Position
