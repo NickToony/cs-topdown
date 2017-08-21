@@ -2,22 +2,35 @@
 
 CS Top Down
 =====================
-A quick adventure into the world of LibGDX: topdown 2D shooter based on the popular Counterstrike series.
+An adventure into the world of LibGDX: A multiplayer top-down 2D shooter with precision, inspired by the popular Counterstrike series.
 
 ## Current Features
 - Collisions and movement using Box2D
 - External map loading and rendering using Tiled Map Editor
+    - Custom Map/Textures downloading from game-servers
 - Skeletal based animation using Spine
 - Lighting engine using Box2D Lights
 - Cross-platform multiplayer (Desktop, Web, Android, iOS)
-- Lag compensating netcode
+    - Entirely based upon WebSockets
+- Reliable server-authoriative net-code: smooth, responsive and fast
+- Moddable game-modes, weapons, sounds, graphics, maps
+
+## Default gamemodes (or make your own!)
+- Team Deathmatch (config: "TeamDeathMatch")
+    - Spawn with a random weapon, infinite respawns
+- Last Team Standing (config: "LastTeamStanding")
+    - Spawn with all weapons, be the last team alive
+- Zombies (config: "Zombies")
+    - Kill zombies, or become a zombie and consume the humans!
+- Left 4 Dead (config: "Left4Dead")
+    - It's human players vs endlessly spawning zombie bots!
 
 ## Controls
 - Movement: WASD
 - Shoot: Left click
 - Flashlight: F
 - Reload: R
-- Switch weapons: 1/2
+- Switch weapons: 1/2/3/4/5
 
 ## Play Now
 You can grab recent builds of the server, desktop and html from my server:
@@ -29,7 +42,7 @@ You can grab recent builds of the server, desktop and html from my server:
 You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/1).
 
 ## Server Hosting
-The server module may be ran with either no GUI (default), or a simple text-based GUI. Alternatively, you can host a server using the game client on platforms that support it (all except HTML).
+The server module may be ran with either no GUI (default), or a simple text-based GUI. Alternatively, you can host a server within the game client on platforms that support it (all except HTML).
 
 [Server Config Documentation](SERVERCONFIG.md)
 
