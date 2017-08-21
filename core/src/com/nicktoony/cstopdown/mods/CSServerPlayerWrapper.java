@@ -32,6 +32,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     private List<HitPlayer> entityHit = new ArrayList<HitPlayer>();
     private Random random = new Random();
     private long toSpawn = -1;
+    private float wallFraction = 1;
     private CSServerPlayerWrapper lastHit;
     private CSServerPlayerWrapper killer;
     private PlayerDetailsWrapper playerDetails = new PlayerDetailsWrapper();
@@ -74,9 +75,8 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 }
             }
 
-//            entityHit = null;
-//            pointHit = null;
-//            normalHit = null;
+            wallFraction = fraction;
+
             return fraction;
         }
     };
@@ -274,31 +274,34 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 int damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().medium;
 
                 for (HitPlayer hitOtherPlayer : entityHit) {
-                    Player otherPlayer = hitOtherPlayer.player;
-                    CSServerClientHandler hitPlayer = server.findClientForPlayer(otherPlayer);
+                    // Only hit if there wasn't a wall in the way
+                    if (hitOtherPlayer.fraction <= wallFraction) {
+                        Player otherPlayer = hitOtherPlayer.player;
+                        CSServerClientHandler hitPlayer = server.findClientForPlayer(otherPlayer);
 
-                    // Check if we're allowed to hurt them
-                    if ( (server.getConfig().mp_friendly_fire)
-                            || (otherPlayer.getTeam() != getTeam())) {
+                        // Check if we're allowed to hurt them
+                        if ((server.getConfig().mp_friendly_fire)
+                                || (otherPlayer.getTeam() != getTeam())) {
 
-                        // Kill them
-                        int currentHealth = otherPlayer.getHealth();
-                        otherPlayer.setHealth(currentHealth - damage);
+                            // Kill them
+                            int currentHealth = otherPlayer.getHealth();
+                            otherPlayer.setHealth(currentHealth - damage);
 
-                        if (hitPlayer != null) {
-                            hitPlayer.getPlayerWrapper().setLastHit(this);
-                            server.notifyModPlayerShot(this, hitPlayer.getPlayerWrapper(), damage, true);
+                            if (hitPlayer != null) {
+                                hitPlayer.getPlayerWrapper().setLastHit(this);
+                                server.notifyModPlayerShot(this, hitPlayer.getPlayerWrapper(), damage, true);
+                            }
+
+                        } else {
+                            if (hitPlayer != null) {
+                                hitPlayer.getPlayerWrapper().setLastHit(this);
+                                server.notifyModPlayerShot(this, hitPlayer.getPlayerWrapper(), 0, false);
+                            }
                         }
 
-                    } else {
-                        if (hitPlayer != null) {
-                            hitPlayer.getPlayerWrapper().setLastHit(this);
-                            server.notifyModPlayerShot(this, hitPlayer.getPlayerWrapper(), 0, false);
-                        }
+                        // Damage reduces when passing through players
+                        damage /= 2;
                     }
-
-                    // Damage reduces when passing through players
-                    damage /= 2;
 
                 }
 
