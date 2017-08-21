@@ -82,6 +82,9 @@ public class Map {
         // Ambient colours
         ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
         ambientColour.a = mapProperties.get("ambientAlpha", Float.class);
+        if (gameConfig.tmp_map_lighting != -1) {
+            ambientColour.a = gameConfig.tmp_map_lighting;
+        }
 
         mapWidth = EngineConfig.CELL_SIZE * tX;
         mapHeight = EngineConfig.CELL_SIZE * tY;

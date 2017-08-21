@@ -47,4 +47,7 @@ public class ServerConfig {
 
     // Client rates
     public int cl_tickrate = 4;
+
+    // Temporary
+    public float tmp_map_lighting = -1;
 }
