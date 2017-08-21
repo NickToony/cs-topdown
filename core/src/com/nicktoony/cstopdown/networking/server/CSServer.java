@@ -6,23 +6,24 @@ package com.nicktoony.cstopdown.networking.server;
 
 import com.nicktoony.cstopdown.Strings;
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
+import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.mods.gamemode.implementations.LastTeamStanding;
+import com.nicktoony.cstopdown.mods.gamemode.implementations.Left4Dead;
+import com.nicktoony.cstopdown.mods.gamemode.implementations.TeamDeathMatch;
+import com.nicktoony.cstopdown.mods.gamemode.implementations.Zombies;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
 import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
 import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.rooms.game.CSRoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
-import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.MyGame;
-import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
-import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
-import com.nicktoony.cstopdown.mods.gamemode.implementations.TeamDeathMatch;
-import com.nicktoony.engine.rooms.RoomGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.networking.client.FakeClientSocket;
 import com.nicktoony.engine.networking.server.Server;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
+import com.nicktoony.engine.rooms.RoomGame;
 import com.nicktoony.engine.services.Logger;
 
 import java.util.ArrayList;
@@ -39,8 +40,9 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private List<PlayerDetailsWrapper> changed = new ArrayList<PlayerDetailsWrapper>();
     private Random random = new Random();
 
-    private enum STATE {
+    public enum STATE {
         ROUND_START,
+        ROUND_FREEZETIME,
         ROUND,
         ROUND_END
     }
@@ -81,7 +83,11 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
         if (config.sv_mode.contentEquals("TeamDeathmatch")) {
             gameModeMod = new TeamDeathMatch();
         } else if (config.sv_mode.contentEquals("LastTeamStanding")) {
-            gameModeMod = new LastTeamStanding();;
+            gameModeMod = new LastTeamStanding();
+        } else if (config.sv_mode.contentEquals("Zombies")) {
+            gameModeMod = new Zombies();
+        } else if (config.sv_mode.contentEquals("Left4Dead")) {
+            gameModeMod = new Left4Dead();
         }
         gameModeMod.setup(this);
         mods.add(gameModeMod);
@@ -157,6 +163,11 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private void roundStep() {
         switch (roundState) {
             case ROUND_START:
+                notifyModRoundStart();
+                roundState = STATE.ROUND_FREEZETIME;
+                break;
+
+            case ROUND_FREEZETIME:
                 if ((config.mp_freeze_time*1000) + roundTimer < System.currentTimeMillis()) {
                     roundState = STATE.ROUND;
                     roundTimer = System.currentTimeMillis();
@@ -187,7 +198,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void startRound() {
-        roundState = STATE.ROUND_START;
+        roundState = STATE.ROUND_FREEZETIME;
         roundTimer = System.currentTimeMillis();
 
         notifyModRoundStart();
@@ -198,6 +209,10 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
         roundTimer = System.currentTimeMillis();
 
         notifyModRoundEnd();
+    }
+
+    public STATE getRoundState() {
+        return roundState;
     }
 
     public float getDelta() {
@@ -243,6 +258,12 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
 
         for (GameModeMod mod : mods) {
             mod.evPlayerConnected(player);
+        }
+    }
+
+    public void notifyModPlayerSpawned(CSServerPlayerWrapper player) {
+        for (GameModeMod mod : mods) {
+            mod.evPlayerSpawned(player);
         }
     }
 

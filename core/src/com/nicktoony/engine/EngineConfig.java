@@ -22,7 +22,7 @@ public class EngineConfig {
     };
 
     public static String[] MODES = new String[] {
-            "TeamDeathmatch", "LastTeamStanding"
+            "TeamDeathmatch", "LastTeamStanding", "Zombies", "Left4Dead"
     };
 
     public static float toMetres(float pixels) {

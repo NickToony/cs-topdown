@@ -30,6 +30,12 @@ public class PlayerDetailsWrapper implements Json.Serializable {
         changed = true;
     }
 
+
+    public void setTeam(int team) {
+        this.team = team;
+        changed = true;
+    }
+
     @Override
     public void write(Json json) {
         json.writeValue("id", id);
@@ -49,4 +55,5 @@ public class PlayerDetailsWrapper implements Json.Serializable {
         ping = jsonData.getInt("ping");
         team = jsonData.getInt("team");
     }
+
 }

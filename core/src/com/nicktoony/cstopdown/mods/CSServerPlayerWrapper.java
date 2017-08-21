@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
+import com.nicktoony.cstopdown.networking.packets.game.UpdateWeaponsPacket;
 import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.server.CSServer;
@@ -34,6 +35,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     private CSServerPlayerWrapper lastHit;
     private CSServerPlayerWrapper killer;
     private PlayerDetailsWrapper playerDetails = new PlayerDetailsWrapper();
+    private int maxHealth = 100;
 
     class HitPlayer {
         Player player;
@@ -93,7 +95,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public int getMaxHealth() {
-        return 100;
+        return maxHealth;
     }
 
     @Override
@@ -136,6 +138,8 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 int index = server.getRoom().getMap().spawnIndex[getTeam()];
                 Spawn spawn = server.getRoom().getMap().getSpawns(team).get(index);
                 createPlayer(spawn.x, spawn.y);
+                server.notifyModPlayerSpawned(this);
+                toSpawn = -1; // overwrite a pending spawn
                 index++;
                 if (index >= server.getRoom().getMap().getSpawns(team).size()) {
                     index = 0;
@@ -182,11 +186,11 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         // Spawn a new one
         player = server.getGame().createPlayer(getID(), x, y, isBot());
         player.setWeapons(new WeaponWrapper[]{
-                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("shotgun_spas")),
-                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_m4a1")),
-                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_ak47")),
-                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_awp")),
-                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("pistol_pistol")),
+//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("shotgun_spas")),
+//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_m4a1")),
+//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_ak47")),
+//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_awp")),
+                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("pistol_melee")),
 
         });
         player.setNextWeapon(0);
@@ -199,13 +203,15 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public void joinTeam(int team) {
-        this.team = team;
-        if (isAlive()) {
-            getPlayer().setTeam(team);
-        }
-        this.playerDetails.team = team;
+        if (team != this.team) {
+            this.team = team;
+            if (isAlive()) {
+                getPlayer().setTeam(team);
+            }
+            this.playerDetails.setTeam(team);
 
-        server.notifyModPlayerJoinedTeam(this);
+            server.notifyModPlayerJoinedTeam(this);
+        }
     }
 
     @Override
@@ -314,5 +320,41 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     public PlayerDetailsWrapper getPlayerDetails() {
         return playerDetails;
+    }
+
+
+
+    @Override
+    public void giveWeapon(String weaponKey) {
+        if (isAlive()) {
+            player.addWeapon(new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon(weaponKey)));
+            UpdateWeaponsPacket packet = new UpdateWeaponsPacket(
+                    getID(),
+                    player.getCurrentWeapon(),
+                    player.getWeapons()
+            );
+            server.sendToAll(packet);
+        }
+    }
+
+    @Override
+    public void setWeapon(String weaponKey) {
+        if (isAlive()) {
+            player.setWeapons(new WeaponWrapper[] {
+                    new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon(weaponKey))}
+            );
+            player.setNextWeapon(0);
+            UpdateWeaponsPacket packet = new UpdateWeaponsPacket(
+                    getID(),
+                    player.getCurrentWeapon(),
+                    player.getWeapons()
+            );
+            server.sendToAll(packet);
+        }
+    }
+
+    @Override
+    public void setMaxHealth(int health) {
+        maxHealth = health;
     }
 }

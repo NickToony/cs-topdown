@@ -19,6 +19,9 @@ public interface PlayerModInterface {
     int getTeam();
     boolean isBot();
     void setHealth(int health);
+    void setMaxHealth(int health);
+    void giveWeapon(String weaponKey);
+    void setWeapon(String weaponKey);
 
     // Actions
     boolean spawn();

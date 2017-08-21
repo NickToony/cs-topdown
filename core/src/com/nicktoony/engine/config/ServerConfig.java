@@ -38,6 +38,9 @@ public class ServerConfig {
     public int mp_sound_range = 800;
     public boolean mp_friendly_fire = true;
 
+    // AI
+    public boolean ai_enabled = true;
+
     // Server rates
     public int sv_tickrate = 1;
     public int sv_lag_compensate = 0;

@@ -50,6 +50,7 @@ public class BotPlayer extends Player {
     private int pause = 0;
     private Vector2 explorePosition = null;
     private Vector2 positionSinceLastScan;
+    private int nearbyTargets = 0;
 
     public void setupBot(CSServer server, CSServerClientHandler player) {
         this.server = server;
@@ -75,9 +76,13 @@ public class BotPlayer extends Player {
     public void step(float delta) {
         super.step(delta);
 
+        if (!server.getConfig().ai_enabled) {
+            return;
+        }
+
         lastScan --;
         if (lastScan < 0) {
-            lastScan = 10;
+            lastScan = nearbyTargets > 0 ? 10 : 60;
             if (pause <= 0 || aiState != AIState.combat) {
                 pause = BOT_REACTION_MIN + random.nextInt(BOT_REACTION_MAX - BOT_REACTION_MIN);
                 if (aiState == AIState.combat) {
@@ -189,16 +194,25 @@ public class BotPlayer extends Player {
         targets.clear();
         currentTarget = null;
         explorePosition = null;
+        nearbyTargets = 0;
         for (CSServerClientHandler otherPlayer : server.getClients()) {
             if (otherPlayer.getPlayerWrapper().isAlive()
                     && otherPlayer.getPlayerWrapper().getTeam() != player.getPlayerWrapper().getTeam()) {
-                if (getPosition().dst(otherPlayer.getPlayer().getPosition()) < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
+                float distance = getPosition().dst(otherPlayer.getPlayer().getPosition());
+                if (distance < getRoom().getSocket().getServerConfig().mp_bot_engage_range) {
                     if (canSeePlayer(otherPlayer.getPlayer())) {
-                        targets.add(otherPlayer.getPlayerWrapper());
+                        if (distance <= getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange()
+                                || getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getRange() == -1) {
+                            targets.add(otherPlayer.getPlayerWrapper());
+                        } else {
+                            explorePosition = otherPlayer.getPlayer().getPosition();
+                        }
+                        nearbyTargets ++;
                     }
                     else if (otherPlayer.getPlayer().isMoving()) {
                         // we heard them...
                         explorePosition = otherPlayer.getPlayer().getPosition();
+                        nearbyTargets ++;
 //                        System.out.println("EXPLORE TIME¬!" + getPosition().dst(player.getPlayer().getPosition()));
                     }
                 }

@@ -17,7 +17,8 @@
     {
       "name": "Pistols",
       "weapons": [
-        "pistol_pistol"
+        "pistol_pistol",
+        "pistol_melee"
       ]
     }
   ]

@@ -33,6 +33,7 @@ public abstract class GameModeMod {
     public abstract void evFreezeTimeEnd();
     public abstract void evPlayerDestroyed(PlayerModInterface player);
     public abstract void evStep();
+    public abstract void evPlayerSpawned(PlayerModInterface player);
 
     protected ServerConfig getServerConfig() {
         return server.getConfig();
@@ -50,6 +51,16 @@ public abstract class GameModeMod {
         List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (player.isAlive()) {
+                list.add(player);
+            }
+        }
+        return list;
+    }
+
+    protected List<PlayerModInterface> getAlivePlayers(int team) {
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        for (PlayerModInterface player : getAllPlayers()) {
+            if (player.isAlive() && player.getTeam() == team) {
                 list.add(player);
             }
         }
@@ -76,6 +87,12 @@ public abstract class GameModeMod {
         return list;
     }
 
+    protected void message(String message) {
+        for (PlayerModInterface player : getAllPlayers()) {
+            player.message(message);
+        }
+    }
+
     protected void restartGame() {
         server.startRound();
     }
@@ -84,4 +101,8 @@ public abstract class GameModeMod {
         server.endRound();
     }
 
+    protected boolean isRoundActive() {
+        return server.getRoundState() == CSServer.STATE.ROUND
+                || server.getRoundState() == CSServer.STATE.ROUND_FREEZETIME;
+    }
 }

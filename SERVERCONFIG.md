@@ -53,5 +53,5 @@ This defines the minimum number of times the server should update clients on the
 **sv_lag_compensate (integer)**
 
 Defines the amount of compensation to allow for latency, in ms. The server will wait this amount of time before processing inputs. This helps smooth out irregular ping or packet loss (which is expensive since we use TCP websockets!).
-*Recommended*: 100
+*Recommended*: 0
 

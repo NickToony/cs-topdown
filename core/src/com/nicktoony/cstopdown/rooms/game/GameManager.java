@@ -3,10 +3,7 @@ package com.nicktoony.cstopdown.rooms.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.nicktoony.cstopdown.networking.packets.game.ChatPacket;
-import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
-import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
-import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
+import com.nicktoony.cstopdown.networking.packets.game.*;
 import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
@@ -103,6 +100,19 @@ public class GameManager implements ClientSocket.SBSocketListener {
             handleReceivedPacket((PlayerInputPacket) packet);
         } else if (packet instanceof PlayerDetailsPacket) {
             handleReceivedPacket((PlayerDetailsPacket) packet);
+        } else if (packet instanceof UpdateWeaponsPacket) {
+            handleReceivedPacket((UpdateWeaponsPacket) packet);
+        }
+    }
+
+    private void handleReceivedPacket(UpdateWeaponsPacket packet) {
+        Player player = playerIdMap.get(packet.id);
+        // If the player exists
+        if (player != null) {
+            player.setWeapons(packet.weapons);
+            if (player.getCurrentWeapon() != packet.slot) {
+                player.setNextWeapon(packet.slot);
+            }
         }
     }
 
@@ -118,6 +128,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
                 existingWrapper.kills = wrapper.kills;
                 existingWrapper.deaths = wrapper.deaths;
                 existingWrapper.ping = wrapper.ping;
+                existingWrapper.team = wrapper.team;
                 scoreboardChanged = true;
             }
         }

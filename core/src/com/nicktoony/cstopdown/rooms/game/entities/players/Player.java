@@ -24,6 +24,7 @@ import com.nicktoony.engine.services.LightManager;
 import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -183,7 +184,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     }
 
     public void setNextWeapon(int slot)  {
-        weaponNext = slot;
+        if (weapons.length > slot) {
+            weaponNext = slot;
+        }
     }
 
     public int getCurrentWeapon(){
@@ -200,6 +203,15 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     }
 
     public void setWeapons(WeaponWrapper weapons[]) {
+        this.weapons = weapons;
+    }
+
+    public void addWeapon(WeaponWrapper weapon) {
+        WeaponWrapper weapons[] = new WeaponWrapper[this.weapons.length + 1];
+        for (int i = 0; i < this.weapons.length; i ++) {
+            weapons[i] = this.weapons[i];
+        }
+        weapons[this.weapons.length] = weapon;
         this.weapons = weapons;
     }
 

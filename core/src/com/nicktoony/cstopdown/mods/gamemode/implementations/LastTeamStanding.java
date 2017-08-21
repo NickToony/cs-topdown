@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.mods.gamemode.implementations;
 
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
+import com.nicktoony.engine.services.weapons.Weapon;
 
 /**
  * Created by Nick on 24/03/2016.
@@ -97,5 +98,17 @@ public class LastTeamStanding extends GameModeMod {
     @Override
     public void evStep() {
 
+    }
+
+    @Override
+    public void evPlayerSpawned(PlayerModInterface player) {
+        String weapons[] = new String[] {
+                "rifle_m4a1", "rifle_ak47",
+                "rifle_awp", "shotgun_spas", "pistol_pistol"
+        };
+        player.setWeapon(weapons[0]);
+        for (int i = 1; i < weapons.length; i++) {
+            player.giveWeapon(weapons[i]);
+        }
     }
 }
