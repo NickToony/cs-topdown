@@ -75,3 +75,5 @@ Example CLI run: `java -jar Server.jar`
 - Map graphics from CS2D ([Website](http://www.cs2d.com/))
 
 Please see the Pro license regarding the sound/graphic resources used [here](https://www.gamedevmarket.net/terms-conditions/#pro-licence).
+
+<img src="https://github.com/NickToony/cs-topdown/blob/master/screenshots/screenshot5.png" width="48%"><img src="https://github.com/NickToony/cs-topdown/blob/master/screenshots/screenshot6.png" width="48%">
