@@ -79,6 +79,7 @@ public class Bullet extends PhysicsEntity {
         fixtureDef.shape = shape;
         fixtureDef.density = 20f;
         fixtureDef.restitution = 0f;
+        fixtureDef.filter.categoryBits = 0x0004;
         fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef);

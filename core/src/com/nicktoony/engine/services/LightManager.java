@@ -14,9 +14,13 @@ import com.nicktoony.engine.EngineConfig;
  */
 public class LightManager {
     public static Light defineTorch(RayHandler rayHandler) {
-        return new ConeLight(rayHandler, 100,
+        ConeLight coneLight = new ConeLight(rayHandler, 100,
                 new Color(1, 1, 1, 0.7f)
                 , EngineConfig.toMetres(400), 16, 16, 0, 20);
+        Filter filter = new Filter();
+        filter.maskBits = 0x0001 | 0x0002;
+        coneLight.setContactFilter(filter);
+        return coneLight;
     }
 
     public static Light definePlayerGlow(RayHandler rayHandler) {
