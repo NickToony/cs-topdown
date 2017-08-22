@@ -69,7 +69,7 @@ public class LastTeamStanding extends GameModeMod {
     }
 
     @Override
-    public void evPlayerJoinedTeam(PlayerModInterface player) {
+    public void evPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
         // If it was the only player
         if (getActivePlayers().size() <= 2) {
             restartGame();

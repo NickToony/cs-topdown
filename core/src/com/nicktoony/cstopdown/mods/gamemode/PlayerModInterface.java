@@ -1,5 +1,7 @@
 package com.nicktoony.cstopdown.mods.gamemode;
 
+import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
+
 /**
  * Created by Nick on 24/03/2016.
  */
@@ -22,6 +24,7 @@ public interface PlayerModInterface {
     void setMaxHealth(int health);
     void giveWeapon(String weaponKey);
     void setWeapon(String weaponKey);
+    void setTraits(BotPlayer.BotTraits botTraits);
 
     // Actions
     boolean spawn();

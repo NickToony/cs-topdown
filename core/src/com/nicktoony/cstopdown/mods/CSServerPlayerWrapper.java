@@ -10,6 +10,7 @@ import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.helpers.WeaponWrapper;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
+import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
@@ -134,12 +135,22 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public boolean spawn(int seconds) {
         if (team != TEAM_SPECTATE) {
+            // If immediate spawn
             if (seconds == 0) {
+                // Find a spawn location
                 int index = server.getRoom().getMap().spawnIndex[getTeam()];
                 Spawn spawn = server.getRoom().getMap().getSpawns(team).get(index);
+
+                // Create the player
                 createPlayer(spawn.x, spawn.y);
+
+                // Notify mods of creation
                 server.notifyModPlayerSpawned(this);
+
+                // Stop a timed respawn happening
                 toSpawn = -1; // overwrite a pending spawn
+
+                // Setup next spawn
                 index++;
                 if (index >= server.getRoom().getMap().getSpawns(team).size()) {
                     index = 0;
@@ -203,6 +214,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     @Override
     public void joinTeam(int team) {
+        boolean forced = (this.team != PlayerModInterface.TEAM_SPECTATE);
         if (team != this.team) {
             this.team = team;
             if (isAlive()) {
@@ -210,7 +222,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
             }
             this.playerDetails.setTeam(team);
 
-            server.notifyModPlayerJoinedTeam(this);
+            server.notifyModPlayerJoinedTeam(this, forced);
         }
     }
 
@@ -226,10 +238,12 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     public void update() {
         if (isAlive() && getHealth() <= 0) {
             slay(true);
-            if (killer.getTeam() != getTeam()) {
-                killer.playerDetails.setKills(killer.playerDetails.kills + 1);
-            } else {
-                killer.playerDetails.setKills(killer.playerDetails.kills - 1);
+            if (killer != null) {
+                if (killer.getTeam() != getTeam()) {
+                    killer.playerDetails.setKills(killer.playerDetails.kills + 1);
+                } else {
+                    killer.playerDetails.setKills(killer.playerDetails.kills - 1);
+                }
             }
             playerDetails.setDeaths(playerDetails.deaths + 1);
             server.notifyModPlayerKilled(this, killer);
@@ -359,5 +373,12 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public void setMaxHealth(int health) {
         maxHealth = health;
+    }
+
+    @Override
+    public void setTraits(BotPlayer.BotTraits botTraits) {
+        if (isBot()) {
+            ((BotPlayer) this.player).setTraits(botTraits);
+        }
     }
 }

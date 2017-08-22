@@ -29,7 +29,7 @@ public abstract class GameModeMod {
     public abstract void evPlayerConnected(PlayerModInterface player);
     public abstract void evPlayerDisconnected(PlayerModInterface player);
     public abstract void evPlayerMessage(PlayerModInterface player);
-    public abstract void evPlayerJoinedTeam(PlayerModInterface player);
+    public abstract void evPlayerJoinedTeam(PlayerModInterface player, boolean forced);
     public abstract void evFreezeTimeEnd();
     public abstract void evPlayerDestroyed(PlayerModInterface player);
     public abstract void evStep();
@@ -71,6 +71,16 @@ public abstract class GameModeMod {
         List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
         for (PlayerModInterface player : getAllPlayers()) {
             if (!player.isAlive() && player.getTeam() != PlayerModInterface.TEAM_SPECTATE) {
+                list.add(player);
+            }
+        }
+        return list;
+    }
+
+    protected List<PlayerModInterface> getDeadPlayers(int team) {
+        List<PlayerModInterface> list = new ArrayList<PlayerModInterface>();
+        for (PlayerModInterface player : getAllPlayers()) {
+            if (!player.isAlive() && player.getTeam() == team) {
                 list.add(player);
             }
         }

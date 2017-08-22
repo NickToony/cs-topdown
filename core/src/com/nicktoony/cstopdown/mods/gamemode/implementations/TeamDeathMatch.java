@@ -63,7 +63,7 @@ public class TeamDeathMatch extends GameModeMod {
     }
 
     @Override
-    public void evPlayerJoinedTeam(PlayerModInterface player) {
+    public void evPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
         // If it was the only player
         if (getActivePlayers().size() == 1) {
             restartGame();

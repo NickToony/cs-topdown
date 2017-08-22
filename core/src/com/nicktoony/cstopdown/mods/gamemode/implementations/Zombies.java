@@ -2,6 +2,7 @@ package com.nicktoony.cstopdown.mods.gamemode.implementations;
 
 import com.nicktoony.cstopdown.mods.gamemode.GameModeMod;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
+import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 
 import java.util.Random;
 
@@ -17,7 +18,7 @@ public class Zombies extends GameModeMod {
 
     @Override
     public void evInit() {
-
+        getServerConfig().mp_friendly_fire = false;
     }
 
     @Override
@@ -77,15 +78,15 @@ public class Zombies extends GameModeMod {
     }
 
     @Override
-    public void evPlayerJoinedTeam(PlayerModInterface player) {
+    public void evPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
         // If it was the only player
-        if (getActivePlayers().size() == 1) {
-            if (isRoundActive()) {
-                message("No humans alive. Ending round.");
-                endRound();
+        if (!forced) {
+            if (getActivePlayers(PlayerModInterface.TEAM_CT).size() == 0
+                    || getActivePlayers(PlayerModInterface.TEAM_T).size() == 0) {
+                    endRound();
+            } else {
+                player.spawn();
             }
-        } else {
-            player.spawn();
         }
     }
 
@@ -123,9 +124,17 @@ public class Zombies extends GameModeMod {
                 player.giveWeapon(weapons[i]);
             }
             player.setMaxHealth(100);
+
+            if (player.isBot()) {
+                player.setTraits(new BotPlayer.BotTraits(30, 10, 60, 0));
+            }
         } else {
             player.setMaxHealth(ZOMBIE_HEALTH);
             player.setHealth(ZOMBIE_HEALTH);
+
+            if (player.isBot()) {
+                player.setTraits(new BotPlayer.BotTraits(0, 100, 0, 10));
+            }
         }
     }
 }

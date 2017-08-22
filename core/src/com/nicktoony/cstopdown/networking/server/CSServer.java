@@ -163,7 +163,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private void roundStep() {
         switch (roundState) {
             case ROUND_START:
-                notifyModRoundStart();
+//                notifyModRoundStart();
                 roundState = STATE.ROUND_FREEZETIME;
                 break;
 
@@ -254,7 +254,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModPlayerConnected(PlayerModInterface player) {
-        sendToAll(new ChatPacket("[YELLOW]Player connected."));
+        sendToAll(new ChatPacket("[YELLOW]" + player.getName() + " connected."));
 
         for (GameModeMod mod : mods) {
             mod.evPlayerConnected(player);
@@ -267,11 +267,11 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
         }
     }
 
-    public void notifyModPlayerJoinedTeam(PlayerModInterface player) {
-        sendToAll(new ChatPacket("[YELLOW]Played joined team."));
+    public void notifyModPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
+        sendToAll(new ChatPacket("[YELLOW]" + player.getName() + " joined team."));
 
         for (GameModeMod mod : mods) {
-            mod.evPlayerJoinedTeam(player);
+            mod.evPlayerJoinedTeam(player, forced);
         }
     }
 

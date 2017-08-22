@@ -100,14 +100,34 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private RayCastCallback callback = new RayCastCallback() {
         @Override
         public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+            // IF the body is not us, or the target
             if (!body.getFixtureList().contains(fixture, false)
                     && !targetBody.getFixtureList().contains(fixture, false)) {
-                cannotSee = true;
-                return 0;
+
+                // If it has data
+                if (fixture.getBody().getUserData() != null) {
+                    PhysicsEntity entity = (PhysicsEntity) fixture.getBody().getUserData();
+                    // IF it's another player
+                    if (entity instanceof Player) {
+                        Player player = (Player) entity;
+                        if (player.team == getTeam() && getRoom().getConfig().mp_friendly_fire) {
+                            cannotSee = true;
+                            return 0;
+                        }
+                    } else {
+                        cannotSee = true;
+                        return 0;
+                    }
+                } else {
+                    cannotSee = true;
+                    return 0;
+                }
             } else {
-                cannotSee = false;
+//                cannotSee = false;
                 return -1;
             }
+
+            return 1;
         }
     };
 
@@ -636,7 +656,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     }
 
     public boolean canSeePlayer(Player player) {
-        cannotSee = true;
+        cannotSee = false;
         targetBody = player.body;
         getRoom().getWorld().rayCast(callback, body.getPosition(), player.body.getPosition());
         return !cannotSee;

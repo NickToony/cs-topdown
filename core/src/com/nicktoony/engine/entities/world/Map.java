@@ -341,4 +341,8 @@ public class Map {
     public float getCameraZoom() {
         return camera.zoom;
     }
+
+    public boolean isPointOnMap(float xTarget, float yTarget) {
+        return (xTarget > 0 && xTarget < mapWidth && yTarget > 0 && yTarget < mapHeight);
+    }
 }
