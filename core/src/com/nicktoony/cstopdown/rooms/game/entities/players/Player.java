@@ -169,8 +169,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     @Override
     public boolean presolveEntity(Contact contact, Entity other) {
         if (other instanceof Player) {
+            contact.setEnabled(false);
+
             if (!getRoom().getConfig().mp_player_collisions){
-                contact.setEnabled(false);
                 return true;
             } else {
                 Vector2 move = new Vector2(0, .2f);

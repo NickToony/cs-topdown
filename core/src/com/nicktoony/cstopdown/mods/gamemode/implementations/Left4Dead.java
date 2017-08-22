@@ -15,7 +15,8 @@ public class Left4Dead extends GameModeMod {
 
     @Override
     public void evInit() {
-
+        getServerConfig().tmp_map_lighting = 0.02f;
+        getServerConfig().sv_bot_prefix = "Zombie ";
     }
 
     @Override
