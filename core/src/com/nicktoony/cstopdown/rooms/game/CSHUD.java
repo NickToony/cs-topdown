@@ -39,6 +39,7 @@ public class CSHUD extends HUD {
     private Scoreboard scoreboard;
     private Label playerLabels[];
     private FragUI fragContainer;
+    private TeamMenu teamMenu;
 
     @Override
     protected void create(boolean render) {
@@ -127,6 +128,7 @@ public class CSHUD extends HUD {
 
             this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
             this.scoreboard = (Scoreboard) getRoom().addSelfManagedEntity(new Scoreboard());
+            this.teamMenu = (TeamMenu) getRoom().addSelfManagedEntity(new TeamMenu());
         }
     }
 
@@ -156,6 +158,7 @@ public class CSHUD extends HUD {
 
         optionsMenu.resize(x, y);
         scoreboard.resize(x, y);
+        teamMenu.resize(x,y);
     }
 
     @Override
@@ -166,23 +169,13 @@ public class CSHUD extends HUD {
 
         // Show menu (toggle)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (optionsMenu.isVisible()) {
+            if (teamMenu.isVisible()) {
+                teamMenu.hide();
+            } else if (optionsMenu.isVisible()) {
                 optionsMenu.hide();
-                Gdx.input.setInputProcessor(this.stage);
             } else {
-                Gdx.input.setInputProcessor(optionsMenu.getStage());
                 optionsMenu.show();
             }
-        }
-
-        // Scoreboard (hold)
-        boolean tab = Gdx.input.isKeyPressed(Input.Keys.TAB);
-        if (tab && !scoreboard.isVisible()) {
-            scoreboard.show();
-            Gdx.input.setInputProcessor(scoreboard.getStage());
-        } else if (!tab && scoreboard.isVisible()) {
-            scoreboard.hide();
-            Gdx.input.setInputProcessor(scoreboard.getStage());
         }
 
         if (optionsMenu.isVisible()) {
@@ -190,14 +183,32 @@ public class CSHUD extends HUD {
             return;
         }
 
-        if (scoreboard.isVisible()) {
-            scoreboard.step(delta);
-//            return;
+        // Show team menu (toggle)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            if (teamMenu.isVisible()) {
+                teamMenu.hide();
+            } else {
+                teamMenu.show();
+            }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
-            chatActive = !chatActive;
-            chatScrollPane.setFlickScroll(chatActive);
+        // Scoreboard (hold)
+        boolean tab = Gdx.input.isKeyPressed(Input.Keys.TAB);
+        if (tab && !scoreboard.isVisible()) {
+            scoreboard.show();
+        } else if (!tab && scoreboard.isVisible()) {
+            scoreboard.hide();
+        }
+
+        // Deal with scoreboard
+        if (scoreboard.isVisible()) {
+            scoreboard.step(delta);
+        }
+
+        // Stop here if we're on team menu
+        if (teamMenu.isVisible()) {
+            teamMenu.step(delta);
+            return;
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
@@ -222,14 +233,24 @@ public class CSHUD extends HUD {
     @Override
     public void render(SpriteBatch spriteBatch) {
 
+        Gdx.input.setInputProcessor(stage);
+
+        // Rendering options? render nothing else
         if (optionsMenu.isVisible()) {
+            Gdx.input.setInputProcessor(optionsMenu.getStage());
             optionsMenu.render(spriteBatch);
             return;
         }
 
+        if (teamMenu.isVisible()) {
+            Gdx.input.setInputProcessor(teamMenu.getStage());
+            teamMenu.render(spriteBatch);
+        }
+
+        // Scoreboard should render on top
         if (scoreboard.isVisible()) {
+            Gdx.input.setInputProcessor(scoreboard.getStage());
             scoreboard.render(spriteBatch);
-//            return;
         }
 
 
@@ -299,6 +320,7 @@ public class CSHUD extends HUD {
 
         optionsMenu.dispose(render);
         scoreboard.dispose(render);
+        teamMenu.dispose(render);
 
         if (render) {
             fragContainer.dispose();
@@ -307,7 +329,9 @@ public class CSHUD extends HUD {
 
     @Override
     public boolean getMouse() {
-        return (chatActive || optionsMenu.isVisible());
+        return (chatActive
+                || optionsMenu.isVisible()
+                 || teamMenu.isVisible());
     }
 
     public void addFrag(FragUI.Frag frag) {

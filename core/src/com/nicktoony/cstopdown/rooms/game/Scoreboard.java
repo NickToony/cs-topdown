@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Sort;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.engine.components.Entity;
 import com.nicktoony.engine.rooms.RoomGame;
@@ -81,11 +82,9 @@ public class Scoreboard extends Entity<RoomGame> {
             deaths.setText(Integer.toString(playerDetailsWrapper.deaths));
             ping.setText(Integer.toString(playerDetailsWrapper.ping));
 
-            Color color = Color.WHITE;
-            if (getRoom().getGameManager().getTeam() != -1) {
-                color = getRoom().getGameManager().getTeam() == playerDetailsWrapper.team
-                        ? Color.SKY : Color.CORAL;
-            }
+            Color color = playerDetailsWrapper.team ==  PlayerModInterface.TEAM_CT ? Color.SKY : // CT
+                    playerDetailsWrapper.team ==  PlayerModInterface.TEAM_T ? Color.CORAL : // T
+                    Color.WHITE; // SPECTATOR
             name.setColor(color);
         }
 

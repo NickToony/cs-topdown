@@ -106,7 +106,7 @@ public abstract class ServerClientHandler{
                 }
             }
 
-        } else {
+        } else if (packet instanceof TimestampedPacket) {
             insertInputQueue((TimestampedPacket) packet);
         }
     }

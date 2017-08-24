@@ -45,11 +45,13 @@ public class TeamDeathMatch extends GameModeMod {
 
     @Override
     public void evPlayerConnected(PlayerModInterface player) {
-        player.joinTeam(lastTeam);
-        if (lastTeam == PlayerModInterface.TEAM_CT)
-            lastTeam = PlayerModInterface.TEAM_T;
-        else
-            lastTeam = PlayerModInterface.TEAM_CT;
+        if (player.isBot()) {
+            player.joinTeam(lastTeam);
+            if (lastTeam == PlayerModInterface.TEAM_CT)
+                lastTeam = PlayerModInterface.TEAM_T;
+            else
+                lastTeam = PlayerModInterface.TEAM_CT;
+        }
     }
 
     @Override

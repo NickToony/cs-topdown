@@ -24,15 +24,15 @@ com.badlogic.gdx.graphics.Color: {
 		a: 1
 	}
 	clear: {
-		r: 1
-		g: 0
-		b: 0
+		r: 0.9568627451
+		g: 0.6431372549
+		b: 0.2588235294
 		a: 0
 	}
 	color: {
-		r: 1
-		g: 0
-		b: 0
+		r: 0.9568627451
+		g: 0.6431372549
+		b: 0.2588235294
 		a: 1
 	}
 	pressed: {
@@ -403,7 +403,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		font: font
 		fontColor: color
 		downFontColor: white
-		overFontColor: white
+		overFontColor: black
 		up: button-c
 		down: button-pressed-c
 		over: button-over-c

@@ -3,6 +3,7 @@ package com.nicktoony.cstopdown.rooms.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.game.*;
 import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
@@ -12,6 +13,7 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.packets.Packet;
+import com.nicktoony.engine.packets.connection.JoinTeamPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.PingPacket;
 import com.nicktoony.engine.rooms.RoomGame;
@@ -207,12 +209,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
         if (killedPlayer != null) {
             PlayerDetailsWrapper killerPlayer = getPlayerDetails(packet.killer);
 
-            Color killerColor = Color.WHITE;
-            Color killedColor = Color.WHITE;
-            if (team != -1) {
-                killerColor = killerPlayer != null && killerPlayer.team == team ? Color.SKY : Color.CORAL;
-                killedColor = killedPlayer.team == team ? Color.SKY : Color.CORAL;
-            }
+            // Set colours depending on team
+            Color killerColor = killerPlayer != null && killerPlayer.team == PlayerModInterface.TEAM_CT ? Color.SKY : Color.CORAL;
+            Color killedColor = killedPlayer.team == PlayerModInterface.TEAM_CT ? Color.SKY : Color.CORAL;
 
             ((CSHUD) this.roomGame.getHud()).addFrag(
                     new FragUI.Frag(
@@ -439,5 +438,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     public int getTeam() {
         return team;
+    }
+
+    public void joinTeam(int team) {
+        socket.sendMessage(new JoinTeamPacket(team));
     }
 }

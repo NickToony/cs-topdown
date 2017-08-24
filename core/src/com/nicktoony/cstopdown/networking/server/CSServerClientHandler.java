@@ -10,10 +10,12 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.TimestampedPacket;
 import com.nicktoony.engine.packets.connection.ConnectPacket;
+import com.nicktoony.engine.packets.connection.JoinTeamPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.MapPacket;
 
@@ -280,4 +282,18 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         return id;
     }
 
+    @Override
+    public void handleReceivedMessage(Packet packet) {
+        super.handleReceivedMessage(packet);
+
+        if (packet instanceof JoinTeamPacket) {
+            JoinTeamPacket joinTeamPacket = (JoinTeamPacket) packet;
+            if (EngineConfig.isValidTeam(joinTeamPacket.team)) {
+                this.player.joinTeam((joinTeamPacket).team);
+                if (this.player.isAlive()) {
+                    this.player.slay(true);
+                }
+            }
+        }
+    }
 }

@@ -17,6 +17,7 @@ import com.nicktoony.cstopdown.networking.packets.game.PlayerDetailsPacket;
 import com.nicktoony.cstopdown.networking.packets.helpers.PlayerDetailsWrapper;
 import com.nicktoony.cstopdown.rooms.game.CSRoomGame;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.networking.client.FakeClientSocket;
@@ -268,7 +269,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
-        sendToAll(new ChatPacket("[YELLOW]" + player.getName() + " joined team."));
+        sendToAll(new ChatPacket("[YELLOW]" + player.getName() + " joined " + EngineConfig.getTeamName(player.getTeam()) + "."));
 
         for (GameModeMod mod : mods) {
             mod.evPlayerJoinedTeam(player, forced);
