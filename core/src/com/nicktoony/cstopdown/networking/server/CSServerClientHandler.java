@@ -230,7 +230,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 packet.y = client.getPlayer().getY();
                 packet.light = client.getPlayer().isLightOn();
                 packet.weapons = client.getPlayer().getWeapons();
-                packet.currentWeapon = client.getPlayer().getCurrentWeapon();
+                packet.currentWeapon = client.getPlayer().getNextWeapon();
                 packet.team = client.getPlayerWrapper().getTeam();
                 sendPacket(packet);
             }

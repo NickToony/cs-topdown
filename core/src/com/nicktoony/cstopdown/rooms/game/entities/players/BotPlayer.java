@@ -157,7 +157,6 @@ public class BotPlayer extends Player {
                 shootKey = false;
                 reloadKey = (player.getPlayer().getCurrentWeaponObject().bulletsIn < player.getPlayer().getCurrentWeaponObject().getWeapon(getRoom().getWeaponManager()).getClipSize() * .8);
 
-
                 // Change weapon
                 randomWeapon();
 
@@ -189,7 +188,7 @@ public class BotPlayer extends Player {
                         actionProtect(protectablePlayers.get(random.nextInt(protectablePlayers.size())));
                     } else {
                         // No humans?!?!
-                        actionAssault(); // avenge!
+                        actionExplore(); // avenge!
                     }
                 }
 
