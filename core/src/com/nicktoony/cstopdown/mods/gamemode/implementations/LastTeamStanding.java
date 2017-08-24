@@ -41,21 +41,15 @@ public class LastTeamStanding extends GameModeMod {
 
     @Override
     public void evPlayerConnected(PlayerModInterface player) {
-        boolean restart = true;
-        for (PlayerModInterface existingPlayers : getAlivePlayers()) {
-            if (!existingPlayers.isBot())
-                restart = false;
+
+        if (player.isBot()) {
+            player.joinTeam(lastTeam);
+            if (lastTeam == PlayerModInterface.TEAM_CT)
+                lastTeam = PlayerModInterface.TEAM_T;
+            else
+                lastTeam = PlayerModInterface.TEAM_CT;
         }
 
-        player.joinTeam(lastTeam);
-        if (lastTeam == PlayerModInterface.TEAM_CT)
-            lastTeam = PlayerModInterface.TEAM_T;
-        else
-            lastTeam = PlayerModInterface.TEAM_CT;
-
-        if (restart) {
-            this.restartGame();
-        }
     }
 
     @Override
@@ -71,9 +65,8 @@ public class LastTeamStanding extends GameModeMod {
     @Override
     public void evPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
         // If it was the only player
-        if (getActivePlayers().size() <= 2) {
-            restartGame();
-            System.out.println("Restarting");
+        if (getRoundSeconds() < 5) {
+            player.spawn();
         }
     }
 
@@ -90,7 +83,6 @@ public class LastTeamStanding extends GameModeMod {
         }
 
         if (!alive[0] || !alive[1]) {
-            System.out.println("All players dead");
             endRound();
         }
     }

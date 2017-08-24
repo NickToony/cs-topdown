@@ -289,10 +289,10 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         if (packet instanceof JoinTeamPacket) {
             JoinTeamPacket joinTeamPacket = (JoinTeamPacket) packet;
             if (EngineConfig.isValidTeam(joinTeamPacket.team)) {
-                this.player.joinTeam((joinTeamPacket).team);
                 if (this.player.isAlive()) {
                     this.player.slay(true);
                 }
+                this.player.joinTeam((joinTeamPacket).team);
             }
         }
     }

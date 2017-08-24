@@ -64,7 +64,9 @@ public class Zombies extends GameModeMod {
 
     @Override
     public void evPlayerConnected(PlayerModInterface player) {
-        player.joinTeam(PlayerModInterface.TEAM_CT);
+        if (player.isBot()) {
+            player.joinTeam(PlayerModInterface.TEAM_CT);
+        }
     }
 
     @Override
@@ -80,12 +82,21 @@ public class Zombies extends GameModeMod {
     @Override
     public void evPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
         // If it was the only player
+//        if (!forced) {
+//            if (getActivePlayers(PlayerModInterface.TEAM_CT).size() == 0
+//                    || getActivePlayers(PlayerModInterface.TEAM_T).size() == 0) {
+//                    endRound();
+//            } else {
+//                player.spawn();
+//            }
+//        }
         if (!forced) {
+            player.joinTeam(PlayerModInterface.TEAM_T);
+            player.spawn();
+
             if (getActivePlayers(PlayerModInterface.TEAM_CT).size() == 0
                     || getActivePlayers(PlayerModInterface.TEAM_T).size() == 0) {
                     endRound();
-            } else {
-                player.spawn();
             }
         }
     }
@@ -124,6 +135,7 @@ public class Zombies extends GameModeMod {
                 player.giveWeapon(weapons[i]);
             }
             player.setMaxHealth(100);
+            player.setHealth(100);
 
             if (player.isBot()) {
                 player.setTraits(new BotPlayer.BotTraits(30, 10, 60, 0));

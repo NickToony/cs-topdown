@@ -315,5 +315,9 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
             mod.evPlayerShot(shooter, shot, damage, valid);
         }
     }
+
+    public long getRoundSeconds() {
+        return (System.currentTimeMillis() - roundTimer)/1000;
+    }
 }
 

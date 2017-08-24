@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.engine.entities.HUD;
@@ -33,6 +34,8 @@ public class CSHUD extends HUD {
     private boolean chatJustAdded = false;
     private Label ammoLabel;
     private Label healthLabel;
+    private Label spectateLabel;
+    private Label deadLabel;
     boolean leftJustPressed = false;
     boolean rightJustPressed = false;
     private OptionsMenu optionsMenu;
@@ -92,16 +95,6 @@ public class CSHUD extends HUD {
             Label.LabelStyle style = new Label.LabelStyle();
             style.font = hudFont;
             style.fontColor = hudFont.getColor();
-            ammoLabel = new Label("", style);
-            ammoLabel.setPosition(50, 10);
-            ammoLabel.setAlignment(Align.bottomLeft);
-            stage.addActor(ammoLabel);
-
-            // Health label
-            healthLabel = new Label("", style);
-            healthLabel.setPosition(Gdx.graphics.getWidth() - 50, 10);
-            healthLabel.setAlignment(Align.bottomRight);
-            stage.addActor(healthLabel);
 
             // Player labels
             playerLabels = new Label[getRoom().getConfig().sv_max_players];
@@ -124,7 +117,32 @@ public class CSHUD extends HUD {
             // Frag container
             fragContainer = new FragUI();
             uiTable.add(fragContainer).expandX().expandY().top().right();
-//            fragContainer.setPosition(Gdx.graphics.getWidth() - 0, Gdx.graphics.getHeight() - 0);
+
+            // Bottom text table
+            Table textTable = new Table();
+            uiTable.row();
+            uiTable.add(textTable).align(Align.bottom).fillX().pad(20);
+
+
+            // Label for who we're currently spectating
+            deadLabel = new Label("", style);
+            textTable.row();
+            textTable.add();
+            textTable.add(deadLabel);
+            textTable.row();
+
+            // Ammo: bottom left
+            ammoLabel = new Label("", style);
+            textTable.add(ammoLabel).expandX().align(Align.bottomLeft);
+
+            // instructions label
+            spectateLabel = new Label("Press M to join a team. Left/Right click to cycle spectating.", style);
+            textTable.add(spectateLabel);
+
+            // Health label
+            healthLabel = new Label("", style);
+            textTable.add(healthLabel).expandX().align(Align.bottomRight);
+
 
             this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
             this.scoreboard = (Scoreboard) getRoom().addSelfManagedEntity(new Scoreboard());
@@ -165,7 +183,16 @@ public class CSHUD extends HUD {
     public void step(float delta) {
         stage.act(delta);
 
+        // Update frags
         fragContainer.update();
+
+        // Update spectate labels
+        spectateLabel.setVisible(getRoom().getGameManager().isSpectating());
+        deadLabel.setVisible(getRoom().getGameManager().isSpectating());
+        if (getRoom().getGameManager().getSpectatingPlayer() != null) {
+            deadLabel.setText("Spectating " + getRoom().getGameManager().getSpectatingPlayer().name);
+        }
+
 
         // Show menu (toggle)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

@@ -125,4 +125,8 @@ public abstract class GameModeMod {
         return server.getRoundState() == CSServer.STATE.ROUND
                 || server.getRoundState() == CSServer.STATE.ROUND_FREEZETIME;
     }
+
+    protected long getRoundSeconds() {
+        return server.getRoundSeconds();
+    }
 }

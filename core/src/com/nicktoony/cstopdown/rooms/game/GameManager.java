@@ -36,7 +36,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
     public OrderedMap<Integer, Float[]> storedPositions = new OrderedMap<Integer, Float[]>();
     public int number = 0;
     private boolean scoreboardChanged = true;
-    private int team = -1;
+    private int team = PlayerModInterface.TEAM_SPECTATE;
 
 
     public int getInputNumber(float x, float y) {
@@ -365,6 +365,14 @@ public class GameManager implements ClientSocket.SBSocketListener {
             return false;
         }
         return roomGame.getMap().getEntitySnap().getId() != socket.getId();
+    }
+
+    public PlayerDetailsWrapper getSpectatingPlayer() {
+        if (isSpectating()) {
+            return getPlayerDetails(roomGame.getMap().getEntitySnap().getId());
+        }
+
+        return null;
     }
 
     public void spectateNext() {

@@ -25,7 +25,7 @@ public class Left4Dead extends GameModeMod {
     public void evRoundStart() {
         // First: spawn all humans as CT
         int humans = 0;
-        for (PlayerModInterface player : getAllPlayers()) {
+        for (PlayerModInterface player : getActivePlayers()) {
             // human player?
             if (!player.isBot()) {
                 // Set them to CT
@@ -52,7 +52,7 @@ public class Left4Dead extends GameModeMod {
         }
 
         // Now teams are sorted - spawn everyone
-        for (PlayerModInterface player : getAllPlayers()) {
+        for (PlayerModInterface player : getActivePlayers()) {
             player.spawn();
         }
     }
@@ -80,9 +80,11 @@ public class Left4Dead extends GameModeMod {
     @Override
     public void evPlayerConnected(PlayerModInterface player) {
         if (player.isBot()) {
-            player.joinTeam(PlayerModInterface.TEAM_T);
-        } else {
-            player.joinTeam(PlayerModInterface.TEAM_CT);
+            if (getActivePlayers(PlayerModInterface.TEAM_CT).size() < 4) {
+                player.joinTeam(PlayerModInterface.TEAM_CT);
+            } else {
+                player.joinTeam(PlayerModInterface.TEAM_T);
+            }
         }
     }
 
@@ -98,6 +100,10 @@ public class Left4Dead extends GameModeMod {
 
     @Override
     public void evPlayerJoinedTeam(PlayerModInterface player, boolean forced) {
+        if (!player.isBot()) {
+            player.joinTeam(PlayerModInterface.TEAM_CT);
+        }
+
         // If it was the only player
         if (getAlivePlayers(PlayerModInterface.TEAM_CT).size() == 0 && isRoundActive()) {
             message("No humans alive. Ending round.");
