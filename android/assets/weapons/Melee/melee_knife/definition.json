@@ -23,15 +23,15 @@
   },
   "damage": {
     "low": 10,
-    "medium": 36,
+    "medium": 25,
     "high": 75
   },
   "animations": {
-    "idle": "pistol_idle",
-    "shoot": "pistol_shoot",
+    "idle": "knife_idle",
+    "shoot": "knife_stab",
     "reload": "pistol_reload",
-    "equip": "pistol_equip",
-    "unequip": "pistol_dequip",
+    "equip": "knife_equip",
+    "unequip": "knife_dequip",
     "cock": "pistol_cock"
   },
   "sounds": {
