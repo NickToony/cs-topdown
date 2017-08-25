@@ -439,7 +439,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
                 } else if (nextWeaponSlot != -1) {
                     state = STATE_DEQUIP;
                     if (getCurrentWeaponObject() != null && !weaponDropped) {
-                        stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getEquipDuration() * 60);
+                        stateTimer =
+                                Math.round(weapons[currentWeaponSlot].getWeapon(getRoom()
+                                        .getWeaponManager()).getEquipDuration() * 30); // 30, not 60, when dequipping
                     } else {
                         stateTimer = 0;
                     }

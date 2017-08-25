@@ -438,7 +438,7 @@ public class BotPlayer extends Player {
 //        }
 
         int nextWeapon;
-        if (random.nextInt(6) <= 1) {
+        if (random.nextInt(10) <= 1) {
             nextWeapon = PlayerModInterface.SECONDARY;
         } else {
             nextWeapon = PlayerModInterface.PRIMARY;
@@ -482,8 +482,8 @@ public class BotPlayer extends Player {
     }
 
     private void actionRespond(Vector2 pos) {
-        int action = random.nextInt(botTraits.camp + botTraits.explore + botTraits.assault);
-        if (action < botTraits.camp) {
+        int action = random.nextInt(botTraits.sum());
+        if (action < botTraits.camp + botTraits.protect) {
             actionCampHere();
         } else {
             huntPosition = pos;

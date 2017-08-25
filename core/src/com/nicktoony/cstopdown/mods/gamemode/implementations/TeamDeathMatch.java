@@ -16,7 +16,7 @@ public class TeamDeathMatch extends GameModeMod {
 
     @Override
     public void evInit() {
-
+        getServerConfig().mp_buy_enabled = false;
     }
 
     @Override
