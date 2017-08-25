@@ -100,6 +100,6 @@ public class TeamDeathMatch extends GameModeMod {
           "rifle_m4a1", "rifle_ak47",
                 "rifle_awp", "shotgun_spas", "pistol_pistol"
         };
-        player.setWeapon(weapons[random.nextInt(weapons.length)]);
+        player.giveWeapon(weapons[random.nextInt(weapons.length)]);
     }
 }

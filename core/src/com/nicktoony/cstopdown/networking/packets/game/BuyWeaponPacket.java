@@ -11,6 +11,10 @@ public class BuyWeaponPacket extends Packet {
         this.weapon = weapon.getKey();
     }
 
+    public BuyWeaponPacket(String weapon) {
+        this.weapon = weapon;
+    }
+
     private String weapon;
 
     public String getWeapon() {

@@ -31,6 +31,7 @@ public class Weapon {
     private float equipDuration = 0.5f;
     private String reloadType = "";
     private int range = -1;
+    private int slot = 0;
 
     private WeaponDamage damage = new WeaponDamage();
     private WeaponAnimation animations = new WeaponAnimation();
@@ -167,6 +168,10 @@ public class Weapon {
 
     public WeaponAI getAi() {
         return ai;
+    }
+
+    public int getSlot() {
+        return slot;
     }
 }
 

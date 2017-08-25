@@ -94,13 +94,13 @@ public class LastTeamStanding extends GameModeMod {
 
     @Override
     public void evPlayerSpawned(PlayerModInterface player) {
-        String weapons[] = new String[] {
-                "rifle_m4a1", "rifle_ak47",
-                "rifle_awp", "shotgun_spas", "pistol_pistol"
-        };
-        player.setWeapon(weapons[0]);
-        for (int i = 1; i < weapons.length; i++) {
-            player.giveWeapon(weapons[i]);
-        }
+//        String weapons[] = new String[] {
+//                "rifle_m4a1", "rifle_ak47",
+//                "rifle_awp", "shotgun_spas", "pistol_pistol"
+//        };
+//        player.setWeapon(weapons[0]);
+//        for (int i = 1; i < weapons.length; i++) {
+//            player.giveWeapon(weapons[i]);
+//        }
     }
 }

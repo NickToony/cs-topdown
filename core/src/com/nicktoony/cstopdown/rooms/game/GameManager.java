@@ -32,8 +32,6 @@ public class GameManager implements ClientSocket.SBSocketListener {
     private Map<Integer, Player> playerIdMap = new LinkedHashMap<Integer, Player>();
     private Map<Integer, PlayerDetailsWrapper> playerDetailsMap = new LinkedHashMap<Integer, PlayerDetailsWrapper>();
 
-    private final int ALLOWANCE = 4;
-    private final float ALLOWANCE_MULTIPLIER = 2;
     public OrderedMap<Integer, Float[]> storedPositions = new OrderedMap<Integer, Float[]>();
     public int number = 0;
     private boolean scoreboardChanged = true;
@@ -112,10 +110,10 @@ public class GameManager implements ClientSocket.SBSocketListener {
         Player player = playerIdMap.get(packet.id);
         // If the player exists
         if (player != null) {
-            player.setWeapons(packet.weapons);
-            if (player.getCurrentWeapon() != packet.slot) {
+            player.overrideWeapons(packet.weapons, packet.slot);
+//            if (player.getCurrentWeapon() != packet.slot) {
                 player.setNextWeapon(packet.slot);
-            }
+//            }
         }
     }
 
@@ -318,7 +316,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
         // Add it to the ID-Player map
         playerIdMap.put(packet.id, player);
         // Weapon
-        player.setWeapons(packet.weapons);
+        player.overrideWeapons(packet.weapons, packet.currentWeapon);
         player.setNextWeapon(packet.currentWeapon);
         player.setTeam(packet.team);
 

@@ -232,7 +232,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 packet.y = client.getPlayer().getY();
                 packet.light = client.getPlayer().isLightOn();
                 packet.weapons = client.getPlayer().getWeapons();
-                packet.currentWeapon = client.getPlayer().getNextWeapon();
+                packet.currentWeapon = client.getPlayer().getNextWeapon() != -1 ?
+                        client.getPlayer().getNextWeapon() : client.getPlayer().getCurrentWeapon();
                 packet.team = client.getPlayerWrapper().getTeam();
                 sendPacket(packet);
             }
@@ -298,7 +299,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             }
         } else if (packet instanceof BuyWeaponPacket) {
             BuyWeaponPacket buyWeaponPacket = (BuyWeaponPacket) packet;
-            if (this.player.isAlive()) {
+            if (this.player.isAlive() && server.getConfig().mp_buy_enabled) {
                 this.player.giveWeapon(buyWeaponPacket.getWeapon());
             }
         }

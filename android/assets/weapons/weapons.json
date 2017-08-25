@@ -26,8 +26,14 @@
       "name": "Pistols",
       "desc": "Side-arms.",
       "weapons": [
-        "pistol_pistol",
-        "pistol_melee"
+        "pistol_pistol"
+      ]
+    },
+    {
+      "name": "Melee",
+      "desc": "Hide me.",
+      "weapons": [
+        "melee_knife"
       ]
     }
   ]

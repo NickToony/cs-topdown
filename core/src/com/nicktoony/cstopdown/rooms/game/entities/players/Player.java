@@ -3,7 +3,6 @@ package com.nicktoony.cstopdown.rooms.game.entities.players;
 import box2dLight.ConeLight;
 import box2dLight.Light;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +23,6 @@ import com.nicktoony.engine.services.LightManager;
 import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponManager;
 
-import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -33,7 +31,6 @@ import java.util.Random;
 public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEventListener {
 
     private final float PLAYER_RADIUS = EngineConfig.toMetres(14);
-    private final float PLAYER_ANGLE_SMOOTHING = 0.1f;
 
     private final int STATE_IDLE = 0;
     private final int STATE_SHOOTING = 1;
@@ -65,9 +62,11 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private boolean stateChange;
     private boolean makeBullet = false;
 
-    private int weaponCurrent = 0;
-    private int weaponNext = -1;
-    private WeaponWrapper weapons[];
+    private int currentWeaponSlot = PlayerModInterface.MELEE;
+    private int nextWeaponSlot = PlayerModInterface.MELEE;
+    private WeaponWrapper weapons[] = new WeaponWrapper[3];
+    private boolean weaponDropped = false;
+
     private Bone leftHand;
     public Bone rightHand;
     private Sprite leftHandSprite;
@@ -154,6 +153,14 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
             setGunFire(LightManager.defineGunFire(getRoom().getRayHandler()));
         }
 
+        // Always give the player a knife
+        if (weapons[PlayerModInterface.MELEE] == null) {
+            weapons[PlayerModInterface.MELEE] =
+                    new WeaponWrapper(getRoom().getWeaponManager().getWeapon("melee_knife"));
+            setNextWeapon(PlayerModInterface.MELEE);
+            currentWeaponSlot = PlayerModInterface.MELEE;
+        }
+
     }
 
     protected SkeletonWrapper getSkeletonWrapper() {
@@ -206,35 +213,43 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     }
 
     public void setNextWeapon(int slot)  {
-        if (weapons.length > slot) {
-            weaponNext = slot;
+        if (weapons.length > slot && weapons[slot] != null) {
+            nextWeaponSlot = slot;
         }
     }
 
     public int getCurrentWeapon(){
-        return weaponCurrent;
+        return currentWeaponSlot;
     }
 
     public WeaponWrapper getCurrentWeaponObject() {
-        if (weaponCurrent != -1) return weapons[weaponCurrent];
+        if (currentWeaponSlot != -1) return weapons[currentWeaponSlot];
         return null;
     }
 
     public int getNextWeapon() {
-        return weaponNext;
+        return nextWeaponSlot;
     }
 
-    public void setWeapons(WeaponWrapper weapons[]) {
-        this.weapons = weapons;
-    }
+    public void giveWeapon(WeaponWrapper weaponWrapper) {
+        Weapon weapon = weaponWrapper.getWeapon(getRoom().getWeaponManager());
+        if (weapons.length > weapon.getSlot()) {
+            if (currentWeaponSlot == weapon.getSlot()) {
+                weaponDropped = true;
+            }
 
-    public void addWeapon(WeaponWrapper weapon) {
-        WeaponWrapper weapons[] = new WeaponWrapper[this.weapons.length + 1];
-        for (int i = 0; i < this.weapons.length; i ++) {
-            weapons[i] = this.weapons[i];
+            // drop current gun..
+            weapons[weapon.getSlot()] = weaponWrapper;
+            setNextWeapon(weapon.getSlot());
         }
-        weapons[this.weapons.length] = weapon;
-        this.weapons = weapons;
+    }
+
+    public void overrideWeapons(WeaponWrapper weaponWrappers[], int slot) {
+        weapons = weaponWrappers;
+        if (currentWeaponSlot == slot) {
+            weaponDropped = true;
+        }
+//        setNextWeapon(currentWeaponSlot);
     }
 
     public WeaponWrapper[] getWeapons() {
@@ -272,8 +287,8 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         // Render the player entirely
         skeletonWrapper.render(spriteBatch);
 
-        if (weaponCurrent != -1) {
-            WeaponWrapper weapon = weapons[weaponCurrent];
+        if (currentWeaponSlot != -1) {
+            WeaponWrapper weapon = weapons[currentWeaponSlot];
             if (gunTexture == null) {
                 gunTexture = getAsset(weapon.getWeapon(getRoom().getWeaponManager()).getTexture(), Texture.class);
                 gunTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -283,12 +298,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
             if (weapon.getWeapon(getRoom().getWeaponManager()).getGraphics().left) {
                 if (leftHandSprite == null || leftHandSprite.getTexture() != gunTexture) {
                     leftHandSprite = new Sprite(gunTexture);
-                    leftHandSprite.setOrigin(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset,
-                            weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
+                    leftHandSprite.setOrigin(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset,
+                            weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
                 }
 
-                leftHandSprite.setX(leftHand.getWorldX() + x - weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset);
-                leftHandSprite.setY(leftHand.getWorldY() + y - weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
+                leftHandSprite.setX(leftHand.getWorldX() + x - weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset);
+                leftHandSprite.setY(leftHand.getWorldY() + y - weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
                 leftHandSprite.setRotation(leftHand.getWorldRotation() - 90);
 
                 leftHandSprite.draw(spriteBatch);
@@ -297,12 +312,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
             if (weapon.getWeapon(getRoom().getWeaponManager()).getGraphics().right) {
                 if (rightHandSprite == null || rightHandSprite.getTexture() != gunTexture) {
                     rightHandSprite = new Sprite(gunTexture);
-                    rightHandSprite.setOrigin(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset,
-                            weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
+                    rightHandSprite.setOrigin(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset,
+                            weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
                 }
 
-                rightHandSprite.setX(rightHand.getWorldX() + x - weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset);
-                rightHandSprite.setY(rightHand.getWorldY() + y - weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
+                rightHandSprite.setX(rightHand.getWorldX() + x - weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().x_offset);
+                rightHandSprite.setY(rightHand.getWorldY() + y - weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getGraphics().y_offset);
                 rightHandSprite.setRotation(rightHand.getWorldRotation() - 90);
 
                 rightHandSprite.draw(spriteBatch);
@@ -310,7 +325,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         }
 
         Vector2 vector = new Vector2(rightHand.getWorldX() + x, rightHand.getWorldY() + y);
-        if (weaponCurrent != -1) {
+        if (currentWeaponSlot != -1) {
             Vector2 gunVector = new Vector2(rightHandSprite.getHeight() / 2, 0);
             gunVector.setAngle(rightHand.getWorldRotation());
             vector.add(gunVector);
@@ -323,25 +338,25 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         // Update gun fire
         gunFire.setPosition(EngineConfig.toMetres(vector.x), EngineConfig.toMetres(vector.y));
         gunFire.setDirection(rightHand.getWorldRotation());
-        gunFire.setActive(stateChange && state == STATE_SHOOTING && weapons[weaponCurrent].bulletsIn >= 0);
+        gunFire.setActive(stateChange && state == STATE_SHOOTING && weapons[currentWeaponSlot].bulletsIn >= 0);
 
         // Handle animations
-        if (stateChange && weaponCurrent != -1) {
+        if (stateChange && currentWeaponSlot != -1) {
             switch (state) {
                 case STATE_SHOOTING:
-                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getAnimations().shoot, stateTimer/60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getAnimations().shoot, stateTimer/60f, false);
                     break;
                 case STATE_RELOADING:
-                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getAnimations().reload, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getAnimations().reload, stateTimer / 60f, false);
                     break;
                 case STATE_COCK:
-                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getAnimations().cock, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getAnimations().cock, stateTimer / 60f, false);
                     break;
                 case STATE_EQUIP:
-                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getAnimations().equip, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getAnimations().equip, stateTimer / 60f, false);
                     break;
                 case STATE_DEQUIP:
-                    getSkeletonWrapper().startAnimation(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getAnimations().unequip, stateTimer / 60f, false);
+                    getSkeletonWrapper().startAnimation(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getAnimations().unequip, stateTimer / 60f, false);
                     break;
             }
         }
@@ -353,14 +368,14 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
         // Create a bullet
         if (makeBullet) {
-            float range = weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getRange();
+            float range = weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getRange();
             if (range == -1) {
                 range = EngineConfig.toPixels(100);
             }
 
-            for (int i = 0; i < weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getBullets(); i ++) {
+            for (int i = 0; i < weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getBullets(); i ++) {
                 // Calculate visual spread
-                float weaponSpread = weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getSpread();
+                float weaponSpread = weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getSpread();
                 float spread = 0;
                 if (weaponSpread > 0) {
                     spread = random.nextInt((int) weaponSpread * 2) - weaponSpread;
@@ -401,18 +416,18 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         switch (state) {
             case STATE_IDLE:
                 // If reload key is currently pressed
-                if (reloadKey && weapons[weaponCurrent].bulletsIn < weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getClipSize()) {
-                    stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getReloadDuration() * 60);
+                if (reloadKey && weapons[currentWeaponSlot].bulletsIn < weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getClipSize()) {
+                    stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getReloadDuration() * 60);
                     state = STATE_RELOADING;
-                } else if (shootKey && weaponCurrent != -1) { // otherwise is shoot key pressed?
-                    stateTimer = Math.max(0, weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getRateOfFire());
+                } else if (shootKey && currentWeaponSlot != -1) { // otherwise is shoot key pressed?
+                    stateTimer = Math.max(0, weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getRateOfFire());
                     state = STATE_SHOOTING;
 
-                    if (weapons[weaponCurrent].bulletsIn >= 0) {
-                        weapons[weaponCurrent].bulletsIn -= 1;
+                    if (weapons[currentWeaponSlot].bulletsIn >= 0) {
+                        weapons[currentWeaponSlot].bulletsIn -= 1;
 
                         // Actually shoot if there was one bullet
-                        if (weapons[weaponCurrent].bulletsIn >= 0) {
+                        if (weapons[currentWeaponSlot].bulletsIn >= 0) {
                             // Visual effect
                             makeBullet = true;
                             // If a listener exists
@@ -421,49 +436,50 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
                             }
                         }
                     }
-                } else if (weaponNext != -1) {
+                } else if (nextWeaponSlot != -1) {
                     state = STATE_DEQUIP;
-                    if (getCurrentWeaponObject() != null) {
-                        stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getEquipDuration() * 60);
+                    if (getCurrentWeaponObject() != null && !weaponDropped) {
+                        stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getEquipDuration() * 60);
                     } else {
                         stateTimer = 0;
                     }
+                    weaponDropped = false;
                 }
                 break;
 
             case STATE_RELOADING:
                 if (stateTimer <= 0) {
-                    if (weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getReloadType() == Weapon.RELOAD_FULL_COCK) {
+                    if (weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getReloadType() == Weapon.RELOAD_FULL_COCK) {
                         state = STATE_COCK;
-                        stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getCockDuration() * 60);
-                        weapons[weaponCurrent].bulletsIn = weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getClipSize();
-                    } else if (weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getReloadType() == Weapon.RELOAD_SHOTGUN) {
+                        stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getCockDuration() * 60);
+                        weapons[currentWeaponSlot].bulletsIn = weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getClipSize();
+                    } else if (weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getReloadType() == Weapon.RELOAD_SHOTGUN) {
                         // Add a shell
-                        weapons[weaponCurrent].bulletsIn ++;
+                        weapons[currentWeaponSlot].bulletsIn ++;
                         // If full
-                        if (weapons[weaponCurrent].bulletsIn >= weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getClipSize()) {
+                        if (weapons[currentWeaponSlot].bulletsIn >= weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getClipSize()) {
                             // Cock the gun
                             state = STATE_COCK;
-                            stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getCockDuration() * 60);
-                            weapons[weaponCurrent].bulletsIn = weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getClipSize();
+                            stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getCockDuration() * 60);
+                            weapons[currentWeaponSlot].bulletsIn = weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getClipSize();
                         } else {
                             // Load another shell
-                            stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getReloadDuration() * 60);
+                            stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getReloadDuration() * 60);
                             state = STATE_RELOADING;
                             stateChange = true;
                         }
                     } else {
                         state = STATE_IDLE;
-                        weapons[weaponCurrent].bulletsIn = weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getClipSize();
+                        weapons[currentWeaponSlot].bulletsIn = weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getClipSize();
                     }
                 }
                 break;
 
             case STATE_SHOOTING:
                 if (stateTimer <= 0) {
-                    if (weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getRateOfFire() == -1) {
+                    if (weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getRateOfFire() == -1) {
                         state = STATE_COCK;
-                        stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getCockDuration() * 60);
+                        stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getCockDuration() * 60);
                     } else {
                         state = STATE_IDLE;
                     }
@@ -478,13 +494,13 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
             case STATE_DEQUIP:
                 if (stateTimer <= 0) {
-                    weaponCurrent = weaponNext;
-                    weaponNext = -1;
+                    currentWeaponSlot = nextWeaponSlot;
+                    nextWeaponSlot = -1;
                     gunTexture = null;
-                    getSkeletonWrapper().setIdleAnimation(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getAnimations().idle, 2);
+                    getSkeletonWrapper().setIdleAnimation(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getAnimations().idle, 2);
                     getSkeletonWrapper().startIdle();
                     state = STATE_EQUIP;
-                    stateTimer = Math.round(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()).getEquipDuration() * 60);
+                    stateTimer = Math.round(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()).getEquipDuration() * 60);
 
                 }
                 break;
@@ -619,31 +635,31 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         ) / soundRange, 0) * SOUND_MODIFIER;
 
         if (event.getData().getName().contentEquals("ev_shoot")) {
-            if (weapons[weaponCurrent].bulletsIn >= 0) {
+            if (weapons[currentWeaponSlot].bulletsIn >= 0) {
                getRoom().getWeaponManager()
-                        .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.SHOOT, volume, getRoom().getGame());
+                        .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.SHOOT, volume, getRoom().getGame());
             } else {
                 getRoom().getWeaponManager()
-                        .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EMPTY, volume, getRoom().getGame());
+                        .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EMPTY, volume, getRoom().getGame());
             }
         } else if (event.getData().getName().contentEquals("ev_equip")) {
             getRoom().getWeaponManager()
-                    .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EQUIP, volume, getRoom().getGame());
+                    .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EQUIP, volume, getRoom().getGame());
         } else if (event.getData().getName().contentEquals("ev_dequip")) {
             getRoom().getWeaponManager()
-                    .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.DEQUIP, volume, getRoom().getGame());
+                    .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.DEQUIP, volume, getRoom().getGame());
         } else if (event.getData().getName().contentEquals("ev_eject")) {
             getRoom().getWeaponManager()
-                    .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EJECT, volume, getRoom().getGame());
+                    .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EJECT, volume, getRoom().getGame());
         } else if (event.getData().getName().contentEquals("ev_insert")) {
             getRoom().getWeaponManager()
-                    .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.INSERT, volume, getRoom().getGame());
+                    .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.INSERT, volume, getRoom().getGame());
         } else if (event.getData().getName().contentEquals("ev_cock")) {
             getRoom().getWeaponManager()
-                    .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.COCK, volume, getRoom().getGame());
+                    .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.COCK, volume, getRoom().getGame());
         } else if (event.getData().getName().contentEquals("ev_empty")) {
             getRoom().getWeaponManager()
-                    .playSound(weapons[weaponCurrent].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EMPTY, volume, getRoom().getGame());
+                    .playSound(weapons[currentWeaponSlot].getWeapon(getRoom().getWeaponManager()), WeaponManager.SoundType.EMPTY, volume, getRoom().getGame());
         }
     }
 

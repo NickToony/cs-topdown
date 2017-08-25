@@ -10,6 +10,10 @@ public interface PlayerModInterface {
     int TEAM_CT = 1;
     int TEAM_T = 2;
 
+    int PRIMARY = 0;
+    int SECONDARY = 1;
+    int MELEE = 2;
+
     int getHealth();
     int getMaxHealth();
     float getX();
@@ -23,7 +27,6 @@ public interface PlayerModInterface {
     void setHealth(int health);
     void setMaxHealth(int health);
     void giveWeapon(String weaponKey);
-    void setWeapon(String weaponKey);
     void setTraits(BotPlayer.BotTraits botTraits);
 
     // Actions

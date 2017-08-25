@@ -5,6 +5,8 @@ import com.badlogic.gdx.ai.pfa.PathSmoother;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.math.Vector2;
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
+import com.nicktoony.cstopdown.networking.packets.game.BuyWeaponPacket;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
@@ -13,6 +15,8 @@ import com.nicktoony.engine.entities.world.PathfindingHeuristic;
 import com.nicktoony.engine.entities.world.PathfindingNode;
 import com.nicktoony.engine.entities.world.PathfindingPath;
 import com.nicktoony.engine.entities.world.PathfindingRaycastCollisionDetector;
+import com.nicktoony.engine.services.weapons.Weapon;
+import com.nicktoony.engine.services.weapons.WeaponCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,7 @@ import java.util.Random;
 public class BotPlayer extends Player {
 
     enum AIState {
+        spawn,
         idle,
         combat,
         moving,
@@ -69,7 +74,7 @@ public class BotPlayer extends Player {
     private PathFinder<PathfindingNode> pathFinder;
     private PathfindingHeuristic heuristic;
     private Vector2 pathGoal;
-    private AIState aiState = AIState.idle;
+    private AIState aiState = AIState.spawn;
     private PathSmoother<PathfindingNode, Vector2> pathSmoother;
     private CSServer server;
     private CSServerClientHandler player;
@@ -83,6 +88,7 @@ public class BotPlayer extends Player {
     private int nearbyTargets = 0;
     private BotTraits botTraits = new BotTraits();
     private Player protectingPlayer = null;
+    private boolean boughtWeapons = false;
 
     public void setupBot(CSServer server, CSServerClientHandler player) {
         this.server = server;
@@ -102,6 +108,8 @@ public class BotPlayer extends Player {
         positionSinceLastScan = getPosition();
 
         mouseDistance = 0;
+        actionPause = random.nextInt(90) + 30;
+        directionTo = random.nextInt(360);
     }
 
     @Override
@@ -148,6 +156,21 @@ public class BotPlayer extends Player {
         }
 
         switch (aiState) {
+            // The bot needs weapons!
+            case spawn:
+                if (!boughtWeapons) {
+                    // primary
+                    buyRandomWeapon(PlayerModInterface.SECONDARY);
+                    buyRandomWeapon(PlayerModInterface.PRIMARY);
+                    boughtWeapons = true;
+                }
+
+                actionPause -= 1;
+                if (actionPause <= 0) {
+                    aiState = AIState.idle;
+                }
+                break;
+
             // The bot needs to decide what to do
             case idle:
                 moveRight = false;
@@ -290,6 +313,20 @@ public class BotPlayer extends Player {
         }
     }
 
+    private void buyRandomWeapon(int slot) {
+        List<String> keys = new ArrayList<String>();
+        for (WeaponCategory category : getRoom().getWeaponManager().getWeaponCategories()) {
+            for (Weapon weapon : category.getWeapons()) {
+                if (weapon.getSlot() == slot) {
+                    keys.add(weapon.getKey());
+                }
+            }
+        }
+        // Buy a gun
+        player.handleReceivedMessage(new BuyWeaponPacket(keys.get(random.nextInt(keys.size()))));
+
+    }
+
     private void actionExplore() {
         PathfindingNode node = null;
         while (node == null || node.isSolid()) {
@@ -356,15 +393,65 @@ public class BotPlayer extends Player {
         }
     }
 
+    private void actionCampHere() {
+//        PathfindingNode node = getRoom().getMap().getPathfindingGraph()
+//                    .getNodeByWorld(getX(), getY());
+
+        List<PathfindingNode> possibleNodes = new ArrayList<PathfindingNode>();
+        for (int x = -4; x < 4; x ++) {
+            for (int y = -4; y < 4; y ++) {
+                int xOffset = x * EngineConfig.CELL_SIZE;
+                int yOffset = y * EngineConfig.CELL_SIZE;
+                float xTarget = getX() + xOffset;
+                float yTarget = getY() + yOffset;
+                if (getRoom().getMap().isPointOnMap(xTarget, yTarget)) {
+                    PathfindingNode node = getRoom().getMap().getPathfindingGraph()
+                            .getNodeByWorld(xTarget, yTarget);
+                    // Check if it's a corner
+                    if (node.getConnections().size <= 2) {
+                        int pathLength = pathLength(node);
+                        if (pathLength < 4 && pathLength != -1) {
+                            possibleNodes.add(node);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!possibleNodes.isEmpty()) {
+            if (startPath(possibleNodes.get(random.nextInt(possibleNodes.size())))) {
+                actionPause = BOT_CAMP_TIME_MIN + random.nextInt(BOT_CAMP_TIME_MAX - BOT_CAMP_TIME_MIN);
+                actionPause /= 3;
+                aiState = AIState.camping;
+            }
+        }
+    }
+
     private void randomWeapon() {
         // Tell client
-        int nextWeapon = random.nextInt(getWeapons().length);
+//        int nextWeapon = random.nextInt(getWeapons().length);
+//        if (nextWeapon != getCurrentWeapon()) {
+//            PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
+//            playerSwitchWeapon.setTimestamp(player.getTimestamp());
+//            playerSwitchWeapon.slot = nextWeapon;
+//            player.handleReceivedMessage(playerSwitchWeapon);
+//        }
+
+        int nextWeapon;
+        if (random.nextInt(6) <= 1) {
+            nextWeapon = PlayerModInterface.SECONDARY;
+        } else {
+            nextWeapon = PlayerModInterface.PRIMARY;
+        }
+
         if (nextWeapon != getCurrentWeapon()) {
+            setNextWeapon(nextWeapon);
             PlayerSwitchWeapon playerSwitchWeapon = new PlayerSwitchWeapon();
             playerSwitchWeapon.setTimestamp(player.getTimestamp());
             playerSwitchWeapon.slot = nextWeapon;
             player.handleReceivedMessage(playerSwitchWeapon);
         }
+
     }
 
     private void scanForEnemies() {
@@ -385,12 +472,21 @@ public class BotPlayer extends Player {
                             || otherPlayer.getPlayer().getShooting()) {
                         // we heard them... let's go hunt them (if not camping)
                         if (aiState != AIState.camping && aiState != AIState.protecting) {
-                            huntPosition = otherPlayer.getPlayer().getPosition();
+                            actionRespond(otherPlayer.getPlayer().getPosition());
                             nearbyTargets++;
                         }
                     }
                 }
             }
+        }
+    }
+
+    private void actionRespond(Vector2 pos) {
+        int action = random.nextInt(botTraits.camp + botTraits.explore + botTraits.assault);
+        if (action < botTraits.camp) {
+            actionCampHere();
+        } else {
+            huntPosition = pos;
         }
     }
 
@@ -409,6 +505,18 @@ public class BotPlayer extends Player {
         }
 
         return false;
+    }
+
+    private int pathLength(PathfindingNode target) {
+        PathfindingPath path = new PathfindingPath();
+        boolean success = pathFinder.searchNodePath(
+                getRoom().getMap().getPathfindingGraph().getNodeByWorld(x, y),
+                target, heuristic, path);
+        if (success) {
+            return path.nodes.size;
+        } else {
+            return -1;
+        }
     }
 
     /**

@@ -17,6 +17,7 @@
   "equipDuration": 1,
   "reloadType": "full_cock",
   "range": -1,
+  "slot": 0,
   "ai": {
     "style": "sniper"
   },

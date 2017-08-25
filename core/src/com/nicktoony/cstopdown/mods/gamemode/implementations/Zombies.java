@@ -130,10 +130,10 @@ public class Zombies extends GameModeMod {
                     "rifle_m4a1", "rifle_ak47",
                     "rifle_awp", "shotgun_spas", "pistol_pistol"
             };
-            player.setWeapon(weapons[0]);
-            for (int i = 1; i < weapons.length; i++) {
-                player.giveWeapon(weapons[i]);
-            }
+            player.giveWeapon(weapons[0]);
+//            for (int i = 1; i < weapons.length; i++) {
+//                player.giveWeapon(weapons[i]);
+//            }
             player.setMaxHealth(100);
             player.setHealth(100);
 

@@ -197,14 +197,14 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
         // Spawn a new one
         player = server.getGame().createPlayer(getID(), x, y, isBot());
-        player.setWeapons(new WeaponWrapper[]{
-//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("shotgun_spas")),
-//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_m4a1")),
-//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_ak47")),
-//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_awp")),
-                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("pistol_melee")),
-
-        });
+//        player.setWeapons(new WeaponWrapper[]{
+////                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("shotgun_spas")),
+////                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_m4a1")),
+////                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_ak47")),
+////                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("rifle_awp")),
+//                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("pistol_melee")),
+//
+//        });
         player.setNextWeapon(0);
         player.setHealth(getMaxHealth());
         player.setListener(this);
@@ -350,31 +350,10 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
                 message("[YELLOW]Couldn't find weapon: " + weaponKey);
                 return;
             }
-            player.addWeapon(new WeaponWrapper(weapon));
+            player.giveWeapon(new WeaponWrapper(weapon));
             UpdateWeaponsPacket packet = new UpdateWeaponsPacket(
                     getID(),
-                    player.getCurrentWeapon(),
-                    player.getWeapons()
-            );
-            server.sendToAll(packet);
-        }
-    }
-
-    @Override
-    public void setWeapon(String weaponKey) {
-        if (isAlive()) {
-            Weapon weapon = server.getRoom().getWeaponManager().getWeapon(weaponKey);
-            if (weapon == null) {
-                message("[YELLOW]Couldn't find weapon: " + weaponKey);
-                return;
-            }
-            player.setWeapons(new WeaponWrapper[] {
-                    new WeaponWrapper(weapon)}
-            );
-            player.setNextWeapon(0);
-            UpdateWeaponsPacket packet = new UpdateWeaponsPacket(
-                    getID(),
-                    player.getCurrentWeapon(),
+                    player.getNextWeapon(),
                     player.getWeapons()
             );
             server.sendToAll(packet);

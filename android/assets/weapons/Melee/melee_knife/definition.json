@@ -1,5 +1,5 @@
 {
-  "name": "Melee",
+  "name": "Knife",
   "clipSize": 999,
   "clipTotal": 999,
   "rateOfFire": 30,
@@ -17,6 +17,7 @@
   "equipDuration": 0.3,
   "reloadType": "full_cock",
   "range": 32,
+  "slot": 2,
   "ai": {
     
   },
