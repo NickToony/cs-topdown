@@ -117,12 +117,12 @@ public class CSHUD extends HUD {
 
             // Frag container
             fragContainer = new FragUI();
-            uiTable.add(fragContainer).expandX().expandY().top().right();
+            uiTable.add(fragContainer).expandX().expandY().top().right().padTop(8).padRight(8);
 
             // Bottom text table
             Table textTable = new Table();
             uiTable.row();
-            uiTable.add(textTable).align(Align.bottom).fillX().pad(20);
+            uiTable.add(textTable).align(Align.bottom).fillX().padLeft(20).padRight(20);
 
 
             // Label for who we're currently spectating
@@ -134,14 +134,16 @@ public class CSHUD extends HUD {
 
             // Ammo: bottom left
             ammoLabel = new Label("", style);
+            ammoLabel.setFontScale(2f);
             textTable.add(ammoLabel).expandX().align(Align.bottomLeft);
 
             // instructions label
             spectateLabel = new Label("Press M to join a team. Left/Right click to cycle spectating.", style);
-            textTable.add(spectateLabel);
+            textTable.add(spectateLabel).padBottom(20);
 
             // Health label
             healthLabel = new Label("", style);
+            healthLabel.setFontScale(2f);
             textTable.add(healthLabel).expandX().align(Align.bottomRight);
 
 

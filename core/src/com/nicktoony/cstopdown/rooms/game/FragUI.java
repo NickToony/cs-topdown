@@ -37,7 +37,6 @@ public class FragUI extends Table {
 
     public FragUI() {
         fragFont.getData().markupEnabled = true;
-        fragFont.getData().scale(1.5f);
     }
 
     public void update() {
@@ -55,6 +54,7 @@ public class FragUI extends Table {
                             "   " + frag.killed,
                             new Label.LabelStyle(fragFont, Color.WHITE));
                     frag.label.setAlignment(Align.right);
+                    frag.label.setFontScale(1.2f);
                     this.row();
                     this.add(frag.label);//.expandX()
                           //  .padBottom(1)
