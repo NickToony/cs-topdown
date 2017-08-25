@@ -17,6 +17,7 @@ import com.nicktoony.engine.packets.connection.JoinTeamPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.PingPacket;
 import com.nicktoony.engine.rooms.RoomGame;
+import com.nicktoony.engine.services.weapons.Weapon;
 
 import java.util.*;
 
@@ -450,5 +451,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
     public void joinTeam(int team) {
         socket.sendMessage(new JoinTeamPacket(team));
+    }
+
+    public void buyWeapon(Weapon weapon) {
+        socket.sendMessage(new BuyWeaponPacket(weapon));
     }
 }

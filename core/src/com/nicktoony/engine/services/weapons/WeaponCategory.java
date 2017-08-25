@@ -8,10 +8,12 @@ import java.util.List;
  */
 public class WeaponCategory {
     private String name;
+    private String desc;
     private List<Weapon> weapons = new ArrayList<Weapon>();
 
-    public WeaponCategory(String name) {
+    public WeaponCategory(String name, String desc) {
         this.name = name;
+        this.desc = desc;
     }
 
     public String getName() {
@@ -28,5 +30,9 @@ public class WeaponCategory {
 
     public void setWeapons(List<Weapon> weapons) {
         this.weapons = weapons;
+    }
+
+    public String getDescription() {
+        return desc;
     }
 }

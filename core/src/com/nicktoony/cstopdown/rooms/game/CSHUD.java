@@ -43,6 +43,7 @@ public class CSHUD extends HUD {
     private Label playerLabels[];
     private FragUI fragContainer;
     private TeamMenu teamMenu;
+    private BuyMenu buyMenu;
 
     @Override
     protected void create(boolean render) {
@@ -147,6 +148,7 @@ public class CSHUD extends HUD {
             this.optionsMenu = (OptionsMenu) getRoom().addSelfManagedEntity(new OptionsMenu());
             this.scoreboard = (Scoreboard) getRoom().addSelfManagedEntity(new Scoreboard());
             this.teamMenu = (TeamMenu) getRoom().addSelfManagedEntity(new TeamMenu());
+            this.buyMenu = (BuyMenu) getRoom().addSelfManagedEntity(new BuyMenu());
         }
     }
 
@@ -177,6 +179,7 @@ public class CSHUD extends HUD {
         optionsMenu.resize(x, y);
         scoreboard.resize(x, y);
         teamMenu.resize(x,y);
+        buyMenu.resize(x,y);
     }
 
     @Override
@@ -198,6 +201,8 @@ public class CSHUD extends HUD {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (teamMenu.isVisible()) {
                 teamMenu.hide();
+            } else if (buyMenu.isVisible()) {
+                buyMenu.hide();
             } else if (optionsMenu.isVisible()) {
                 optionsMenu.hide();
             } else {
@@ -219,6 +224,15 @@ public class CSHUD extends HUD {
             }
         }
 
+        // Show team menu (toggle)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            if (buyMenu.isVisible()) {
+                buyMenu.hide();
+            } else if (!getRoom().getGameManager().isSpectating()) {
+                buyMenu.show();
+            }
+        }
+
         // Scoreboard (hold)
         boolean tab = Gdx.input.isKeyPressed(Input.Keys.TAB);
         if (tab && !scoreboard.isVisible()) {
@@ -235,6 +249,12 @@ public class CSHUD extends HUD {
         // Stop here if we're on team menu
         if (teamMenu.isVisible()) {
             teamMenu.step(delta);
+            return;
+        }
+
+        // Stop here if we're on buy menu
+        if (buyMenu.isVisible()) {
+            buyMenu.step(delta);
             return;
         }
 
@@ -272,6 +292,15 @@ public class CSHUD extends HUD {
         if (teamMenu.isVisible()) {
             Gdx.input.setInputProcessor(teamMenu.getStage());
             teamMenu.render(spriteBatch);
+        }
+
+        if (buyMenu.isVisible()) {
+            Gdx.input.setInputProcessor(buyMenu.getStage());
+            buyMenu.render(spriteBatch);
+
+            if (getRoom().getGameManager().isSpectating()) {
+                buyMenu.hide();
+            }
         }
 
         // Scoreboard should render on top
@@ -348,6 +377,7 @@ public class CSHUD extends HUD {
         optionsMenu.dispose(render);
         scoreboard.dispose(render);
         teamMenu.dispose(render);
+        buyMenu.dispose(render);
 
         if (render) {
             fragContainer.dispose();
@@ -358,7 +388,8 @@ public class CSHUD extends HUD {
     public boolean getMouse() {
         return (chatActive
                 || optionsMenu.isVisible()
-                 || teamMenu.isVisible());
+                 || teamMenu.isVisible()
+                    || buyMenu.isVisible());
     }
 
     public void addFrag(FragUI.Frag frag) {

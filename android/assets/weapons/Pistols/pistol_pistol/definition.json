@@ -2,7 +2,7 @@
   "name": "Pistol",
   "clipSize": 9,
   "clipTotal": 90,
-  "rateOfFire": 26,
+  "rateOfFire": 20,
   "accuracy": 90,
   "recoil": 5,
   "bullets": 1,

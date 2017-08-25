@@ -16,6 +16,7 @@ import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.components.PhysicsEntity;
 import com.nicktoony.engine.components.PlayerListener;
+import com.nicktoony.engine.services.weapons.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -344,7 +345,12 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public void giveWeapon(String weaponKey) {
         if (isAlive()) {
-            player.addWeapon(new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon(weaponKey)));
+            Weapon weapon = server.getRoom().getWeaponManager().getWeapon(weaponKey);
+            if (weapon == null) {
+                message("[YELLOW]Couldn't find weapon: " + weaponKey);
+                return;
+            }
+            player.addWeapon(new WeaponWrapper(weapon));
             UpdateWeaponsPacket packet = new UpdateWeaponsPacket(
                     getID(),
                     player.getCurrentWeapon(),
@@ -357,8 +363,13 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
     @Override
     public void setWeapon(String weaponKey) {
         if (isAlive()) {
+            Weapon weapon = server.getRoom().getWeaponManager().getWeapon(weaponKey);
+            if (weapon == null) {
+                message("[YELLOW]Couldn't find weapon: " + weaponKey);
+                return;
+            }
             player.setWeapons(new WeaponWrapper[] {
-                    new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon(weaponKey))}
+                    new WeaponWrapper(weapon)}
             );
             player.setNextWeapon(0);
             UpdateWeaponsPacket packet = new UpdateWeaponsPacket(

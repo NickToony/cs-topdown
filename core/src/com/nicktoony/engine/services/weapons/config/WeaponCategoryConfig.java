@@ -5,5 +5,6 @@ package com.nicktoony.engine.services.weapons.config;
  */
 public class WeaponCategoryConfig {
     public String name;
+    public String desc;
     public String[] weapons;
 }

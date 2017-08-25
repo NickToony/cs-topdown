@@ -36,6 +36,7 @@ public class PacketDefinitions {
         put(19, PlayerDetailsPacket.class);
         put(20, UpdateWeaponsPacket.class);
         put(21, JoinTeamPacket.class);
+        put(22, BuyWeaponPacket.class);
 
         // Player
         put(10, PlayerInputPacket.class);

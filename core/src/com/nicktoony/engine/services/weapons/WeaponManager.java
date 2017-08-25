@@ -41,7 +41,7 @@ public class WeaponManager {
         WeaponCategoryConfigWrapper config = json.fromJson(WeaponCategoryConfigWrapper.class, fileHandle);
 
         for (WeaponCategoryConfig weaponCategoryConfig :  config.config) {
-            WeaponCategory weaponCategory = new WeaponCategory(weaponCategoryConfig.name);
+            WeaponCategory weaponCategory = new WeaponCategory(weaponCategoryConfig.name, weaponCategoryConfig.desc);
             weaponCategories.add(weaponCategory);
 //            weaponCategory.getWeapons().addAll(findWeapons(subDirectory));
             for (String weaponName : weaponCategoryConfig.weapons) {
@@ -126,5 +126,9 @@ public class WeaponManager {
 
     public Weapon getWeapon(String string) {
         return weapons.get(string);
+    }
+
+    public List<WeaponCategory> getWeaponCategories() {
+        return weaponCategories;
     }
 }

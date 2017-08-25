@@ -2,20 +2,29 @@
   "config": [
     {
       "name": "Rifles",
+      "desc": "Expensive weapons suitable for medium-long range, they bring much heavier firepower capable of piercing body armor.",
       "weapons": [
         "rifle_ak47",
-        "rifle_m4a1",
-        "rifle_awp"
+        "rifle_m4a1"
       ]
     },
     {
       "name": "Shotguns",
+      "desc": "Dangerous in close quaters: fires multiple projectiles for massive combined damage.",
       "weapons": [
         "shotgun_spas"
       ]
     },
     {
+      "name": "Snipers",
+      "desc": "Unmatched in firepower and effective range, these weapons come outfitted with good optics.",
+      "weapons": [
+        "rifle_awp"
+      ]
+    },
+    {
       "name": "Pistols",
+      "desc": "Side-arms.",
       "weapons": [
         "pistol_pistol",
         "pistol_melee"
