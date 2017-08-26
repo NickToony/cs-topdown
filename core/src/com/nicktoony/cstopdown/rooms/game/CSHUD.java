@@ -218,7 +218,7 @@ public class CSHUD extends HUD {
         }
 
         // Show team menu (toggle)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M) && getRoom().getConfig().mp_buy_enabled) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             if (teamMenu.isVisible()) {
                 teamMenu.hide();
             } else {
@@ -227,7 +227,7 @@ public class CSHUD extends HUD {
         }
 
         // Show team menu (toggle)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B) && getRoom().getConfig().mp_buy_enabled) {
             if (buyMenu.isVisible()) {
                 buyMenu.hide();
             } else if (!getRoom().getGameManager().isSpectating()) {
