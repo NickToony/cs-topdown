@@ -2,8 +2,17 @@ package com.nicktoony.engine.entities.world;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -12,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
@@ -45,7 +55,7 @@ public class Map {
     protected HashMap<Integer, List<Spawn>> spawns;
     public int[] spawnIndex = { 0, 0, 0 };
     protected ServerConfig gameConfig;
-
+    private Map3D map3D;
 
     private Player entitySnap;
 
@@ -53,20 +63,22 @@ public class Map {
         this.gameConfig = gameConfig;
     }
 
-    public Map(ServerConfig gameConfig, String mapName, MapPacket mapWrapper) {
+    public Map(ServerConfig gameConfig, String mapName, MapPacket mapWrapper, AssetManager assetManager) {
         this(gameConfig);
 
         // Load the map
+        map3D = new Map3D(this, assetManager);
         map = new AdvancedTmxMapLoader(mapWrapper).load("/"); // the location does not matter at all
         this.mapName = mapName;
 
         performSetup();
     }
 
-    public Map(ServerConfig gameConfig, String mapName)    {
+    public Map(ServerConfig gameConfig, String mapName, AssetManager assetManager)    {
         this(gameConfig);
 
         // Load the map
+        map3D = new Map3D(this, assetManager);
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
         this.mapName = mapName;
 
@@ -74,6 +86,7 @@ public class Map {
     }
 
     private void performSetup() {
+
         // Calculate map size
         MapProperties mapProperties = map.getProperties();
         int tX = mapProperties.get("width", Integer.class);
@@ -128,16 +141,35 @@ public class Map {
         pathfindingGraph = new PathfindingGraph(tX, tY);
     }
 
+    public void step() {
+        if (entitySnap != null) {
+//            float offsetValue = Math.max(15, Math.min(100, entitySnap.getMouseDistance()) * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().weapon.getZoom() : 1));
+            float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().getWeapon(entitySnap.getRoom().getWeaponManager()).getZoom() : 1);
+
+            Vector2 offset = new Vector2(offsetValue, 0).setAngle(entitySnap.getDirection() + 90);
+            float toX = entitySnap.getX() + offset.x;
+            float toY = entitySnap.getY() + offset.y;
+            camera.translate(Math.round(toX - camera.position.x)/2, Math.round(toY - camera.position.y)/2);
+        }
+
+        camera.update();
+        map3D.update();
+    }
+
+    public void render() {
+        renderer.setView(camera);
+        renderer.render();
+
+        map3D.render();
+    }
+
     protected void findObjectives() {
         spawns = new HashMap<Integer, List<Spawn>>();
         spawns.put(PlayerModInterface.TEAM_CT, new ArrayList<Spawn>());
         spawns.put(PlayerModInterface.TEAM_T, new ArrayList<Spawn>());
     }
 
-    public void render() {
-        renderer.setView(camera);
-        renderer.render();
-    }
+
 
     public OrthographicCamera getCamera() {
         return camera;
@@ -159,20 +191,6 @@ public class Map {
 
     public Player getEntitySnap() {
         return entitySnap;
-    }
-
-    public void step() {
-        if (entitySnap != null) {
-//            float offsetValue = Math.max(15, Math.min(100, entitySnap.getMouseDistance()) * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().weapon.getZoom() : 1));
-            float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().getWeapon(entitySnap.getRoom().getWeaponManager()).getZoom() : 1);
-
-            Vector2 offset = new Vector2(offsetValue, 0).setAngle(entitySnap.getDirection() + 90);
-            float toX = entitySnap.getX() + offset.x;
-            float toY = entitySnap.getY() + offset.y;
-            camera.translate(Math.round(toX - camera.position.x)/2, Math.round(toY - camera.position.y)/2);
-        }
-
-        camera.update();
     }
 
     public float getCameraX() {
@@ -233,6 +251,8 @@ public class Map {
                         (Float) rectangle.getProperties().get("width"),  (Float) rectangle.getProperties().get("height") );
 
 //                System.out.println(rectangle.getX() + "," + rectangle.getY() + " :: " + rectangle.getProperties().get("width") + "," + rectangle.getProperties().get("height"));
+                map3D.addWall(rectangle.getX(), rectangle.getY(),
+                        (Float) rectangle.getProperties().get("width"),  (Float) rectangle.getProperties().get("height"));
             }
         }
     }
@@ -317,6 +337,12 @@ public class Map {
         return spawns.get(team);
     }
 
+    public void dispose(boolean render) {
+        if (render) {
+            map3D.dispose();
+        }
+    }
+
     @Override
     public String toString() {
         return Gdx.files.internal("maps/" + mapName + "/map.tmx").readString();
@@ -345,4 +371,10 @@ public class Map {
     public boolean isPointOnMap(float xTarget, float yTarget) {
         return (xTarget > 0 && xTarget < mapWidth && yTarget > 0 && yTarget < mapHeight);
     }
+
+    public TiledMap getTiledMap() {
+        return map;
+    }
+
+
 }

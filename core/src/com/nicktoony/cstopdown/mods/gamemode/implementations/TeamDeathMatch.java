@@ -98,7 +98,7 @@ public class TeamDeathMatch extends GameModeMod {
     public void evPlayerSpawned(PlayerModInterface player) {
         String weapons[] = new String[] {
           "rifle_m4a1", "rifle_ak47",
-                "rifle_awp", "shotgun_spas", "pistol_pistol"
+                "rifle_awp", "shotgun_spas"
         };
         player.giveWeapon(weapons[random.nextInt(weapons.length)]);
     }

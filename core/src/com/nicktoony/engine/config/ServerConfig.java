@@ -16,7 +16,7 @@ public class ServerConfig {
     public String sv_name = "CS Server";
     public int sv_max_players = 16;
     public boolean sv_server_list = false;
-    public int sv_bots = 7;
+    public int sv_bots = 0;
     public String sv_bot_prefix = "";
     public String sv_map = EngineConfig.MAPS[0];
     public String sv_mode = EngineConfig.MODES[0];

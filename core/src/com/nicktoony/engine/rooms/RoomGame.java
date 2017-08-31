@@ -117,6 +117,7 @@ public abstract class RoomGame extends Room {
 
         this.characterManager.dispose();
         this.weaponManager.dispose();
+        this.map.dispose(render);
     }
 
     public Player createPlayer(int id, float x, float y, boolean bot) {
