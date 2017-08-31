@@ -21,11 +21,7 @@
   "ai": {
     "engage": 300
   },
-  "damage": {
-    "low": 5,
-    "medium": 18,
-    "high": 36
-  },
+  "damage": 18,
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",

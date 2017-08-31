@@ -1,15 +1,15 @@
 {
-  "name": "Pistol",
-  "clipSize": 9,
-  "clipTotal": 90,
+  "name": "Desert Eagle",
+  "clipSize": 7,
+  "clipTotal": 35,
   "rateOfFire": 20,
   "accuracy": 90,
   "recoil": 5,
   "bullets": 1,
   "spread": 0,
   "speed": 100,
-  "cost": 1000,
-  "reward": 250,
+  "cost": 600,
+  "reward": 300,
   "silencer": false,
   "zoom": 1,
   "reloadDuration": 2,
@@ -19,13 +19,10 @@
   "range": -1,
   "slot": 1,
   "ai": {
-    
+
   },
-  "damage": {
-    "low": 10,
-    "medium": 36,
-    "high": 75
-  },
+  "damage": 53,
+  "penetration": 93,
   "animations": {
     "idle": "pistol_idle",
     "shoot": "pistol_shoot",

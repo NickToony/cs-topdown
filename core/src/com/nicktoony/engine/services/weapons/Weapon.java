@@ -15,11 +15,11 @@ public class Weapon {
     private int clipTotal = 30;
 
     private int rateOfFire = 10;
-    private float accuracy = 0;
-    private float recoil = 0;
+    private int accuracy = 0;
+    private int recoil = 0;
     private int bullets = 1;
-    private float spread = 0;
-    private float speed = 100;
+    private int spread = 0;
+    private int speed = 100;
 
     private int cost = 0;
     private int reward = 0;
@@ -33,7 +33,9 @@ public class Weapon {
     private int range = -1;
     private int slot = 0;
 
-    private WeaponDamage damage = new WeaponDamage();
+    private int damage = 25;
+    private int penetration = 50;
+
     private WeaponAnimation animations = new WeaponAnimation();
     private WeaponSound sounds = new WeaponSound();
     private WeaponGraphic graphics = new WeaponGraphic();
@@ -138,7 +140,7 @@ public class Weapon {
         return reloadCalculatedType;
     }
 
-    public WeaponDamage getDamage() {
+    public int getDamage() {
         return damage;
     }
 

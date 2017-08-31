@@ -279,7 +279,7 @@ public class BuyMenu extends Entity<RoomGame> {
 
         // Stats
         sb.append("Damage:         \t")
-                .append(between(0, 100, weapon.getDamage().medium * weapon.getBullets()))
+                .append(between(0, 100, weapon.getDamage() * weapon.getBullets()))
                 .append("%").append(newline);
         sb.append("Accuracy:       \t")
                 .append(Math.min(100, weapon.getAccuracy()))

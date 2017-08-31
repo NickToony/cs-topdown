@@ -21,11 +21,7 @@
   "ai": {
     "style": "sniper"
   },
-  "damage": {
-    "low": 80,
-    "medium": 100,
-    "high": 500
-  },
+  "damage": 100,
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",

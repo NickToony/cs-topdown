@@ -286,7 +286,7 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
             if (!entityHit.isEmpty()) {
 
                 // Figure out damage
-                int damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage().medium;
+                int damage = player.getCurrentWeaponObject().getWeapon(server.getRoom().getWeaponManager()).getDamage();
 
                 for (HitPlayer hitOtherPlayer : entityHit) {
                     // Only hit if there wasn't a wall in the way

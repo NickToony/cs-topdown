@@ -1,34 +1,35 @@
 {
-  "name": "M4A1",
+  "name": "Dual Berettas",
   "clipSize": 30,
   "clipTotal": 90,
-  "rateOfFire": 5,
-  "accuracy": 60,
-  "recoil": 4,
+  "rateOfFire": 10,
+  "accuracy": 90,
+  "recoil": 5,
   "bullets": 1,
-  "spread": 2,
+  "spread": 0,
   "speed": 100,
   "cost": 1000,
   "reward": 250,
   "silencer": false,
-  "zoom": 1.6,
-  "reloadDuration": 1.6,
-  "cockDuration": 0.6,
+  "zoom": 1,
+  "reloadDuration": 2,
+  "cockDuration": 0.5,
   "equipDuration": 0.3,
   "reloadType": "full_cock",
   "range": -1,
-  "slot": 0,
+  "slot": 1,
   "ai": {
 
   },
-  "damage": 25,
+  "damage": 36,
+  "penetration": 30,
   "animations": {
-    "idle": "rifle_idle",
-    "shoot": "rifle_fire",
-    "reload": "rifle_reload",
-    "equip": "rifle_equip",
-    "unequip": "rifle_dequip",
-    "cock": "sniper_cock"
+    "idle": "dual_idle",
+    "shoot": "pistol_shoot",
+    "reload": "pistol_reload",
+    "equip": "pistol_equip",
+    "unequip": "pistol_dequip",
+    "cock": "pistol_cock"
   },
   "sounds": {
     "shoot": "shoot.wav",
@@ -40,9 +41,9 @@
     "empty": "empty.wav"
   },
   "graphics": {
-    "left": false,
+    "left": true,
     "right": true,
-    "x_offset": 28,
-    "y_offset": 36
+    "x_offset": 24,
+    "y_offset": 25
   }
 }

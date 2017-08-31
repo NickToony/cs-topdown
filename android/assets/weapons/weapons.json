@@ -26,7 +26,12 @@
       "name": "Pistols",
       "desc": "Side-arms.",
       "weapons": [
-        "pistol_pistol"
+        "pistol_glock",
+        "pistol_usp",
+        "pistol_p228",
+        "pistol_dual",
+        "pistol_deagle",
+        "pistol_fiveseven"
       ]
     },
     {

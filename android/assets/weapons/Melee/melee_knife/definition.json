@@ -19,13 +19,9 @@
   "range": 32,
   "slot": 2,
   "ai": {
-    
+
   },
-  "damage": {
-    "low": 10,
-    "medium": 25,
-    "high": 75
-  },
+  "damage": 25,
   "animations": {
     "idle": "knife_idle",
     "shoot": "knife_stab",
