@@ -117,6 +117,7 @@ public abstract class RoomGame extends Room {
 
         this.characterManager.dispose();
         this.weaponManager.dispose();
+        this.map.dispose(render);
     }
 
     public Player createPlayer(int id, float x, float y, boolean bot) {
@@ -151,6 +152,9 @@ public abstract class RoomGame extends Room {
         map.step();
         spriteBatch.setProjectionMatrix(map.getCamera().combined);
         map.render();
+
+        // We don't want players appearing on top of walls
+        map.render3D();
 
         // Render everything else
         super.render(spriteBatch);

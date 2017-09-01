@@ -10,6 +10,10 @@ public class EngineConfig {
     public static final float PIXELS_PER_METRE = 32;
     public static final float METRES_PER_PIXEL = 1 / PIXELS_PER_METRE;
     public static final int CELL_SIZE = 32;
+    public static final int DEFAULT_CAMERA_HEIGHT = 300;
+    public static final float DEFAULT_CAMERA_ZOOM = 0.7f;
+    public static final float ZOOM_MAX = 450f;
+    public static final float ZOOM_MIN = 100f;
 
     public static class Skins {
         public static String DEFAULT = "skins/default/uiskin.json";

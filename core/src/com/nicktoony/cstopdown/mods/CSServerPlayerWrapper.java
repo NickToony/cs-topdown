@@ -193,7 +193,11 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 
     public void createPlayer(float x, float y) {
         // Destroy current player
-        slay(false);
+        WeaponWrapper[] weapons = new WeaponWrapper[] {};
+        if (isAlive()) {
+            weapons = player.getWeapons();
+            slay(false);
+        }
 
         // Spawn a new one
         player = server.getGame().createPlayer(getID(), x, y, isBot());
@@ -205,6 +209,11 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
 //                new WeaponWrapper(server.getRoom().getWeaponManager().getWeapon("pistol_melee")),
 //
 //        });
+        for (WeaponWrapper weaponWrapper : weapons) {
+            if (weaponWrapper != null) {
+                player.giveWeapon(weaponWrapper);
+            }
+        }
         player.setNextWeapon(0);
         player.setHealth(getMaxHealth());
         player.setListener(this);
@@ -370,5 +379,10 @@ public abstract class CSServerPlayerWrapper implements PlayerModInterface, Playe
         if (isBot()) {
             ((BotPlayer) this.player).setTraits(botTraits);
         }
+    }
+
+    public boolean canBuy() {
+        return (this.player.getTeam() == PlayerModInterface.TEAM_CT && server.getConfig().mp_ct_buy_enabled)
+                || (this.player.getTeam() == PlayerModInterface.TEAM_T && server.getConfig().mp_t_buy_enabled);
     }
 }

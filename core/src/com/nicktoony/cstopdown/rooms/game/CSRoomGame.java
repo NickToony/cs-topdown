@@ -58,7 +58,7 @@ public class CSRoomGame extends RoomGame {
             map = new TexturelessMap(socket.getServerConfig(), socket.getServerConfig().sv_map);
         } else {
             if (this.map == null) {
-                map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map);
+                map = new Map(socket.getServerConfig(), socket.getServerConfig().sv_map, getGame().getGameConfig());
             } else {
                 map = this.map;
             }

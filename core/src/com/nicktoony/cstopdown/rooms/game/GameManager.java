@@ -454,4 +454,9 @@ public class GameManager implements ClientSocket.SBSocketListener {
     public void buyWeapon(Weapon weapon) {
         socket.sendMessage(new BuyWeaponPacket(weapon));
     }
+
+    public boolean canBuy() {
+        return (this.team == PlayerModInterface.TEAM_CT && roomGame.getConfig().mp_ct_buy_enabled)
+                || (this.team == PlayerModInterface.TEAM_T && roomGame.getConfig().mp_t_buy_enabled);
+    }
 }

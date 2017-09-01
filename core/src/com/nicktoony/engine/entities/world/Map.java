@@ -2,24 +2,38 @@ package com.nicktoony.engine.entities.world;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.objectives.Spawn;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.MyGame;
+import com.nicktoony.engine.config.GameConfig;
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.packets.connection.MapPacket;
+import com.nicktoony.engine.rooms.RoomGame;
 import com.nicktoony.engine.services.AdvancedTmxMapLoader;
 import com.nicktoony.engine.services.LightManager;
 
@@ -44,29 +58,34 @@ public class Map {
     protected PathfindingGraph pathfindingGraph;
     protected HashMap<Integer, List<Spawn>> spawns;
     public int[] spawnIndex = { 0, 0, 0 };
-    protected ServerConfig gameConfig;
+    protected ServerConfig serverConfig;
+    protected GameConfig gameConfig;
+    private Map3D map3D;
+    private boolean loaded3D = false;
 
 
     private Player entitySnap;
 
-    protected Map(ServerConfig gameConfig) {
-        this.gameConfig = gameConfig;
+    protected Map(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
     }
 
-    public Map(ServerConfig gameConfig, String mapName, MapPacket mapWrapper) {
-        this(gameConfig);
+    public Map(ServerConfig serverConfig, String mapName, MapPacket mapWrapper, GameConfig gameConfig) {
+        this(serverConfig);
 
         // Load the map
+        this.gameConfig = gameConfig;
         map = new AdvancedTmxMapLoader(mapWrapper).load("/"); // the location does not matter at all
         this.mapName = mapName;
 
         performSetup();
     }
 
-    public Map(ServerConfig gameConfig, String mapName)    {
-        this(gameConfig);
+    public Map(ServerConfig serverConfig, String mapName, GameConfig gameConfig)    {
+        this(serverConfig);
 
         // Load the map
+        this.gameConfig = gameConfig;
         map = new TmxMapLoader().load("maps/" + mapName + "/map.tmx");
         this.mapName = mapName;
 
@@ -74,6 +93,7 @@ public class Map {
     }
 
     private void performSetup() {
+
         // Calculate map size
         MapProperties mapProperties = map.getProperties();
         int tX = mapProperties.get("width", Integer.class);
@@ -82,8 +102,8 @@ public class Map {
         // Ambient colours
         ambientColour = Color.valueOf(mapProperties.get("ambientColour", String.class));
         ambientColour.a = mapProperties.get("ambientAlpha", Float.class);
-        if (gameConfig.tmp_map_lighting != -1) {
-            ambientColour.a = gameConfig.tmp_map_lighting;
+        if (serverConfig.tmp_map_lighting != -1) {
+            ambientColour.a = serverConfig.tmp_map_lighting;
         }
 
         mapWidth = EngineConfig.CELL_SIZE * tX;
@@ -117,8 +137,8 @@ public class Map {
         // Setup the camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.zoom = mapProperties.get("zoom", Float.class);
-        camera.zoom = 0.625f; // override
+//        camera.zoom = mapProperties.get("zoom", Float.class);
+        camera.zoom = EngineConfig.DEFAULT_CAMERA_ZOOM; // override
         renderer.setView(camera);
 
         // Objectivbes
@@ -128,15 +148,63 @@ public class Map {
         pathfindingGraph = new PathfindingGraph(tX, tY);
     }
 
+    public void step() {
+        if (entitySnap != null) {
+//            float offsetValue = Math.max(15, Math.min(100, entitySnap.getMouseDistance()) * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().weapon.getZoom() : 1));
+            float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().getWeapon(entitySnap.getRoom().getWeaponManager()).getZoom() : 1);
+
+            Vector2 offset = new Vector2(offsetValue, 0).setAngle(entitySnap.getDirection() + 90);
+            float toX = entitySnap.getX() + offset.x;
+            float toY = entitySnap.getY() + offset.y;
+            camera.translate(Math.round(toX - camera.position.x)/2, Math.round(toY - camera.position.y)/2);
+        }
+
+        if (map3D == null) {
+            map3D = new Map3D(this);
+        }
+
+//        if (is3D()) {
+            map3D.update();
+            camera.update();
+            camera.combined.set(map3D.getCamera().combined);
+            camera.zoom = 1;
+//        } else {
+////            camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//            camera.update();
+//        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F12)) {
+            gameConfig.use_3d = !gameConfig.use_3d;
+        }
+    }
+
+    public void render() {
+        renderer.setView(camera);
+        renderer.render();
+    }
+
+    public void render3D() {
+        if (gameConfig.use_3d) {
+            if (!loaded3D) {
+                add3DWalls();
+                loaded3D = true;
+            }
+            map3D.render();
+        }
+    }
+
     protected void findObjectives() {
         spawns = new HashMap<Integer, List<Spawn>>();
         spawns.put(PlayerModInterface.TEAM_CT, new ArrayList<Spawn>());
         spawns.put(PlayerModInterface.TEAM_T, new ArrayList<Spawn>());
     }
 
-    public void render() {
-        renderer.setView(camera);
-        renderer.render();
+    public boolean is3D() {
+        return map3D != null;
+    }
+
+    public Map3D getMap3D() {
+        return map3D;
     }
 
     public OrthographicCamera getCamera() {
@@ -159,20 +227,6 @@ public class Map {
 
     public Player getEntitySnap() {
         return entitySnap;
-    }
-
-    public void step() {
-        if (entitySnap != null) {
-//            float offsetValue = Math.max(15, Math.min(100, entitySnap.getMouseDistance()) * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().weapon.getZoom() : 1));
-            float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().getWeapon(entitySnap.getRoom().getWeaponManager()).getZoom() : 1);
-
-            Vector2 offset = new Vector2(offsetValue, 0).setAngle(entitySnap.getDirection() + 90);
-            float toX = entitySnap.getX() + offset.x;
-            float toY = entitySnap.getY() + offset.y;
-            camera.translate(Math.round(toX - camera.position.x)/2, Math.round(toY - camera.position.y)/2);
-        }
-
-        camera.update();
     }
 
     public float getCameraX() {
@@ -231,8 +285,20 @@ public class Map {
 
                 addCollisionWall(world, rectangle.getX(), rectangle.getY(),
                         (Float) rectangle.getProperties().get("width"),  (Float) rectangle.getProperties().get("height") );
+            }
+        }
+    }
 
-//                System.out.println(rectangle.getX() + "," + rectangle.getY() + " :: " + rectangle.getProperties().get("width") + "," + rectangle.getProperties().get("height"));
+    protected void add3DWalls() {
+        for (MapObject object : collisionLayer.getObjects())   {
+            if (object instanceof TextureMapObject) {
+                // Fetch the rectangle collision box
+                TextureMapObject rectangle = ((TextureMapObject) object);
+
+                map3D.addWall(rectangle.getX(), rectangle.getY(),
+                        (Float) rectangle.getProperties().get("width"),  (Float) rectangle.getProperties().get("height"),
+                rectangle.getProperties().containsKey("depth") ? (Float) rectangle.getProperties().get("depth") : 1f,
+                        rectangle.getProperties().containsKey("depth_repeat") ? (Integer) rectangle.getProperties().get("depth_repeat") : -1 );
             }
         }
     }
@@ -317,6 +383,12 @@ public class Map {
         return spawns.get(team);
     }
 
+    public void dispose(boolean render) {
+        if (render && is3D()) {
+            map3D.dispose();
+        }
+    }
+
     @Override
     public String toString() {
         return Gdx.files.internal("maps/" + mapName + "/map.tmx").readString();
@@ -336,6 +408,7 @@ public class Map {
 
     public void resize(int width, int height) {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        map3D.resize();
     }
 
     public float getCameraZoom() {
@@ -345,4 +418,10 @@ public class Map {
     public boolean isPointOnMap(float xTarget, float yTarget) {
         return (xTarget > 0 && xTarget < mapWidth && yTarget > 0 && yTarget < mapHeight);
     }
+
+    public TiledMap getTiledMap() {
+        return map;
+    }
+
+
 }

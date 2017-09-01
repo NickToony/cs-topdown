@@ -30,11 +30,20 @@ public class RayHandlerWrapper extends Renderable {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        boxLightCamera.position.set(EngineConfig.toMetres(map.getCamera().position.x),
-                EngineConfig.toMetres(map.getCamera().position.y), 0);
-        boxLightCamera.update();
+        boxLightCamera.combined.set(map.getCamera().combined);
+//        boxLightCamera.position.set(EngineConfig.toMetres(map.getCamera().position.x),
+//                EngineConfig.toMetres(map.getCamera().position.y), 0);
+//        boxLightCamera.zoom = EngineConfig.toMetres(map.getCamera().zoom);
+//        boxLightCamera.viewportWidth = EngineConfig.toMetres(map.getCamera().viewportWidth);
+//        boxLightCamera.viewportHeight = EngineConfig.toMetres(map.getCamera().viewportHeight);
+        boxLightCamera.combined.scl(32);
+//        boxLightCamera.update();
 
         // Render the light over everything
+//        handler.setCombinedMatrix(map.getCamera().combined,
+//                boxLightCamera.position.x, boxLightCamera.position.y,
+//                boxLightCamera.viewportWidth * boxLightCamera.zoom,
+//                boxLightCamera.viewportHeight * boxLightCamera.zoom);
         handler.setCombinedMatrix(boxLightCamera.combined,
                 boxLightCamera.position.x, boxLightCamera.position.y,
                 boxLightCamera.viewportWidth * boxLightCamera.zoom,
