@@ -326,11 +326,6 @@ public class GameManager implements ClientSocket.SBSocketListener {
         }
     }
 
-    private int smartMod(int a, int b) {
-        int mod = (a < 0) ? (b - (Math.abs(a) % b) ) %b : (a % b);
-        return mod;
-    }
-
     private void handleReceivedPacket(PlayerToggleLight packet) {
         // Find the player in question
         Player player = playerIdMap.get(packet.id);

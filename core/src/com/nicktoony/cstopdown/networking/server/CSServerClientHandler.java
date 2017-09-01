@@ -111,8 +111,10 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     server.sendToAll(packet);
 //                    server.sendToOthers(packet, this);
 //                    for (CSServerClientHandler client : server.getClients()) {
-//                        if (client != this && client.getState() == ServerClientHandler.STATE.INGAME) {
-//                            if (!client.getPlayerWrapper().isAlive() || !this.getPlayerWrapper().isAlive()) {
+//                        if (client.getState() == ServerClientHandler.STATE.INGAME) {
+//                            if (client == this) {
+//                                client.sendPacket(packet);
+//                            }else if (!client.getPlayerWrapper().isAlive() || !this.getPlayerWrapper().isAlive()) {
 //                                client.sendPacket(packet);
 //                            } else {
 //                                if (client.getPlayer().canSeePlayer(getPlayer())) {
@@ -132,61 +134,6 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         }
 
         player.update();
-    }
-
-    @Override
-    protected void handleInput(TimestampedPacket packet) {
-        if (!player.isAlive()) {
-            return;
-        }
-
-        if (packet instanceof PlayerInputPacket) {
-            // Cast to input packet
-            PlayerInputPacket inputPacket = (PlayerInputPacket) packet;
-            // Update state of player
-            getPlayer().setMovement(inputPacket.moveUp, inputPacket.moveRight,
-                    inputPacket.moveDown, inputPacket.moveLeft);
-            getPlayer().setDirection(inputPacket.direction);
-
-            // Update shooting
-            getPlayer().setShooting(inputPacket.shoot);
-            getPlayer().setReloading(inputPacket.reload);
-            getPlayer().setZoom(inputPacket.zoom);
-
-            // Store which input we're processing
-            lastProcessed = inputPacket.number;
-
-            // Time since last input was 0
-            lastInput = System.currentTimeMillis();
-
-            // Attach the id
-            inputPacket.id = getID();
-            // Attach the SERVER position
-//            inputPacket.x = getPlayer().getX();
-//            inputPacket.y = getPlayer().getY();
-//            inputPacket.timestamp = getTimestamp();
-//            server.sendToOthers(packet, this);
-
-            // Trigger immediate update
-            lastUpdate = -1;
-        } else if (packet instanceof PlayerToggleLight) {
-            PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
-            getPlayer().setLightOn(lightPacket.light);
-
-            // Add an id
-            lightPacket.id = id;
-
-            server.sendToOthers(lightPacket, this);
-        } else if (packet instanceof PlayerSwitchWeapon) {
-            PlayerSwitchWeapon playerSwitchWeapon = (PlayerSwitchWeapon) packet;
-            getPlayer().setNextWeapon(playerSwitchWeapon.slot);
-
-            // Add an id
-            playerSwitchWeapon.id = id;
-
-            server.sendToOthers(playerSwitchWeapon, this);
-        }
-
     }
 
     @Override
@@ -260,11 +207,6 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         destroyPlayerPacket.id = id;
         destroyPlayerPacket.killer = killer == null ? -1 : killer.getID();
         destroyPlayerPacket.cause = killer == null ? "SLAYED" : killer.getWeaponName();
-//        destroyPlayerPacket.victimName = player.getName();
-//        if (killer != null) {
-//            destroyPlayerPacket.killerName = killer.getName();
-//            destroyPlayerPacket.weapon = killer.getWeaponName();
-//        }
         server.sendToAll(destroyPlayerPacket);
     }
 
@@ -286,10 +228,61 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
     }
 
     @Override
-    public void handleReceivedMessage(Packet packet) {
-        super.handleReceivedMessage(packet);
+    protected void handleGameMessages(Packet packet) {
+        super.handleGameMessages(packet);
 
-        if (packet instanceof JoinTeamPacket) {
+        if (packet instanceof PlayerInputPacket) {
+            if (!this.getPlayerWrapper().isAlive()) return;
+
+            // Cast to input packet
+            PlayerInputPacket inputPacket = (PlayerInputPacket) packet;
+            // Update state of player
+            getPlayer().setMovement(inputPacket.moveUp, inputPacket.moveRight,
+                    inputPacket.moveDown, inputPacket.moveLeft);
+            getPlayer().setDirection(inputPacket.direction);
+
+            // Update shooting
+            getPlayer().setShooting(inputPacket.shoot);
+            getPlayer().setReloading(inputPacket.reload);
+            getPlayer().setZoom(inputPacket.zoom);
+
+            // Store which input we're processing
+            lastProcessed = inputPacket.number;
+
+            // Time since last input was 0
+            lastInput = System.currentTimeMillis();
+
+            // Attach the id
+            inputPacket.id = getID();
+            // Attach the SERVER position
+//            inputPacket.x = getPlayer().getX();
+//            inputPacket.y = getPlayer().getY();
+//            inputPacket.timestamp = getTimestamp();
+//            server.sendToOthers(packet, this);
+
+            // Trigger immediate update
+            lastUpdate = -1;
+        } else if (packet instanceof PlayerToggleLight) {
+            if (!this.getPlayerWrapper().isAlive()) return;
+
+            PlayerToggleLight lightPacket = (PlayerToggleLight) packet;
+            getPlayer().setLightOn(lightPacket.light);
+
+            // Add an id
+            lightPacket.id = id;
+
+            server.sendToOthers(lightPacket, this);
+        } else if (packet instanceof PlayerSwitchWeapon) {
+            if (!this.getPlayerWrapper().isAlive()) return;
+
+            PlayerSwitchWeapon playerSwitchWeapon = (PlayerSwitchWeapon) packet;
+            getPlayer().setNextWeapon(playerSwitchWeapon.slot);
+
+            // Add an id
+            playerSwitchWeapon.id = id;
+
+            server.sendToOthers(playerSwitchWeapon, this);
+        } else if (packet instanceof JoinTeamPacket) {
             JoinTeamPacket joinTeamPacket = (JoinTeamPacket) packet;
             if (EngineConfig.isValidTeam(joinTeamPacket.team)) {
                 if (this.player.isAlive()) {
@@ -298,6 +291,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                 this.player.joinTeam((joinTeamPacket).team);
             }
         } else if (packet instanceof BuyWeaponPacket) {
+            if (!this.getPlayerWrapper().isAlive()) return;
+
             BuyWeaponPacket buyWeaponPacket = (BuyWeaponPacket) packet;
             if (this.player.isAlive()
                     && (this.getPlayerWrapper().canBuy())) {

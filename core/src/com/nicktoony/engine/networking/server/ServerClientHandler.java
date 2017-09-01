@@ -26,8 +26,6 @@ public abstract class ServerClientHandler{
     protected STATE state = STATE.INIT;
     protected int id;
     private long initialTimestamp; // only sync'd on loaded!
-    private List<TimestampedPacket> inputQueue = new ArrayList<TimestampedPacket>();
-    private float leniency = 0;
     private long[] ping;
     private int pingIndex = 0;
     private long lastPing = 0;
@@ -83,7 +81,7 @@ public abstract class ServerClientHandler{
         }
     }
 
-    private void handleGameMessages(Packet packet) {
+    protected void handleGameMessages(Packet packet) {
         if (packet instanceof PingPacket) {
             if (ping == null) {
                 ping = new long[10];
@@ -106,8 +104,6 @@ public abstract class ServerClientHandler{
                 }
             }
 
-        } else if (packet instanceof TimestampedPacket) {
-            insertInputQueue((TimestampedPacket) packet);
         }
     }
 
@@ -120,14 +116,6 @@ public abstract class ServerClientHandler{
                 sendPacket(packet);
                 lastPing = getTimestamp();
             }
-
-
-            if (leniency > 0) leniency -= 2;
-            if (leniency > 100) leniency = 100;
-        }
-
-        if (state == STATE.INGAME) {
-            handleInputQueue();
         }
     }
 
@@ -151,22 +139,6 @@ public abstract class ServerClientHandler{
         return (System.currentTimeMillis() - initialTimestamp);
     }
 
-    public void insertInputQueue(TimestampedPacket packet) {
-        // loop through all elements
-//        for (int i = 0; i < inputQueue.size(); i++) {
-//            // Skip to next one if smaller
-//            if (inputQueue.get(i).timestamp < packet.timestamp) continue;
-//
-//            System.out.println("WE JUMPED THE QUEUE");
-//
-//            // Otherwise, found location
-//            inputQueue.add(i, packet);
-//            return;
-//        }
-        // Jump to end
-        inputQueue.add(packet);
-    }
-
     /**
      * Event called when client is disconnected. Hence, should clean up
      */
@@ -177,25 +149,6 @@ public abstract class ServerClientHandler{
     public int getID() {
         return id;
     }
-
-    private void handleInputQueue() {
-        ListIterator<TimestampedPacket> iterator = inputQueue.listIterator();
-        while (iterator.hasNext()) {
-            TimestampedPacket packet = iterator.next();
-            // Wait until we've compensated for latency
-            if (packet.getTimestamp() < getTimestamp()
-                    - server.getConfig().sv_lag_compensate) {
-            // Latency has been compensated. Process it!
-            iterator.remove();
-
-            handleInput(packet);
-            } else {
-                break;
-            }
-        }
-    }
-
-    protected abstract void handleInput(TimestampedPacket packet);
 
     public boolean bot() {
         return false;
