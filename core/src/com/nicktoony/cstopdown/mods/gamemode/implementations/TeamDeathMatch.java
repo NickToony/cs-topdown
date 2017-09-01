@@ -16,7 +16,7 @@ public class TeamDeathMatch extends GameModeMod {
 
     @Override
     public void evInit() {
-        getServerConfig().mp_buy_enabled = false;
+
     }
 
     @Override
@@ -96,10 +96,6 @@ public class TeamDeathMatch extends GameModeMod {
 
     @Override
     public void evPlayerSpawned(PlayerModInterface player) {
-        String weapons[] = new String[] {
-          "rifle_m4a1", "rifle_ak47",
-                "rifle_awp", "shotgun_spas"
-        };
-        player.giveWeapon(weapons[random.nextInt(weapons.length)]);
+
     }
 }

@@ -20,7 +20,7 @@ public class Left4Dead extends GameModeMod {
         getServerConfig().tmp_map_lighting = 0.02f;
 //        getServerConfig().sv_bot_prefix = "Zombie ";
         getServerConfig().mp_friendly_fire = false;
-        getServerConfig().mp_buy_enabled = false;
+        getServerConfig().mp_t_buy_enabled = false;
     }
 
     @Override
@@ -140,11 +140,6 @@ public class Left4Dead extends GameModeMod {
     @Override
     public void evPlayerSpawned(PlayerModInterface player) {
         if (player.getTeam() == PlayerModInterface.TEAM_CT) {
-            String weapons[] = new String[] {
-                    "rifle_m4a1", "rifle_ak47",
-                    "rifle_awp", "shotgun_spas"
-            };
-            player.giveWeapon(weapons[random.nextInt(weapons.length)]);
             player.setMaxHealth(100);
 
             if (player.isBot()) {

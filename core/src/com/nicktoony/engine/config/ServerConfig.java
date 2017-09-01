@@ -37,7 +37,8 @@ public class ServerConfig {
     public int mp_bot_engage_range = 400;
     public int mp_sound_range = 800;
     public boolean mp_friendly_fire = true;
-    public boolean mp_buy_enabled = true;
+    public boolean mp_ct_buy_enabled = true;
+    public boolean mp_t_buy_enabled = true;
 
     // AI
     public boolean ai_enabled = true;

@@ -219,12 +219,14 @@ public class BotPlayer extends Player {
 
             // The bot is just moving somewhere
             case moving:
+                shootKey = false;
                 if (!movePath()) {
                     aiState = AIState.idle;
                 }
                 break;
 
             case camping:
+                shootKey = false;
                 if (!movePath()) {
                     stopMoving();
                     if (actionPause > 0) {
@@ -240,6 +242,7 @@ public class BotPlayer extends Player {
                 break;
 
             case protecting:
+                shootKey = false;
                 if (!movePath()) {
                     stopMoving();
                     if (actionPause > 0) {

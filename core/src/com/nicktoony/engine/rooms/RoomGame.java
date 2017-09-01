@@ -153,6 +153,9 @@ public abstract class RoomGame extends Room {
         spriteBatch.setProjectionMatrix(map.getCamera().combined);
         map.render();
 
+        // We don't want players appearing on top of walls
+        map.render3D();
+
         // Render everything else
         super.render(spriteBatch);
 

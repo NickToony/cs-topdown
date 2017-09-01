@@ -10,6 +10,7 @@ public class GameConfig {
     public int resolution_x = 1280;
     public int resolution_y = 768;
     public boolean fullscreen = false;
+    public boolean use_3d = false;
     public String name = "";
 
     public void save() {
@@ -19,6 +20,7 @@ public class GameConfig {
         prefs.putInteger("resolution_y", resolution_y);
         prefs.putBoolean("fullscreen", fullscreen);
         prefs.putString("name", name);
+        prefs.putBoolean("use_3d", use_3d);
 
         prefs.flush();
     }
@@ -30,5 +32,6 @@ public class GameConfig {
         resolution_y = prefs.getInteger("resolution_y", resolution_y);
         fullscreen = prefs.getBoolean("fullscreen", fullscreen);
         name = prefs.getString("name", name);
+        use_3d = prefs.getBoolean("use_3d", use_3d);
     }
 }

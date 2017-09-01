@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.nicktoony.engine.EngineConfig;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,11 +31,10 @@ public class Map3D {
     private ModelBatch modelBatch;
     private ModelBuilder modelBuilder;
     private List<ModelInstance> modelInstances = new LinkedList<ModelInstance>();
-    private AssetManager assetManager;
-    private float cameraHeight = 252f;
-    private float wallHeight = 16;
+    private float cameraHeight = EngineConfig.DEFAULT_CAMERA_HEIGHT;
+    private float wallHeight = 22;
 
-    Map3D(Map map, AssetManager assetManager) {
+    Map3D(Map map) {
         this.map = map;
 
         // 3D camera
@@ -42,12 +42,11 @@ public class Map3D {
         camera.position.set(0f, 0f, 400f);
         camera.lookAt(0f,0f,0);
         camera.near = 1f;
-        camera.far = 500f;
+        camera.far = EngineConfig.ZOOM_MAX + 1;
         camera.update();
 
         modelBatch = new ModelBatch();
         modelBuilder = new ModelBuilder();
-        this.assetManager = assetManager;
     }
 
     public void render() {
@@ -61,12 +60,14 @@ public class Map3D {
     }
 
     public void update() {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) cameraHeight ++;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) cameraHeight --;
-//        System.out.println(cameraHeight);
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) cameraHeight += 2;
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) cameraHeight -= 2;
+        cameraHeight = Math.max(EngineConfig.ZOOM_MIN, Math.min(EngineConfig.ZOOM_MAX, cameraHeight));
+
         camera.position.set(map.getCameraCenterX(), map.getCameraCenterY(), cameraHeight);
         camera.lookAt(map.getCameraCenterX(), map.getCameraCenterY(),0f);
         camera.update();
+
     }
 
     public void dispose() {
@@ -76,13 +77,10 @@ public class Map3D {
         }
     }
 
-    public void addWall(float x, float y, float width, float height) {
+    public void addWall(float x, float y, float width, float height, float depth, int depthRepeat) {
 //        Model model  = modelBuilder.createBox(width , height, 1f,
 //                new Material(ColorAttribute.createDiffuse(Color.GREEN)),
 //                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        assetManager.load("dust.png", Texture.class);
-        assetManager.finishLoading();
-        Texture fallback = assetManager.get("dust.png", Texture.class);
 
         TiledMapTileLayer layer = map.getTiledMap().getLayers().getByType(TiledMapTileLayer.class).first();
         TiledMapTile tile = layer.getCell((int) Math.floor(x / 32), (int) Math.floor(y / 32))
@@ -160,6 +158,10 @@ public class Map3D {
                 }
                 lastRegion = innerRegion;
             }
+        }
+
+        if (depthRepeat > 0) {
+            smartTexture = true;
         }
 
         System.out.println("Smart texture: " + smartTexture);
@@ -267,8 +269,8 @@ public class Map3D {
         ModelInstance instance = new ModelInstance(model);
 //        physicsX + (physicsCellWidth /2), physicsY + (physiceCellHeight /2)
 
-        instance.transform.setTranslation(x , y , wallHeight);
-        instance.transform.scale(width, height, wallHeight);
+        instance.transform.setTranslation(x , y , 0);
+        instance.transform.scale(width, height, depth * wallHeight);
 
         // Texture repeat! :)
         Matrix3 mat = new Matrix3();
@@ -302,5 +304,19 @@ public class Map3D {
             meshPartBuilder.rect(boxSize,-boxSize,-boxSize, boxSize,boxSize,-boxSize,  boxSize,boxSize,boxSize, boxSize,-boxSize,boxSize, boxOffset,0,0);
 
             return modelBuilder.end();
+    }
+
+    public void resize() {
+        camera.viewportWidth = Gdx.graphics.getWidth();
+        camera.viewportHeight = Gdx.graphics.getHeight();
+        camera.update();
+    }
+
+    public PerspectiveCamera getCamera() {
+        return camera;
+    }
+
+    public float getCameraHeight() {
+        return cameraHeight;
     }
 }

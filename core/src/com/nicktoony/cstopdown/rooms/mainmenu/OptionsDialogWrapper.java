@@ -18,6 +18,7 @@ public class OptionsDialogWrapper {
     private SelectBox<Resolution> fieldResolutions;
     private TextField fieldName;
     private CheckBox fieldFullscreen;
+    private CheckBox field3D;
     private Dialog dialog;
     private Skin skin;
     private GameConfig gameConfig;
@@ -116,6 +117,12 @@ public class OptionsDialogWrapper {
         fieldFullscreen.setChecked(gameConfig.fullscreen);
         dialog.add(fieldFullscreen).prefWidth(rightSize);
         dialog.row();
+
+        dialog.add(new Label("Use 3D", skin)).prefWidth(leftSize);
+        field3D = new CheckBox("", skin);
+        field3D.setChecked(gameConfig.use_3d);
+        dialog.add(field3D).prefWidth(rightSize);
+        dialog.row();
     }
 
     public void show(Stage stage) {
@@ -139,6 +146,7 @@ public class OptionsDialogWrapper {
         gameConfig.fullscreen = fieldFullscreen.isChecked();
         gameConfig.resolution_x = fieldResolutions.getSelected().x;
         gameConfig.resolution_y = fieldResolutions.getSelected().y;
+        gameConfig.use_3d = field3D.isChecked();
         gameConfig.save();
 
         listener.saved();

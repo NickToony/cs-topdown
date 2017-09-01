@@ -1,6 +1,7 @@
 package com.nicktoony.cstopdown.networking.server;
 
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
+import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.game.BuyWeaponPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -19,7 +20,6 @@ import com.nicktoony.engine.packets.connection.ConnectPacket;
 import com.nicktoony.engine.packets.connection.JoinTeamPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
 import com.nicktoony.engine.packets.connection.MapPacket;
-import com.nicktoony.engine.services.weapons.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -299,7 +299,8 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             }
         } else if (packet instanceof BuyWeaponPacket) {
             BuyWeaponPacket buyWeaponPacket = (BuyWeaponPacket) packet;
-            if (this.player.isAlive() && server.getConfig().mp_buy_enabled) {
+            if (this.player.isAlive()
+                    && (this.getPlayerWrapper().canBuy())) {
                 this.player.giveWeapon(buyWeaponPacket.getWeapon());
             }
         }

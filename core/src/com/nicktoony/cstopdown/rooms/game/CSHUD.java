@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
 import com.nicktoony.engine.entities.HUD;
@@ -227,7 +227,7 @@ public class CSHUD extends HUD {
         }
 
         // Show team menu (toggle)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B) && getRoom().getConfig().mp_buy_enabled) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B) && getRoom().getGameManager().canBuy()) {
             if (buyMenu.isVisible()) {
                 buyMenu.hide();
             } else if (!getRoom().getGameManager().isSpectating()) {
@@ -340,12 +340,8 @@ public class CSHUD extends HUD {
             if (showName) {
                 if (i < playerLabels.length) {
                     Label label = playerLabels[i];
-                    float zoom = getRoom().getMap().getCameraZoom();
-                    float X = (player.getX() - getRoom().getMap().getCameraCenterX())/(100*zoom)*100;
-                    float Y = (player.getY() - getRoom().getMap().getCameraCenterY())/(100*zoom)*100;
-                    float offsetX = ((getRoom().getMap().getCamera().viewportWidth/2));
-                    float offsetY = ((getRoom().getMap().getCamera().viewportHeight/2)) + 40;
-                    label.setPosition(X + offsetX,Y + offsetY);
+                    Vector3 projected = getRoom().getMap().getCamera().project(new Vector3(player.getX(), player.getY(), 0));
+                    label.setPosition(projected.x, projected.y + 40 );
                     label.setText(getRoom().getGameManager().getPlayerDetails(player.getId()).name);
                     label.setVisible(true);
 

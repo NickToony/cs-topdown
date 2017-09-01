@@ -2,18 +2,19 @@
 
 CS Top Down
 =====================
-An adventure into the world of LibGDX: A multiplayer top-down 2D shooter with precision, inspired by the popular Counterstrike series.
+An adventure into the world of LibGDX: A multiplayer top-down shooter with precision, inspired by the popular Counterstrike series.
 
 ## Current Features
 - Collisions and movement using Box2D
 - External map loading and rendering using Tiled Map Editor
-    - Custom Map/Textures downloading from game-servers
+    - Custom Map/Textures downloaded from game-servers when joining
 - Skeletal based animation using Spine
 - Lighting engine using Box2D Lights
 - Cross-platform multiplayer (Desktop, Web, Android, iOS)
     - Entirely based upon WebSockets
 - Reliable server-authoriative net-code: smooth, responsive and fast
 - Moddable game-modes, weapons, sounds, graphics, maps
+- Experimental 3D world with OpenGL (Hit F12 to toggle!)
 
 ## Default gamemodes (or make your own!)
 - Team Deathmatch (config: "TeamDeathMatch")
@@ -33,6 +34,7 @@ An adventure into the world of LibGDX: A multiplayer top-down 2D shooter with pr
 - Switch weapons: 1/2/3/4/5
 - Tab: Scoreboard
 - ESC: Menu
+- F12: Toggle 3D world
 
 ## Play Now
 You can grab recent builds of the server, desktop and html from my server:
