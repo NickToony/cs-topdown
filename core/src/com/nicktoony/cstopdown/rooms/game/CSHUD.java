@@ -340,7 +340,7 @@ public class CSHUD extends HUD {
             if (showName) {
                 if (i < playerLabels.length) {
                     Label label = playerLabels[i];
-                    Vector3 projected = getRoom().getMap().getCamera().project(new Vector3(player.getX(), player.getY(), 0));
+                    Vector3 projected = getRoom().getMap().getCamera().project(new Vector3(player.fakeX, player.fakeY, 0));
                     label.setPosition(projected.x, projected.y + 40 );
                     label.setText(getRoom().getGameManager().getPlayerDetails(player.getId()).name);
                     label.setVisible(true);

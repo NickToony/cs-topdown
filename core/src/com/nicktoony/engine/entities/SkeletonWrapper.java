@@ -29,7 +29,7 @@ public class SkeletonWrapper {
         }
     }
 
-    public void step()  {
+    public void step(float x, float y)  {
         if (skeleton == null)   {
             return;
         }
@@ -37,8 +37,8 @@ public class SkeletonWrapper {
         state.update(Gdx.graphics.getDeltaTime());
         state.apply(skeleton);
 
-        skeleton.setX(entity.getX());
-        skeleton.setY(entity.getY());
+        skeleton.setX(x);
+        skeleton.setY(y);
         skeleton.getRootBone().setRotation(skeleton.getRootBone().getRotation() + entity.getDirection());
 
         skeleton.updateWorldTransform();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Event;
@@ -93,6 +94,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private boolean lastReload = false;
     private long lastUpdate = 0;
     private boolean lastZoom = false;
+
+    public float fakeX = 0f;
+    public float fakeY = 0f;
 
     boolean cannotSee = false;
     Body targetBody = null;
@@ -196,17 +200,17 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     @Override
     public boolean presolveEntity(Contact contact, Entity other) {
         if (other instanceof Player) {
-            contact.setEnabled(false);
+            contact.setEnabled(true);
 
-            if (!getRoom().getConfig().mp_player_collisions){
-                return true;
-            } else {
-                Vector2 move = new Vector2(0, .2f);
-                move.setAngle(EngineConfig.angleBetweenPoints(other.getPosition(), getPosition()));
-                Vector2 pos = body.getPosition();
-                this.body.applyLinearImpulse(move.x, move.y, pos.x, pos.y, true);
-                return true;
-            }
+//            if (!getRoom().getConfig().mp_player_collisions){
+//                return true;
+//            } else {
+//                Vector2 move = new Vector2(0, .2f);
+//                move.setAngle(EngineConfig.angleBetweenPoints(other.getPosition(), getPosition()));
+//                Vector2 pos = body.getPosition();
+//                this.body.applyLinearImpulse(move.x, move.y, pos.x, pos.y, true);
+//                return true;
+//            }
         }
 
         return super.presolveEntity(contact, other);
@@ -258,6 +262,9 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        float x = this.fakeX;
+        float y = this.fakeY;
+
         // render harry's shadow
         shadowSprite.setX(x - shadowSprite.getWidth() / 2);
         shadowSprite.setY(y - shadowSprite.getHeight() / 2);
@@ -393,7 +400,19 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     public void step(float delta) {
         super.step(delta);
 
-        skeletonWrapper.step();
+        Vector2 from = new Vector2(fakeX, fakeY);
+        Vector2 to = new Vector2(getX(), getY());
+        if (from.dst(to) < 64) {
+            Vector2 result = from.lerp(to, 0.2f);
+
+            fakeX = result.x;
+            fakeY = result.y;
+        } else {
+            fakeX = getX();
+            fakeY = getY();
+        }
+
+        skeletonWrapper.step(fakeX, fakeY);
 
         float moveSpeed = getRoom().getConfig().mp_player_move_speed;
 //        if (Gdx.input != null) {

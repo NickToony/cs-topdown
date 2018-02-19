@@ -154,9 +154,13 @@ public class Map {
             float offsetValue = Math.max( .15f, Math.min(1, entitySnap.getMouseDistance())) * 100 * (entitySnap.getZoomKey() ? entitySnap.getCurrentWeaponObject().getWeapon(entitySnap.getRoom().getWeaponManager()).getZoom() : 1);
 
             Vector2 offset = new Vector2(offsetValue, 0).setAngle(entitySnap.getDirection() + 90);
-            float toX = entitySnap.getX() + offset.x;
-            float toY = entitySnap.getY() + offset.y;
-            camera.translate(Math.round(toX - camera.position.x)/2, Math.round(toY - camera.position.y)/2);
+//            float toX = entitySnap.getX() + offset.x;
+//            float toY = entitySnap.getY() + offset.y;
+//            camera.translate(Math.round(toX - camera.position.x)/2, Math.round(toY - camera.position.y)/2);
+            Vector3 from = camera.position;
+            Vector3 to = new Vector3(entitySnap.getX() + offset.x, entitySnap.getY() + offset.y, camera.position.z);
+            Vector3 lerp = from.lerp(to, 0.2f);
+            camera.position.set(lerp);
         }
 
         if (map3D == null) {
