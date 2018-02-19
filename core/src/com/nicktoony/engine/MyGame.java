@@ -152,6 +152,11 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
         gameConfig = new GameConfig();
         gameConfig.load();
 
+        // Temp: Stop HTML using 3d.
+        if (Gdx.app.getType() != Application.ApplicationType.Desktop) {
+            gameConfig.use_3d = false;
+        }
+
         reconfigure();
     }
 

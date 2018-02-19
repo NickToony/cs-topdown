@@ -1,6 +1,7 @@
 package com.nicktoony.engine.entities.world;
 
 import box2dLight.RayHandler;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
@@ -178,7 +179,10 @@ public class Map {
 //        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F12)) {
-            gameConfig.use_3d = !gameConfig.use_3d;
+            // Temp: Stop HTML using 3d.
+            if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+                gameConfig.use_3d = !gameConfig.use_3d;
+            }
         }
     }
 
