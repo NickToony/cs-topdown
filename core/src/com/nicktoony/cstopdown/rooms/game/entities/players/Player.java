@@ -200,7 +200,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     @Override
     public boolean presolveEntity(Contact contact, Entity other) {
         if (other instanceof Player) {
-            contact.setEnabled(true);
+            contact.setEnabled(getRoom().getConfig().mp_player_collisions);
 
 //            if (!getRoom().getConfig().mp_player_collisions){
 //                return true;
