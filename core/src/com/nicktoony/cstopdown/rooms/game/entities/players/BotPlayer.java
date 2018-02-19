@@ -121,7 +121,8 @@ public class BotPlayer extends Player {
         }
 
         lastScan --;
-        if (lastScan < 0) {
+        // Don't do scan unless we have weapons
+        if (lastScan < 0 && boughtWeapons) {
             lastScan = nearbyTargets > 0 ? 10 : 30;
             if (combatPause < 0
                     || aiState != AIState.combat) {
