@@ -64,7 +64,6 @@ public class HtmlClientSocket extends ClientSocket {
     @Override
     public boolean sendPacket(Packet packet) {
         socket.send(getJson().toJson(packet));
-        String string = getJson().toJson(packet);
         return true;
     }
 
