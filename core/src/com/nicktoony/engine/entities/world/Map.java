@@ -180,7 +180,8 @@ public class Map {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F12)) {
             // Temp: Stop HTML using 3d.
-            if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            if (Gdx.app.getType() == Application.ApplicationType.Desktop
+                    || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                 gameConfig.use_3d = !gameConfig.use_3d;
             }
         }

@@ -11,6 +11,8 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerToggleLight;
 import com.nicktoony.cstopdown.networking.packets.player.PlayerUpdatePacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
+import com.nicktoony.cstopdown.rooms.game.ui.CSHUD;
+import com.nicktoony.cstopdown.rooms.game.ui.FragUI;
 import com.nicktoony.engine.networking.client.ClientSocket;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.connection.JoinTeamPacket;
@@ -145,6 +147,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
         Player player = playerIdMap.get(packet.id);
         // If the player exists
         if (player != null) {
+            System.out.println("USING");
             player.setMovement(packet.moveUp, packet.moveRight, packet.moveDown, packet.moveLeft);
             player.setZoom(packet.zoom);
             player.setShooting(packet.shoot);
@@ -153,6 +156,7 @@ public class GameManager implements ClientSocket.SBSocketListener {
 
             resolveConflict(player, packet.x, packet.y);
 //            System.out.println("INPUT");
+
         }
     }
 

@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game;
+package com.nicktoony.cstopdown.rooms.options;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;

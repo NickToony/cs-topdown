@@ -36,7 +36,6 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private RoomGame roomGame;
     private long roundTimer = 0;
     private long lastTime;
-    private final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
     private float delta;
     private List<PlayerDetailsWrapper> changed = new ArrayList<PlayerDetailsWrapper>();
     private Random random = new Random();
@@ -50,9 +49,6 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     private STATE roundState;
 
     private List<GameModeMod> mods = new ArrayList<GameModeMod>();
-
-    private long fpsLast = 0;
-    private int fps = 0;
 
     /**
      * Create a new CSTDServer with the given logger and config
@@ -125,7 +121,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
         super.step();
 
         long now = System.currentTimeMillis();
-        delta = (float) ((now - lastTime) / MS_PER_TICK);
+        delta = (float) ((now - lastTime) / MyGame.MS_PER_TICK);
         lastTime = now;
 
 //        System.out.println(delta + " :: " + fps);

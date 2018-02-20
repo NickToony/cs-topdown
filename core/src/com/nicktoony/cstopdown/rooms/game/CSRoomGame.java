@@ -1,11 +1,11 @@
 package com.nicktoony.cstopdown.rooms.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nicktoony.cstopdown.rooms.game.ui.CSHUD;
 import com.nicktoony.engine.entities.HUD;
 import com.nicktoony.engine.entities.world.Map;
 import com.nicktoony.engine.entities.world.TexturelessMap;
 import com.nicktoony.engine.networking.client.ClientSocket;
-import com.nicktoony.engine.packets.connection.MapPacket;
 import com.nicktoony.engine.rooms.RoomGame;
 
 /**

@@ -11,6 +11,7 @@ import com.nicktoony.cstopdown.networking.packets.player.PlayerSwitchWeapon;
 import com.nicktoony.cstopdown.networking.server.CSServer;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.engine.EngineConfig;
+import com.nicktoony.engine.MyGame;
 import com.nicktoony.engine.entities.world.PathfindingHeuristic;
 import com.nicktoony.engine.entities.world.PathfindingNode;
 import com.nicktoony.engine.entities.world.PathfindingPath;
@@ -18,9 +19,7 @@ import com.nicktoony.engine.entities.world.PathfindingRaycastCollisionDetector;
 import com.nicktoony.engine.services.weapons.Weapon;
 import com.nicktoony.engine.services.weapons.WeaponCategory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Nick on 24/03/2016.
@@ -67,6 +66,8 @@ public class BotPlayer extends Player {
     private static final int BOT_CAMP_TIME_MAX = 400;
     private static final int BOT_PROTECT_TIME_MIN = 300;
     private static final int BOT_PROTECT_TIME_MAX = 700;
+    private static final int BOT_STUCK_CHECK = Math.round(MyGame.GAME_FPS/2);
+    private static final int BOT_STUCK_RADIUS = 32;
 
     private Random random = new Random();
     private PathfindingPath path;
@@ -89,6 +90,12 @@ public class BotPlayer extends Player {
     private BotTraits botTraits = new BotTraits();
     private Player protectingPlayer = null;
     private boolean boughtWeapons = false;
+    private float lastX = 0;
+    private float lastY = 0;
+    private float lastTime = 0;
+
+    private Integer campSpot = null;
+    private static final Set<Integer> CAMP_SPOTS = new HashSet<Integer>();
 
     public void setupBot(CSServer server, CSServerClientHandler player) {
         this.server = server;
@@ -315,6 +322,11 @@ public class BotPlayer extends Player {
 
                 break;
         }
+
+        if (campSpot != null && aiState != AIState.camping) {
+            CAMP_SPOTS.remove(campSpot);
+            campSpot = null;
+        }
     }
 
     private void buyRandomWeapon(int slot) {
@@ -388,12 +400,16 @@ public class BotPlayer extends Player {
             if (node.getConnections().size > 2) {
                 // Too many connections! not a good camp spot!
                 node = null;
+            } else if (CAMP_SPOTS.contains(node.getIndex())) {
+                node = null;
             }
         }
 
         if (startPath(node)) {
             actionPause = BOT_CAMP_TIME_MIN + random.nextInt(BOT_CAMP_TIME_MAX - BOT_CAMP_TIME_MIN);
             aiState = AIState.camping;
+            campSpot = node.getIndex();
+            CAMP_SPOTS.add(campSpot);
         }
     }
 
@@ -413,9 +429,13 @@ public class BotPlayer extends Player {
                             .getNodeByWorld(xTarget, yTarget);
                     // Check if it's a corner
                     if (node.getConnections().size <= 2) {
-                        int pathLength = pathLength(node);
-                        if (pathLength < 4 && pathLength != -1) {
-                            possibleNodes.add(node);
+                        if (CAMP_SPOTS.contains(node.getIndex())) {
+                            // Occupied
+                        } else {
+                            int pathLength = pathLength(node);
+                            if (pathLength < 4 && pathLength != -1) {
+                                possibleNodes.add(node);
+                            }
                         }
                     }
                 }
@@ -423,10 +443,13 @@ public class BotPlayer extends Player {
         }
 
         if (!possibleNodes.isEmpty()) {
-            if (startPath(possibleNodes.get(random.nextInt(possibleNodes.size())))) {
+            PathfindingNode node = possibleNodes.get(random.nextInt(possibleNodes.size()));
+            if (startPath(node)) {
                 actionPause = BOT_CAMP_TIME_MIN + random.nextInt(BOT_CAMP_TIME_MAX - BOT_CAMP_TIME_MIN);
                 actionPause /= 3;
                 aiState = AIState.camping;
+                campSpot = node.getIndex();
+                CAMP_SPOTS.add(campSpot);
             }
         }
     }
@@ -505,6 +528,9 @@ public class BotPlayer extends Player {
 //            pathSmoother.smoothPath(path);
             pathIndex = 0;
             pathGoal = node.getWorldPos();
+            lastX = getX();
+            lastY = getY();
+            lastTime = BOT_STUCK_CHECK;
             return true;
         }
 
@@ -534,7 +560,7 @@ public class BotPlayer extends Player {
 
         PathfindingNode targetNode = path.get(pathIndex);
         PathfindingNode currentNode = path.get(Math.max(0, pathIndex-2));
-        if (new Vector2(x, y).dst(targetNode.getWorldPos()) <= 20) {
+        if (new Vector2(x, y).dst(targetNode.getWorldPos()) <= 10) {
             pathIndex += 1;
             if (pathIndex >= path.getCount()) {
                 pathGoal = null;
@@ -547,6 +573,17 @@ public class BotPlayer extends Player {
             moveDown = y - 8 > targetNode.getWorldY();
             directionTo = (float) Math.toDegrees(Math.atan2(targetNode.getWorldY() - currentNode.getWorldY(),
                     targetNode.getWorldX() - currentNode.getWorldX())) - 90;
+
+            lastTime -= 1;
+            if (lastTime <= 0) {
+                lastTime = BOT_STUCK_CHECK;
+                if (new Vector2(lastX, lastY).dst(getPosition()) < BOT_STUCK_RADIUS) {
+                    pathGoal = null;
+                    return false;
+                }
+                lastX = getX();
+                lastY = getY();
+            }
         }
 
         return true;

@@ -1,4 +1,4 @@
-package com.nicktoony.cstopdown.rooms.game;
+package com.nicktoony.cstopdown.rooms.game.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.cstopdown.rooms.game.entities.players.UserPlayer;
+import com.nicktoony.cstopdown.rooms.options.OptionsMenu;
 import com.nicktoony.engine.entities.HUD;
 
 /**

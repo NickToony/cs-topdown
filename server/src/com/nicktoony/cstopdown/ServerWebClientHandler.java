@@ -4,7 +4,6 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.nicktoony.cstopdown.networking.server.CSServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.packets.TimestampedPacket;
 import org.java_websocket.WebSocket;
 
 /**
@@ -33,9 +32,7 @@ public class ServerWebClientHandler extends CSServerClientHandler {
 
     protected String packetToString(Packet packet) {
         packet.prepareMessageId();
-        if (packet instanceof TimestampedPacket) {
-            ((TimestampedPacket) packet).setTimestamp(getTimestamp());
-        }
+        packet.setTimestamp(getTimestamp());
         return getJson().toJson(packet);
     }
 

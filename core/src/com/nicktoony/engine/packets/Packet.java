@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public class Packet {
     private int message_id;
+    private float timestamp;
 
     public void prepareMessageId() {
         for (Map.Entry<Integer, Class> entrySet : PacketDefinitions.PACKET_DEFITIONS.entrySet()) {
@@ -25,5 +26,13 @@ public class Packet {
 
     public void setMessage_id(int message_id) {
         this.message_id = message_id;
+    }
+
+    public float getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

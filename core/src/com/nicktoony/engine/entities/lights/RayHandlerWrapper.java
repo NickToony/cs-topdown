@@ -36,7 +36,7 @@ public class RayHandlerWrapper extends Renderable {
 //        boxLightCamera.zoom = EngineConfig.toMetres(map.getCamera().zoom);
 //        boxLightCamera.viewportWidth = EngineConfig.toMetres(map.getCamera().viewportWidth);
 //        boxLightCamera.viewportHeight = EngineConfig.toMetres(map.getCamera().viewportHeight);
-        boxLightCamera.combined.scl(32);
+        boxLightCamera.combined.scl(EngineConfig.CELL_SIZE);
 //        boxLightCamera.update();
 
         // Render the light over everything

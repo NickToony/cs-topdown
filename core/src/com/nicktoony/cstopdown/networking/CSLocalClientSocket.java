@@ -6,18 +6,14 @@ import com.nicktoony.engine.networking.client.LocalClientSocket;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
 import com.nicktoony.engine.packets.PacketDefinitions;
-import com.nicktoony.engine.packets.TimestampedPacket;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Nick on 16/05/2016.
  */
 public class CSLocalClientSocket extends LocalClientSocket<CSServer> {
 
-    private long timer = System.currentTimeMillis();
-    Map<String, Integer> packetCount = new HashMap<String, Integer>();
+//    private long timer = System.currentTimeMillis();
+//    Map<String, Integer> packetCount = new HashMap<String, Integer>();
 
     public CSLocalClientSocket(CSServer server) {
         super(server);
@@ -29,14 +25,12 @@ public class CSLocalClientSocket extends LocalClientSocket<CSServer> {
             @Override
             public void sendPacket(Packet packet) {
                 packet.prepareMessageId();
-                if (packet instanceof TimestampedPacket) {
-                    ((TimestampedPacket) packet).setTimestamp(getTimestamp());
-                }
+                packet.setTimestamp(getTimestamp());
 
 
 
                 notifyMessage(CSLocalClientSocket.this, (Packet) getJson()
-                        .fromJson((Class) PacketDefinitions.PACKET_DEFITIONS
+                        .fromJson(PacketDefinitions.PACKET_DEFITIONS
                                 .get(packet.getMessage_id()), getJson().toJson(packet)));
 
 //                if (!packetCount.containsKey(packet.getClass().getCanonicalName())) {

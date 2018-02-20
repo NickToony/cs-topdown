@@ -20,6 +20,7 @@ public class MyGame extends ApplicationAdapter implements Server.LoopManager {
 
     // Hardcoded ticks per second for game simulation
     public static final float GAME_FPS = 60;
+    public static final double MS_PER_TICK = 1000 / MyGame.GAME_FPS;
 
     public PlatformProvider getPlatformProvider() {
         return platformProvider;

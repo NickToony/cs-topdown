@@ -1,6 +1,5 @@
 package com.nicktoony.cstopdown.networking.server;
 
-import com.nicktoony.cstopdown.networking.packets.player.PlayerInputPacket;
 import com.nicktoony.cstopdown.rooms.game.entities.players.BotPlayer;
 import com.nicktoony.engine.packets.Packet;
 
@@ -25,13 +24,6 @@ public class CSServerClientHandlerBot extends CSServerClientHandler {
     @Override
     public void update() {
         super.update();
-
-        if (getPlayerWrapper().isAlive() && getPlayer().isPlayerChanged()) {
-            PlayerInputPacket updatePacket = getPlayer().constructUpdatePacket();
-            updatePacket.id = getID();
-            updatePacket.setTimestamp(getTimestamp());
-            server.sendToOthers(updatePacket, this);
-        }
     }
 
     @Override

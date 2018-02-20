@@ -1,7 +1,6 @@
 package com.nicktoony.cstopdown.networking.server;
 
 import com.nicktoony.cstopdown.mods.CSServerPlayerWrapper;
-import com.nicktoony.cstopdown.mods.gamemode.PlayerModInterface;
 import com.nicktoony.cstopdown.networking.packets.game.BuyWeaponPacket;
 import com.nicktoony.cstopdown.networking.packets.game.CreatePlayerPacket;
 import com.nicktoony.cstopdown.networking.packets.game.DestroyPlayerPacket;
@@ -15,7 +14,6 @@ import com.nicktoony.cstopdown.rooms.game.entities.players.Player;
 import com.nicktoony.engine.EngineConfig;
 import com.nicktoony.engine.networking.server.ServerClientHandler;
 import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.packets.TimestampedPacket;
 import com.nicktoony.engine.packets.connection.ConnectPacket;
 import com.nicktoony.engine.packets.connection.JoinTeamPacket;
 import com.nicktoony.engine.packets.connection.LoadedPacket;
@@ -70,9 +68,6 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
             mapWrapper.map = server.getRoom().getMap().toString();
             mapWrapper.pixels = server.getRoom().getMap().getTilesetImages(server.getPlatformProvider());
             mapWrapper.tilesets = server.getRoom().getMap().getTilesetNames().toArray(new String[server.getRoom().getMap().getTilesetNames().size()]);
-//            MapPacket mapPacket = new MapPacket();
-//            mapPacket.mapWrapper = mapWrapper;
-//            mapWrapper.pixels = null;
             sendPacket(mapWrapper);
         }
 
@@ -95,10 +90,10 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     lastUpdate = System.currentTimeMillis();
 
                     PlayerUpdatePacket packet = new PlayerUpdatePacket();
+                    packet.id = id;
                     packet.x = player.getX();
                     packet.y = player.getY();
                     packet.direction = player.getPlayer().getDirection();
-                    packet.id = id;
                     packet.moveDown = player.getPlayer().getMoveDown();
                     packet.moveUp = player.getPlayer().getMoveUp();
                     packet.moveLeft = player.getPlayer().getMoveLeft();
@@ -109,22 +104,7 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
                     packet.health = player.getPlayer().getHealth();
                     packet.lastProcessed = lastProcessed;
                     server.sendToAll(packet);
-//                    server.sendToOthers(packet, this);
-//                    for (CSServerClientHandler client : server.getClients()) {
-//                        if (client.getState() == ServerClientHandler.STATE.INGAME) {
-//                            if (client == this) {
-//                                client.sendPacket(packet);
-//                            }else if (!client.getPlayerWrapper().isAlive() || !this.getPlayerWrapper().isAlive()) {
-//                                client.sendPacket(packet);
-//                            } else {
-//                                if (client.getPlayer().canSeePlayer(getPlayer())) {
-//                                    client.sendPacket(packet);
-//                                }
-//                            }
-//                        }
-//                    }
-
-                }
+                    }
             }
 
         super.update();
@@ -134,6 +114,17 @@ public abstract class CSServerClientHandler extends ServerClientHandler {
         }
 
         player.update();
+
+        if (this.bot()) {
+            if (getPlayerWrapper().isAlive() && getPlayer().isPlayerChanged()) {
+                PlayerInputPacket updatePacket = getPlayer().constructUpdatePacket();
+                updatePacket.id = getID();
+                updatePacket.setTimestamp(getTimestamp());
+
+                lastUpdate = -1; // we just created it for fun
+//                server.sendToOthers(updatePacket, this);
+            }
+        }
     }
 
     @Override

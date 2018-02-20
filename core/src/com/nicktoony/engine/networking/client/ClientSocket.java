@@ -2,7 +2,6 @@ package com.nicktoony.engine.networking.client;
 
 import com.nicktoony.engine.config.ServerConfig;
 import com.nicktoony.engine.packets.Packet;
-import com.nicktoony.engine.packets.TimestampedPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,9 +75,7 @@ public abstract class ClientSocket {
 
     public boolean sendMessage(Packet packet) {
         packet.prepareMessageId();
-        if (packet instanceof TimestampedPacket) {
-            ((TimestampedPacket) packet).setTimestamp(getTimestamp());
-        }
+        packet.setTimestamp(getTimestamp());
         return sendPacket(packet);
     }
 
