@@ -28,7 +28,7 @@ deploy:
   api_key: "$DEPLOYMENT_KEY"
   file:
     # Define which files should be deployed to GitHub
-  - "desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar
+  - "desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar"
   - "$PROJECT_NAME-$TRAVIS_TAG.zip"
   on:
     tags: true
