@@ -33,4 +33,3 @@ deploy:
     tags: true
     repo: "{GITHUB_USER}/{PROJECT_NAME}"
     branches: master
-    condition: "$TRAVIS_TAG =~ ^v\d+\.\d+\.\d+.*$" # Only deploy tags that match something like v1.0.0
