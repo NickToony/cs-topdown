@@ -1,0 +1,36 @@
+language: java # can be 'java' if there is no android build target
+jdk: oraclejdk8
+
+# Cache gradle dependencies (should be faster to download them from cache)
+cache:
+  directories:
+  - $HOME/.gradle/wrapper
+  - $HOME/.gradle/caches/modules-2/files-2.1
+
+# Setup environment
+before_install:
+- chmod +x gradlew
+
+# Default gradle task will be run automatically on build, no need to define it
+
+# Deployment to GitHub-releases
+before_deploy:
+  # Generate a packaged jar for the desktop-project and rename it to include the tag
+- ./gradlew desktop:dist
+- mv desktop/build/libs/desktop-1.0.jar desktop/build/libs/{PROJECT_NAME}-$TRAVIS_TAG.jar
+  # Generate and zip deployment files for the HTML project
+- ./gradlew html:dist
+- zip -r {PROJECT_NAME}-$TRAVIS_TAG.zip ./html/build/dist/
+deploy:
+  provider: releases
+  api_key:
+    secure: {DEPLOYMENT_KEY}
+  file:
+    # Define which files should be deployed to GitHub
+  - desktop/build/libs/{PROJECT_NAME}-$TRAVIS_TAG.jar
+  - {PROJECT_NAME}-$TRAVIS_TAG.zip
+  on:
+    tags: true
+    repo: {GITHUB_USER}/{PROJECT_NAME}
+    branches: master
+    condition: "$TRAVIS_TAG =~ ^v\d+\.\d+\.\d+.*$" # Only deploy tags that match something like v1.0.0
