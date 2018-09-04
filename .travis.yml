@@ -11,7 +11,9 @@ cache:
 before_install:
 - chmod +x gradlew
 
-# Default gradle task will be run automatically on build, no need to define it
+# Default gradle task will be run automatically on build, so stop it
+install:
+- true
 
 # Deployment to GitHub-releases
 before_deploy:
