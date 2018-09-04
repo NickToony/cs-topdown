@@ -19,18 +19,18 @@ install:
 before_deploy:
   # Generate a packaged jar for the desktop-project and rename it to include the tag
 - ./gradlew desktop:dist
-- mv desktop/build/libs/desktop-1.0.jar desktop/build/libs/{PROJECT_NAME}-$TRAVIS_TAG.jar
+- mv desktop/build/libs/desktop-1.0.jar desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar
   # Generate and zip deployment files for the HTML project
 - ./gradlew html:dist
-- zip -r {PROJECT_NAME}-$TRAVIS_TAG.zip ./html/build/dist/
+- zip -r $PROJECT_NAME-$TRAVIS_TAG.zip ./html/build/dist/
 deploy:
   provider: releases
-  api_key: "{DEPLOYMENT_KEY}"
+  api_key: "$DEPLOYMENT_KEY"
   file:
     # Define which files should be deployed to GitHub
-  - "desktop/build/libs/{PROJECT_NAME}-$TRAVIS_TAG.jar"
-  - "{PROJECT_NAME}-$TRAVIS_TAG.zip"
+  - "desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar
+  - "$PROJECT_NAME-$TRAVIS_TAG.zip"
   on:
     tags: true
-    repo: "{GITHUB_USER}/{PROJECT_NAME}"
+    repo: "$GITHUB_USER/$PROJECT_NAME"
     branches: master
