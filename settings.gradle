@@ -1,2 +1,2 @@
-include 'desktop', 'ios', 'html', 'core', 'server', 'gameserver-service-java', 'gameserver-service-libgdx'
+include 'desktop', 'html', 'core', 'server', 'gameserver-service-java', 'gameserver-service-libgdx'
 
