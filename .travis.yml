@@ -25,8 +25,7 @@ before_deploy:
 - zip -r {PROJECT_NAME}-$TRAVIS_TAG.zip ./html/build/dist/
 deploy:
   provider: releases
-  api_key:
-    secure: {DEPLOYMENT_KEY}
+  api_key: {DEPLOYMENT_KEY}
   file:
     # Define which files should be deployed to GitHub
   - desktop/build/libs/{PROJECT_NAME}-$TRAVIS_TAG.jar
