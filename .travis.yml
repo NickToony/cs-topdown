@@ -26,6 +26,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key: "$DEPLOYMENT_KEY"
+  skip_cleanup: true
   file:
     # Define which files should be deployed to GitHub
   - "desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar"
