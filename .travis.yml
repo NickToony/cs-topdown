@@ -19,6 +19,7 @@ install:
 before_deploy:
   # Generate a packaged jar for the desktop-project and rename it to include the tag
 - ./gradlew desktop:dist
+- mv desktop/build/libs/desktop-1.0.jar desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar
 - cp -R android/assets desktop/build/libs/
 - zip -r $PROJECT_NAME-$TRAVIS_TAG-DESKTOP.zip ./desktop/build/libs/
   # Generate and zip deployment files for the HTML project
