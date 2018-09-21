@@ -35,3 +35,13 @@ deploy:
     tags: true
     repo: "$GITHUB_USER/$PROJECT_NAME"
     branches: master
+deploy:
+  provider: firebase
+  api_key: "$FIREBASE_KEY"
+  message: "Deployed to Firebase!"
+  file:
+    # Define which files should be deployed to Firebase
+  - "./html/build/dist/"
+  on:
+    tags: true
+    branches: master
