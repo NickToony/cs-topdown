@@ -37,7 +37,6 @@ deploy:
     branches: master
 deploy:
   provider: firebase
-  api_key: "$FIREBASE_KEY"
   message: "Deployed to Firebase!"
   skip_cleanup: true
   file:
