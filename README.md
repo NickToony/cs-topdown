@@ -38,10 +38,9 @@ An adventure into the world of LibGDX: A multiplayer top-down shooter with preci
 
 ## Play Now
 You can grab recent builds of the server, desktop and html from my server:
-- [Web](http://cstopdown.nick-hope.co.uk/) (Any modern browser)
-- [Desktop Client](http://cstopdown.nick-hope.co.uk/desktop.zip) (Windows, OSX, Linux)
-- [Server](http://cstopdown.nick-hope.co.uk/server.zip) (Windows, OSX, Linux)
-- [Assets](http://cstopdown.nick-hope.co.uk/assets.zip) (If using standalone JARs)
+- [Web](https://cs-topdown.firebaseapp.com/) (Any modern browser)
+- Desktop (Windows, OSX, Linux) - see releases
+- Server (Windows, OSX, Linux) - see releases
 
 You can also see all active servers [here](http://gameservers.nick-hope.co.uk/game/view/1).
 
