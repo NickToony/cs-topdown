@@ -39,6 +39,7 @@ deploy:
   provider: firebase
   api_key: "$FIREBASE_KEY"
   message: "Deployed to Firebase!"
+  skip_cleanup: true
   file:
     # Define which files should be deployed to Firebase
   - "./html/build/dist/"
