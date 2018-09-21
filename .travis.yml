@@ -39,9 +39,6 @@ deploy:
   provider: firebase
   message: "Deployed to Firebase!"
   skip_cleanup: true
-  file:
-    # Define which files should be deployed to Firebase
-  - "./html/build/dist/"
   on:
     tags: true
     branches: master
