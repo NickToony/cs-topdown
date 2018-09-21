@@ -19,26 +19,26 @@ install:
 before_deploy:
   # Generate a packaged jar for the desktop-project and rename it to include the tag
 - ./gradlew desktop:dist
-- mv desktop/build/libs/desktop-1.0.jar desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar
+- cp -R android/assets desktop/build/libs/
+- zip -r $PROJECT_NAME-$TRAVIS_TAG-DESKTOP.zip ./desktop/build/libs/
   # Generate and zip deployment files for the HTML project
 - ./gradlew html:dist
-- zip -r $PROJECT_NAME-$TRAVIS_TAG.zip ./html/build/dist/
+- zip -r $PROJECT_NAME-$TRAVIS_TAG-WEB.zip ./html/build/dist/
 deploy:
-  provider: releases
-  api_key: "$DEPLOYMENT_KEY"
-  skip_cleanup: true
-  file:
-    # Define which files should be deployed to GitHub
-  - "desktop/build/libs/$PROJECT_NAME-$TRAVIS_TAG.jar"
-  - "$PROJECT_NAME-$TRAVIS_TAG.zip"
-  on:
-    tags: true
-    repo: "$GITHUB_USER/$PROJECT_NAME"
-    branches: master
-deploy:
-  provider: firebase
-  message: "Deployed to Firebase!"
-  skip_cleanup: true
-  on:
-    tags: true
-    branches: master
+  - provider: releases
+    api_key: "$DEPLOYMENT_KEY"
+    skip_cleanup: true
+    file:
+      # Define which files should be deployed to GitHub
+    - "$PROJECT_NAME-$TRAVIS_TAG-WEB.zip"
+    - "$PROJECT_NAME-$TRAVIS_TAG-DESKTOP.zip"
+    on:
+      tags: true
+      repo: "$GITHUB_USER/$PROJECT_NAME"
+      branches: master
+  - provider: firebase
+    message: "Deployed to Firebase!"
+    skip_cleanup: true
+    on:
+      tags: true
+      branches: master
