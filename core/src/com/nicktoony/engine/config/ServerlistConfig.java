@@ -25,7 +25,7 @@ public class ServerlistConfig extends GameserverConfig {
 
     @Override
     public String getServerUrl() {
-        return "http://gameservers.nick-hope.co.uk/api/";
+        return "https://gameservers.nick-hope.co.uk/api/";
     }
 
     @Override
