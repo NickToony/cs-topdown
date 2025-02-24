@@ -3,6 +3,7 @@ package com.nicktoony.engine.config;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.HttpRequestBuilder;
+import com.badlogic.gdx.net.HttpRequestHeader;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.nicktoony.gameserver.service.Callback;
@@ -70,6 +71,9 @@ public class ServerlistConfig extends GameserverConfig {
         Net.HttpRequest httpRequest = requestBuilder.newRequest()
                 .method(Net.HttpMethods.GET)
                 .url(url).build();
+
+        httpRequest.setHeader(HttpRequestHeader.UserAgent, "cs-topdown");
+
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
@@ -100,6 +104,8 @@ public class ServerlistConfig extends GameserverConfig {
                 .method(Net.HttpMethods.POST)
                 .formEncodedContent(data)
                 .url(url).build();
+
+        httpRequest.setHeader(HttpRequestHeader.UserAgent, "cs-topdown");
 
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
