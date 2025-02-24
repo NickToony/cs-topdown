@@ -227,7 +227,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModRoundStart() {
-        sendToAll(new ChatPacket("[YELLOW]Round Started."));
+        sendToAll(new ChatPacket("[YELLOW]Round Started. Press B to buy weapons."));
 
         for (GameModeMod mod : mods) {
             mod.evRoundStart();
@@ -243,7 +243,7 @@ public abstract class CSServer extends Server<CSServerClientHandler> {
     }
 
     public void notifyModRoundEnd() {
-        sendToAll(new ChatPacket("[YELLOW]Round Ended."));
+        sendToAll(new ChatPacket("[YELLOW]Round Ended. Press M to join/change teams."));
 
         for (GameModeMod mod : mods) {
             mod.evRoundEnd();

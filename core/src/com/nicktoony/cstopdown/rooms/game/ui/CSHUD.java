@@ -91,7 +91,7 @@ public class CSHUD extends HUD {
             chatContainer.fill();
             chatContainer.align(Align.bottomLeft);
 
-            addChatLine("[YELLOW]Chat initiated. Press Y to focus.");
+            addChatLine("[YELLOW]Chat initiated. Press M to join a team.");
 
             // Ammo label
             Label.LabelStyle style = new Label.LabelStyle();
