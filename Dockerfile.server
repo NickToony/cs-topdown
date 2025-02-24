@@ -1,0 +1,7 @@
+FROM openjdk:8-alpine
+
+WORKDIR /
+
+COPY ./dist/server ./
+
+CMD ["java", "-jar", "server-1.0.jar"]

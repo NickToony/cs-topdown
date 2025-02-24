@@ -95,3 +95,7 @@ proguard/
 
 # Extras
 html/war/
+
+
+# Legacy build
+/dist
