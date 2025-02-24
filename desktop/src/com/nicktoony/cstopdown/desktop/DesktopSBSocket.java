@@ -22,7 +22,7 @@ public class DesktopSBSocket extends ClientSocket {
     public DesktopSBSocket(String ip, int port) {
         super(ip, port);
 
-        socket = new WebSocketClient(URI.create("ws://"
+        socket = new WebSocketClient(URI.create("wss://"
                 + ip + ":"
                 + port + "/")) {
             @Override

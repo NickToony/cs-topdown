@@ -22,7 +22,7 @@ public class AndroidClientSocket extends ClientSocket {
     public AndroidClientSocket(String ip, int port) {
         super(ip, port);
 
-        socket = new WebSocketClient(URI.create("ws://"
+        socket = new WebSocketClient(URI.create("wss://"
                 + ip + ":"
                 + port + "/")) {
             @Override

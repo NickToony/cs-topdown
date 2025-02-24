@@ -22,7 +22,7 @@ public class HtmlClientSocket extends ClientSocket {
     public HtmlClientSocket(String ip, int port) {
         super(ip, port);
 
-        socket = new Websocket("ws://"
+        socket = new Websocket("wss://"
                 + ip + ":"
                 + port + "/");
         socket.addListener(new WebsocketListener() {
