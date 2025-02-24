@@ -87,7 +87,7 @@ public abstract class Server<T extends ServerClientHandler> {
         // Server list
         if (publicServerList) {
             if (host == null) {
-                host = new Host(config.sv_name + " " + System.currentTimeMillis(), 0, config.sv_max_players);
+                host = new Host(config.sv_name, 0, config.sv_max_players);
                 host.addMeta("ip", config.sv_ip);
                 host.addMeta("port", Integer.toString(config.sv_port));
                 host.create();

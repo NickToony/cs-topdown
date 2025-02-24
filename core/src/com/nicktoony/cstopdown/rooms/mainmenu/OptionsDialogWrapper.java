@@ -118,7 +118,7 @@ public class OptionsDialogWrapper {
         dialog.add(fieldFullscreen).prefWidth(rightSize);
         dialog.row();
 
-        dialog.add(new Label("Use 3D", skin)).prefWidth(leftSize);
+        dialog.add(new Label("Use 3D (Broken)", skin)).prefWidth(leftSize);
         field3D = new CheckBox("", skin);
         field3D.setChecked(gameConfig.use_3d);
         dialog.add(field3D).prefWidth(rightSize);
