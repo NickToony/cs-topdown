@@ -16,9 +16,9 @@ docker rm -f dummy
 # Cleanup the build image
 # docker image rm cstopdown
 
-docker build -f Dockerfile.server -t cstopdown:server-latest .
-docker image tag cstopdown:server-latest nicktoony/cstopdown:server-latest
-docker image push nicktoony/cstopdown:server-latest
-docker image rm cstopdown:server-latest
+# docker build -f Dockerfile.server -t cstopdown:server-latest .
+# docker image tag cstopdown:server-latest nicktoony/cstopdown:server-latest
+# docker image push nicktoony/cstopdown:server-latest
+# docker image rm cstopdown:server-latest
 
 # docker run --rm -it --entrypoint bash cstopdown

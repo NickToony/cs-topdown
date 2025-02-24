@@ -78,6 +78,9 @@ public class ServerlistConfig extends GameserverConfig {
 
             @Override
             public void failed(Throwable t) {
+
+
+                t.printStackTrace();
                 callback.onFailure();
             }
 
