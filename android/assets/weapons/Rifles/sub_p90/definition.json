@@ -1,27 +1,27 @@
 {
-  "name": "AWP",
-  "clipSize": 5,
-  "clipTotal": 30,
-  "rateOfFire": -1,
-  "accuracy": 100,
-  "recoil": 10,
+  "name": "P90",
+  "clipSize": 50,
+  "clipTotal": 150,
+  "rateOfFire": 3,
+  "accuracy": 60,
+  "recoil": 4,
   "bullets": 1,
-  "spread": 0,
+  "spread": 2,
   "speed": 100,
   "cost": 1000,
   "reward": 250,
   "silencer": false,
-  "zoom": 3,
-  "reloadDuration": 5,
-  "cockDuration": 2.5,
-  "equipDuration": 1,
+  "zoom": 1.6,
+  "reloadDuration": 1.2,
+  "cockDuration": 0.4,
+  "equipDuration": 0.2,
   "reloadType": "full_cock",
   "range": -1,
   "slot": 0,
   "ai": {
-    "style": "sniper"
+
   },
-  "damage": 100,
+  "damage": 8,
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",
@@ -43,6 +43,6 @@
     "left": false,
     "right": true,
     "x_offset": 28,
-    "y_offset": 34
+    "y_offset": 36
   }
 }

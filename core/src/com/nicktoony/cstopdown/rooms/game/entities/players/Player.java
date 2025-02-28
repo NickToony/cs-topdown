@@ -40,7 +40,7 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
     private final int STATE_DEQUIP = 4;
     private final int STATE_EQUIP = 5;
 
-    private final float SOUND_MODIFIER = 0.5f;
+    private final float SOUND_MODIFIER = 0.2f;
 
     protected boolean moveUp = false;
     protected boolean moveDown = false;
@@ -415,6 +415,12 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         skeletonWrapper.step(fakeX, fakeY);
 
         float moveSpeed = getRoom().getConfig().mp_player_move_speed;
+        if (
+            currentWeaponSlot != -1 
+            && weapons[currentWeaponSlot] != null 
+            && weapons[currentWeaponSlot].weaponKey.contentEquals("melee_knife")) {
+            moveSpeed *= 1.3f;
+        }
 //        if (Gdx.input != null) {
 //            moveSpeed += (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? .5f : 0);
 //        }

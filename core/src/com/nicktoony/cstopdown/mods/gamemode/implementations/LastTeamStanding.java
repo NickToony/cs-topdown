@@ -50,6 +50,10 @@ public class LastTeamStanding extends GameModeMod {
                 lastTeam = PlayerModInterface.TEAM_CT;
         }
 
+        if (getAlivePlayers().size() <= 1) {
+            endRound();
+        }
+
     }
 
     @Override

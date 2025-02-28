@@ -1,40 +1,39 @@
 {
-  "name": "AWP",
-  "clipSize": 5,
-  "clipTotal": 30,
+  "name": "Pump Shotgun",
+  "clipSize": 8,
+  "clipTotal": 32,
   "rateOfFire": -1,
-  "accuracy": 100,
-  "recoil": 10,
-  "bullets": 1,
-  "spread": 0,
+  "accuracy": 90,
+  "recoil": 5,
+  "bullets": 12,
+  "spread": 4,
   "speed": 100,
   "cost": 1000,
   "reward": 250,
   "silencer": false,
-  "zoom": 3,
-  "reloadDuration": 5,
-  "cockDuration": 2.5,
-  "equipDuration": 1,
-  "reloadType": "full_cock",
+  "zoom": 1,
+  "reloadDuration": 0.5,
+  "cockDuration": 1.5,
+  "equipDuration": 0.6,
+  "reloadType": "shotgun",
   "range": -1,
   "slot": 0,
   "ai": {
-    "style": "sniper"
+    "engage": 300
   },
-  "damage": 100,
+  "damage": 10,
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",
-    "reload": "rifle_reload",
+    "reload": "shotgun_reload",
     "equip": "rifle_equip",
     "unequip": "rifle_dequip",
-    "cock": "sniper_cock"
+    "cock": "shotgun_cock"
   },
   "sounds": {
     "shoot": "shoot.wav",
     "equip": "equip.wav",
     "dequip": "dequip.wav",
-    "eject": "eject.wav",
     "insert": "insert.wav",
     "cock": "cock.wav",
     "empty": "empty.wav"
@@ -42,7 +41,7 @@
   "graphics": {
     "left": false,
     "right": true,
-    "x_offset": 28,
-    "y_offset": 34
+    "x_offset": 32,
+    "y_offset": 24
   }
 }

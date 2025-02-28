@@ -5,21 +5,25 @@
       "desc": "Expensive weapons suitable for medium-long range, they bring much heavier firepower capable of piercing body armor.",
       "weapons": [
         "rifle_ak47",
-        "rifle_m4a1"
+        "rifle_m4a1",
+        "sub_mp5",
+        "sub_p90"
       ]
     },
     {
       "name": "Shotguns",
       "desc": "Dangerous in close quaters: fires multiple projectiles for massive combined damage.",
       "weapons": [
-        "shotgun_spas"
+        "shotgun_spas",
+        "shotgun_pump"
       ]
     },
     {
       "name": "Snipers",
       "desc": "Unmatched in firepower and effective range, these weapons come outfitted with good optics.",
       "weapons": [
-        "rifle_awp"
+        "rifle_awp",
+        "rifle_scout"
       ]
     },
     {

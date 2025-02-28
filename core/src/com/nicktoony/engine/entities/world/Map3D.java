@@ -127,7 +127,7 @@ public class Map3D {
 //        textureRegion.setRegion(textureRegion.getRegionX(), textureRegion.getRegionY(), 32, 32);
 //        System.out.println(textureRegion.getRegionX());
 //        System.out.println(textureRegion.getRegionY());
-        textureRegion.getTexture().setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        // textureRegion.getTexture().setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
 
 

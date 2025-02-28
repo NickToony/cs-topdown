@@ -1,6 +1,6 @@
 {
-  "name": "AWP",
-  "clipSize": 5,
+  "name": "Scout",
+  "clipSize": 10,
   "clipTotal": 30,
   "rateOfFire": -1,
   "accuracy": 100,
@@ -12,8 +12,8 @@
   "reward": 250,
   "silencer": false,
   "zoom": 3,
-  "reloadDuration": 5,
-  "cockDuration": 2.5,
+  "reloadDuration": 2.5,
+  "cockDuration": 1,
   "equipDuration": 1,
   "reloadType": "full_cock",
   "range": -1,
@@ -21,7 +21,7 @@
   "ai": {
     "style": "sniper"
   },
-  "damage": 100,
+  "damage": 70,
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",

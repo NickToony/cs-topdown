@@ -21,7 +21,7 @@
   "ai": {
 
   },
-  "damage": 25,
+  "damage": 50,
   "animations": {
     "idle": "knife_idle",
     "shoot": "knife_stab",

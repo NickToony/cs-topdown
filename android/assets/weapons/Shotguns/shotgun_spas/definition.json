@@ -1,11 +1,11 @@
 {
-  "name": "SPAS",
+  "name": "Auto Shotgun",
   "clipSize": 8,
   "clipTotal": 32,
-  "rateOfFire": -1,
+  "rateOfFire": 25,
   "accuracy": 90,
   "recoil": 5,
-  "bullets": 6,
+  "bullets": 12,
   "spread": 4,
   "speed": 100,
   "cost": 1000,
@@ -21,7 +21,7 @@
   "ai": {
     "engage": 300
   },
-  "damage": 18,
+  "damage": 7,
   "animations": {
     "idle": "rifle_idle",
     "shoot": "rifle_fire",
