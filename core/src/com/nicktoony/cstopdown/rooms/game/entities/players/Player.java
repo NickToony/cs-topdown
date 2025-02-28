@@ -415,12 +415,13 @@ public class Player extends PhysicsEntity implements SkeletonWrapper.AnimationEv
         skeletonWrapper.step(fakeX, fakeY);
 
         float moveSpeed = getRoom().getConfig().mp_player_move_speed;
-        if (
-            currentWeaponSlot != -1 
-            && weapons[currentWeaponSlot] != null 
-            && weapons[currentWeaponSlot].weaponKey.contentEquals("melee_knife")) {
-            moveSpeed *= 1.3f;
-        }
+        // if (
+        //     currentWeaponSlot != -1 
+        //     && weapons[currentWeaponSlot] != null
+
+        //     && weapons[currentWeaponSlot].weaponKey.contentEquals("melee_knife")) {
+        //     moveSpeed *= 1.3f;
+        // }
 //        if (Gdx.input != null) {
 //            moveSpeed += (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? .5f : 0);
 //        }
