@@ -64,6 +64,28 @@ jobs:
             dist/server/cstopdown-server.zip
             dist/html/cstopdown-web.zip
       
+      - name: Install butler (itch.io CLI)
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          chmod +x butler
+          ./butler -V
+
+      - name: Publish web build to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: ./butler push dist/html nicktoony/cs-topdown:html5 --userversion "${{ github.ref_name }}" --ignore "*.zip"
+
+      - name: Publish desktop build to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: ./butler push dist/desktop nicktoony/cs-topdown:desktop --userversion "${{ github.ref_name }}" --ignore "*.zip"
+
+      - name: Publish server build to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: ./butler push dist/server nicktoony/cs-topdown:server --userversion "${{ github.ref_name }}" --ignore "*.zip"
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
